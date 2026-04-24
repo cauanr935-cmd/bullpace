@@ -56,9 +56,7 @@
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-*Preencha com até 100 palavras – sem necessidade de fonte*
-
-*Apresente uma visão geral da situação do parceiro com base na matriz SWOT (forças, fraquezas, oportunidades e ameaças). Foque na relação com os concorrentes e o posicionamento da instituição.*
+<img src="../assets/Analise_Swot.png">
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
