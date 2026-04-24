@@ -36,13 +36,10 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-*Preencha com até 300 palavras – sem necessidade de fonte*
+A proposta do projeto surge a partir de um desafio operacional real no evento da Red Bull 24 Horas, uma competição de corrida em esteira que duas equipes de 16 pessoas cada revezam durante 24 horas. A equipe que completar mais quilômetros na esteira vence, porém o controle é feito manualmente, por meio de anotações em uma prancheta pelos jurados, registram qual atleta está iniciando, e de 30 em 30 minutos como uma forma de backup, e ao término da corrida do atleta, o meio de registro aumenta drasticamente erros em contagens e fora que a plateia não conseguem acompanhar o desenvolvimento de cada equipe. Além disso, o trabalho em que os jurados têm para organizar todos os dados das 24 horas em até 48 horas.
+ 
+Diante deste cenário, e considerando as limitações que a esteira têm, como sua conectividade com outros aparelhos além da pulseira que é algo inviável, propõe-se o desenvolvimento de…
 
-*Contextualize aqui a problemática trazida pelo parceiro de projeto.*
-
-*Descreva brevemente a solução desenvolvida para o parceiro de negócios. Descreva os aspectos essenciais para a criação de valor do produto, com o objetivo de ajudar a entender melhor a realidade do cliente e entregar uma solução que está alinhado com o que ele espera.*
-
-*Observe a seção 2 e verifique que ali é possível trazer mais detalhes, portanto seja objetivo aqui. Atualize esta descrição até a entrega final, conforme desenvolvimento.*
 
 # <a name="c2"></a>2. Visão Geral da Aplicação Web (sprint 1)
 
