@@ -47,10 +47,19 @@ Diante deste cenário, e considerando as limitações que a esteira têm, como s
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-*Preencha com até 400 palavras*
+As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
+O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
+<br>
+<div align="center">
+  <sub>Figura 2.1.1 -  5 Forças de Porter</sub><br>
+  <img src="../assets/Forças-de-Porter.png" width="100%" 
+  <sub>Fonte: Material produzido pelos autores (2026).<sup>
+</div>
+<br>   
 
-*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.*
+Portanto, com base na análise das cinco forças aplicada ao projeto, conclui-se que o ambiente competitivo se mostra favorável. A rivalidade praticamente inexistente e o baixo poder dos fornecedores criam condições propícias para a operação. Os pontos de atenção concentram-se no poder de barganha elevado da Red Bull, que é o único cliente e definidor de todos os critérios de aceitação, e na ameaça média de substitutos, dado que a prancheta ainda cumpre funções básicas e uma regressão a esse formato permanece viável.
 
+O equilíbrio geral das forças indica que o maior risco estratégico não é externo, mas relacional: manter o alinhamento contínuo com o cliente é condição essencial para o sucesso do projeto.
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
 *Preencha com até 100 palavras – sem necessidade de fonte*
