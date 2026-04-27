@@ -77,9 +77,34 @@
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
-*Sem limite de palavras – usar template do curso*
+A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
-*Registre na matriz os riscos identificados no projeto.*
+<div align="center">
+  <sub>Figura 2.1.5.1 Matriz de risco</sub><br>
+  <img src="/g03/assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
+
+### Matriz de Riscos do Projeto (AMEAÇAS)
+
+| ID | Risco | Descrição Detalhada | Impacto | Probabilidade | Plano de Ação e Resposta (Mitigação) | Responsável |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **R01** | Instabilidade de Infraestrutura de Rede Local | Verificou-se a possibilidade de interrupção da conectividade nos locais das seletivas regionais, o que impossibilitaria a sincronização de dados em tempo real com o servidor central. | Alto | Média | Estabelecimento de um protocolo de cache local (offline first) para armazenamento temporário de dados e uso de redundância via rede 4G/5G. | Red Bull |
+| **R02** | Incapacidade de Processamento (Overload/Downtime) | Projetou-se o risco de o servidor não suportar o volume de requisições durante picos de acesso (especialmente na final), resultando em indisponibilidade do sistema. | Crítico | Baixa | Implementação de arquitetura escalável (Auto-scaling) e realização de testes de carga (Stress Tests) simulando o dobro do tráfego esperado. | Cauan |
+| **R03** | Incongruência de Métricas (Hardware vs. Software) | Identificou-se o risco de divergência entre os dados exibidos no painel físico da esteira e os processados pela plataforma, afetando a credibilidade do sistema. | Médio | Média | Realização de calibração prévia rigorosa e implementação de um fator de correção algorítmico testado em ambiente controlado antes das seletivas. | Fernando |
+| **R04** | Falha na Integridade do Registro de Transição | Considerou-se a ocorrência de falhas no registro do momento exato da troca de atletas, o que acarretaria a corrupção das métricas individuais de pace. | Alto | Média | Desenvolvimento de uma interface de confirmação rápida para o "juiz de prova" e logs de segurança com carimbo de tempo (timestamp) de alta precisão. | André |
+| **R05** | Não Conformidade com Identidade Visual (Brandbook) | Avaliou-se o risco de a interface desenvolvida ser rejeitada pelo departamento de Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validar com a equipe e parceiros da Red Bull as tomadas de decisão referentes ao visual da aplicação. | Augusto |
+| **R06** | Latência Elevada na Transmissão de Dados | Detectou-se o risco de atraso (delay) perceptível entre a atividade física do atleta e a atualização visual no painel, prejudicando a experiência do usuário. | Médio | Alta | Otimização do pipeline de dados via WebSockets para comunicação bidirecional de baixa latência e redução do tamanho dos pacotes de dados enviados. | Red Bull |
+
+### Matriz de Riscos do Projeto (OPORTUNIDADES)
+
+| ID | Risco (Oportunidade) | Descrição Detalhada | Impacto | Probabilidade | Plano de Ação (Potencialização) | Responsável |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **R07** | Viralização Orgânica via Redes Sociais | Identificou-se a oportunidade de ampliação do alcance digital do evento. Projetou-se um recurso de compartilhamento rápido de conquistas, estimulando postagens massivas no Instagram e Strava. | Alto | Alta | Desenvolvimento de APIs de integração direta e geração automatizada de cards com a identidade visual da marca. | Red Bull |
+| **R08** | Otimização de Latência (Edge Computing) | Constatou-se a viabilidade de utilizar processamento em borda para neutralizar a latência, garantindo atualizações em tempo real mesmo com internet oscilante. | Alto | Alta | Homologação de dispositivos locais (tablets) com capacidade de processamento autônomo e sincronização assíncrona. | Red Bull |
+| **R09** | Engajamento por Gamificação | Mapeou-se o potencial de dinâmicas de gamificação para elevar a motivação. Planejou-se a inserção de Leaderboards e "corrida virtual" para estimular a competitividade. | Alto | Média | Aplicação de diretrizes de game design e uso de frameworks de animação leves para garantir interatividade e performance. | Cauan |
+| **R10** | Monitoramento Preditivo de Segurança | Avaliou-se a possibilidade de utilizar a telemetria para detectar quedas de rendimento, acionando alertas automáticos para prevenção de lesões ou desmaios. | Crítico | Média | Definição de limiares algorítmicos com medicina esportiva e criação de um dashboard de notificações para socorristas. | Luckas |
+| **R11** | Integração de Comunidade (Fan Zone) | Considerou-se a criação de uma "Fan Zone" digital para envio de mensagens de incentivo que aparecem na tela do corredor durante a prova. | Médio | Média | Implementação de moderação automatizada e integração de interface que não sobreponha dados críticos de prova. | Daniel |
 
 ## 2.2. Personas (sprint 1)
 
