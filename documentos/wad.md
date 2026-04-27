@@ -52,14 +52,33 @@ O modelo mapeia cinco forças externas que determinam a intensidade da concorrê
 <br>
 <div align="center">
   <sub>Figura 2.1.1 -  5 Forças de Porter</sub><br>
-  <img src="../assets/Forças-de-Porter.png" width="100%" 
+  <img src="../assets/ForçasPcorrecao.png" width="100%" 
   <sub>Fonte: Material produzido pelos autores (2026).<sup>
 </div>
 <br>   
 
-Portanto, com base na análise das cinco forças aplicada ao projeto, conclui-se que o ambiente competitivo se mostra favorável. A rivalidade praticamente inexistente e o baixo poder dos fornecedores criam condições propícias para a operação. Os pontos de atenção concentram-se no poder de barganha elevado da Red Bull, que é o único cliente e definidor de todos os critérios de aceitação, e na ameaça média de substitutos, dado que a prancheta ainda cumpre funções básicas e uma regressão a esse formato permanece viável.
+#### 1. Rivalidade entre concorrentes
+A rivalidade é classificada como baixa. O projeto é direcionado a um evento interno exclusivo da Red Bull, o que elimina a competição direta de mercado por outros possíveis rivais. Atualmente, o maior "concorrente" é o processo manual feito com pranchetas. Embora existam ferramentas de gestão no mercado, nenhuma é adaptada para a dinâmica específica de um revezamento de 24 horas, classificando, assim, a rivalidade como praticamente inexistente no nosso nicho de atuação.
 
-O equilíbrio geral das forças indica que o maior risco estratégico não é externo, mas relacional: manter o alinhamento contínuo com o cliente é condição essencial para o sucesso do projeto.
+#### 2. Ameaça de novos entrantes
+A ameaça de novos entrantes é média. Do ponto de vista técnico, o desenvolvimento de uma solução similar é simples; contudo, as barreiras de entrada são principalmente contextuais e operacionais. O sistema exige uma validação rigorosa do time de Field Marketing e uma garantia inegociável de confiabilidade para operar sem interrupções por 24 horas. Além disso, o custo de troca durante a execução do evento é extremamente inviável, o que protege a solução uma vez que ela é implementada.
+
+#### 3. Poder de barganha dos fornecedores
+O poder de barganha é baixo. A dependência de fornecedores se restringe à infraestrutura digital básica, como serviços de nuvem (cloud), bancos de dados e ferramentas de desenvolvimento. Como o mercado de tecnologia oferece uma ampla gama de provedores e opções intercambiáveis, o poder individual de cada fornecedor é mitigado, permitindo que o projeto mantenha autonomia sobre seus custos e escolhas técnicas.
+
+#### 4. Ameaça de produtos substitutos
+A ameaça é média. Os substitutos imediatos não são outras plataformas digitais, mas sim o método analógico (prancheta e papel), planilhas colaborativas ou aplicativos genéricos de produtividade. Embora sejam soluções arcaicas e menos eficientes para a análise de dados em tempo real, elas cumprem as funcionalidades básicas de registro. A viabilidade de uma regressão a esses formatos obriga o projeto a manter um alto nível de entrega de valor para justificar a digitalização.
+
+#### 5. Poder de barganha dos clientes
+O poder de barganha é alto. O projeto possui um cenário de monopsônio, onde há apenas um cliente direto: a Red Bull (representada pelo time de Field Marketing). Como único "comprador" e definidor de requisitos, o cliente tem total controle sobre o escopo, as prioridades e os critérios de aceitação. A ausência de outros clientes no horizonte do projeto aumenta a autoridade da Red Bull para exigir ajustes e determinar o sucesso ou fracasso da solução.
+
+### Conclusão
+Com base na análise das cinco forças aplicada ao projeto, conclui-se que o ambiente competitivo se mostra favorável à implementação e consolidação da ferramenta. A rivalidade praticamente inexistente, somada ao baixo poder de barganha dos fornecedores, cria um "oceano azul" operacional, onde a pressão externa de mercado é minimizada pela especificidade do nicho e pela abundância de recursos tecnológicos.
+
+Entretanto, o equilíbrio estratégico do projeto é sensível a dois vetores internos de atenção. O primeiro é o poder de barganha elevado da Red Bull, que, por ser o cliente único e soberano, transforma a relação comercial em uma dependência direta de alinhamento de expectativas. O segundo é a ameaça média de substitutos, uma vez que a simplicidade do método analógico (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade excessiva no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
+
+Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é de natureza externa ou competitiva, mas sim relacional e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir um alinhamento contínuo e rigoroso com os critérios de aceitação do cliente, assegurando que a superioridade da ferramenta digital em relação aos métodos substitutos seja evidente, estável e indispensável durante as 24 horas de operação.
+
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
 A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 1 mostra a matriz que montamos.
@@ -142,7 +161,7 @@ Critério de aceite 1 | CR1: descrever cenário + testes de aceite
 Critério de aceite 2 | CR2: descrever cenário + testes de aceite
 Critério de aceite ... | CR...
 Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que é Valorosa? Por que é Estimável? Por que é Pequena? Por que é Testável?)*
-
+a
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
@@ -151,12 +170,6 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
-*Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.*
-
-| ID    | Descrição | Prioridade | Status       |
-|-------|-----------|------------|--------------|
-| RF001 | ...       | Alta       | Implementado |
-| RF002 | ...       | Média      | Planejado    |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
