@@ -1,7 +1,7 @@
 # Inteli - Instituto de Tecnologia e Liderança 
 
 <p align="center">
-<a href= "https://www.inteli.edu.br/"><img src="/assets/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
+<a href= "https://www.inteli.edu.br/"><img src="./assets/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
 </p>
 
 # Nome do projeto
@@ -9,23 +9,23 @@
 ## Nome do grupo
 
 ## :student: Integrantes: 
-- <a href="https://www.linkedin.com/">Nome do integrante 1</a>
-- <a href="https://www.linkedin.com/">Nome do integrante 2</a>
-- <a href="https://www.linkedin.com/">Nome do integrante 3</a> 
-- <a href="https://www.linkedin.com/">Nome do integrante 4</a> 
-- <a href="https://www.linkedin.com/">Nome do integrante 5</a>
-- <a href="https://www.linkedin.com/">Nome do integrante 6</a> 
-- <a href="https://www.linkedin.com/">Nome do integrante 7</a>
+- <a href="https://www.linkedin.com/in/andre-lmelo?utm_source=share_via&utm_content=profile&utm_medium=member_android">André Lopes de Melo</a>
+- <a href="https://www.linkedin.com/in/augusto-de-castro-cadena-259555401/">Augusto de Castro Cadena</a>
+- <a href="https://www.linkedin.com/in/candido-luiz-cidrao-95b723380?utm_source=share_via&utm_content=profile&utm_medium=member_android">Cândido Luiz Vieira Quinderé Cidrão</a> 
+- <a href="https://www.linkedin.com/in/cauanmartinss?utm_source=share_via&utm_content=profile&utm_medium=member_android">Cauan da Rocha Martins</a> 
+- <a href="https://www.linkedin.com/in/daniel-hamoui-9a4814398?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Daniel Hamoui</a>
+- <a href="www.linkedin.com/in/fernando-ohara-300870405">Fernando Takeshi Ohara</a> 
+- <a href="https://www.linkedin.com/in/luckas-milfont-859a073b6/">Luckas Milfont</a>
 
 ## :teacher: Professores:
 ### Orientador(a) 
-- <a href="https://www.linkedin.com/">Nome do professor 1</a>
+- <a href="https://www.linkedin.com/in/profclaudioandre/">Cláudio André</a>
 ### Instrutores
-- <a href="https://www.linkedin.com/">Nome do professor 2</a>
-- <a href="https://www.linkedin.com/">Nome do professor 3</a> 
-- <a href="https://www.linkedin.com/">Nome do professor 4</a> 
-- <a href="https://www.linkedin.com/">Nome do professor 5</a>
-- <a href="https://www.linkedin.com/">Nome do professor 6</a>
+- <a href="https://www.linkedin.com/in/camilanarantes/">Camila Naves Arantes</a>
+- <a href="https://www.linkedin.com/in/cristiano-benites-ph-d-687647a8/">Cristiano Benitez</a> 
+- <a href="https://www.linkedin.com/in/heloisacandello?utm_source=share_via&utm_content=profile&utm_medium=member_android">Heloisa Caroline de Souza Pereira Candello</a> 
+- <a href="https://www.linkedin.com/in/luciano-galdino-26191b36/">Luciano Galdino</a>
+- <a href="https://www.linkedin.com/in/natalia-k-37a62052?utm_source=share_via&utm_content=profile&utm_medium=member_android">Natalia Varela da Rocha Kloeckner</a>
 
 ## 📝 Descrição
 
@@ -81,7 +81,7 @@ npm start
     * 
 * 0.2.0 - XX/XX/2024
     * 
-* 0.1.0 - XX/XX/2024
+* 0.1.0 - 30/04/2024
     *
 
 ## 📋 Licença/License
@@ -91,5 +91,4 @@ Alunos inteli (remover essa observação do readme.md após leitura e execução
 1. Siga o tutorial para criação da licença: https://drive.google.com/file/d/1hXWLHUhjBkPVuGqeE2LZKozFntnJZzlx/view
 ```
 
-<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/Intelihub/Template_M2/">MODELO GIT INTELI</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.yggbrasil.com.br/vr">Inteli, Nome do integrante 1, Nome do integrante 2, Nome do integrante 3, Nome do integrante 4, Nome do integrante 5, Nome do integrante 6, Nome do integrante 7</a> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
-
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/Intelihub/Template_M2/">MODELO GIT INTELI</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.yggbrasil.com.br/vr">Inteli, André Lopes de Melo, Augusto de Castro Cadena, Cândido Luiz Vieira Quinderé Cidrão, Cauan da Rocha Martins, Daniel Hamoui, Fernando Takeshi Ohara, Luckas Milfont</a> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
