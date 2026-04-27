@@ -125,7 +125,62 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.2. Personas (sprint 1)
 
-*Posicione aqui suas Personas em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
+**Perfil dos Usuários:**
+
+- Usuários principais: time operacional do evento (Field Marketing);
+
+- Usuários secundários: organização para validação dos dados;
+
+**Perfil:**
+
+- Perfil sem especialização em sistemas digitais;
+
+- Atuam em ambiente dinâmico, com pressão e constantes mudanças de contexto;
+
+- Precisam de rapidez (eficácia) e praticidade (eficiência) para as suas funções;
+
+- Possuem baixa tolerância a sistemas complexos ou lentos;
+
+- Focam na execução do evento, mas não na tecnologia;
+
+**Dores dos Usuários:**
+
+- Potencial para erros no registro manual (anotações incorretas ou imprecisas);
+
+- Falta de confiabilidade e consistência das informações ao longo das 24 horas;
+
+- Impossibilidade de monitorar em tempo real o total de quilômetros por equipe;
+
+- Operação altamente demandante (registro contínuo + dinâmica intensa do evento);
+
+- Dependência de checkpoints manuais como o “backup” a cada 30 minutos;
+
+- Ausência de métodos de rastreabilidade dos registros (apenas uma pessoa com uma prancheta registra);
+
+- Restrições tecnológicas (tecnologias sem integração direta com as esteiras e inviabilidade de uso de pulseiras);
+
+- Perda de dados de até 30 minutos caso a esteira pare de funcionar;
+
+**Necessidades dos Usuários:**
+
+- Substituir a prancheta por um processo digital simples e ágil;
+
+- Possuir um sistema de backups constantes e realizados automaticamente;
+
+- Permitir registro rápido de início, checkpoints e fim da corrida;
+
+- Calcular automaticamente o total de quilômetros por equipe;
+
+- Possibilitar acompanhamento conveniente do placar e evolução da competição;
+
+- Disponibilizar informações em tempo real (ou quase) durante o evento;
+
+-  Garantir robustez e minimizar erros operacionais;
+
+- Suportar operação contínua durante 24 horas;
+
+- Ser utilizável em dispositivos móveis no ambiente do evento;
+
 
 ## 2.3. User Stories (sprints 1 a 5)
 
