@@ -53,9 +53,15 @@ Diante deste cenário, e considerando as limitações que a esteira têm, como s
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-*Preencha com até 100 palavras – sem necessidade de fonte*
+A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 1 mostra a matriz que montamos.
 
-*Apresente uma visão geral da situação do parceiro com base na matriz SWOT (forças, fraquezas, oportunidades e ameaças). Foque na relação com os concorrentes e o posicionamento da instituição.*
+*Figura 1 — Análise SWOT da Red Bull*
+
+<img src="../assets/Analise_Swot.png">
+
+<sub>Fonte: elaborado pelos autores (2026).</sub>
+
+O ponto mais forte da Red Bull é a marca em si e os eventos próprios, e o 24 Horas se encaixa bem nessa linha. A maior fraqueza para o nosso projeto é como a contagem dos quilômetros é feita hoje, no papel, o que abre espaço para erros. Do lado de fora, a corrida vem crescendo no Brasil e isso pesa a favor, mas também tem concorrência forte de Monster, Baly e TNT, sem contar que energético é um produto que sempre acende o debate sobre saúde.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
