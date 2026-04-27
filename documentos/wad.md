@@ -36,9 +36,12 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-A proposta do projeto surge a partir de um desafio operacional real no evento da Red Bull 24 Horas, uma competição de corrida em esteira que duas equipes de 16 pessoas cada revezam durante 24 horas. A equipe que completar mais quilômetros na esteira vence, porém o controle é feito manualmente, por meio de anotações em uma prancheta pelos jurados, registram qual atleta está iniciando, e de 30 em 30 minutos como uma forma de backup, e ao término da corrida do atleta, o meio de registro aumenta drasticamente erros em contagens e fora que a plateia não conseguem acompanhar o desenvolvimento de cada equipe. Além disso, o trabalho em que os jurados têm para organizar todos os dados das 24 horas em até 48 horas.
- 
-Diante deste cenário, e considerando as limitações que a esteira têm, como sua conectividade com outros aparelhos além da pulseira que é algo inviável, propõe-se o desenvolvimento de…
+A proposta do projeto surge a partir de um desafio operacional real no evento da Red Bull 24 Horas, uma competição de corrida em esteira onde duas equipes com 16 participantes cada se revezam durante as 24 horas de prova. A equipe que completar mais quilômetros na esteira após a apuração dos resultados vence; porém, o controle é feito manualmente, por meio de anotações em uma prancheta pelo time operacional do Field Marketing, no qual se registra qual é o atleta que entrará para correr, e, de 5 em 5 minutos, realiza-se o backup. Ao término da corrida do atleta, é marcada a quilometragem e tirada uma foto para arquivo.
+
+Diante deste cenário e considerando as limitações humanas e das esteiras utilizadas (Technogym), como a conectividade com outros aparelhos além da pulseira, que é algo inviável, propõe-se o desenvolvimento de uma plataforma digital que irá mostrar os dados da corrida, com o backup de 5 em 5 minutos, nome dos atletas, qual horário cada um entrou e uma tabela separada para cada equipe. Será um sistema de banco de dados simples, com um recurso que facilite também o registro das fotos da esteira com a quilometragem, para que não fique algo totalmente manual, garantindo uma maior confiabilidade das informações e diminuindo problemas por erros humanos.
+
+Além disso, o sistema irá calcular automaticamente a quilometragem, cada vez que será computada pelo pessoal do Field Marketing, e também irá contar com um display simultâneo restrito para o pessoal da Red Bull, para que haja um controle das equipes, permitindo um melhor acompanhamento durante a competição.
+
 
 
 # <a name="c2"></a>2. Visão Geral da Aplicação Web (sprint 1)
