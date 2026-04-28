@@ -206,20 +206,108 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-*Posicione aqui a lista de User Stories levantadas para o projeto. Siga o template de User Stories e utilize a mesma referência USXX no roadmap de seu quadro Kanban. Indique todas as User Stories mapeadas, mesmo aquelas que não forem implementadas ao longo do projeto. Não se esqueça de explicar o INVEST das 5 User Stories prioritárias*
+### US01
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US01 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso selecionar a equipe e a esteira antes de qualquer registro, para garantir que os dados sejam atribuídos corretamente desde o início do turno |
+| **Critério de aceite 1** | CR1 : O sistema exibe as equipes (A e B) e as duas esteiras por equipe para seleção obrigatória na tela inicial. Dado que Ricardo acessa o sistema, quando a tela carrega, então ele vê as opções de seleção antes de qualquer ação |
+| **Critério de aceite 2** | CR2 : A seleção persiste durante toda a sessão de operação. Dado que Ricardo selecionou uma esteira, quando registra checkpoints subsequentes, então a seleção permanece ativa sem necessidade de reconfiguração |
+| **Critério de aceite 3** | CR3 : Bloqueio de ação sem seleção. Dado que o operador tenta registrar algo sem definir a esteira, quando confirma, então o sistema impede o salvamento e solicita a seleção |
+| **CRITERIOS INVEST** | |
 
-*ATUALIZE ESTA SEÇÃO SEMPRE QUE ALGUMA DEMANDA MUDAR EM SEU PROJETO*
+### US02
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US02 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar o início de um turno com timestamp automático, para marcar com precisão quando o corredor começou sem depender de anotação manual |
+| **Critério de aceite 1** | CR1 : Geração automática de tempo. Dado que Ricardo clica em iniciar turno, quando confirma, então o sistema registra a data e hora exatas sem entrada manual |
+| **Critério de aceite 2** | CR2 : Agilidade operacional. Dado que o início é registrado, quando salvo, então o sistema exige apenas o vínculo com a esteira, sem necessidade de identificar o atleta nominalmente no momento da largada |
+| **CRITERIOS INVEST** | |
 
-*Template de User Story*
-Identificação | USXX (troque XX por numeração ordenada das User Stories)
---- | ---
-Persona | nome da Persona
-User Story | "como (papel/perfil), posso (ação/meta), para (benefício/razão)"
-Critério de aceite 1 | CR1: descrever cenário + testes de aceite
-Critério de aceite 2 | CR2: descrever cenário + testes de aceite
-Critério de aceite ... | CR...
-Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que é Valorosa? Por que é Estimável? Por que é Pequena? Por que é Testável?)*
-a
+### US03
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US03 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar o fim de um turno com timestamp automático e o valor de km da esteira, para documentar com precisão o encerramento de cada corrida |
+| **Critério de aceite 1** | CR1 : Registro de encerramento. Dado que Ricardo clica em finalizar turno, quando confirma, então o sistema grava o timestamp final e exige obrigatoriamente o valor total de KM da esteira |
+| **Critério de aceite 2** | CR2 : Confirmação de segurança. Dado que a ação de encerrar é acionada, quando o sistema processa, então ele exibe um alerta de confirmação para evitar encerramentos acidentais por erro de toque |
+| **CRITERIOS INVEST** | |
+
+### US04
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US04 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar checkpoints a cada 5 minutos com o valor de km, para criar um histórico de backup caso a esteira apresente problema |
+| **Critério de aceite 1** | CR1 : Registro de checkpoint. Dado que Ricardo insere o KM atual, quando confirma, então o sistema gera o timestamp automático e vincula ao histórico da equipe |
+| **Critério de aceite 2** | CR2 : Alerta de tempo. Dado que 5 minutos se passaram desde o último registro, quando o tempo expira, então o sistema exibe um alerta visual na tela para lembrar o operador de realizar o novo checkpoint |
+| **Critério de aceite 3** | CR3 : Validação de KM. Dado que o operador insere um KM menor que o último registrado, quando tenta salvar, então o sistema bloqueia e emite alerta de inconsistência |
+| **CRITERIOS INVEST** | |
+
+### US05
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US05 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso editar qualquer registro e adicionar observações livres, para corrigir inconsistências sem perder o histórico original |
+| **Critério de aceite 1** | CR1 : Edição com rastro de auditoria. Dado que um registro é alterado, quando salvo, então o sistema mantém o dado original armazenado e indica visualmente que o item foi editado |
+| **Critério de aceite 2** | CR2 : Campo de observações. Dado que Ricardo acessa o modo de edição, quando abre o formulário, então um campo de texto livre está disponível para justificativas operacionais |
+| **CRITERIOS INVEST** | |
+
+### US06
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US06 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar o total de km por equipe e o total geral em tempo real, para acompanhar o andamento da competição |
+| **Critério de aceite 1** | CR1 : Painel de consolidação. Dado que Camila acessa a tela de gestão, quando a página carrega, então os totais acumulados de KM por equipe e o total geral do evento são exibidos de forma clara |
+| **Critério de aceite 2** | CR2 : Atualização dinâmica. Dado que novos dados são inseridos pelos promotores, quando salvos, então o painel de Camila reflete os novos totais automaticamente sem necessidade de recarregar a página |
+| **CRITERIOS INVEST** | |
+
+### US07
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US07 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar métricas derivadas como projeção de km e pace médio, para tomar decisões táticas com base em dados concretos |
+| **Critério de aceite 1** | CR1 : Cálculo de métricas. Dado que o sistema possui dados de tempo e distância, quando o painel é consultado, então são exibidos o pace médio, velocidade média e a projeção final de KM para as 24 horas |
+| **Critério de aceite 2** | CR2 : Projeção por equipe. Dado que o ritmo de corrida muda, quando o cálculo é processado, então a projeção de KM ao fim do evento é recalculada individualmente para a Equipe A e Equipe B |
+| **CRITERIOS INVEST** | |
+
+### US08
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US08 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso acessar o histórico cronológico de todos os registros, para auditar qualquer ponto da competição |
+| **Critério de aceite 1** | CR1 : Listagem cronológica. Dado que Camila acessa o histórico, quando a tela abre, então todos os eventos são listados do mais recente para o mais antigo com seus respectivos timestamps |
+| **Critério de aceite 2** | CR2 : Filtragem por esteira. Dado que Camila seleciona um filtro, quando aplicado, então o sistema exibe apenas os registros específicos da equipe ou esteira selecionada |
+| **CRITERIOS INVEST** | |
+
+### US09
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US09 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar o placar em tela cheia, para que o público e a organização acompanhem o resultado em tempo real |
+| **Critério de aceite 1** | CR1 : Layout de exibição. Dado que o modo placar é acionado, quando a tela abre, então os dados de KM e tempo decorrido aparecem em formato ampliado e legível à distância |
+| **Critério de aceite 2** | CR2 : Independência de sessão. Dado que o placar está aberto em uma TV, quando os operadores usam o sistema nos dispositivos móveis, então o placar permanece estável e se atualiza automaticamente |
+| **CRITERIOS INVEST** | |
+
+### US10
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US10 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso gerar um relatório pós evento com o histórico completo, para ter documentação oficial do resultado |
+| **Critério de aceite 1** | CR1 : Exportação de dados. Dado que a competição encerra, quando Camila clica em gerar relatório, então o sistema baixa um arquivo em formato padronizado contendo todos os registros e métricas finais |
+| **Critério de aceite 2** | CR2 : Identificação automática. Dado que o relatório é gerado, quando o download conclui, então o arquivo possui um nome padronizado incluindo a data do evento para facilitar a organização |
+| **CRITERIOS INVEST** | |
+
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
