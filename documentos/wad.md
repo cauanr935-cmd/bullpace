@@ -54,17 +54,36 @@ O modelo mapeia cinco forças externas que determinam a intensidade da concorrê
 <br>
 <div align="center">
   <sub>Figura 2.1.1 -  5 Forças de Porter</sub><br>
-  <img src="../assets/Forças-de-Porter.png" width="100%" 
+  <img src="../assets/ForçasPcorrecao.png" width="100%" 
   <sub>Fonte: Material produzido pelos autores (2026).<sup>
 </div>
 <br>   
 
-Portanto, com base na análise das cinco forças aplicada ao projeto, conclui-se que o ambiente competitivo se mostra favorável. A rivalidade praticamente inexistente e o baixo poder dos fornecedores criam condições propícias para a operação. Os pontos de atenção concentram-se no poder de barganha elevado da Red Bull, que é o único cliente e definidor de todos os critérios de aceitação, e na ameaça média de substitutos, dado que a prancheta ainda cumpre funções básicas e uma regressão a esse formato permanece viável.
+#### 1. Rivalidade entre concorrentes
+A rivalidade é classificada como baixa. O projeto é direcionado a um evento interno exclusivo da Red Bull, o que elimina a competição direta de mercado por outros possíveis rivais. Atualmente, o maior "concorrente" é o processo manual feito com pranchetas. Embora existam ferramentas de gestão no mercado, nenhuma é adaptada para a dinâmica específica de um revezamento de 24 horas, classificando, assim, a rivalidade como praticamente inexistente no nosso nicho de atuação.
 
-O equilíbrio geral das forças indica que o maior risco estratégico não é externo, mas relacional: manter o alinhamento contínuo com o cliente é condição essencial para o sucesso do projeto.
+#### 2. Ameaça de novos entrantes
+A ameaça de novos entrantes é média. Do ponto de vista técnico, o desenvolvimento de uma solução similar é simples; contudo, as barreiras de entrada são principalmente contextuais e operacionais. O sistema exige uma validação rigorosa do time de Field Marketing e uma garantia inegociável de confiabilidade para operar sem interrupções por 24 horas. Além disso, o custo de troca durante a execução do evento é extremamente inviável, o que protege a solução uma vez que ela é implementada.
+
+#### 3. Poder de barganha dos fornecedores
+O poder de barganha é baixo. A dependência de fornecedores se restringe à infraestrutura digital básica, como serviços de nuvem (cloud), bancos de dados e ferramentas de desenvolvimento. Como o mercado de tecnologia oferece uma ampla gama de provedores e opções intercambiáveis, o poder individual de cada fornecedor é mitigado, permitindo que o projeto mantenha autonomia sobre seus custos e escolhas técnicas.
+
+#### 4. Ameaça de produtos substitutos
+A ameaça é média. Os substitutos imediatos não são outras plataformas digitais, mas sim o método analógico (prancheta e papel), planilhas colaborativas ou aplicativos genéricos de produtividade. Embora sejam soluções arcaicas e menos eficientes para a análise de dados em tempo real, elas cumprem as funcionalidades básicas de registro. A viabilidade de uma regressão a esses formatos obriga o projeto a manter um alto nível de entrega de valor para justificar a digitalização.
+
+#### 5. Poder de barganha dos clientes
+O poder de barganha é alto. O projeto possui um cenário de monopsônio, onde há apenas um cliente direto: a Red Bull (representada pelo time de Field Marketing). Como único "comprador" e definidor de requisitos, o cliente tem total controle sobre o escopo, as prioridades e os critérios de aceitação. A ausência de outros clientes no horizonte do projeto aumenta a autoridade da Red Bull para exigir ajustes e determinar o sucesso ou fracasso da solução.
+
+### Conclusão
+Com base na análise das cinco forças aplicada ao projeto, conclui-se que o ambiente competitivo se mostra favorável à implementação e consolidação da ferramenta. A rivalidade praticamente inexistente, somada ao baixo poder de barganha dos fornecedores, cria um "oceano azul" operacional, onde a pressão externa de mercado é minimizada pela especificidade do nicho e pela abundância de recursos tecnológicos.
+
+Entretanto, o equilíbrio estratégico do projeto é sensível a dois vetores internos de atenção. O primeiro é o poder de barganha elevado da Red Bull, que, por ser o cliente único e soberano, transforma a relação comercial em uma dependência direta de alinhamento de expectativas. O segundo é a ameaça média de substitutos, uma vez que a simplicidade do método analógico (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade excessiva no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
+
+Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é de natureza externa ou competitiva, mas sim relacional e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir um alinhamento contínuo e rigoroso com os critérios de aceitação do cliente, assegurando que a superioridade da ferramenta digital em relação aos métodos substitutos seja evidente, estável e indispensável durante as 24 horas de operação.
+
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 1 mostra a matriz que montamos.
+A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 2.1.2 mostra a matriz que montamos.
 
 <div align="center">
   <sub>Figura 2.1.2 — Análise SWOT da Red Bull</sub><br>
@@ -72,7 +91,7 @@ A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esport
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
 
-O ponto mais forte da Red Bull é a marca em si e os eventos próprios, e o 24 Horas se encaixa bem nessa linha. A maior fraqueza para o nosso projeto é como a contagem dos quilômetros é feita hoje, no papel, o que abre espaço para erros. Do lado de fora, a corrida vem crescendo no Brasil e isso pesa a favor, mas também tem concorrência forte de Monster, Baly e TNT, sem contar que energético é um produto que sempre acende o debate sobre saúde.
+O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Marketing, que já tem experiência em rodar eventos próprios de grande porte como o 24 Horas. A maior fraqueza é como o controle de quilometragem é feito hoje, no papel, somado às limitações das esteiras que não conversam com sistemas externos. Do lado de fora, a corrida vem crescendo no Brasil e o público jovem engajado em eventos urbanos pesa a favor, mas o cenário também tem ameaças relevantes para uma prova de 24 horas: Outros eventos esportivos disputando atenção, imprevistos operacionais durante a competição e riscos de saúde dos atletas em uma prova de longa duração.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
@@ -145,19 +164,107 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-*Posicione aqui a lista de User Stories levantadas para o projeto. Siga o template de User Stories e utilize a mesma referência USXX no roadmap de seu quadro Kanban. Indique todas as User Stories mapeadas, mesmo aquelas que não forem implementadas ao longo do projeto. Não se esqueça de explicar o INVEST das 5 User Stories prioritárias*
+### US01
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US01 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso selecionar a equipe e a esteira antes de qualquer registro, para garantir que os dados sejam atribuídos corretamente desde o início do turno |
+| **Critério de aceite 1** | CR1 : O sistema exibe as equipes (A e B) e as duas esteiras por equipe para seleção obrigatória na tela inicial. Dado que Ricardo acessa o sistema, quando a tela carrega, então ele vê as opções de seleção antes de qualquer ação |
+| **Critério de aceite 2** | CR2 : A seleção persiste durante toda a sessão de operação. Dado que Ricardo selecionou uma esteira, quando registra checkpoints subsequentes, então a seleção permanece ativa sem necessidade de reconfiguração |
+| **Critério de aceite 3** | CR3 : Bloqueio de ação sem seleção. Dado que o operador tenta registrar algo sem definir a esteira, quando confirma, então o sistema impede o salvamento e solicita a seleção |
+| **CRITERIOS INVEST** | |
 
-*ATUALIZE ESTA SEÇÃO SEMPRE QUE ALGUMA DEMANDA MUDAR EM SEU PROJETO*
+### US02
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US02 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar o início de um turno com timestamp automático, para marcar com precisão quando o corredor começou sem depender de anotação manual |
+| **Critério de aceite 1** | CR1 : Geração automática de tempo. Dado que Ricardo clica em iniciar turno, quando confirma, então o sistema registra a data e hora exatas sem entrada manual |
+| **Critério de aceite 2** | CR2 : Agilidade operacional. Dado que o início é registrado, quando salvo, então o sistema exige apenas o vínculo com a esteira, sem necessidade de identificar o atleta nominalmente no momento da largada |
+| **CRITERIOS INVEST** | |
 
-*Template de User Story*
-Identificação | USXX (troque XX por numeração ordenada das User Stories)
---- | ---
-Persona | nome da Persona
-User Story | "como (papel/perfil), posso (ação/meta), para (benefício/razão)"
-Critério de aceite 1 | CR1: descrever cenário + testes de aceite
-Critério de aceite 2 | CR2: descrever cenário + testes de aceite
-Critério de aceite ... | CR...
-Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que é Valorosa? Por que é Estimável? Por que é Pequena? Por que é Testável?)*
+### US03
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US03 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar o fim de um turno com timestamp automático e o valor de km da esteira, para documentar com precisão o encerramento de cada corrida |
+| **Critério de aceite 1** | CR1 : Registro de encerramento. Dado que Ricardo clica em finalizar turno, quando confirma, então o sistema grava o timestamp final e exige obrigatoriamente o valor total de KM da esteira |
+| **Critério de aceite 2** | CR2 : Confirmação de segurança. Dado que a ação de encerrar é acionada, quando o sistema processa, então ele exibe um alerta de confirmação para evitar encerramentos acidentais por erro de toque |
+| **CRITERIOS INVEST** | |
+
+### US04
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US04 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso registrar checkpoints a cada 5 minutos com o valor de km, para criar um histórico de backup caso a esteira apresente problema |
+| **Critério de aceite 1** | CR1 : Registro de checkpoint. Dado que Ricardo insere o KM atual, quando confirma, então o sistema gera o timestamp automático e vincula ao histórico da equipe |
+| **Critério de aceite 2** | CR2 : Alerta de tempo. Dado que 5 minutos se passaram desde o último registro, quando o tempo expira, então o sistema exibe um alerta visual na tela para lembrar o operador de realizar o novo checkpoint |
+| **Critério de aceite 3** | CR3 : Validação de KM. Dado que o operador insere um KM menor que o último registrado, quando tenta salvar, então o sistema bloqueia e emite alerta de inconsistência |
+| **CRITERIOS INVEST** | |
+
+### US05
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US05 |
+| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
+| **User Story** | Como promotor de Field Marketing, posso editar qualquer registro e adicionar observações livres, para corrigir inconsistências sem perder o histórico original |
+| **Critério de aceite 1** | CR1 : Edição com rastro de auditoria. Dado que um registro é alterado, quando salvo, então o sistema mantém o dado original armazenado e indica visualmente que o item foi editado |
+| **Critério de aceite 2** | CR2 : Campo de observações. Dado que Ricardo acessa o modo de edição, quando abre o formulário, então um campo de texto livre está disponível para justificativas operacionais |
+| **CRITERIOS INVEST** | |
+
+### US06
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US06 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar o total de km por equipe e o total geral em tempo real, para acompanhar o andamento da competição |
+| **Critério de aceite 1** | CR1 : Painel de consolidação. Dado que Camila acessa a tela de gestão, quando a página carrega, então os totais acumulados de KM por equipe e o total geral do evento são exibidos de forma clara |
+| **Critério de aceite 2** | CR2 : Atualização dinâmica. Dado que novos dados são inseridos pelos promotores, quando salvos, então o painel de Camila reflete os novos totais automaticamente sem necessidade de recarregar a página |
+| **CRITERIOS INVEST** | |
+
+### US07
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US07 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar métricas derivadas como projeção de km e pace médio, para tomar decisões táticas com base em dados concretos |
+| **Critério de aceite 1** | CR1 : Cálculo de métricas. Dado que o sistema possui dados de tempo e distância, quando o painel é consultado, então são exibidos o pace médio, velocidade média e a projeção final de KM para as 24 horas |
+| **Critério de aceite 2** | CR2 : Projeção por equipe. Dado que o ritmo de corrida muda, quando o cálculo é processado, então a projeção de KM ao fim do evento é recalculada individualmente para a Equipe A e Equipe B |
+| **CRITERIOS INVEST** | |
+
+### US08
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US08 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso acessar o histórico cronológico de todos os registros, para auditar qualquer ponto da competição |
+| **Critério de aceite 1** | CR1 : Listagem cronológica. Dado que Camila acessa o histórico, quando a tela abre, então todos os eventos são listados do mais recente para o mais antigo com seus respectivos timestamps |
+| **Critério de aceite 2** | CR2 : Filtragem por esteira. Dado que Camila seleciona um filtro, quando aplicado, então o sistema exibe apenas os registros específicos da equipe ou esteira selecionada |
+| **CRITERIOS INVEST** | |
+
+### US09
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US09 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso visualizar o placar em tela cheia, para que o público e a organização acompanhem o resultado em tempo real |
+| **Critério de aceite 1** | CR1 : Layout de exibição. Dado que o modo placar é acionado, quando a tela abre, então os dados de KM e tempo decorrido aparecem em formato ampliado e legível à distância |
+| **Critério de aceite 2** | CR2 : Independência de sessão. Dado que o placar está aberto em uma TV, quando os operadores usam o sistema nos dispositivos móveis, então o placar permanece estável e se atualiza automaticamente |
+| **CRITERIOS INVEST** | |
+
+### US10
+| Campo | Descrição |
+| :--- | :--- |
+| **Identificação** | US10 |
+| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
+| **User Story** | Como coordenadora de operações de campo, posso gerar um relatório pós evento com o histórico completo, para ter documentação oficial do resultado |
+| **Critério de aceite 1** | CR1 : Exportação de dados. Dado que a competição encerra, quando Camila clica em gerar relatório, então o sistema baixa um arquivo em formato padronizado contendo todos os registros e métricas finais |
+| **Critério de aceite 2** | CR2 : Identificação automática. Dado que o relatório é gerado, quando o download conclui, então o arquivo possui um nome padronizado incluindo a data do evento para facilitar a organização |
+| **CRITERIOS INVEST** | |
 
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
@@ -167,12 +274,6 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
-*Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.*
-
-| ID    | Descrição | Prioridade | Status       |
-|-------|-----------|------------|--------------|
-| RF001 | ...       | Alta       | Implementado |
-| RF002 | ...       | Média      | Planejado    |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
