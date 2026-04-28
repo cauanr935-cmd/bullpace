@@ -65,15 +65,15 @@ Portanto, com base na análise das cinco forças aplicada ao projeto, conclui-se
 O equilíbrio geral das forças indica que o maior risco estratégico não é externo, mas relacional: manter o alinhamento contínuo com o cliente é condição essencial para o sucesso do projeto.
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 1 mostra a matriz que montamos.
+A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 2.1.2 mostra a matriz que montamos.
 
-*Figura 1 — Análise SWOT da Red Bull*
+**Figura 2.1.2 — Análise SWOT da Red Bull**
 
 <img src="../assets/Analise_Swot.png">
 
 <sub>Fonte: elaborado pelos autores (2026).</sub>
 
-O ponto mais forte da Red Bull é a marca em si e os eventos próprios, e o 24 Horas se encaixa bem nessa linha. A maior fraqueza para o nosso projeto é como a contagem dos quilômetros é feita hoje, no papel, o que abre espaço para erros. Do lado de fora, a corrida vem crescendo no Brasil e isso pesa a favor, mas também tem concorrência forte de Monster, Baly e TNT, sem contar que energético é um produto que sempre acende o debate sobre saúde.
+O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Marketing, que já tem experiência em rodar eventos próprios de grande porte como o 24 Horas. A maior fraqueza é como o controle de quilometragem é feito hoje, no papel, somado às limitações das esteiras que não conversam com sistemas externos. Do lado de fora, a corrida vem crescendo no Brasil e o público jovem engajado em eventos urbanos pesa a favor, mas o cenário também tem ameaças relevantes para uma prova de 24 horas: Outros eventos esportivos disputando atenção, imprevistos operacionais durante a competição e riscos de saúde dos atletas em uma prova de longa duração.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
