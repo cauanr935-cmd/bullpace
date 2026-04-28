@@ -340,18 +340,60 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
-*Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).*
+| Eixo | Requisito | Métrica / Critério | Como atendido |
+| :--- | :--- | :--- | :--- |
+| **USAB — Usabilidade** | Facilidade de aprendizado e operação sob pressão operacional. | Taxa de sucesso de 100% na realização do primeiro registro sem auxílio de manual externo. | Design de interface intuitivo com elementos visuais de alta affordance e botões de dimensões ampliadas para evitar erros de toque. |
+| **CONF — Confiabilidade** | Tolerância a falhas e preservação da integridade dos dados coletados. | Frequência de salvamento automático de dados a cada inserção de checkpoint (intervalo de 5 min). | Implementação de persistência de dados em tempo real e redundância de registros via checkpoints periódicos para evitar perdas por falhas de hardware. |
+| **DES — Desempenho** | Rapidez no processamento de informações e cálculos de performance. | Tempo de resposta para atualização de métricas no dashboard (p95) < 1000 ms. | Otimização de scripts de cálculo no front-end e consultas eficientes ao banco de dados para garantir fluidez no modo placar. |
+| **SUP — Suportabilidade** | Compatibilidade com o ecossistema tecnológico do ambiente do evento. | 100% de conformidade com os navegadores Safari e Chrome em ambiente mobile. | Desenvolvimento baseado em padrões web responsivos, garantindo a execução estável em tablets (iPads) sem necessidade de instalação local. |
+| **SEG — Segurança** | Rastreabilidade e proteção contra exclusão acidental de dados. | Garantia de 0% de registros deletados permanentemente do banco de dados durante o evento. | Aplicação de lógica de Soft Delete em todos os registros e manutenção de logs de edição para auditoria pela organização. |
+| **CAP — Capacidade** | Suporte à concorrência de múltiplos usuários operando o sistema. | Suporte para no mínimo 2 operadores simultâneos (um por equipe) realizando inputs constantes. | Arquitetura de software preparada para gerenciar requisições paralelas sem conflitos de escrita ou travamento da sessão. |
+| **REST — Restrições Design** | Independência tecnológica frente às limitações de hardware externo. | 0% de dependência de integração via pulseiras ou captura automática das esteiras Technogym. | Interface focada em entrada manual de dados padronizada, contornando a inviabilidade de pareamento com equipamentos de terceiros. |
+| **ORG — Organizacionais** | Alinhamento com os processos de desenvolvimento e padrões do grupo. | Adoção de arquitetura MVC (Model-View-Controller) conforme os padrões pedagógicos do projeto. | Desenvolvimento estruturado em sprints com documentação técnica rigorosa e uso de repositório Git para controle de versão acadêmico. |
 
-| Eixo                     | Requisito | Métrica / Critério | Como atendido |
-|--------------------------|-----------|--------------------|---------------|
-| USAB — Usabilidade       | ...       | ...                | ...           |
-| CONF — Confiabilidade    | ...       | ...                | ...           |
-| DES — Desempenho         | ...       | p95 < X ms         | ...           |
-| SUP — Suportabilidade    | ...       | ...                | ...           |
-| SEG — Segurança          | ...       | ...                | ...           |
-| CAP — Capacidade         | ...       | ...                | ...           |
-| REST — Restrições Design | ...       | ...                | ...           |
-| ORG — Organizacionais    | ...       | ...                | ...           |
+---
+
+### 3.1.3.1 Fundamentação dos Eixos
+
+#### 1. USAB — Usabilidade
+* **De que forma esse RNF é mensurável?** Através da taxa de sucesso de operadores em completar o fluxo de início e fim de turno sem erros na primeira tentativa.
+* **Conexão com RF ou Restrição:** Conecta-se ao registro de início e seleção de equipe. Deriva da restrição de que o evento dura 24h e o operador estará sob forte fadiga e pressão.
+* **Critério de Aceite:** 100% das funções críticas devem ser operáveis intuitivamente, sem necessidade de consulta a manuais externos.
+
+#### 2. CONF — Confiabilidade
+* **De que forma esse RNF é mensurável?** Pela frequência e sucesso da persistência dos dados no banco de dados a cada intervalo de 5 minutos.
+* **Conexão com RF ou Restrição:** Conecta-se diretamente ao requisito de checkpoints periódicos. Responde à necessidade do parceiro sobre a falta de confiabilidade do controle manual e falhas potenciais nas esteiras.
+* **Critério de Aceite:** Garantia de 0% de perda de dados após a confirmação do registro, com histórico disponível para recuperação imediata.
+
+#### 3. DES — Desempenho
+* **De que forma esse RNF é mensurável?** Através do tempo de latência (em milissegundos) entre o input do dado e a atualização visual no painel.
+* **Conexão com RF ou Restrição:** Conecta-se à consolidação em tempo real e ao painel de placar. Atende à necessidade da organização de ter um placar oficial instantâneo.
+* **Critério de Aceite:** O sistema deve processar os cálculos e atualizar a interface em menos de 1 segundo (p95).
+
+#### 4. SUP — Suportabilidade
+* **De que forma esse RNF é mensurável?** Pela conformidade técnica de renderização e execução das funcionalidades nos navegadores especificados.
+* **Conexão com RF ou Restrição:** Conecta-se à restrição tecnológica de ser uma aplicação web operada em tablets no campo de prova.
+* **Critério de Aceite:** Estabilidade e funcionamento pleno em 100% dos testes realizados nos navegadores Safari (iOS) e Chrome.
+
+#### 5. SEG — Segurança
+* **De que forma esse RNF é mensurável?** Pela presença de logs de alteração e pela verificação de que registros editados permanecem no banco de dados (Soft Delete).
+* **Conexão com RF ou Restrição:** Conecta-se à edição e observações nos registros. Responde à necessidade de transparência e rastreabilidade para evitar contestações no resultado final.
+* **Critério de Aceite:** 0% de exclusão física de dados; todas as alterações devem ser rastreáveis para fins de auditoria.
+
+#### 6. CAP — Capacidade
+* **De que forma esse RNF é mensurável?** Pela realização de testes de concorrência simulando múltiplos acessos simultâneos de escrita.
+* **Conexão com RF ou Restrição:** Conecta-se à estrutura operacional de ter dois operadores (um para a Equipe A e outro para a Equipe B) trabalhando simultaneamente.
+* **Critério de Aceite:** Suporte a no mínimo 2 operadores realizando inputs constantes sem travamentos de sessão ou conflitos de banco de dados.
+
+#### 7. REST — Restrições de Design
+* **De que forma esse RNF é mensurável?** Pela verificação binária da ausência de dependências de integração automática com equipamentos externos.
+* **Conexão com RF ou Restrição:** Conecta-se à restrição explícita do documento do parceiro sobre a inviabilidade de pareamento com as esteiras ou uso de pulseiras.
+* **Critério de Aceite:** O sistema deve ser funcional de forma totalmente independente de qualquer API ou hardware de terceiros.
+
+#### 8. ORG — Organizacionais
+* **De que forma esse RNF é mensurável?** Pela conformidade da estrutura de pastas e organização do código com o padrão MVC e uso de Git.
+* **Conexão com RF ou Restrição:** Conecta-se às diretrizes curriculares e aos padrões de desenvolvimento definidos pelo grupo para avaliação pedagógica.
+* **Critério de Aceite:** O projeto deve seguir a arquitetura MVC e possuir um histórico de commits que comprovem o desenvolvimento estruturado.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
