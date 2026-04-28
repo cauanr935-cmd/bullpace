@@ -105,9 +105,56 @@ O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Ma
 6. Critério de sucesso e como será avaliado
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
-*Sem limite de palavras – usar template do curso*
 
-*Elaborar o Value Proposition Canvas com base na proposta de solução definida.*
+Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [1]
+
+<div align="center">
+  <sub><b>Figura 1 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
+  <img src="assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+**Análise do Mapa do Perfil do Cliente**
+
+**Tarefas do Cliente (Customer Jobs)**
+O perfil de usuário da Operação Red Bull busca, essencialmente, realizar o registro contínuo e confiável de dados de performance, como quilometragem, velocidade e pace, durante o revezamento ininterrupto de 16 atletas por equipe (totalizando 32 participantes). Para os gestores do ecossistema, a prioridade absoluta é a consolidação e validação do total de quilômetros por equipe para a apuração de um resultado oficial e inquestionável. Portanto, o foco central do operador não é apenas inserir números, mas garantir que a transição entre atletas e o monitoramento dos checkpoints ocorram sem lacunas informacionais, exigindo que a tecnologia atue como um suporte eficiente para a gestão da prova.
+
+
+
+
+
+
+
+
+
+
+**Dores do Cliente (Pains)**
+Os operadores enfrentam barreiras críticas, como o cansaço extremo e a sobrecarga cognitiva resultantes de 24 horas de monitoramento, o que frequentemente gera erros de anotação e ilegibilidade no método manual. Essa vulnerabilidade é agravada pela ineficiência de tecnologias genéricas, como as pulseiras Technogym, que se mostram inviáveis na dinâmica veloz do evento. Dito isso, a dor do usuário é operacional e acumulativa, o risco de perda de dados históricos ou a inconsistência de registros manuais gera uma insegurança profunda quanto à integridade do resultado final, tornando o processo de apuração um fardo propenso a contestações.
+
+
+
+**Ganhos do Cliente (Gains)**
+As expectativas de ganho concentram-se na obtenção de um resultado final preciso, transparente e imune a erros humanos, resultando em uma cerimônia de premiação justa e baseada em dados reais. O usuário busca a agilidade de chegar ao fim das 24 horas de prova com todos os dados já digitalizados e prontos para análise, eliminando o retrabalho pós evento. Então, o ganho máximo desejado é a confiança operacional, onde a padronização e o registro rápido transformam-se no principal motor de sucesso da entrega técnica para o parceiro.
+
+
+
+**Análise do Mapa de Valor**
+
+**Produtos e Serviços (Products and Services)**
+
+A entrega central consiste em uma aplicação web mobile estruturada para operar em tablets, oferecendo módulos de registro de checkpoints e gestão de perfis de atletas integrados a um motor de cálculo em tempo real. A solução transforma o registro de quilometragem em métricas de performance imediatas e automatiza a geração do relatório oficial. Portanto, este eixo supre diretamente as Tarefas do Cliente (Customer Jobs), pois substitui o processo burocrático e analógico da prancheta por uma interface fluida, garantindo que o software seja o meio técnico necessário para que a Red Bull oficialize a performance dos corredores com precisão digital.
+
+**Aliviadores de Dores (Pain Relievers)**
+
+O sistema neutraliza o risco de erro humano através da padronização digital de inputs e do bloqueio de dados inconsistentes, impedindo que a fadiga do operador resulte em registros inválidos. A persistência de dados em tempo real assegura que nenhuma informação seja perdida, mesmo em casos de falhas no hardware externo. Dito isso, este eixo é o reflexo direto das Dores do Cliente (Pains), pois mitiga a insegurança gerada pelo cansaço extremo e pela vulnerabilidade do método manual, eliminando o risco de contestações e garantindo a integridade total do histórico da prova.
+
+
+
+
+**Criadores de Ganhos (Gain Creators)**
+
+Através de uma usabilidade de baixo esforço e do cálculo automático de performance, o sistema permite que registros complexos sejam realizados de forma ágil e precisa. A rastreabilidade individual por atleta assegura que cada metro percorrido seja devidamente computado e auditável no placar geral. Então, este eixo conecta-se aos Ganhos do Cliente (Gains) ao converter a tecnologia em um motor de credibilidade e transparência, assegurando que o esforço dos atletas seja premiado com um resultado final inquestionável e gerado em tempo real, sem a necessidade de retrabalho pós-evento.
+
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
@@ -149,11 +196,11 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 **Perfil dos Usuários:**
 
-- Usuários principais: Usuário Operacional (Field Marketing);
+- Usuários principais: time operacional do evento (Field Marketing);
 
-- Usuários secundários: Usuário de Coordenação (Organização do Evento);
+- Usuários secundários: organização para validação dos dados;
 
-**Perfil do Usuário Princcipal:**
+**Perfil:**
 
 - Perfil sem especialização em sistemas digitais;
 
@@ -165,7 +212,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 - Focam na execução do evento, mas não na tecnologia;
 
-**Dores do Usuário Principal:**
+**Dores dos Usuários:**
 
 - Potencial para erros no registro manual (anotações incorretas ou imprecisas);
 
@@ -183,7 +230,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 - Perda de dados de até 30 minutos caso a esteira pare de funcionar;
 
-**Necessidades do Usuário Principal:**
+**Necessidades dos Usuários:**
 
 - Substituir a prancheta por um processo digital simples e ágil;
 
@@ -202,50 +249,6 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 - Suportar operação contínua durante 24 horas;
 
 - Ser utilizável em dispositivos móveis no ambiente do evento;
-
-
-**Perfil do Usuário Secundário:**
-
-- Perfil com maior responsabilidade sobre os resultados e tomada de decisão;
-
-- Não é necessário a especialização em sistemas digitais;
-
-- Atuação em ambientes dinâmicos, com alta pressão e respostas rápidas;
-
-- Precisa de clareza, confiabilidade e organização das informações;
-
-- Possui baixa tolerância a inconsistências nos dados;
-
-- Foca na gestão do evento e na validação dos resultados;
-
-**Dores do Usuário Secundário:**
-
-- Falta de confiabilidade e consistência dos dados ao longo das 24 horas;
-
-- Necessidade constante de validar informações manualmente;
-
-- Risco de perda de dados entre checkpoints;
-
-- Dificuldade de acompanhar o desempenho das equipes em tempo real;
-
-- Dependência de registros manuais sujeitos a erro humano;
-
-- Possibilidade de decisões baseadas em dados imprecisos;
-
-**Necessidades do Usuário Secundário:**
-
-- Ter acesso a dados confiáveis e consolidados;
-
-- Acompanhar o placar e a evolução da competição em tempo real;
-
-- Possibilitar tomada de decisão rápida durante o evento;
-
-- Reduzir retrabalho e necessidade de uma auditoria manual;
-
-- Garantir visibilidade clara e organizada das informações;
-
-- Minimizar riscos operacionais relacionados à inconsistência de dado;
-
 
 
 ## 2.3. User Stories (sprints 1 a 5)
@@ -667,13 +670,7 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-_Incluir as principais referências de seu projeto, para que seu parceiro possa consultar caso ele se interessar em aprofundar. Um exemplo de referência de livro e de site:_<br>
-
-LUCK, Heloisa. Liderança em gestão escolar. 4. ed. Petrópolis: Vozes, 2010. <br>
-SOBRENOME, Nome. Título do livro: subtítulo do livro. Edição. Cidade de publicação: Nome da editora, Ano de publicação. <br>
-
-INTELI. Adalove. Disponível em: https://adalove.inteli.edu.br/feed. Acesso em: 1 out. 2023 <br>
-SOBRENOME, Nome. Título do site. Disponível em: link do site. Acesso em: Dia Mês Ano
+[1] RED BULL. **TAPI 1AMD2 – Aplicação Web:** RED BULL 24 HORAS. São Paulo: Inteli, 2026.
 
 # <a name="c9"></a>Anexos
 
