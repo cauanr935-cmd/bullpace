@@ -149,11 +149,11 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 **Perfil dos Usuários:**
 
-- Usuários principais: time operacional do evento (Field Marketing);
+- Usuários principais: Usuário Operacional (Field Marketing);
 
-- Usuários secundários: organização para validação dos dados;
+- Usuários secundários: Usuário de Coordenação (Organização do Evento);
 
-**Perfil:**
+**Perfil do Usuário Princcipal:**
 
 - Perfil sem especialização em sistemas digitais;
 
@@ -165,7 +165,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 - Focam na execução do evento, mas não na tecnologia;
 
-**Dores dos Usuários:**
+**Dores do Usuário Principal:**
 
 - Potencial para erros no registro manual (anotações incorretas ou imprecisas);
 
@@ -183,7 +183,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 - Perda de dados de até 30 minutos caso a esteira pare de funcionar;
 
-**Necessidades dos Usuários:**
+**Necessidades do Usuário Principal:**
 
 - Substituir a prancheta por um processo digital simples e ágil;
 
@@ -202,6 +202,50 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 - Suportar operação contínua durante 24 horas;
 
 - Ser utilizável em dispositivos móveis no ambiente do evento;
+
+
+**Perfil do Usuário Secundário:**
+
+- Perfil com maior responsabilidade sobre os resultados e tomada de decisão;
+
+- Não é necessário a especialização em sistemas digitais;
+
+- Atuação em ambientes dinâmicos, com alta pressão e respostas rápidas;
+
+- Precisa de clareza, confiabilidade e organização das informações;
+
+- Possui baixa tolerância a inconsistências nos dados;
+
+- Foca na gestão do evento e na validação dos resultados;
+
+**Dores do Usuário Secundário:**
+
+- Falta de confiabilidade e consistência dos dados ao longo das 24 horas;
+
+- Necessidade constante de validar informações manualmente;
+
+- Risco de perda de dados entre checkpoints;
+
+- Dificuldade de acompanhar o desempenho das equipes em tempo real;
+
+- Dependência de registros manuais sujeitos a erro humano;
+
+- Possibilidade de decisões baseadas em dados imprecisos;
+
+**Necessidades do Usuário Secundário:**
+
+- Ter acesso a dados confiáveis e consolidados;
+
+- Acompanhar o placar e a evolução da competição em tempo real;
+
+- Possibilitar tomada de decisão rápida durante o evento;
+
+- Reduzir retrabalho e necessidade de uma auditoria manual;
+
+- Garantir visibilidade clara e organizada das informações;
+
+- Minimizar riscos operacionais relacionados à inconsistência de dado;
+
 
 
 ## 2.3. User Stories (sprints 1 a 5)
