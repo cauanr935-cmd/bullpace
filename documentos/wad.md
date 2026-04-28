@@ -3,11 +3,10 @@
 
 # WAD - Web Application Document - Módulo 2 - Inteli
 
-**_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_**
 
-## Nome do Grupo
+## Grupo 03
 
-#### Nomes dos integrantes do grupo
+#### André Lopes de Melo, Augusto de Castro Cadena, Cândido Luiz Vieira Quinderé Cidrão, Cauan da Rocha Martins, Daniel Hamoui, Fernando Takeshi Ohara, Luckas Milfont 
 
 
 
@@ -128,61 +127,20 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.2. Personas (sprint 1)
 
-**Perfil dos Usuários:**
+As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004; NIELSEN, 2012).
 
-- Usuários principais: time operacional do evento (Field Marketing);
+<div align="center">
+  <sub>Figura 2.2.1 Primeira persona</sub><br>
+  <img src="../assets/persona1.jpg" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
 
-- Usuários secundários: organização para validação dos dados;
+<div align="center">
+  <sub>Figura 2.2.1 Segunda persona</sub><br>
+  <img src="../assets/persona2.jpg" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
 
-**Perfil:**
-
-- Perfil sem especialização em sistemas digitais;
-
-- Atuam em ambiente dinâmico, com pressão e constantes mudanças de contexto;
-
-- Precisam de rapidez (eficácia) e praticidade (eficiência) para as suas funções;
-
-- Possuem baixa tolerância a sistemas complexos ou lentos;
-
-- Focam na execução do evento, mas não na tecnologia;
-
-**Dores dos Usuários:**
-
-- Potencial para erros no registro manual (anotações incorretas ou imprecisas);
-
-- Falta de confiabilidade e consistência das informações ao longo das 24 horas;
-
-- Impossibilidade de monitorar em tempo real o total de quilômetros por equipe;
-
-- Operação altamente demandante (registro contínuo + dinâmica intensa do evento);
-
-- Dependência de checkpoints manuais como o “backup” a cada 30 minutos;
-
-- Ausência de métodos de rastreabilidade dos registros (apenas uma pessoa com uma prancheta registra);
-
-- Restrições tecnológicas (tecnologias sem integração direta com as esteiras e inviabilidade de uso de pulseiras);
-
-- Perda de dados de até 30 minutos caso a esteira pare de funcionar;
-
-**Necessidades dos Usuários:**
-
-- Substituir a prancheta por um processo digital simples e ágil;
-
-- Possuir um sistema de backups constantes e realizados automaticamente;
-
-- Permitir registro rápido de início, checkpoints e fim da corrida;
-
-- Calcular automaticamente o total de quilômetros por equipe;
-
-- Possibilitar acompanhamento conveniente do placar e evolução da competição;
-
-- Disponibilizar informações em tempo real (ou quase) durante o evento;
-
--  Garantir robustez e minimizar erros operacionais;
-
-- Suportar operação contínua durante 24 horas;
-
-- Ser utilizável em dispositivos móveis no ambiente do evento;
 
 
 ## 2.3. User Stories (sprints 1 a 5)
@@ -468,13 +426,11 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-_Incluir as principais referências de seu projeto, para que seu parceiro possa consultar caso ele se interessar em aprofundar. Um exemplo de referência de livro e de site:_<br>
 
-LUCK, Heloisa. Liderança em gestão escolar. 4. ed. Petrópolis: Vozes, 2010. <br>
-SOBRENOME, Nome. Título do livro: subtítulo do livro. Edição. Cidade de publicação: Nome da editora, Ano de publicação. <br>
+COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
 
-INTELI. Adalove. Disponível em: https://adalove.inteli.edu.br/feed. Acesso em: 1 out. 2023 <br>
-SOBRENOME, Nome. Título do site. Disponível em: link do site. Acesso em: Dia Mês Ano
+NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
+
 
 # <a name="c9"></a>Anexos
 

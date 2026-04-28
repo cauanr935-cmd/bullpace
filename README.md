@@ -4,9 +4,9 @@
 <a href= "https://www.inteli.edu.br/"><img src="./assets/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
 </p>
 
-# Nome do projeto
+# Bull Pace
 
-## Nome do grupo
+## Grupo 03
 
 ## :student: Integrantes: 
 - <a href="https://www.linkedin.com/in/andre-lmelo?utm_source=share_via&utm_content=profile&utm_medium=member_android">André Lopes de Melo</a>
