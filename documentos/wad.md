@@ -62,13 +62,14 @@
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
-*Explique detalhadamente os seguintes aspectos (até 60 palavras por item):*
-1. Problema a ser resolvido
-2. Dados disponíveis (mencionar fonte e conteúdo; se não houver, indicar “não se aplica”)
-3. Solução proposta
-4. Forma de utilização da solução
-5. Benefícios esperados
-6. Critério de sucesso e como será avaliado
+- Problema a ser resolvido     
+    
+    A apuração dos quilômetros no evento Red Bull 24 Horas é feita de forma manual em pranchetas, com registros de entrada, checkpoints de 5 em 5 minutos e saída dos corredores. Esse processo é sujeito a erros humanos, distrações, inconsistências e dificuldade de conferência, comprometendo a confiabilidade dos resultados durante as 24 horas de competição.
+
+- Dados disponíveis 
+
+  Os dados disponíveis vêm dos registros inseridos manualmente pela operação durante o evento: equipe, esteira, horário de início, checkpoints,horário de fim e quilometragem indicada na esteira. Não há integração direta com as esteiras Technogym nem uso viável de pulseiras, portanto os dados dependem da leitura e inserção pela equipe operacional.   
+
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 *Sem limite de palavras – usar template do curso*
