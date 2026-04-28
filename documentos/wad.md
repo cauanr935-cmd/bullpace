@@ -66,11 +66,11 @@ O equilíbrio geral das forças indica que o maior risco estratégico não é ex
 
 A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 1 mostra a matriz que montamos.
 
-*Figura 1 — Análise SWOT da Red Bull*
-
-<img src="../assets/Analise_Swot.png">
-
-<sub>Fonte: elaborado pelos autores (2026).</sub>
+<div align="center">
+  <sub>Figura 2.1.2 — Análise SWOT da Red Bull</sub><br>
+  <img src="../assets/Analise_Swot.png" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
 
 O ponto mais forte da Red Bull é a marca em si e os eventos próprios, e o 24 Horas se encaixa bem nessa linha. A maior fraqueza para o nosso projeto é como a contagem dos quilômetros é feita hoje, no papel, o que abre espaço para erros. Do lado de fora, a corrida vem crescendo no Brasil e isso pesa a favor, mas também tem concorrência forte de Monster, Baly e TNT, sem contar que energético é um produto que sempre acende o debate sobre saúde.
 
@@ -94,7 +94,7 @@ O ponto mais forte da Red Bull é a marca em si e os eventos próprios, e o 24 H
 A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
-  <sub>Figura 2.1.5.1 Matriz de risco</sub><br>
+  <sub>Figura 2.1.5.1 - Matriz de risco</sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -106,11 +106,11 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 | **R01** | Instabilidade de Conexão no Local do Evento | Queda ou oscilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app pra manter o registro mesmo com queda momentânea. | Red Bull |
 | **R02** | Indisponibilidade do Banco de Dados | O serviço de banco (Supabase) ficar fora do ar durante o evento, impedindo o registro de checkpoints. | Crítico | Baixa | Validação prévia do ambiente em simulação e backup local mínimo no app pra continuar os registros caso o banco caia. | Cauan |
 | **R03** | Inconsistência nos Checkpoints (KM Regressivo) | Operador digitar km menor que o checkpoint anterior por engano, comprometendo o cálculo do total acumulado. | Médio | Média | Validação no sistema que bloqueia o salvamento se o km for menor que o último registrado no mesmo turno. | Fernando |
-| **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "juiz de prova" e logs de segurança com timestamp de alta precisão. | André |
-| **R05** | Não Conformidade visual (Brandbook) | Rejeição da interface pelo Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validação contínua com a equipa de marca da Red Bull durante as sprints de design. | Augusto |
+| **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "operadores de prova" e logs de segurança com timestamp de alta precisão. | André |
+| **R05** | Não Conformidade visual (Brandbook) | Rejeição da interface pelo Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validação contínua com a equipe de marca da Red Bull durante as sprints de design. | Augusto |
 | **R06** | Latência na Atualização do Placar | Atraso perceptível entre o registro do checkpoint e a atualização do placar exibido em tela, prejudicando a experiência durante o evento. | Médio | Alta | Otimização do envio de dados e atualização eficiente do placar conforme a stack a ser definida no planejamento técnico. | Red Bull |
-| **R07** | Erro Operacional (Digitação Incorreta) | Operador ou juiz digitar quilometragem errada na transição, corrompendo os resultados. | Alto | Alta | Bloqueios lógicos (ex: impedir saltos de KM impossíveis) e dupla validação visual na UI. | Fernando / André |
-| **R08** | Fadiga Operacional (Madrugada) | Queda de atenção e erros da equipa de apoio devido à exaustão física durante provas longas. | Médio | Alta | Escala de revezamento, pausas obrigatórias e área de descanso com alimentação e energéticos. | Produção / Red Bull |
+| **R07** | Erro Operacional (Digitação Incorreta) | Operador digitar quilometragem errada na transição, corrompendo os resultados. | Alto | Alta | Bloqueios lógicos (ex: impedir saltos de KM impossíveis) e dupla validação visual na UI. | Fernando / André |
+| **R08** | Fadiga Operacional (Madrugada) | Queda de atenção e erros da equipe de apoio devido à exaustão física durante provas longas. | Médio | Alta | Escala de revezamento, pausas obrigatórias e área de descanso com alimentação e energéticos. | Produção / Red Bull |
 | **R09** | Falha Mecânica da Esteira | Travamento ou reinicialização da esteira no meio da corrida de um atleta. | Crítico | Média | **Contingência:** Sistema assume último checkpoint + pace médio do atleta. Troca para esteira reserva. | André |
 | **R10** | Descarregamento de iPads/Tablets | Dispositivos dos juízes ou de exibição ficarem sem bateria durante o evento. | Alto | Alta | iPads obrigatoriamente ligados à corrente, powerbanks de reserva e alertas de bateria a 20%. | Infraestrutura |
 
