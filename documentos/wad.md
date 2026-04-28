@@ -103,7 +103,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 | ID | Risco | Descrição Detalhada | Impacto | Probabilidade | Plano de Ação e Resposta (Mitigação) | Responsável |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **R01** | Instabilidade de Conexão no Local do Evento | Queda ou ocilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app pra manter o registro mesmo com queda momentânea. | Red Bull |
+| **R01** | Instabilidade de Conexão no Local do Evento | Queda ou oscilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app pra manter o registro mesmo com queda momentânea. | Red Bull |
 | **R02** | Indisponibilidade do Banco de Dados | O serviço de banco (Supabase) ficar fora do ar durante o evento, impedindo o registro de checkpoints. | Crítico | Baixa | Validação prévia do ambiente em simulação e backup local mínimo no app pra continuar os registros caso o banco caia. | Cauan |
 | **R03** | Inconsistência nos Checkpoints (KM Regressivo) | Operador digitar km menor que o checkpoint anterior por engano, comprometendo o cálculo do total acumulado. | Médio | Média | Validação no sistema que bloqueia o salvamento se o km for menor que o último registrado no mesmo turno. | Fernando |
 | **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "juiz de prova" e logs de segurança com timestamp de alta precisão. | André |
@@ -131,13 +131,13 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 <div align="center">
   <sub>Figura 2.2.1 Primeira persona</sub><br>
-  <img src="../assets/persona1.jpg" width="100%" alt="Matriz de risco"><br>
+  <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
 
 <div align="center">
   <sub>Figura 2.2.1 Segunda persona</sub><br>
-  <img src="../assets/persona2.jpg" width="100%" alt="Matriz de risco"><br>
+  <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
 
