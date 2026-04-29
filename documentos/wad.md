@@ -292,40 +292,40 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 | **Critério de aceite 3** | CR3 : Validação de KM. Dado que o operador insere um KM menor que o último registrado, quando tenta salvar, então o sistema bloqueia e emite alerta de inconsistência |
 | **CRITERIOS INVEST** | |
 
-### US06
+### US05
 | Campo | Descrição |
 | :--- | :--- |
-| **Identificação** | US06 |
+| **Identificação** | US05 |
 | **Persona** | Camila Souza : Coordenadora de Operações de Campo |
 | **User Story** | Como coordenadora de operações de campo, posso visualizar o total de km por equipe e o total geral em tempo real, para acompanhar o andamento da competição |
 | **Critério de aceite 1** | CR1 : Painel de consolidação. Dado que Camila acessa a tela de gestão, quando a página carrega, então os totais acumulados de KM por equipe e o total geral do evento são exibidos de forma clara |
 | **Critério de aceite 2** | CR2 : Atualização dinâmica. Dado que novos dados são inseridos pelos promotores, quando salvos, então o painel de Camila reflete os novos totais automaticamente sem necessidade de recarregar a página |
 | **CRITERIOS INVEST** | |
 
-### US08
+### US06
 | Campo | Descrição |
 | :--- | :--- |
-| **Identificação** | US08 |
+| **Identificação** | US06 |
 | **Persona** | Camila Souza : Coordenadora de Operações de Campo |
 | **User Story** | Como coordenadora de operações de campo, posso acessar o histórico cronológico de todos os registros, para auditar qualquer ponto da competição |
 | **Critério de aceite 1** | CR1 : Listagem cronológica. Dado que Camila acessa o histórico, quando a tela abre, então todos os eventos são listados do mais recente para o mais antigo com seus respectivos timestamps |
 | **Critério de aceite 2** | CR2 : Filtragem por esteira. Dado que Camila seleciona um filtro, quando aplicado, então o sistema exibe apenas os registros específicos da equipe ou esteira selecionada |
 | **CRITERIOS INVEST** | |
 
-### US05
+### US07
 | Campo | Descrição |
 | :--- | :--- |
-| **Identificação** | US05 |
+| **Identificação** | US07 |
 | **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
 | **User Story** | Como promotor de Field Marketing, posso editar qualquer registro e adicionar observações livres, para corrigir inconsistências sem perder o histórico original |
 | **Critério de aceite 1** | CR1 : Edição com rastro de auditoria. Dado que um registro é alterado, quando salvo, então o sistema mantém o dado original armazenado e indica visualmente que o item foi editado |
 | **Critério de aceite 2** | CR2 : Campo de observações. Dado que Ricardo acessa o modo de edição, quando abre o formulário, então um campo de texto livre está disponível para justificativas operacionais |
 | **CRITERIOS INVEST** | |
 
-### US07
+### US08
 | Campo | Descrição |
 | :--- | :--- |
-| **Identificação** | US07 |
+| **Identificação** | US08 |
 | **Persona** | Camila Souza : Coordenadora de Operações de Campo |
 | **User Story** | Como coordenadora de operações de campo, posso visualizar métricas derivadas como projeção de km e pace médio, para tomar decisões táticas com base em dados concretos |
 | **Critério de aceite 1** | CR1 : Cálculo de métricas. Dado que o sistema possui dados de tempo e distância, quando o painel é consultado, então são exibidos o pace médio, velocidade média e a projeção final de KM para as 24 horas |
