@@ -72,14 +72,11 @@
 
 - Problema a ser resolvido     
     
-   O controle dos quilômetros no evento Red Bull 24 Horas é feito de forma manual em pranchetas, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. Esse processo é muito vulnerável a erros de anotação, distrações, inconsistências e dificuldade de conferência, comprometendo a confiabilidade dos resultados durante as 24 horas de competição.
-
+   O controle dos quilômetros no Red Bull 24 Horas é feito a mão em uma prancheta, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. O processo é vulnerável a erros de anotação, papel danificado e divergência entre operadores ao longo das 24 horas de prova.
 
 - Dados disponíveis 
 
-    Os dados disponíveis vêm dos registros inseridos manualmente pelos operadores durante o evento: equipe, esteira, horários de início e fim e quilometragem registrada em cada checkpoint, sem integração direta com as esteiras Technogym ou uso de pulseiras. Essas informações, assim como o contexto operacional e as restrições de campo, definidas pelo TAPI e pelo kick off fornecidos pelo parceiro.
-
-
+   Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
