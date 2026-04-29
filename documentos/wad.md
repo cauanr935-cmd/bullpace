@@ -103,6 +103,15 @@ O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Ma
 5. Benefícios esperados
 6. Critério de sucesso e como será avaliado
 
+- Problema a ser resolvido     
+    
+   O controle dos quilômetros no Red Bull 24 Horas é feito a mão em uma prancheta, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. O processo é vulnerável a erros de anotação, papel danificado e divergência entre operadores ao longo das 24 horas de prova.
+
+- Dados disponíveis 
+
+   Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
+
+
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
 Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [1]
