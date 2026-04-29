@@ -372,6 +372,19 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
+| ID    | Descrição | Prioridade | Status |
+|-------|-----------|------------|--------|
+| RF001 | Seleção de Equipe e Esteira: o sistema deve permitir que o operador selecione a equipe (A ou B) e a esteira (1 ou 2 por equipe) antes de realizar qualquer ação de registro. | Alta | Planejado |
+| RF002 | Cadastro e Registro de Início de Turno: o sistema deve exigir a inserção do nome do corredor e registrar automaticamente a hora exata de entrada na esteira, marcando o início da contabilização do turno. | Alta | Planejado |
+| RF003 | Registro de Checkpoints Periódicos: a cada 5 minutos, o sistema deve solicitar a inserção manual dos quilômetros percorridos (demais números são opcionais), além de um campo para observações, processando o restante das métricas automaticamente. | Alta | Planejado |
+| RF004 | Registro de Fim de Turno: o sistema deve permitir o encerramento do turno do corredor atual, registrando a hora de saída e exigindo apenas a quilometragem final do revezamento, derivando os demais dados automaticamente. | Alta | Planejado |
+| RF005 | Edição de Registros e Observações: o sistema deve permitir a edição de registros passados para correção de dados inseridos equivocadamente (km, pace, velocidade, hora de entrada/saída) e a atualização do campo de observações. | Média | Planejado |
+| RF006 | Contagem do Tempo de Prova: o sistema deve possuir um cronômetro central exibindo o tempo total decorrido desde o início oficial da prova, operando de forma contínua durante as 24 horas. | Alta | Planejado |
+| RF007 | Contagem de Entradas e Trocas: o sistema deve contabilizar automaticamente o número de entradas (turnos iniciados) e calcular o total de trocas de revezamento realizadas por equipe. | Média | Planejado |
+| RF008 | Consolidação de Quilometragem (Totais e Overall): o sistema deve somar automaticamente os valores de quilometragem inseridos para exibir a distância total por equipe e o placar geral (overall) em tempo real. | Alta | Planejado |
+| RF009 | Cálculo de Médias da Equipe (Pace e Velocidade): a partir dos quilômetros inseridos e dos timestamps capturados, o sistema deve calcular e exibir o pace médio (min/km) e a velocidade média (km/h) de cada equipe e turno, sem exigir cálculos do operador. | Alta | Planejado |
+| RF010 | Projeção de Passos Totais: o sistema deve calcular e exibir uma estimativa do número total de passos dados por equipe, utilizando a quilometragem total como base de conversão. | Baixa | Planejado |
+| RF011 | Relatório Pós-Evento: ao fim das 24 horas, o sistema deve gerar e permitir a exportação em CSV de um relatório completo com histórico de corredores, horas, quilometragens, paces, velocidades, trocas e observações. | Média | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
