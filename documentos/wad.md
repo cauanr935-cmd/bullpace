@@ -76,7 +76,8 @@
 
 - Dados disponíveis 
 
-  Durante o evento, o sistema manipula informações inseridas manualmente pelos operadores: equipe, esteira, horários de início e fim e quilometragem registrada em cada checkpoint, sem integração direta com as esteiras Technogym ou uso de pulseiras. Esses dados, assim como o contexto operacional e as restrições de campo, foram fundamentados pelo documento TAPI e pelo kick off fornecidos pelo parceiro.
+
+Os dados disponíveis vêm dos registros inseridos manualmente pela operação durante o evento: equipe, esteira, horários de início e fim e quilometragem registrada em cada checkpoint, sem integração direta com as esteiras Technogym ou uso de pulseiras. Essas informações, assim como o contexto operacional e as restrições de campo, foram fundamentadas pelo documento TAPI e pelo kick off fornecidos pelo parceiro.
 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
