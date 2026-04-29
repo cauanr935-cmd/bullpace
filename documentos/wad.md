@@ -62,23 +62,13 @@
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
-- Problema a ser resolvido 
-
-    A apuração dos quilômetros no evento Red Bull 24 Horas é feita de forma manual em pranchetas, com registros de entrada, checkpoints de 5 em 5 minutos e saída dos corredores. Esse processo é sujeito a erros humanos, distrações, inconsistências e dificuldade de conferência, comprometendo a confiabilidade dos resultados durante as 24 horas de competição.
-
-
-- Dados disponíveis 
-
-	Os dados disponíveis vêm dos registros inseridos manualmente pela operação durante o evento: equipe, esteira, horário de início, checkpoints, horário de fim e quilometragem indicada na esteira. Não há integração direta com as esteiras Technogym nem uso viável de pulseiras, portanto os dados dependem da leitura e inserção pela equipe operacional.   
-
-- Solução proposta 
+Solução proposta 
 
     Aplicação web responsiva para iPad que substitui a prancheta, permitindo registrar início, checkpoints e fim de turno com timestamps automáticos. Inclui painel unificado de placar exibindo ambas as equipes lado a lado com métricas consolidadas (km totais, passos projetados, tempo de prova, pace médio, velocidade média, trocas e número de entradas), anotações editáveis, campo de observações, modo TV e exportação de dados em CSV.
 
-- Forma de utilização 
+Forma de utilização 
 
 	Os operadores utilizam um iPad para registrar turnos ao lado da esteira, lendo o quilômetro do display a cada 5 minutos. A gestão do evento e os atletas acompanham o placar consolidado durante a competição, sem acesso aberto ao público. Ao final das 24 horas, os dados são exportados para auditoria e validação dos resultados.
-
 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
