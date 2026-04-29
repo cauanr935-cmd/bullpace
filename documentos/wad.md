@@ -72,12 +72,14 @@
 
 - Problema a ser resolvido     
     
-    A apuração dos quilômetros no evento Red Bull 24 Horas é feita de forma manual em pranchetas, com registros de entrada, checkpoints de 5 em 5 minutos e saída dos corredores. Esse processo é sujeito a erros humanos, distrações, inconsistências e dificuldade de conferência, comprometendo a confiabilidade dos resultados durante as 24 horas de competição.
+   O controle dos quilômetros no evento Red Bull 24 Horas é feito de forma manual em pranchetas, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. Esse processo é muito vulnerável a erros de anotação, distrações, inconsistências e dificuldade de conferência, comprometendo a confiabilidade dos resultados durante as 24 horas de competição.
+
 
 - Dados disponíveis 
 
+    Os dados disponíveis vêm dos registros inseridos manualmente pelos operadores durante o evento: equipe, esteira, horários de início e fim e quilometragem registrada em cada checkpoint, sem integração direta com as esteiras Technogym ou uso de pulseiras. Essas informações, assim como o contexto operacional e as restrições de campo, definidas pelo TAPI e pelo kick off fornecidos pelo parceiro.
 
-Os dados disponíveis vêm dos registros inseridos manualmente pela operação durante o evento: equipe, esteira, horários de início e fim e quilometragem registrada em cada checkpoint, sem integração direta com as esteiras Technogym ou uso de pulseiras. Essas informações, assim como o contexto operacional e as restrições de campo, foram fundamentadas pelo documento TAPI e pelo kick off fornecidos pelo parceiro.
+
 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
