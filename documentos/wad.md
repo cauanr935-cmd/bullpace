@@ -438,7 +438,79 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
-*Apresente o diagrama de casos de uso com atores (boneco), casos (elipse) e as relações `<<include>>` / `<<extend>>` com semântica correta. Consulte a notação de referência em `in02/suporte/use-case_3.0_v1.0.pdf`.*
+Esta seção apresenta os principais casos de uso do sistema, descrevendo como os usuários interagem com a aplicação ao longo do evento. Os casos de uso ajudam a entender quais funcionalidades o sistema oferece, em que condições elas acontecem e quais resultados são esperados.
+Quando necessário, são utilizadas as relações <include> e <extend> no diagrama para indicar dependências ou comportamentos opcionais entre os casos de uso.
+
+<div align="center">
+  <sub>Diagrama de casos de uso</sub><br>
+  <img src="../assets/diagramacu.png" width="100%"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
+
+**Casos de Uso:** 
+
+**Configurar evento**
+* **Ator:** Organização do evento
+* **Pré-condição:** Sistema disponível para uso
+* **Pós-condição:** Evento configurado com regras definidas
+* **Descrição:** A organização define os parâmetros do evento, como duração, regras e estrutura geral da competição.
+
+**Cadastrar equipes e corredores**
+* **Ator:** Organização do evento
+* **Pré-condição:** Evento previamente configurado
+* **Pós-condição:** Equipes e corredores registrados no sistema
+* **Descrição:** A organização cadastra as equipes participantes e seus corredores.
+
+**Iniciar sessão de corrida**
+* **Ator:** Operador do evento
+* **Ator secundário:** Sistema de captura de dados
+* **Pré-condições:** Evento configurado | Corredores cadastrados | Esteiras disponíveis
+* **Pós-condições:** Sessão de corrida iniciada | Registro automático de dados ativado
+* **Descrição:** O operador inicia uma sessão de corrida associando um corredor a uma esteira, permitindo o início da coleta de dados.
+
+**Encerrar sessão de corrida**
+* **Ator:** Operador do evento
+* **Pré-condição:** Sessão de corrida ativa
+* **Pós-condição:** Sessão finalizada
+* **Descrição:** O operador encerra a sessão de corrida.
+
+**Monitorar sessão**
+* **Ator:** Organização do evento
+* **Pré-condição:** Sessão de corrida ativa
+* **Pós-condição:** Dados atualizados continuamente e coerentes no sistema
+* **Descrição:** O operador acompanha o andamento da sessão e verifica se os dados estão sendo registrados corretamente.
+
+**Registrar dados automaticamente**
+* **Ator:** Sistema de captura de dados
+* **Pré-condição:** Sessão de corrida iniciada
+* **Pós-condição:** Dados de tempo e distância armazenados continuamente
+* **Descrição:** O sistema coleta automaticamente os dados da esteira e os envia para a aplicação web.
+
+**Corrigir inconsistência**
+* **Ator:** Operador do evento
+* **Pré-condição:** Existência de erro ou inconsistência nos dados
+* **Pós-condição:** Dados corrigidos e atualizados
+* **Descrição:** O operador ajusta dados incorretos, como sessões incompletas ou falhas na captura automática dos dados.
+
+**Gerar resultado final**
+* **Atores:** Organização do evento
+* **Pré-condições:** Evento encerrado (fim das 24 horas) | Todos os dados registrados
+* **Pós-condição:** Resultado consolidado gerado
+* **Descrição:** O sistema calcula o total de quilômetros percorridos por cada equipe ao longo das 24 horas.
+
+**Consolidar dados**
+* **Atores:** Sistema
+* **Pré-condição:** Dados de todas as sessões disponíveis
+* **Pós-condição:** Dados agregados por equipe
+* **Descrição:** O sistema processa e agrupa os dados das corridas para viabilizar o cálculo do resultado final.
+
+**Divulgar resultado**
+* **Atores:** Organização do evento
+* **Pré-condição:** Resultado final gerado
+**Pós-condição:** Resultado disponibilizado ao público
+* **Descrição:** A organização divulga o resultado final da competição ao término do evento.
+
+
 
 ### 3.2.3. Diagrama de Classes do Domínio (sprint 2)
 
