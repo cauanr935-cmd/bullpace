@@ -111,6 +111,13 @@ O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Ma
 
    Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
 
+- Benefícios esperados 
+
+  Cadastro inicial dos participantes facilitado, redução de erros na apuração dos quilômetros, maior confiabilidade e rastreabilidade dos registros, mais eficiência operacional para o time, visão consolidada do andamento da competição em tempo real, disponibilização contínua de métricas analíticas (pace, velocidade média e projeção de passos) inexistentes no método atual e base de dados estruturada para auditoria e análise pós-evento.
+
+- Critérios de sucesso e como será avaliado 
+
+  A solução será avaliada por meio de simulação prática pré-evento, comparando os registros gerados pelo sistema com os obtidos pelo método atual da prancheta durante um período controlado. Serão verificados três critérios definidos pelo parceiro: consistência dos dados entre os dois métodos, facilidade de uso pela equipe operacional e redução efetiva de erros em relação ao processo manual.  
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
