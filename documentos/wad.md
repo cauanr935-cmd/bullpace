@@ -3,11 +3,10 @@
 
 # WAD - Web Application Document - Módulo 2 - Inteli
 
-**_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_**
 
-## Nome do Grupo
+## Grupo 03
 
-#### Nomes dos integrantes do grupo
+#### André Lopes de Melo, Augusto de Castro Cadena, Cândido Luiz Vieira Quinderé Cidrão, Cauan da Rocha Martins, Daniel Hamoui, Fernando Takeshi Ohara, Luckas Milfont 
 
 
 
@@ -86,7 +85,7 @@ Portanto, o equilíbrio geral das forças indica que o maior risco estratégico 
 
 A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 2.1.2 mostra a matriz que montamos.
 
-**Figura 2.1.2 — Análise SWOT da Red Bull**
+*Figura 1 — Análise SWOT da Red Bull*
 
 <img src="../assets/Analise_Swot.png">
 
@@ -161,7 +160,7 @@ Através de uma usabilidade de baixo esforço e do cálculo automático de perfo
 A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
-  <sub>Figura 2.1.5.1 Matriz de risco</sub><br>
+  <sub>Figura 2.1.5.1 - Matriz de risco</sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -170,14 +169,14 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 | ID | Risco | Descrição Detalhada | Impacto | Probabilidade | Plano de Ação e Resposta (Mitigação) | Responsável |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **R01** | Instabilidade de Conexão no Local do Evento | Queda ou ocilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app pra manter o registro mesmo com queda momentânea. | Red Bull |
+| **R01** | Instabilidade de Conexão no Local do Evento | Queda ou oscilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app pra manter o registro mesmo com queda momentânea. | Red Bull |
 | **R02** | Indisponibilidade do Banco de Dados | O serviço de banco (Supabase) ficar fora do ar durante o evento, impedindo o registro de checkpoints. | Crítico | Baixa | Validação prévia do ambiente em simulação e backup local mínimo no app pra continuar os registros caso o banco caia. | Cauan |
 | **R03** | Inconsistência nos Checkpoints (KM Regressivo) | Operador digitar km menor que o checkpoint anterior por engano, comprometendo o cálculo do total acumulado. | Médio | Média | Validação no sistema que bloqueia o salvamento se o km for menor que o último registrado no mesmo turno. | Fernando |
-| **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "juiz de prova" e logs de segurança com timestamp de alta precisão. | André |
-| **R05** | Não Conformidade visual (Brandbook) | Rejeição da interface pelo Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validação contínua com a equipa de marca da Red Bull durante as sprints de design. | Augusto |
+| **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "operadores de prova" e logs de segurança com timestamp de alta precisão. | André |
+| **R05** | Não Conformidade visual (Brandbook) | Rejeição da interface pelo Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validação contínua com a equipe de marca da Red Bull durante as sprints de design. | Augusto |
 | **R06** | Latência na Atualização do Placar | Atraso perceptível entre o registro do checkpoint e a atualização do placar exibido em tela, prejudicando a experiência durante o evento. | Médio | Alta | Otimização do envio de dados e atualização eficiente do placar conforme a stack a ser definida no planejamento técnico. | Red Bull |
-| **R07** | Erro Operacional (Digitação Incorreta) | Operador ou juiz digitar quilometragem errada na transição, corrompendo os resultados. | Alto | Alta | Bloqueios lógicos (ex: impedir saltos de KM impossíveis) e dupla validação visual na UI. | Fernando / André |
-| **R08** | Fadiga Operacional (Madrugada) | Queda de atenção e erros da equipa de apoio devido à exaustão física durante provas longas. | Médio | Alta | Escala de revezamento, pausas obrigatórias e área de descanso com alimentação e energéticos. | Produção / Red Bull |
+| **R07** | Erro Operacional (Digitação Incorreta) | Operador digitar quilometragem errada na transição, corrompendo os resultados. | Alto | Alta | Bloqueios lógicos (ex: impedir saltos de KM impossíveis) e dupla validação visual na UI. | Fernando / André |
+| **R08** | Fadiga Operacional (Madrugada) | Queda de atenção e erros da equipe de apoio devido à exaustão física durante provas longas. | Médio | Alta | Escala de revezamento, pausas obrigatórias e área de descanso com alimentação e energéticos. | Produção / Red Bull |
 | **R09** | Falha Mecânica da Esteira | Travamento ou reinicialização da esteira no meio da corrida de um atleta. | Crítico | Média | **Contingência:** Sistema assume último checkpoint + pace médio do atleta. Troca para esteira reserva. | André |
 | **R10** | Descarregamento de iPads/Tablets | Dispositivos dos juízes ou de exibição ficarem sem bateria durante o evento. | Alto | Alta | iPads obrigatoriamente ligados à corrente, powerbanks de reserva e alertas de bateria a 20%. | Infraestrutura |
 
@@ -194,61 +193,20 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.2. Personas (sprint 1)
 
-**Perfil dos Usuários:**
+As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004; NIELSEN, 2012).
 
-- Usuários principais: time operacional do evento (Field Marketing);
+<div align="center">
+  <sub>Figura 2.2.1 Primeira persona</sub><br>
+  <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
 
-- Usuários secundários: organização para validação dos dados;
+<div align="center">
+  <sub>Figura 2.2.1 Segunda persona</sub><br>
+  <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
 
-**Perfil:**
-
-- Perfil sem especialização em sistemas digitais;
-
-- Atuam em ambiente dinâmico, com pressão e constantes mudanças de contexto;
-
-- Precisam de rapidez (eficácia) e praticidade (eficiência) para as suas funções;
-
-- Possuem baixa tolerância a sistemas complexos ou lentos;
-
-- Focam na execução do evento, mas não na tecnologia;
-
-**Dores dos Usuários:**
-
-- Potencial para erros no registro manual (anotações incorretas ou imprecisas);
-
-- Falta de confiabilidade e consistência das informações ao longo das 24 horas;
-
-- Impossibilidade de monitorar em tempo real o total de quilômetros por equipe;
-
-- Operação altamente demandante (registro contínuo + dinâmica intensa do evento);
-
-- Dependência de checkpoints manuais como o “backup” a cada 30 minutos;
-
-- Ausência de métodos de rastreabilidade dos registros (apenas uma pessoa com uma prancheta registra);
-
-- Restrições tecnológicas (tecnologias sem integração direta com as esteiras e inviabilidade de uso de pulseiras);
-
-- Perda de dados de até 30 minutos caso a esteira pare de funcionar;
-
-**Necessidades dos Usuários:**
-
-- Substituir a prancheta por um processo digital simples e ágil;
-
-- Possuir um sistema de backups constantes e realizados automaticamente;
-
-- Permitir registro rápido de início, checkpoints e fim da corrida;
-
-- Calcular automaticamente o total de quilômetros por equipe;
-
-- Possibilitar acompanhamento conveniente do placar e evolução da competição;
-
-- Disponibilizar informações em tempo real (ou quase) durante o evento;
-
--  Garantir robustez e minimizar erros operacionais;
-
-- Suportar operação contínua durante 24 horas;
-
-- Ser utilizável em dispositivos móveis no ambiente do evento;
 
 
 ## 2.3. User Stories (sprints 1 a 5)
@@ -671,6 +629,11 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
 [1] RED BULL. **TAPI 1AMD2 – Aplicação Web:** RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+
+COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
+
+NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
+
 
 # <a name="c9"></a>Anexos
 
