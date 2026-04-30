@@ -95,13 +95,14 @@ O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Ma
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
-*Explique detalhadamente os seguintes aspectos (até 60 palavras por item):*
-1. Problema a ser resolvido
-2. Dados disponíveis (mencionar fonte e conteúdo; se não houver, indicar “não se aplica”)
-3. Solução proposta
-4. Forma de utilização da solução
-5. Benefícios esperados
-6. Critério de sucesso e como será avaliado
+Solução proposta 
+
+    Aplicação web responsiva para iPad que substitui a prancheta, permitindo registrar início, checkpoints e fim de turno com timestamps automáticos. Inclui painel unificado de placar exibindo ambas as equipes lado a lado com métricas consolidadas (km totais, passos projetados, tempo de prova, pace médio, velocidade média, trocas e número de entradas), anotações editáveis, campo de observações, modo TV e exportação de dados em CSV.
+
+Forma de utilização 
+
+	Os operadores utilizam um iPad para registrar turnos ao lado da esteira, lendo o quilômetro do display a cada 5 minutos. A gestão do evento e os atletas acompanham o placar consolidado durante a competição, sem acesso aberto ao público. Ao final das 24 horas, os dados são exportados para auditoria e validação dos resultados.
+
 
 - Problema a ser resolvido     
     
