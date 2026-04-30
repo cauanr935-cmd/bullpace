@@ -229,107 +229,148 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-### US01
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US01 |
-| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
-| **User Story** | Como promotor de Field Marketing, posso selecionar a equipe e a esteira antes de qualquer registro, para garantir que os dados sejam atribuídos corretamente desde o início do turno |
-| **Critério de aceite 1** | CR1 : O sistema exibe as equipes (A e B) e as duas esteiras por equipe para seleção obrigatória na tela inicial. Dado que Ricardo acessa o sistema, quando a tela carrega, então ele vê as opções de seleção antes de qualquer ação |
-| **Critério de aceite 2** | CR2 : A seleção persiste durante toda a sessão de operação. Dado que Ricardo selecionou uma esteira, quando registra checkpoints subsequentes, então a seleção permanece ativa sem necessidade de reconfiguração |
-| **Critério de aceite 3** | CR3 : Bloqueio de ação sem seleção. Dado que o operador tenta registrar algo sem definir a esteira, quando confirma, então o sistema impede o salvamento e solicita a seleção |
-| **CRITERIOS INVEST** | |
+As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto.
 
-### US02
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US02 |
-| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
-| **User Story** | Como promotor de Field Marketing, posso registrar o início de um turno com timestamp automático, para marcar com precisão quando o corredor começou sem depender de anotação manual |
-| **Critério de aceite 1** | CR1 : Geração automática de tempo. Dado que Ricardo clica em iniciar turno, quando confirma, então o sistema registra a data e hora exatas sem entrada manual |
-| **Critério de aceite 2** | CR2 : Agilidade operacional. Dado que o início é registrado, quando salvo, então o sistema exige apenas o vínculo com a esteira, sem necessidade de identificar o atleta nominalmente no momento da largada |
-| **CRITERIOS INVEST** | |
+Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
 
-### US03
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US03 |
-| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
-| **User Story** | Como promotor de Field Marketing, posso registrar o fim de um turno com timestamp automático e o valor de km da esteira, para documentar com precisão o encerramento de cada corrida |
-| **Critério de aceite 1** | CR1 : Registro de encerramento. Dado que Ricardo clica em finalizar turno, quando confirma, então o sistema grava o timestamp final e exige obrigatoriamente o valor total de KM da esteira |
-| **Critério de aceite 2** | CR2 : Confirmação de segurança. Dado que a ação de encerrar é acionada, quando o sistema processa, então ele exibe um alerta de confirmação para evitar encerramentos acidentais por erro de toque |
-| **CRITERIOS INVEST** | |
+Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
 
-### US04
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US04 |
-| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
-| **User Story** | Como promotor de Field Marketing, posso registrar checkpoints a cada 5 minutos com o valor de km, para criar um histórico de backup caso a esteira apresente problema |
-| **Critério de aceite 1** | CR1 : Registro de checkpoint. Dado que Ricardo insere o KM atual, quando confirma, então o sistema gera o timestamp automático e vincula ao histórico da equipe |
-| **Critério de aceite 2** | CR2 : Alerta de tempo. Dado que 5 minutos se passaram desde o último registro, quando o tempo expira, então o sistema exibe um alerta visual na tela para lembrar o operador de realizar o novo checkpoint |
-| **Critério de aceite 3** | CR3 : Validação de KM. Dado que o operador insere um KM menor que o último registrado, quando tenta salvar, então o sistema bloqueia e emite alerta de inconsistência |
-| **CRITERIOS INVEST** | |
+**US01**
 
-### US05
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US05 |
-| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
-| **User Story** | Como coordenadora de operações de campo, posso visualizar o total de km por equipe e o total geral em tempo real, para acompanhar o andamento da competição |
-| **Critério de aceite 1** | CR1 : Painel de consolidação. Dado que Camila acessa a tela de gestão, quando a página carrega, então os totais acumulados de KM por equipe e o total geral do evento são exibidos de forma clara |
-| **Critério de aceite 2** | CR2 : Atualização dinâmica. Dado que novos dados são inseridos pelos promotores, quando salvos, então o painel de Camila reflete os novos totais automaticamente sem necessidade de recarregar a página |
-| **CRITERIOS INVEST** | |
+**Identificação** | US01  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero selecionar a equipe na tela inicial para que todos os registros seguintes sejam vinculados corretamente ao grupo em competição.  
+**Critério de aceite 1** | Dado que o sistema exibe as equipes cadastradas, quando o promotor tocar em uma equipe, então o sistema deve abrir a tela de operação daquela equipe.  
+**Critério de aceite 2** | Dado que uma equipe foi selecionada, então todos os registros criados a partir dali devem ficar vinculados a essa equipe.  
+**Critérios INVEST** | **I (Independente):** Pode ser implementada de forma isolada, pois representa a tela inicial do fluxo operacional e tem como função principal definir a equipe ativa antes de qualquer registro. <br><br> **N (Negociável):** O formato da seleção pode variar entre botões, cards ou lista. O ponto obrigatório é que uma equipe seja selecionada antes do início dos registros. <br><br> **V (Valiosa):** Sem essa US, o fluxo operacional não pode ser iniciado corretamente, pois os registros precisam estar vinculados à equipe correspondente para evitar inconsistências na apuração. <br><br> **E (Estimável):** Envolve uma tela com as equipes disponíveis e a persistência da escolha durante a sessão. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** Trata-se de uma tela única e objetiva, adequada para ser desenvolvida dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem validar se as equipes são exibidas corretamente e se os registros posteriores ficam vinculados à equipe escolhida.
 
-### US06
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US06 |
-| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
-| **User Story** | Como coordenadora de operações de campo, posso acessar o histórico cronológico de todos os registros, para auditar qualquer ponto da competição |
-| **Critério de aceite 1** | CR1 : Listagem cronológica. Dado que Camila acessa o histórico, quando a tela abre, então todos os eventos são listados do mais recente para o mais antigo com seus respectivos timestamps |
-| **Critério de aceite 2** | CR2 : Filtragem por esteira. Dado que Camila seleciona um filtro, quando aplicado, então o sistema exibe apenas os registros específicos da equipe ou esteira selecionada |
-| **CRITERIOS INVEST** | |
 
-### US07
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US07 |
-| **Persona** | Ricardo Oliveira : Promotor de Field Marketing |
-| **User Story** | Como promotor de Field Marketing, posso editar qualquer registro e adicionar observações livres, para corrigir inconsistências sem perder o histórico original |
-| **Critério de aceite 1** | CR1 : Edição com rastro de auditoria. Dado que um registro é alterado, quando salvo, então o sistema mantém o dado original armazenado e indica visualmente que o item foi editado |
-| **Critério de aceite 2** | CR2 : Campo de observações. Dado que Ricardo acessa o modo de edição, quando abre o formulário, então um campo de texto livre está disponível para justificativas operacionais |
-| **CRITERIOS INVEST** | |
+**US02**
 
-### US08
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US08 |
-| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
-| **User Story** | Como coordenadora de operações de campo, posso visualizar métricas derivadas como projeção de km e pace médio, para tomar decisões táticas com base em dados concretos |
-| **Critério de aceite 1** | CR1 : Cálculo de métricas. Dado que o sistema possui dados de tempo e distância, quando o painel é consultado, então são exibidos o pace médio, velocidade média e a projeção final de KM para as 24 horas |
-| **Critério de aceite 2** | CR2 : Projeção por equipe. Dado que o ritmo de corrida muda, quando o cálculo é processado, então a projeção de KM ao fim do evento é recalculada individualmente para a Equipe A e Equipe B |
-| **CRITERIOS INVEST** | |
+**Identificação** | US02  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero selecionar um dos 16 atletas da equipe selecionada para que os registros de turnos estejam associados ao atleta escolhido.  
+**Critério de aceite 1** | Dado que a equipe foi selecionada, quando o promotor visualizar a lista de atletas, então os 16 atletas da equipe devem estar disponíveis para seleção.  
+**Critério de aceite 2** | Dado que um atleta foi escolhido, então o sistema deve identificá-lo como atleta ativo para o próximo registro de turno.  
+**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada de forma isolada com uma equipe previamente definida ou mockada. No fluxo completo, depende apenas da equipe selecionada na US01. <br><br> **N (Negociável):** A forma de listar os 16 atletas pode variar entre grid, lista ou cards. O ponto obrigatório é que o atleta selecionado seja vinculado aos registros seguintes. <br><br> **V (Valiosa):** Essa US permite a rastreabilidade individual dos atletas. Sem ela, os registros ficariam associados apenas à equipe, prejudicando a análise de desempenho individual. <br><br> **E (Estimável):** Envolve a exibição de uma lista com 16 atletas e a persistência da escolha como atleta ativo. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A história é focada em uma única ação principal: selecionar um atleta da equipe. Por isso, cabe dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite validam se os 16 atletas corretos aparecem e se o sistema reconhece o atleta selecionado como ativo para o próximo turno.
 
-### US09
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US09 |
-| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
-| **User Story** | Como coordenadora de operações de campo, posso visualizar o placar em tela cheia, para que o público e a organização acompanhem o resultado em tempo real |
-| **Critério de aceite 1** | CR1 : Layout de exibição. Dado que o modo placar é acionado, quando a tela abre, então os dados de KM e tempo decorrido aparecem em formato ampliado e legível à distância |
-| **Critério de aceite 2** | CR2 : Independência de sessão. Dado que o placar está aberto em uma TV, quando os operadores usam o sistema nos dispositivos móveis, então o placar permanece estável e se atualiza automaticamente |
-| **CRITERIOS INVEST** | |
 
-### US10
-| Campo | Descrição |
-| :--- | :--- |
-| **Identificação** | US10 |
-| **Persona** | Camila Souza : Coordenadora de Operações de Campo |
-| **User Story** | Como coordenadora de operações de campo, posso gerar um relatório pós evento com o histórico completo, para ter documentação oficial do resultado |
-| **Critério de aceite 1** | CR1 : Exportação de dados. Dado que a competição encerra, quando Camila clica em gerar relatório, então o sistema baixa um arquivo em formato padronizado contendo todos os registros e métricas finais |
-| **Critério de aceite 2** | CR2 : Identificação automática. Dado que o relatório é gerado, quando o download conclui, então o arquivo possui um nome padronizado incluindo a data do evento para facilitar a organização |
-| **CRITERIOS INVEST** | |
+**US03**
+
+**Identificação** | US03  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero iniciar o turno de um atleta, para garantir que os checkpoints estejam associados àquele turno.  
+**Critério de aceite 1** | Dado que um atleta foi selecionado, quando o promotor clicar em “Iniciar turno”, então o sistema deve registrar automaticamente o timestamp de início.  
+**Critério de aceite 2** | Dado que o turno foi iniciado, então o sistema deve criar um turno novo e vincular todos os checkpoints a esse turno.  
+**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada de forma isolada com um atleta previamente selecionado ou mockado. No fluxo completo, depende da seleção de atleta, mas entrega uma funcionalidade própria: criar um turno com timestamp automático. <br><br> **N (Negociável):** A forma de iniciar o turno pode variar entre botão simples, dupla confirmação ou outro padrão de interação. O ponto obrigatório é o registro automático do timestamp de início. <br><br> **V (Valiosa):** Essa US cria a sessão de corrida do atleta. Sem ela, os checkpoints não teriam um turno específico ao qual se associar. <br><br> **E (Estimável):** Envolve um botão de início, gravação automática de timestamp e criação de um turno vinculado ao atleta. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A funcionalidade é compacta e possui escopo bem delimitado, sendo adequada para desenvolvimento dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem verificar se o timestamp é registrado ao iniciar o turno e se os checkpoints futuros ficam associados ao turno criado.
+
+
+**US04**
+
+**Identificação** | US04  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero inserir o KM acumulado, e como opcionais o Pace Médio e a Velocidade Média lidos na esteira para que o histórico de desempenho do atleta seja registrado integralmente.  
+**Critério de aceite 1** | Dado que um checkpoint está sendo registrado, quando o promotor preencher o KM acumulado e confirmar, então o dado deve ser salvo com sucesso.  
+**Critério de aceite 2** | Dado que o sistema esteja no formulário de checkpoint, então os campos Pace Médio e Velocidade Média devem ser opcionais e, quando preenchidos, também devem ser salvos no registro.  
+**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada com um turno previamente criado ou mockado. No fluxo completo, os checkpoints passam a ser vinculados ao turno criado na US03. <br><br> **N (Negociável):** A disposição dos campos de Pace Médio e Velocidade Média pode variar na interface. O ponto obrigatório é que o KM acumulado esteja sempre disponível e seja salvo corretamente. <br><br> **V (Valiosa):** Essa US registra os dados de performance do atleta ao longo do turno. Sem ela, o sistema teria apenas início e fim de sessão, sem histórico de desempenho. <br><br> **E (Estimável):** Envolve um formulário com campo obrigatório de KM acumulado e campos opcionais de Pace Médio e Velocidade Média. Estimativa aproximada: 1 a 2 dias. <br><br> **S (Pequena):** Apesar de conter três campos, todos pertencem ao mesmo evento de checkpoint, mantendo a história pequena e objetiva. <br><br> **T (Testável):** Os critérios de aceite permitem validar se o KM acumulado é salvo obrigatoriamente e se os campos opcionais são salvos quando preenchidos.
+
+
+**US05**
+
+**Identificação** | US05  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero encerrar o turno do atleta para que os dados daquela sessão sejam salvos, mostrando os resultados daquele turno associado ao atleta.  
+**Critério de aceite 1** | Dado que o turno está em andamento, quando o promotor clicar em “Encerrar turno”, então o sistema deve salvar o encerramento daquele turno.  
+**Critério de aceite 2** | Dado que o turno foi encerrado, então o sistema deve exibir os resultados consolidados daquela sessão vinculados ao atleta correspondente.  
+**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada com um turno previamente criado ou mockado. No fluxo completo, complementa a US03 ao encerrar a sessão iniciada. <br><br> **N (Negociável):** A forma de exibir os resultados do turno pode variar entre resumo em tela, modal ou seção dedicada. O ponto obrigatório é que o encerramento salve a sessão e apresente os resultados vinculados ao atleta. <br><br> **V (Valiosa):** Essa US fecha o ciclo do turno. Sem ela, a sessão permaneceria em aberto e os dados não seriam consolidados para o atleta. <br><br> **E (Estimável):** Envolve o encerramento do turno, gravação do horário final e exibição dos resultados consolidados da sessão. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A funcionalidade é focada no fechamento de uma sessão já iniciada, com escopo reduzido e adequado para uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem validar se o sistema salva o encerramento do turno e exibe os resultados vinculados ao atleta correspondente.
+
+
+**US06**
+
+**Identificação** | US06  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero visualizar o status atual das duas esteiras da equipe para saber qual está livre e qual está em uso.  
+**Critério de aceite 1** | Dado que a tela da equipe esteja aberta, então o sistema deve exibir claramente as duas esteiras vinculadas à equipe selecionada.  
+**Critério de aceite 2** | Dado que uma esteira esteja associada a um turno em andamento, então seu status deve aparecer como “em uso”.  
+**Critério de aceite 3** | Dado que uma esteira não esteja associada a um turno em andamento, então seu status deve aparecer como “livre”.  
+**Critérios INVEST** | 
+
+
+**US07**
+
+**Identificação** | US07  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero vincular o turno do atleta a uma das esteiras da equipe para que o registro fique associado ao equipamento utilizado.  
+**Critério de aceite 1** | Dado que um atleta foi selecionado para iniciar um turno, quando o promotor escolher uma esteira, então o sistema deve vincular aquele turno à esteira escolhida.  
+**Critério de aceite 2** | Dado que o turno foi iniciado com uma esteira vinculada, então todos os checkpoints daquele turno devem manter o vínculo com a mesma esteira.  
+**Critério de aceite 3** | Dado que uma esteira esteja em uso, então o sistema deve impedir que outro turno seja iniciado nela simultaneamente.  
+**Critérios INVEST** | 
+
+
+**US08**
+
+**Identificação** | US08  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero selecionar um atleta que já possui turnos registrados para iniciar um novo turno sem sobrescrever o histórico anterior.  
+**Critério de aceite 1** | Dado que um atleta já possui um ou mais turnos registrados, quando ele for selecionado novamente, então o sistema deve permitir iniciar um novo turno para esse mesmo atleta.  
+**Critério de aceite 2** | Dado que o novo turno foi iniciado, então ele deve ser salvo como um turno distinto dos turnos anteriores.  
+**Critério de aceite 3** | Dado que o atleta possui histórico anterior, então os dados dos turnos passados devem permanecer preservados.  
+**Critérios INVEST** | 
+
+
+**US09**
+
+**Identificação** | US09  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero receber um alerta de timer regressivo para registrar os checkpoints no tempo correto durante o turno.  
+**Critério de aceite 1** | Dado que um turno esteja em andamento, então o sistema deve exibir um timer regressivo para orientar o próximo registro de checkpoint.  
+**Critério de aceite 2** | Dado que o timer chegue ao fim, então o sistema deve sinalizar visualmente que um novo checkpoint precisa ser registrado.  
+**Critério de aceite 3** | Dado que um checkpoint seja salvo, então o sistema deve reiniciar o timer para o próximo intervalo de registro.  
+**Critérios INVEST** | 
+
+
+**US10**
+
+**Identificação** | US10  
+**Persona** | Promotor de Field Marketing  
+**User Story** | Como promotor de Field Marketing, quero finalizar a equipe com confirmação para consolidar os resultados de todos os atletas.  
+**Critério de aceite 1** | Dado que não exista turno em andamento para a equipe, quando o promotor clicar em “Finalizar equipe”, então o sistema deve solicitar confirmação antes de concluir a ação.  
+**Critério de aceite 2** | Dado que a finalização seja confirmada, então o sistema deve consolidar os resultados de todos os atletas daquela equipe.  
+**Critério de aceite 3** | Dado que a equipe foi finalizada, então o sistema deve impedir alterações diretas nos registros consolidados.  
+**Critérios INVEST** | 
+
+
+**US11**
+
+**Identificação** | US11  
+**Persona** | Gestora de operações  
+**User Story** | Como gestora de operações, quero visualizar a tela de resultado da equipe para conferir o total consolidado antes do encerramento da competição.  
+**Critério de aceite 1** | Dado que a equipe tenha sido finalizada, quando a gestora acessar a tela de resultado, então o sistema deve exibir o total de quilômetros acumulados da equipe.  
+**Critério de aceite 2** | Dado que a tela de resultado esteja aberta, então o sistema deve apresentar os valores consolidados de forma clara e legível.  
+**Critério de aceite 3** | Dado que os resultados estejam consolidados, então o sistema deve exibir os dados associados à equipe correspondente.  
+**Critérios INVEST** | 
+
+
+**US12**
+
+**Identificação** | US12  
+**Persona** | Gestora de operações  
+**User Story** | Como gestora de operações, quero comparar as duas equipes lado a lado para identificar a vencedora da competição.  
+**Critério de aceite 1** | Dado que ambas as equipes tenham sido finalizadas, quando a gestora acessar a comparação final, então o sistema deve exibir os resultados das duas equipes lado a lado.  
+**Critério de aceite 2** | Dado que uma equipe tenha maior quilometragem acumulada que a outra, então o sistema deve destacá-la visualmente como vencedora.  
+**Critério de aceite 3** | Dado que as duas equipes tenham a mesma quilometragem acumulada, então o sistema deve exibir o resultado como empate.  
+**Critérios INVEST** | 
+
+
+**US13**
+
+**Identificação** | US13  
+**Persona** | Gestora de operações  
+**User Story** | Como gestora de operações, quero exportar os dados consolidados em CSV para auditoria do evento.  
+**Critério de aceite 1** | Dado que os dados consolidados estejam disponíveis, quando a gestora clicar em “Exportar CSV”, então o sistema deve gerar um arquivo com os registros do evento.  
+**Critério de aceite 2** | Dado que o arquivo CSV seja exportado, então ele deve conter informações de equipes, atletas, esteiras, turnos e checkpoints.  
+**Critério de aceite 3** | Dado que existam timestamps registrados no sistema, então eles devem estar presentes no arquivo CSV exportado.  
+**Critérios INVEST** | 
 
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
@@ -389,85 +430,47 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ---
 
-## Explicação dos RNFs por eixo
+### 3.1.3.1 Fundamentação dos Eixos
 
-### USAB — Usabilidade
+#### 1. USAB — Usabilidade
+* **De que forma esse RNF é mensurável?** Através da taxa de sucesso de operadores em completar o fluxo de início e fim de turno sem erros na primeira tentativa.
+* **Conexão com RF ou Restrição:** Conecta-se ao registro de início e seleção de equipe. Deriva da restrição de que o evento dura 24h e o operador estará sob forte fadiga e pressão.
+* **Critério de Aceite:** 100% das funções críticas devem ser operáveis intuitivamente, sem necessidade de consulta a manuais externos.
 
-O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão.
+#### 2. CONF — Confiabilidade
+* **De que forma esse RNF é mensurável?** Pela frequência e sucesso da persistência dos dados no banco de dados a cada intervalo de 5 minutos.
+* **Conexão com RF ou Restrição:** Conecta-se diretamente ao requisito de checkpoints periódicos. Responde à necessidade do parceiro sobre a falta de confiabilidade do controle manual e falhas potenciais nas esteiras.
+* **Critério de Aceite:** Garantia de 0% de perda de dados após a confirmação do registro, com histórico disponível para recuperação imediata.
 
-Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio externo. Ele se conecta aos RFs de seleção de equipe, seleção de atleta, início de turno, registro de checkpoint e encerramento de turno.
+#### 3. DES — Desempenho
+* **De que forma esse RNF é mensurável?** Através do tempo de latência (em milissegundos) entre o input do dado e a atualização visual no painel.
+* **Conexão com RF ou Restrição:** Conecta-se à consolidação em tempo real e ao painel de placar. Atende à necessidade da organização de ter um placar oficial instantâneo.
+* **Critério de Aceite:** O sistema deve processar os cálculos e atualizar a interface em menos de 1 segundo (p95).
 
-**Critério de aceite:** o operador deve conseguir realizar o primeiro fluxo completo de registro sem consultar manual externo.
+#### 4. SUP — Suportabilidade
+* **De que forma esse RNF é mensurável?** Pela conformidade técnica de renderização e execução das funcionalidades nos navegadores especificados.
+* **Conexão com RF ou Restrição:** Conecta-se à restrição tecnológica de ser uma aplicação web operada em tablets no campo de prova.
+* **Critério de Aceite:** Estabilidade e funcionamento pleno em 100% dos testes realizados nos navegadores Safari (iOS) e Chrome.
 
----
+#### 5. SEG — Segurança
+* **De que forma esse RNF é mensurável?** Pela presença de logs de alteração e pela verificação de que registros editados permanecem no banco de dados (Soft Delete).
+* **Conexão com RF ou Restrição:** Conecta-se à edição e observações nos registros. Responde à necessidade de transparência e rastreabilidade para evitar contestações no resultado final.
+* **Critério de Aceite:** 0% de exclusão física de dados; todas as alterações devem ser rastreáveis para fins de auditoria.
 
-### CONF — Confiabilidade
+#### 6. CAP — Capacidade
+* **De que forma esse RNF é mensurável?** Pela realização de testes de concorrência simulando múltiplos acessos simultâneos de escrita.
+* **Conexão com RF ou Restrição:** Conecta-se à estrutura operacional de ter dois operadores (um para a Equipe A e outro para a Equipe B) trabalhando simultaneamente.
+* **Critério de Aceite:** Suporte a no mínimo 2 operadores realizando inputs constantes sem travamentos de sessão ou conflitos de banco de dados.
 
-O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas.
+#### 7. REST — Restrições de Design
+* **De que forma esse RNF é mensurável?** Pela verificação binária da ausência de dependências de integração automática com equipamentos externos.
+* **Conexão com RF ou Restrição:** Conecta-se à restrição explícita do documento do parceiro sobre a inviabilidade de pareamento com as esteiras ou uso de pulseiras.
+* **Critério de Aceite:** O sistema deve ser funcional de forma totalmente independente de qualquer API ou hardware de terceiros.
 
-Esse RNF é mensurável pela frequência de salvamento automático dos dados a cada checkpoint. Ele se conecta aos RFs de registro de turno, registro de checkpoint e consolidação dos resultados.
-
-**Critério de aceite:** cada checkpoint registrado deve ser salvo e permanecer associado ao turno, atleta e equipe correspondentes.
-
----
-
-### DES — Desempenho
-
-O requisito de desempenho foi derivado da necessidade de uso contínuo durante o evento, em um ambiente com trocas rápidas de corredores. O sistema não pode atrasar o operador no momento de iniciar turnos, registrar checkpoints ou consultar resultados.
-
-Esse RNF é mensurável pelo tempo de resposta do sistema, especialmente nas ações principais. Ele se conecta aos RFs de iniciar turno, salvar checkpoint, encerrar turno e visualizar resultados.
-
-**Critério de aceite:** as principais ações do sistema devem responder em até 1 segundo no cenário esperado de uso.
-
----
-
-### SUP — Suportabilidade
-
-O requisito de suportabilidade foi derivado do contexto de uso em ambiente de evento, especialmente em dispositivos móveis ou tablets, como iPads. Como a operação pode ocorrer fora de um ambiente tradicional de escritório, o sistema precisa funcionar em navegadores modernos sem instalação local.
-
-Esse RNF é mensurável pela compatibilidade com Safari e Chrome em ambiente mobile. Ele se conecta à restrição organizacional de uso simples e rápido pela equipe operacional.
-
-**Critério de aceite:** o sistema deve funcionar corretamente em iPad e navegadores modernos sem quebra visual ou funcional.
-
----
-
-### SEG — Segurança
-
-O requisito de segurança foi derivado da necessidade de proteger os registros contra exclusões acidentais. Mesmo sem login, o sistema precisa preservar a rastreabilidade dos dados para auditoria e conferência pós-evento.
-
-Esse RNF é mensurável pela garantia de que nenhum registro seja apagado permanentemente do banco de dados. Ele se conecta aos RFs de registro de turno, checkpoint, encerramento de turno e exportação CSV.
-
-**Critério de aceite:** registros removidos pelo operador não devem ser deletados permanentemente, mas marcados por soft delete.
-
----
-
-### CAP — Capacidade
-
-O requisito de capacidade foi derivado da operação simultânea das duas equipes durante o evento. Como cada equipe pode ter um operador registrando dados ao mesmo tempo, o sistema precisa suportar múltiplos usuários operando em paralelo.
-
-Esse RNF é mensurável pelo suporte a pelo menos 2 operadores simultâneos, um por equipe. Ele se conecta aos RFs de seleção de equipe, registro de turno e registro de checkpoints.
-
-**Critério de aceite:** dois operadores devem conseguir registrar dados simultaneamente, em equipes diferentes, sem conflito ou sobrescrita de informações.
-
----
-
-### REST — Restrições Design
-
-O requisito de restrição de design foi derivado das limitações definidas pelo parceiro: não haverá integração direta com as esteiras Technogym, não haverá uso de pulseiras, não haverá login e não haverá dependência de APIs externas no MVP.
-
-Esse RNF é mensurável pela ausência de dependências externas obrigatórias para o funcionamento do sistema. Ele se conecta diretamente às restrições do projeto e aos RFs baseados em input manual assistido.
-
-**Critério de aceite:** o sistema deve permitir o registro completo dos dados sem autenticação, sem integração com esteiras e sem APIs externas.
-
----
-
-### ORG — Organizacionais
-
-O requisito organizacional foi derivado da necessidade de alinhar o desenvolvimento ao processo acadêmico do projeto e garantir documentação, versionamento e rastreabilidade das decisões técnicas.
-
-Esse RNF é mensurável pela adoção da arquitetura MVC, documentação do projeto e uso de repositório Git. Ele se conecta às exigências organizacionais da disciplina e à necessidade de manutenção do sistema ao longo das sprints.
-
-**Critério de aceite:** o projeto deve manter estrutura documentada, versionada e organizada conforme o padrão definido pelo grupo.
+#### 8. ORG — Organizacionais
+* **De que forma esse RNF é mensurável?** Pela conformidade da estrutura de pastas e organização do código com o padrão MVC e uso de Git.
+* **Conexão com RF ou Restrição:** Conecta-se às diretrizes curriculares e aos padrões de desenvolvimento definidos pelo grupo para avaliação pedagógica.
+* **Critério de Aceite:** O projeto deve seguir a arquitetura MVC e possuir um histórico de commits que comprovem o desenvolvimento estruturado.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
