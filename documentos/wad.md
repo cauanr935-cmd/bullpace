@@ -95,22 +95,21 @@ O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Ma
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
-Solução proposta 
-
-    Aplicação web responsiva para iPad que substitui a prancheta, permitindo registrar início, checkpoints e fim de turno com timestamps automáticos. Inclui painel unificado de placar exibindo ambas as equipes lado a lado com métricas consolidadas (km totais, passos projetados, tempo de prova, pace médio, velocidade média, trocas e número de entradas), anotações editáveis, campo de observações, modo TV e exportação de dados em CSV.
-
-Forma de utilização 
-
-	Os operadores utilizam um iPad para registrar turnos ao lado da esteira, lendo o quilômetro do display a cada 5 minutos. A gestão do evento e os atletas acompanham o placar consolidado durante a competição, sem acesso aberto ao público. Ao final das 24 horas, os dados são exportados para auditoria e validação dos resultados.
-
-
 - Problema a ser resolvido     
     
-   O controle dos quilômetros no Red Bull 24 Horas é feito a mão em uma prancheta, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. O processo é vulnerável a erros de anotação, papel danificado e divergência entre operadores ao longo das 24 horas de prova.
+  O controle dos quilômetros no Red Bull 24 Horas é feito a mão em uma prancheta, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. O processo é vulnerável a erros de anotação, papel danificado e divergência entre operadores ao longo das 24 horas de prova.
 
 - Dados disponíveis 
 
-   Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
+  Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
+
+- Solução proposta
+
+  Aplicação web responsiva para iPad que substitui a prancheta, permitindo registrar início, checkpoints e fim de turno com timestamps automáticos. Inclui painel unificado de placar exibindo ambas as equipes lado a lado com métricas consolidadas (km totais, passos projetados, tempo de prova, pace médio, velocidade média, trocas e número de entradas), anotações editáveis, campo de observações, modo TV e exportação de dados em CSV.
+
+- Forma de utilização
+
+  Os operadores utilizam um iPad para registrar turnos ao lado da esteira, lendo o quilômetro do display a cada 5 minutos. A gestão do evento e os atletas acompanham o placar consolidado durante a competição, sem acesso aberto ao público. Ao final das 24 horas, os dados são exportados para auditoria e validação dos resultados.
 
 - Benefícios esperados 
 
