@@ -389,47 +389,85 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ---
 
-### 3.1.3.1 Fundamentação dos Eixos
+## Explicação dos RNFs por eixo
 
-#### 1. USAB — Usabilidade
-* **De que forma esse RNF é mensurável?** Através da taxa de sucesso de operadores em completar o fluxo de início e fim de turno sem erros na primeira tentativa.
-* **Conexão com RF ou Restrição:** Conecta-se ao registro de início e seleção de equipe. Deriva da restrição de que o evento dura 24h e o operador estará sob forte fadiga e pressão.
-* **Critério de Aceite:** 100% das funções críticas devem ser operáveis intuitivamente, sem necessidade de consulta a manuais externos.
+### USAB — Usabilidade
 
-#### 2. CONF — Confiabilidade
-* **De que forma esse RNF é mensurável?** Pela frequência e sucesso da persistência dos dados no banco de dados a cada intervalo de 5 minutos.
-* **Conexão com RF ou Restrição:** Conecta-se diretamente ao requisito de checkpoints periódicos. Responde à necessidade do parceiro sobre a falta de confiabilidade do controle manual e falhas potenciais nas esteiras.
-* **Critério de Aceite:** Garantia de 0% de perda de dados após a confirmação do registro, com histórico disponível para recuperação imediata.
+O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão.
 
-#### 3. DES — Desempenho
-* **De que forma esse RNF é mensurável?** Através do tempo de latência (em milissegundos) entre o input do dado e a atualização visual no painel.
-* **Conexão com RF ou Restrição:** Conecta-se à consolidação em tempo real e ao painel de placar. Atende à necessidade da organização de ter um placar oficial instantâneo.
-* **Critério de Aceite:** O sistema deve processar os cálculos e atualizar a interface em menos de 1 segundo (p95).
+Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio externo. Ele se conecta aos RFs de seleção de equipe, seleção de atleta, início de turno, registro de checkpoint e encerramento de turno.
 
-#### 4. SUP — Suportabilidade
-* **De que forma esse RNF é mensurável?** Pela conformidade técnica de renderização e execução das funcionalidades nos navegadores especificados.
-* **Conexão com RF ou Restrição:** Conecta-se à restrição tecnológica de ser uma aplicação web operada em tablets no campo de prova.
-* **Critério de Aceite:** Estabilidade e funcionamento pleno em 100% dos testes realizados nos navegadores Safari (iOS) e Chrome.
+**Critério de aceite:** o operador deve conseguir realizar o primeiro fluxo completo de registro sem consultar manual externo.
 
-#### 5. SEG — Segurança
-* **De que forma esse RNF é mensurável?** Pela presença de logs de alteração e pela verificação de que registros editados permanecem no banco de dados (Soft Delete).
-* **Conexão com RF ou Restrição:** Conecta-se à edição e observações nos registros. Responde à necessidade de transparência e rastreabilidade para evitar contestações no resultado final.
-* **Critério de Aceite:** 0% de exclusão física de dados; todas as alterações devem ser rastreáveis para fins de auditoria.
+---
 
-#### 6. CAP — Capacidade
-* **De que forma esse RNF é mensurável?** Pela realização de testes de concorrência simulando múltiplos acessos simultâneos de escrita.
-* **Conexão com RF ou Restrição:** Conecta-se à estrutura operacional de ter dois operadores (um para a Equipe A e outro para a Equipe B) trabalhando simultaneamente.
-* **Critério de Aceite:** Suporte a no mínimo 2 operadores realizando inputs constantes sem travamentos de sessão ou conflitos de banco de dados.
+### CONF — Confiabilidade
 
-#### 7. REST — Restrições de Design
-* **De que forma esse RNF é mensurável?** Pela verificação binária da ausência de dependências de integração automática com equipamentos externos.
-* **Conexão com RF ou Restrição:** Conecta-se à restrição explícita do documento do parceiro sobre a inviabilidade de pareamento com as esteiras ou uso de pulseiras.
-* **Critério de Aceite:** O sistema deve ser funcional de forma totalmente independente de qualquer API ou hardware de terceiros.
+O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas.
 
-#### 8. ORG — Organizacionais
-* **De que forma esse RNF é mensurável?** Pela conformidade da estrutura de pastas e organização do código com o padrão MVC e uso de Git.
-* **Conexão com RF ou Restrição:** Conecta-se às diretrizes curriculares e aos padrões de desenvolvimento definidos pelo grupo para avaliação pedagógica.
-* **Critério de Aceite:** O projeto deve seguir a arquitetura MVC e possuir um histórico de commits que comprovem o desenvolvimento estruturado.
+Esse RNF é mensurável pela frequência de salvamento automático dos dados a cada checkpoint. Ele se conecta aos RFs de registro de turno, registro de checkpoint e consolidação dos resultados.
+
+**Critério de aceite:** cada checkpoint registrado deve ser salvo e permanecer associado ao turno, atleta e equipe correspondentes.
+
+---
+
+### DES — Desempenho
+
+O requisito de desempenho foi derivado da necessidade de uso contínuo durante o evento, em um ambiente com trocas rápidas de corredores. O sistema não pode atrasar o operador no momento de iniciar turnos, registrar checkpoints ou consultar resultados.
+
+Esse RNF é mensurável pelo tempo de resposta do sistema, especialmente nas ações principais. Ele se conecta aos RFs de iniciar turno, salvar checkpoint, encerrar turno e visualizar resultados.
+
+**Critério de aceite:** as principais ações do sistema devem responder em até 1 segundo no cenário esperado de uso.
+
+---
+
+### SUP — Suportabilidade
+
+O requisito de suportabilidade foi derivado do contexto de uso em ambiente de evento, especialmente em dispositivos móveis ou tablets, como iPads. Como a operação pode ocorrer fora de um ambiente tradicional de escritório, o sistema precisa funcionar em navegadores modernos sem instalação local.
+
+Esse RNF é mensurável pela compatibilidade com Safari e Chrome em ambiente mobile. Ele se conecta à restrição organizacional de uso simples e rápido pela equipe operacional.
+
+**Critério de aceite:** o sistema deve funcionar corretamente em iPad e navegadores modernos sem quebra visual ou funcional.
+
+---
+
+### SEG — Segurança
+
+O requisito de segurança foi derivado da necessidade de proteger os registros contra exclusões acidentais. Mesmo sem login, o sistema precisa preservar a rastreabilidade dos dados para auditoria e conferência pós-evento.
+
+Esse RNF é mensurável pela garantia de que nenhum registro seja apagado permanentemente do banco de dados. Ele se conecta aos RFs de registro de turno, checkpoint, encerramento de turno e exportação CSV.
+
+**Critério de aceite:** registros removidos pelo operador não devem ser deletados permanentemente, mas marcados por soft delete.
+
+---
+
+### CAP — Capacidade
+
+O requisito de capacidade foi derivado da operação simultânea das duas equipes durante o evento. Como cada equipe pode ter um operador registrando dados ao mesmo tempo, o sistema precisa suportar múltiplos usuários operando em paralelo.
+
+Esse RNF é mensurável pelo suporte a pelo menos 2 operadores simultâneos, um por equipe. Ele se conecta aos RFs de seleção de equipe, registro de turno e registro de checkpoints.
+
+**Critério de aceite:** dois operadores devem conseguir registrar dados simultaneamente, em equipes diferentes, sem conflito ou sobrescrita de informações.
+
+---
+
+### REST — Restrições Design
+
+O requisito de restrição de design foi derivado das limitações definidas pelo parceiro: não haverá integração direta com as esteiras Technogym, não haverá uso de pulseiras, não haverá login e não haverá dependência de APIs externas no MVP.
+
+Esse RNF é mensurável pela ausência de dependências externas obrigatórias para o funcionamento do sistema. Ele se conecta diretamente às restrições do projeto e aos RFs baseados em input manual assistido.
+
+**Critério de aceite:** o sistema deve permitir o registro completo dos dados sem autenticação, sem integração com esteiras e sem APIs externas.
+
+---
+
+### ORG — Organizacionais
+
+O requisito organizacional foi derivado da necessidade de alinhar o desenvolvimento ao processo acadêmico do projeto e garantir documentação, versionamento e rastreabilidade das decisões técnicas.
+
+Esse RNF é mensurável pela adoção da arquitetura MVC, documentação do projeto e uso de repositório Git. Ele se conecta às exigências organizacionais da disciplina e à necessidade de manutenção do sistema ao longo das sprints.
+
+**Critério de aceite:** o projeto deve manter estrutura documentada, versionada e organizada conforme o padrão definido pelo grupo.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
