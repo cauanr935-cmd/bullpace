@@ -29,7 +29,11 @@
 
 ## 📝 Descrição
 
-_Descreva seu projeto (até 600 palavras)_
+Durante o segundo módulo do primeiro ano do Instituto de Tecnologia e Liderança (Inteli), em colaboração com a parceira Red Bull, estamos desenvolvendo o projeto BullPace. Nosso foco nesta primeira fase (sprint 1 de 5) é planejar e desenhar uma solução web para resolver um desafio crítico de operação do evento Red Bull 24 Horas: uma prova de revezamento contínuo em esteiras. Atualmente, o registro da quilometragem, os backups a cada 5 minutos e as trocas das duas equipes de 16 atletas são feitos de forma analógica, por meio de anotações em pranchetas de papel. Esse método é altamente vulnerável a erros, perdas de informação e ilegibilidade, especialmente devido ao cansaço da equipe de Field Marketing durante a madrugada.
+
+Como o projeto está dando os seus primeiros passos, nossos esforços atuais concentram-se no mapeamento de requisitos, na análise de riscos e na validação das regras de negócio. O que já podemos fazer nesta etapa é projetar uma arquitetura de software e interfaces (wireframes) pensadas especificamente para a realidade do evento. Já definimos que a aplicação será responsiva e operada exclusivamente por meio de tablets (iPads) pela equipe de apoio, contornando a falta de integração das esteiras Technogym com sistemas externos. Nesta fase inicial, estamos estruturando o sistema para que seja capaz de registrar as equipes, selecionar os atletas previamente cadastrados e preparar a base tecnológica para o registro dos tempos exatos (timestamps).
+
+A plataforma que está sendo desenvolvida busca ser intuitiva, rápida e tolerante a falhas, priorizando a usabilidade do operador. À medida que avançarmos nas próximas sprints, implementaremos os cálculos automáticos de performance, como o pace médio e a velocidade, e construiremos um painel "Modo TV" com a consolidação dos resultados em tempo real. Com base no planejamento que estamos fechando nesta primeira sprint, nossa missão é entregar, até o final do projeto, uma solução que não só elimine o uso de papel, mas que garanta a integridade, a segurança e a clareza necessárias para a organização auditar e divulgar os resultados da competição com total transparência.
 
 ## 📝 Link de demonstração
 
@@ -82,7 +86,23 @@ npm start
 * 0.2.0 - XX/XX/2024
     * 
 * 0.1.0 - 30/04/2024
-    *
+    * Entendimento do negócio
+        * Seção 1 do WAD: Introdução;
+        * Seção 2.1 do WAD: Escopo do projeto (Modelo de 5 Forças de Porter, análise SWOT, solução, Canvas Proposta de Valor e matriz de riscos).
+
+    * Entendimento do usuário
+        * Seção 2.2 do WAD: Personas;
+        * Seção 2.3 do WAD: User stories.
+
+    * Projeto técnico e Requisitos
+        * Seção 3.1 do WAD: Requisitos do sistema (Minimundo do sistema, Requisitos Funcionais, Regras de Negócio, Requisitos Não Funcionais e Fundamentação dos Eixos);
+Seção 3.1.4 do WAD: Matriz RF → RN → Endpoint (iniciada).
+
+Arquitetura do sistema
+Seção 3.2.2 do WAD: Diagrama de Casos de Uso.
+
+Rastreabilidade
+Seção 3.9 do WAD: Matriz de Rastreabilidade (RTM) (iniciada).
 
 ## 📋 Licença/License
 ```
