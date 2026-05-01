@@ -336,12 +336,29 @@ Depois do evento, todo o histórico fica salvo: checkpoints, trocas, métricas. 
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-*Numere e redija as RN de forma implementável e testável. Toda RN deve ter pelo menos um teste automatizado associado a partir da sprint 3.*
+A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema.
 
-| ID   | Descrição | RF associado |
-|------|-----------|--------------|
-| RN01 | ...       | RF001        |
-| RN02 | ...       | RF001        |
+
+| ID | Título | Descrição | RF Associado |
+|---|---|---|---|
+| RN01 | Estrutura e Alternância de Esteiras | O sistema deve suportar exatamente 2 equipes (Equipe A e Equipe B), cada uma com 2 esteiras físicas associadas. Apenas uma esteira pode estar ativa por vez em cada equipe. O sistema deve sugerir a alternância automática da esteira a cada troca de turno, mas deve permitir que o operador altere manualmente a esteira em uso em casos excepcionais (ex.: quebra ou manutenção), exigindo uma justificativa para a troca. | RF001 |
+| RN02 | Seleção de Participante Pré-cadastrado | Para iniciar qualquer turno, o operador deve obrigatoriamente selecionar um dos 16 participantes previamente cadastrados na base de dados da equipe correspondente. Não será permitida a criação de novos perfis ou a entrada de nomes via digitação livre durante a operação do evento. | RF002 |
+| RN03 | Bloqueio de Turnos Simultâneos | Não é permitido registrar o início de um novo turno para uma equipe se ela já possuir um turno em andamento na sua esteira ativa. O sistema deve bloquear um novo registro até que o turno atual seja encerrado. | RF003 |
+| RN04 | Progressão de Quilometragem | O valor de quilômetros inserido deve ser sempre incremental. O sistema deve impedir a gravação de um valor menor que o registro imediatamente anterior da mesma esteira no mesmo turno, evitando regressões por erro de digitação. | RF004, RF005 |
+| RN05 | Frequência de Checkpoints e Alerta | O sistema exige o registro manual de checkpoints a cada 5 minutos. Caso uma esteira ativa fique mais de 6 minutos sem receber um novo checkpoint, o sistema deve gerar automaticamente um alerta exclusivamente visual para o operador, sinalizando possível esquecimento. | RF005 |
+| RN06 | Consistência de Encerramento | O registro de fim de turno só pode ser realizado se existir ao menos um registro de início de turno correspondente; o sistema deve rejeitar tentativas de encerramento sem turno iniciado. | RF003, RF004 |
+| RN07 | Validação de Valor Final | O valor de quilômetros no momento do encerramento do turno deve ser maior ou igual ao valor do último checkpoint registrado no mesmo turno; caso contrário, o sistema deve exibir erro e impedir o salvamento, evitando falhas de registro. | RF004, RF005 |
+| RN08 | Atualização do Placar (Quilometragem Total) | A quilometragem total consolidada da equipe (exibida no placar) será calculada pela soma de todos os turnos já encerrados mais o valor do último checkpoint validado do turno atualmente em andamento. | RF006 |
+| RN09 | Resiliência em Paradas Inesperadas | Em caso de parada inesperada da esteira, o sistema deve permitir que o operador utilize o valor do último checkpoint registrado como base para a continuidade, sem apagar o histórico anterior. | RF005, RF007 |
+| RN10 | Registro de Tempo Automático | Todo registro (início de turno, checkpoint e fim de turno) deve armazenar automaticamente o timestamp do servidor no momento da gravação, não sendo permitida edição manual de horários pelo operador. | RF003, RF004, RF005 |
+| RN11 | Gestão de Turnos por Participante | O sistema deve permitir que um mesmo perfil de participante realize múltiplos turnos ao longo das 24 horas. Ao selecionar o corredor na lista, o sistema deve vincular automaticamente o histórico de quilometragem daquele turno ao perfil do atleta para fins de estatísticas individuais. | RF002, RF003 |
+| RN12 | Imutabilidade de Registros e Ajustes | Registros confirmados não podem ser excluídos. Eventuais correções de digitação (ex.: o operador digitou a quilometragem errada) devem ser feitas via "Lançamento de Ajuste", mantendo o log do valor original no banco de dados e exigindo um motivo obrigatório para fins de auditoria. | RF007 |
+| RN13 | Campos Obrigatórios para Exportação | A exportação de dados em CSV deve conter obrigatoriamente os campos: ID do registro, equipe, número da esteira, tipo do registro (início/checkpoint/fim), quilometragem, timestamp e nome do participante selecionado. | RF008 |
+| RN14 | Retenção de Dados | O sistema deve armazenar os dados consolidados e os relatórios finais do evento, garantindo que possam ser consultados pela organização a qualquer momento no futuro. | RF008 |
+| RN15 | Visualização do Placar no Modo TV | O Modo TV (telas de exibição pública) deve exibir exclusivamente a quilometragem total por equipe de forma "somente leitura", sem permitir qualquer tipo de interação, edição de dados ou navegação por parte do observador. | RF009 |
+| RN16 | Inserção Estritamente Manual | O sistema não possui qualquer integração ou comunicação direta com as esteiras. A apuração depende 100% da leitura visual e inserção manual dos dados pelo operador na interface web. | RF003, RF004, RF005 |
+| RN17 | Restrição Operacional em Tablet (iPad) | O contexto operacional do evento impõe a premissa de que a apuração será realizada exclusivamente via tablets (iPad). O sistema deve respeitar essa restrição de negócio, não dependendo de teclados físicos ou mouses para a inserção fluida dos registros numéricos. | RF003, RF005 |
+| RN18 | Obrigatoriedade do Campo KM Acumulado | Em todo novo registro de checkpoint, o preenchimento do campo de quilometragem (KM) acumulada é estritamente obrigatório, sendo este o dado central e indispensável da apuração. Campos informativos complementares, como pace médio e velocidade média, devem permanecer como opcionais. | RF005 |
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
