@@ -96,13 +96,13 @@ npm start
 
     * Projeto técnico e Requisitos
         * Seção 3.1 do WAD: Requisitos do sistema (Minimundo do sistema, Requisitos Funcionais, Regras de Negócio, Requisitos Não Funcionais e Fundamentação dos Eixos);
-Seção 3.1.4 do WAD: Matriz RF → RN → Endpoint (iniciada).
+        * Seção 3.1.4 do WAD: Matriz RF → RN → Endpoint (iniciada).
 
-Arquitetura do sistema
-Seção 3.2.2 do WAD: Diagrama de Casos de Uso.
+    * Arquitetura do sistema
+        * Seção 3.2.2 do WAD: Diagrama de Casos de Uso.
 
-Rastreabilidade
-Seção 3.9 do WAD: Matriz de Rastreabilidade (RTM) (iniciada).
+    * Rastreabilidade
+        * Seção 3.9 do WAD: Matriz de Rastreabilidade (RTM) (iniciada).
 
 ## 📋 Licença/License
 ```
