@@ -86,7 +86,6 @@ Portanto, o equilíbrio geral das forças indica que o maior risco estratégico 
 
 A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 2.1.2 mostra a matriz que montamos.
 
-
 <div align="center">
   <sub><b>Figura 2.1.2.1 — Análise SWOT da Red Bull</b></sub><br>
   <img src="../assets/Analise_Swot.png" width="100%" alt="canva da proposta de valor"><br>
