@@ -54,9 +54,9 @@ As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Mic
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
 <br>
 <div align="center">
-  <sub><b>Figura 2.1.1 -  5 Forças de Porter</b></sub><br>
-  <img src="../assets/ForçasPcorrecao.png" width="100%">
-  <sub>Fonte: Material produzido pelos autores (2026).</sub>
+  <b>Figura 2.1.1 — 5 Forças de Porter</b><br>
+  <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
