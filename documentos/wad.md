@@ -35,12 +35,13 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-A proposta do projeto surge a partir de um desafio operacional real no evento da Red Bull 24 Horas, uma competição de corrida em esteira, onde duas equipes com 16 participantes cada se revezam durante as 24 horas de prova. A equipe que completar mais quilômetros na esteira após a apuração dos resultados vence. Porém, o controle é feito manualmente, por meio de anotações em uma prancheta pelo time operacional do Field Marketing, onde se registra qual atleta entrará para correr e, de 5 em 5 minutos, realiza-se o backup. Ao término da corrida do atleta, é marcada a quilometragem e tirada uma foto para arquivo. Além disso, conforme definido em reunião com a Red Bull, os atletas também terão acesso ao sistema, ampliando a visibilidade das informações durante a competição.
+A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior.
 
-Diante deste cenário e considerando as limitações humanas e das esteiras utilizadas (Technogym), como a conectividade com outros aparelhos além da pulseira, que é algo inviável, propõe-se o desenvolvimento de uma plataforma digital que irá mostrar os dados da corrida, com o backup de 5 em 5 minutos, nome dos atletas, em qual horário cada um entrou e uma tabela separada para cada equipe. Será um sistema de banco de dados simples, com um recurso que facilite também o registro das fotos da esteira com a quilometragem, para que não fique algo totalmente manual, garantindo uma maior confiabilidade das informações e diminuindo problemas por erros humanos.
+Além da limitação do método manual, o contexto do evento também apresenta restrições técnicas importantes. Não há integração direta com as esteiras Technogym, e o uso de pulseiras sincronizadas não se mostra viável devido à dinâmica de revezamento, à quantidade de participantes e ao tempo necessário para sincronização antes de cada corrida. Dessa forma, a solução precisa considerar uma operação baseada em leitura visual da esteira e inserção manual assistida dos dados pelo operador.
 
-Além disso, o sistema irá calcular automaticamente a quilometragem cada vez que for computada pelo pessoal do Field Marketing e também irá contar com um display simultâneo restrito para o pessoal da Red Bull e para os atletas, para que haja um controle das equipes, permitindo um melhor acompanhamento durante a competição.
+Diante desse cenário, propõe-se o desenvolvimento de uma aplicação web para apoiar o registro, a organização e a consolidação dos dados da competição. O sistema permitirá selecionar a equipe, o atleta e a esteira utilizada, registrar o início e o encerramento de turnos, inserir checkpoints periódicos com quilometragem acumulada e armazenar timestamps automáticos para aumentar a rastreabilidade dos registros. A aplicação também deverá consolidar os resultados por equipe, possibilitando o acompanhamento da quilometragem acumulada e a comparação final entre os grupos competidores.
 
+Com isso, espera-se substituir o uso da prancheta por um fluxo digital mais confiável, padronizado e adequado ao ambiente do evento. A solução busca reduzir erros humanos, facilitar a conferência dos dados, melhorar a visibilidade da operação e permitir a exportação das informações em formato CSV para auditoria pós-evento. Dessa forma, o projeto contribui para uma apuração mais segura, transparente e eficiente dos resultados do Red Bull 24 Horas.
 
 
 
@@ -85,41 +86,153 @@ Portanto, o equilíbrio geral das forças indica que o maior risco estratégico 
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-A Red Bull é uma marca conhecida no mundo inteiro e que investe muito em esporte, então fazer uma SWOT antes de começar o projeto ajudou a gente a entender melhor com quem está trabalhando e o que precisa ser pensado na hora de desenvolver a solução. A Figura 2.1.2 mostra a matriz que montamos.
+A análise SWOT é uma ferramenta de diagnóstico estratégico utilizada para compreender a posição de uma organização ou projeto a partir de quatro dimensões: forças, fraquezas, oportunidades e ameaças. As forças e fraquezas dizem respeito a fatores internos, ou seja, elementos ligados à própria instituição, sua operação, seus recursos e suas limitações. Já as oportunidades e ameaças representam fatores externos, relacionados ao mercado, ao público, aos concorrentes, aos substitutos e ao ambiente em que o projeto está inserido.
 
+No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação da Red Bull enquanto parceira do projeto, considerando seu posicionamento institucional, a operação atual do evento e a proposta de desenvolvimento de uma solução web para registro e consolidação dos dados da competição. A análise permite identificar quais aspectos favorecem a implementação da solução, quais fragilidades precisam ser enfrentadas, quais oportunidades podem ampliar o valor do projeto e quais ameaças podem comprometer sua adoção.
+
+<br>
 <div align="center">
-  <sub><b>Figura 2.1.2.1 — Análise SWOT da Red Bull</b></sub><br>
-  <img src="../assets/Analise_Swot.png" width="100%" alt="canva da proposta de valor"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+  <b>Figura xx Matriz Swot</b><br>
+  <img src="../assets/swot.jpeg" width="100%"><br>
+  <sub>Fonte: Template Lab (2026).</sub>
 </div>
+<br>
 
-O ponto mais forte da Red Bull para o projeto é a estrutura interna de Field Marketing, que já tem experiência em rodar eventos próprios de grande porte como o 24 Horas. A maior fraqueza é como o controle de quilometragem é feito hoje, no papel, somado às limitações das esteiras que não conversam com sistemas externos. Do lado de fora, a corrida vem crescendo no Brasil e o público jovem engajado em eventos urbanos pesa a favor, mas o cenário também tem ameaças relevantes para uma prova de 24 horas: Outros eventos esportivos disputando atenção, imprevistos operacionais durante a competição e riscos de saúde dos atletas em uma prova de longa duração.
+## Interno
+
+### Forças
+
+- Marca globalmente reconhecida e associada a esporte, energia, performance e experiências de alto impacto.
+- Estrutura interna de Field Marketing experiente na execução de eventos proprietários.
+- Capacidade de mobilizar público jovem e engajado em ativações esportivas e urbanas.
+- Evento com identidade forte, formato competitivo claro e alto potencial de engajamento.
+- Experiência prévia da Red Bull na criação de eventos próprios com apelo de marca.
+- Posicionamento diferenciado em relação a concorrentes por unir esporte, entretenimento e experiência presencial.
+
+As principais forças da Red Bull estão ligadas ao seu posicionamento institucional e à sua capacidade de criar experiências proprietárias. A marca já é reconhecida por sua associação com esporte, performance, energia e eventos de alto impacto, o que favorece a relevância do Red Bull 24 Horas dentro do seu ecossistema de marca.
+
+Além disso, a existência de uma estrutura interna de Field Marketing é um fator importante para o projeto. A empresa já possui uma equipe acostumada a planejar e executar ativações presenciais, lidar com participantes e operar eventos em ambientes dinâmicos. Isso contribui para que as necessidades do evento sejam bem compreendidas e para que a solução proposta seja validada com base na realidade operacional.
+
+Outro ponto forte é o próprio formato do Red Bull 24 Horas. Por ter uma dinâmica clara de equipes, revezamento, atletas, esteiras e apuração de quilometragem, o evento oferece um contexto bem definido para o desenvolvimento de uma solução específica. Essa clareza operacional facilita o entendimento do problema e permite que o projeto seja construído em torno de um fluxo real de uso.
+
+Em relação aos concorrentes, a força da Red Bull está na dificuldade de replicar integralmente sua combinação de marca, público, experiência e operação proprietária. Outras marcas podem promover eventos esportivos, mas a Red Bull possui um posicionamento consolidado nesse tipo de ativação, o que favorece a diferenciação do evento.
+
+### Fraquezas
+
+- Processo atual de apuração dependente de registros manuais em prancheta.
+- Maior risco de erro humano, ilegibilidade, perda de dados ou inconsistência entre registros.
+- Ausência de integração direta entre as esteiras Technogym e sistemas externos.
+- Dependência da leitura visual do operador para registrar os dados da esteira.
+- Operação prolongada por 24 horas, sujeita à fadiga e sobrecarga cognitiva da equipe operacional.
+- Dificuldade de auditoria rápida quando os registros estão dispersos em papel, fotos ou anotações manuais.
+- Baixa padronização do processo atual em comparação com um fluxo digital estruturado.
+- Dependência de operadores manterem atenção contínua durante turnos longos de acompanhamento.
+
+As fraquezas identificadas estão concentradas principalmente na operação atual de apuração. O registro manual em prancheta aumenta o risco de erros de preenchimento, atrasos, rasuras, divergências entre operadores e perda de informações relevantes. Em uma competição na qual o resultado depende diretamente da quilometragem registrada, essa fragilidade afeta a confiabilidade da apuração.
+
+Outra limitação relevante está na infraestrutura tecnológica do evento. As esteiras Technogym utilizadas não possuem integração direta com o sistema proposto, o que impede a captura automática dos dados. Assim, a operação depende da leitura visual do display da esteira e da inserção manual das informações pelo time operacional.
+
+A duração de 24 horas também intensifica essas fraquezas. Com o passar do evento, a fadiga dos operadores pode comprometer a atenção e aumentar a probabilidade de erro. Isso mostra que o problema não é apenas tecnológico, mas também operacional: o método atual exige consistência humana por um período longo e sob pressão.
+
+Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
+
+## Externo
+
+### Oportunidades
+
+- Crescimento do interesse por corrida, fitness e desafios esportivos de resistência.
+- Possibilidade de digitalizar e profissionalizar a apuração do Red Bull 24 Horas.
+- Aumento da confiabilidade, rastreabilidade e transparência na apuração dos resultados.
+- Criação de uma base de dados estruturada para conferência, auditoria e aprendizado pós-evento.
+- Possibilidade de reaproveitamento da solução em futuras edições do Red Bull 24 Horas.
+- Potencial de adaptação da solução para outras ativações esportivas da Red Bull.
+- Possibilidade de expansão para edições internacionais com dinâmica semelhante, como o Red Bull 24 Horas da Suíça, caso o modelo seja validado.
+- Diferenciação frente a eventos concorrentes por meio de uma operação mais organizada e confiável.
+- Melhoria da experiência de acompanhamento para equipe organizadora, operadores e participantes.
+- Redução de retrabalho pós-evento por meio da consolidação digital dos registros.
+
+As oportunidades surgem principalmente da possibilidade de transformar uma operação manual em um processo digital mais organizado e confiável. Como a Red Bull já possui força de marca e experiência em eventos esportivos, a digitalização da apuração pode elevar o padrão operacional do Red Bull 24 Horas e reforçar a percepção de profissionalismo do evento.
+
+O crescimento do interesse por corrida, fitness e desafios de resistência também favorece a relevância do projeto. Esse contexto amplia o potencial de engajamento do evento e aumenta a importância de uma apuração confiável, já que os participantes e a organização precisam ter segurança sobre os resultados finais.
+
+A solução proposta pode ainda gerar valor além da edição atual. Ao estruturar dados de equipes, atletas, turnos, esteiras e checkpoints, o projeto cria uma base que pode ser reaproveitada em futuras edições do evento ou adaptada para outras ativações esportivas da marca. Caso o modelo seja validado no contexto brasileiro, existe a possibilidade de replicação para eventos internacionais com formato semelhante, como uma edição do Red Bull 24 Horas na Suíça.
+
+Em relação ao posicionamento competitivo, essa oportunidade é relevante porque a Red Bull pode diferenciar sua operação não apenas pela força da marca, mas também pela qualidade da gestão dos dados do evento. A confiabilidade da apuração passa a ser parte da experiência entregue.
+
+### Ameaças
+
+- Concorrência com outros eventos esportivos e experiências de marca voltadas ao mesmo público.
+- Existência de substitutos simples, como pranchetas, planilhas colaborativas e aplicativos genéricos.
+- Risco de baixa adoção caso a solução proposta seja mais lenta ou complexa que o método manual.
+- Imprevistos operacionais durante as 24 horas, como falhas de infraestrutura, equipamentos ou conexão.
+- Possibilidade de falha técnica durante um momento crítico da competição.
+- Resistência de operadores acostumados ao processo manual.
+- Riscos de saúde, segurança e fadiga dos atletas em uma prova de longa duração.
+- Dependência de validação e aceitação do time operacional da Red Bull.
+- Pressão por alta confiabilidade, já que qualquer erro pode gerar contestação do resultado final.
+- Dificuldade de adoção em futuras edições se o sistema não demonstrar ganho claro em relação à prancheta.
+
+As ameaças mais relevantes não vêm apenas de concorrentes diretos, mas também de substitutos operacionais. A prancheta, as planilhas e os aplicativos genéricos continuam sendo alternativas possíveis porque são simples, conhecidos e exigem baixa preparação. Mesmo com limitações, esses métodos podem ser mantidos se a solução proposta não demonstrar ganhos claros de confiabilidade e facilidade de uso.
+
+Também há concorrência indireta com outros eventos esportivos e ativações de marca que disputam a atenção do mesmo público. Nesse cenário, a qualidade da experiência oferecida pela Red Bull precisa se manter alta, inclusive nos bastidores da operação. Uma apuração confusa, lenta ou sujeita a questionamentos pode enfraquecer a percepção de profissionalismo do evento.
+
+Além disso, a natureza do Red Bull 24 Horas cria riscos operacionais próprios. Uma prova contínua está sujeita a falhas de equipamento, instabilidade de infraestrutura, troca de operadores, cansaço da equipe e situações relacionadas à saúde dos atletas. Como a solução digital será inserida nesse ambiente, ela precisa ser simples, resiliente e adequada ao uso sob pressão.
+
+A aceitação do time operacional também é uma ameaça importante. Se os operadores perceberem o sistema como difícil, lento ou pouco confiável, a tendência será recorrer ao método manual. Portanto, o sucesso do projeto depende de a solução proposta ser claramente melhor do que a prancheta, sem exigir complexidade adicional na operação.
+
+## Visão geral da SWOT
+
+A análise SWOT mostra que a Red Bull parte de uma posição institucional forte para desenvolver o projeto. A marca possui reconhecimento global, associação consolidada com esporte e performance e experiência na criação de eventos proprietários de alto engajamento. Esses fatores favorecem o Red Bull 24 Horas e criam um ambiente positivo para a adoção de melhorias operacionais.
+
+Por outro lado, a operação atual apresenta uma fraqueza clara: a apuração dos quilômetros ainda depende de registros manuais, leitura visual da esteira e consolidação posterior dos dados. Essa limitação é ainda mais sensível por se tratar de uma competição de 24 horas, na qual a fadiga, a pressão operacional e a repetição dos registros aumentam o risco de erro.
+
+As oportunidades estão ligadas à possibilidade de a solução proposta digitalizar e padronizar uma etapa crítica do evento. O projeto pode reduzir inconsistências, melhorar a rastreabilidade, facilitar a auditoria e criar uma base replicável para futuras edições ou ativações semelhantes, inclusive em outros países, caso o modelo seja validado.
+
+Já as ameaças indicam que a solução precisa provar valor rapidamente. O método manual, apesar de limitado, continua sendo um substituto viável por ser conhecido e simples. Portanto, o desafio estratégico não é apenas desenvolver uma aplicação digital, mas garantir que ela seja mais confiável, prática e aderente ao contexto do evento do que os métodos já utilizados.
+
+Em síntese, a SWOT reforça que o projeto deve aproveitar as forças institucionais da Red Bull para resolver uma fragilidade operacional concreta. A solução proposta não parte de uma digitalização já existente; ela surge justamente para substituir um processo manual por um fluxo mais confiável, rastreável e adequado à complexidade do Red Bull 24 Horas.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
 - Problema a ser resolvido     
     
-  O controle dos quilômetros no Red Bull 24 Horas é feito a mão em uma prancheta, com registros de entrada, checkpoints a cada 5 minutos e saída dos atletas. O processo é vulnerável a erros de anotação, papel danificado e divergência entre operadores ao longo das 24 horas de prova.
+  O controle dos quilômetros no Red Bull 24 Horas é realizado manualmente por meio de pranchetas, com registros de entrada dos atletas, checkpoints periódicos e encerramento dos turnos. Esse processo é vulnerável a erros de anotação, rasuras, perda de informações, divergência entre operadores e dificuldade de conferência ao longo das 24 horas de prova.
+
+Como o resultado da competição depende diretamente da quilometragem registrada, qualquer inconsistência no processo de apuração pode comprometer a confiabilidade do resultado final. Além disso, a ausência de integração direta com as esteiras exige que os dados sejam lidos visualmente e inseridos manualmente pela equipe operacional.
 
 - Dados disponíveis 
 
-  Os dados vêm dos registros feitos pelo operador de Field Marketing durante o evento: equipe, esteira, horários de início e fim e quilometragem por checkpoint. Não há integração com as esteiras Technogym nem com pulseiras. O TAPI e o kick-off com a Red Bull definiram as regras de operação e as restrições do campo.
+  Os dados disponíveis foram levantados a partir de três fontes principais: uma planilha fornecida pela Red Bull com registros de uma edição anterior do evento, o kick-off com o parceiro e o TAPI do projeto. A planilha permitiu identificar métricas já utilizadas na apuração, como equipe, participante, quilometragem, pace médio e velocidade média.
+
+Já o kick-off e o TAPI ajudaram a definir o contexto operacional, incluindo o uso de equipes, atletas, esteiras, turnos, checkpoints e as restrições técnicas do evento, como a ausência de integração direta com as esteiras Technogym e a inviabilidade do uso de pulseiras como fonte automática de dados.
 
 - Solução proposta
 
-  Aplicação web responsiva para iPad que substitui a prancheta, permitindo registrar início, checkpoints e fim de turno com timestamps automáticos. Inclui painel unificado de placar exibindo ambas as equipes lado a lado com métricas consolidadas (km totais, passos projetados, tempo de prova, pace médio, velocidade média, trocas e número de entradas), anotações editáveis, campo de observações, modo TV e exportação de dados em CSV.
+  A solução proposta consiste em uma aplicação web responsiva, otimizada para uso em iPad, com o objetivo de substituir a prancheta por um fluxo digital mais confiável e rastreável. O sistema permitirá selecionar equipe, atleta e esteira, iniciar turnos com timestamp automático, registrar checkpoints periódicos com KM acumulado obrigatório e campos opcionais de pace médio e velocidade média, além de encerrar turnos e exibir os resultados daquela sessão.
+
+A aplicação também deverá permitir a visualização dos resultados consolidados por equipe, a comparação final entre as equipes competidoras e a exportação dos dados em CSV para auditoria. Dessa forma, a solução busca organizar os registros da competição, reduzir falhas humanas e facilitar a conferência dos dados após o evento.
 
 - Forma de utilização
 
-  Os operadores utilizam um iPad para registrar turnos ao lado da esteira, lendo o quilômetro do display a cada 5 minutos. A gestão do evento e os atletas acompanham o placar consolidado durante a competição, sem acesso aberto ao público. Ao final das 24 horas, os dados são exportados para auditoria e validação dos resultados.
+  Durante o evento, os operadores utilizarão um iPad ao lado da esteira para registrar o fluxo de cada turno. O processo seguirá a lógica operacional definida: seleção da equipe, seleção do atleta, vinculação com a esteira, início do turno, registro de checkpoints periódicos e encerramento da sessão.
+
+A organização poderá acompanhar os resultados consolidados por equipe em uma visualização restrita, sem acesso aberto ao público. Ao final da competição, os dados registrados serão exportados em formato CSV para conferência, auditoria e validação dos resultados.
 
 - Benefícios esperados 
 
-  Cadastro inicial dos participantes facilitado, redução de erros na apuração dos quilômetros, maior confiabilidade e rastreabilidade dos registros, mais eficiência operacional para o time, visão consolidada do andamento da competição em tempo real, disponibilização contínua de métricas analíticas (pace, velocidade média e projeção de passos) inexistentes no método atual e base de dados estruturada para auditoria e análise pós-evento.
+  Os principais benefícios esperados são a redução de erros na apuração dos quilômetros, maior confiabilidade dos registros, rastreabilidade dos dados por equipe, atleta, esteira, turno e checkpoint, além de mais eficiência operacional para o time de Field Marketing.
+
+A solução também deve facilitar a conferência dos resultados, reduzir retrabalho pós-evento, padronizar a coleta de dados e criar uma base estruturada para auditoria. Com isso, o processo de apuração se torna mais transparente, organizado e adequado à dinâmica de uma competição de 24 horas.
 
 - Critérios de sucesso e como será avaliado 
 
-  A solução será avaliada por meio de simulação prática pré-evento, comparando os registros gerados pelo sistema com os obtidos pelo método atual da prancheta durante um período controlado. Serão verificados três critérios definidos pelo parceiro: consistência dos dados entre os dois métodos, facilidade de uso pela equipe operacional e redução efetiva de erros em relação ao processo manual.  
+  A solução será avaliada inicialmente por meio de testes internos com dados mockados, reproduzindo o fluxo principal da operação do evento: seleção de equipe, seleção de atleta, vinculação à esteira, início de turno, registro de checkpoints, encerramento do turno, consolidação dos resultados e exportação em CSV.
+
+Os dados mockados deverão simular situações reais do Red Bull 24 Horas, como múltiplos atletas, diferentes turnos, registros de checkpoints, variação de quilometragem, campos opcionais de pace e velocidade média e possíveis inconsistências de preenchimento. Dessa forma, será possível validar se o sistema registra e relaciona corretamente equipe, atleta, esteira, turno e checkpoints.
+
+A avaliação considerará como critérios de sucesso: consistência dos dados registrados, facilidade de uso no fluxo principal, funcionamento correto das validações, redução de erros em relação ao processo manual e geração adequada do arquivo CSV para auditoria.
+
+Caso seja viável, em uma etapa posterior, a solução poderá ser validada com o parceiro em uma simulação assistida ou demonstração guiada, permitindo coletar feedback do time de Field Marketing sobre usabilidade, aderência ao fluxo real e confiabilidade percebida.  
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
@@ -134,43 +247,66 @@ Esta seção detalha o alinhamento estratégico entre as necessidades operaciona
 **Análise do Mapa do Perfil do Cliente**
 
 **Tarefas do Cliente (Customer Jobs)**
-O perfil de usuário da Operação Red Bull busca, essencialmente, realizar o registro contínuo e confiável de dados de performance, como quilometragem, velocidade e pace, durante o revezamento ininterrupto de 16 atletas por equipe (totalizando 32 participantes). Para os gestores do ecossistema, a prioridade absoluta é a consolidação e validação do total de quilômetros por equipe para a apuração de um resultado oficial e inquestionável. Portanto, o foco central do operador não é apenas inserir números, mas garantir que a transição entre atletas e o monitoramento dos checkpoints ocorram sem lacunas informacionais, exigindo que a tecnologia atue como um suporte eficiente para a gestão da prova.
 
+O perfil do cliente está diretamente relacionado à operação do Red Bull 24 Horas, especialmente ao time de Field Marketing responsável por acompanhar a competição e registrar os dados produzidos durante os turnos dos atletas. A principal tarefa desse usuário é manter o controle contínuo da quilometragem ao longo das 24 horas de prova, registrando a entrada, os checkpoints e a saída de cada atleta nas esteiras.
 
+Além do registro em si, o cliente precisa garantir que cada dado esteja corretamente associado à equipe, ao atleta, à esteira e ao turno correspondente. Essa tarefa é essencial porque a apuração final da competição depende da consolidação da quilometragem total por equipe. Portanto, o trabalho do operador não se limita ao preenchimento de informações: ele também precisa assegurar que os registros sejam confiáveis, organizados e utilizáveis para validação posterior.
 
-
-
-
-
-
-
+Outro ponto relevante é a necessidade de exportar os registros para conferência e auditoria após o evento. Como a competição envolve revezamento contínuo e grande volume de dados, o cliente precisa de um processo que facilite a validação do resultado final com base em informações rastreáveis, reduzindo a dependência de anotações dispersas ou registros manuais difíceis de conferir.
 
 **Dores do Cliente (Pains)**
-Os operadores enfrentam barreiras críticas, como o cansaço extremo e a sobrecarga cognitiva resultantes de 24 horas de monitoramento, o que frequentemente gera erros de anotação e ilegibilidade no método manual. Essa vulnerabilidade é agravada pela ineficiência de tecnologias genéricas, como as pulseiras Technogym, que se mostram inviáveis na dinâmica veloz do evento. Dito isso, a dor do usuário é operacional e acumulativa, o risco de perda de dados históricos ou a inconsistência de registros manuais gera uma insegurança profunda quanto à integridade do resultado final, tornando o processo de apuração um fardo propenso a contestações.
 
+As principais dores do cliente surgem da dependência do processo manual. O registro em prancheta, somado à necessidade de leitura visual da esteira, cria um ambiente propenso a erros de anotação, inconsistências e perda de informações ao longo das 24 horas. Como a operação ocorre de forma contínua, fatores como distração, fadiga e pressão operacional aumentam o risco de falhas.
 
+A ausência de integração direta com as esteiras Technogym também representa uma limitação importante. Como os dados não podem ser capturados automaticamente, o operador precisa observar a informação exibida na esteira e registrá-la manualmente no momento correto. Esse processo aumenta a sobrecarga cognitiva, principalmente durante trocas rápidas de atletas ou em situações de parada inesperada da esteira.
+
+Outra dor relevante está na dificuldade de conferência e auditoria. Quando os dados ficam espalhados entre pranchetas, fotos ou anotações manuais, torna-se mais difícil reconstruir o histórico da competição com segurança. Isso pode gerar dúvidas sobre turnos, checkpoints e resultados finais, especialmente se houver registros incompletos ou divergentes.
 
 **Ganhos do Cliente (Gains)**
-As expectativas de ganho concentram-se na obtenção de um resultado final preciso, transparente e imune a erros humanos, resultando em uma cerimônia de premiação justa e baseada em dados reais. O usuário busca a agilidade de chegar ao fim das 24 horas de prova com todos os dados já digitalizados e prontos para análise, eliminando o retrabalho pós evento. Então, o ganho máximo desejado é a confiança operacional, onde a padronização e o registro rápido transformam-se no principal motor de sucesso da entrega técnica para o parceiro.
 
+Os ganhos esperados estão associados à melhoria da confiabilidade, da organização e da transparência da apuração. O cliente busca um resultado final confiável, auditável e menos sujeito a contestação, baseado em registros bem estruturados ao longo da competição. Para isso, é necessário que os dados estejam organizados por equipe, atleta, esteira e turno.
 
+Outro ganho importante é a redução de retrabalho após o evento. Com os dados registrados de forma padronizada durante a operação, a organização pode consultar informações consolidadas com maior rapidez e segurança. Isso facilita a conferência dos turnos, dos checkpoints e da quilometragem acumulada por equipe.
+
+Além disso, a visualização consolidada dos dados por equipe contribui para um acompanhamento mais claro da competição. O registro rápido e padronizado durante a operação reduz a complexidade do processo para os operadores e aumenta a segurança da organização na validação dos resultados.
+
+---
 
 **Análise do Mapa de Valor**
 
 **Produtos e Serviços (Products and Services)**
 
-A entrega central consiste em uma aplicação web mobile estruturada para operar em tablets, oferecendo módulos de registro de checkpoints e gestão de perfis de atletas integrados a um motor de cálculo em tempo real. A solução transforma o registro de quilometragem em métricas de performance imediatas e automatiza a geração do relatório oficial. Portanto, este eixo supre diretamente as Tarefas do Cliente (Customer Jobs), pois substitui o processo burocrático e analógico da prancheta por uma interface fluida, garantindo que o software seja o meio técnico necessário para que a Red Bull oficialize a performance dos corredores com precisão digital.
+A entrega proposta consiste em uma aplicação web responsiva para uso em iPad, voltada ao registro da operação do Red Bull 24 Horas. A solução permite registrar equipe, atleta, esteira, turno e checkpoints, substituindo a prancheta por um fluxo digital mais estruturado e rastreável.
+
+Além do registro operacional, o sistema oferece painel de resultados consolidados por equipe, comparação final entre equipes e exportação dos dados em CSV para auditoria. Esses recursos atendem diretamente às tarefas do cliente, pois apoiam tanto o acompanhamento da competição quanto a conferência posterior dos resultados.
+
+É importante destacar que a solução não depende de integração automática com as esteiras. Seu papel é organizar e qualificar o registro manual feito pelo operador, tornando esse processo mais confiável, padronizado e adequado ao contexto de uma prova de 24 horas.
 
 **Aliviadores de Dores (Pain Relievers)**
 
-O sistema neutraliza o risco de erro humano através da padronização digital de inputs e do bloqueio de dados inconsistentes, impedindo que a fadiga do operador resulte em registros inválidos. A persistência de dados em tempo real assegura que nenhuma informação seja perdida, mesmo em casos de falhas no hardware externo. Dito isso, este eixo é o reflexo direto das Dores do Cliente (Pains), pois mitiga a insegurança gerada pelo cansaço extremo e pela vulnerabilidade do método manual, eliminando o risco de contestações e garantindo a integridade total do histórico da prova.
+A solução alivia as dores do cliente ao reduzir a vulnerabilidade do processo manual. A padronização dos inputs de quilometragem, pace e velocidade diminui a chance de registros incompletos ou inconsistentes, enquanto a obrigatoriedade do KM acumulado nos checkpoints garante que o dado central da apuração seja sempre coletado.
 
+Os timestamps automáticos nos registros críticos também contribuem para a confiabilidade da operação, pois reduzem a necessidade de controle manual de horários. Além disso, a validação de dados inconsistentes ajuda a evitar erros como a inserção de uma quilometragem menor que a anterior dentro do mesmo turno.
 
-
+Outro aliviador relevante é a preservação do histórico por equipe, atleta, esteira, turno e checkpoint. Isso melhora a capacidade de auditoria e reduz a dependência de registros em papel. Caso sejam necessários ajustes, a lógica de ajustes auditáveis evita a edição direta e sem rastreabilidade, mantendo maior controle sobre o histórico da prova.
 
 **Criadores de Ganhos (Gain Creators)**
 
-Através de uma usabilidade de baixo esforço e do cálculo automático de performance, o sistema permite que registros complexos sejam realizados de forma ágil e precisa. A rastreabilidade individual por atleta assegura que cada metro percorrido seja devidamente computado e auditável no placar geral. Então, este eixo conecta-se aos Ganhos do Cliente (Gains) ao converter a tecnologia em um motor de credibilidade e transparência, assegurando que o esforço dos atletas seja premiado com um resultado final inquestionável e gerado em tempo real, sem a necessidade de retrabalho pós-evento.
+Os criadores de ganho estão ligados à capacidade da solução de transformar registros operacionais em informações consolidadas e úteis para a tomada de decisão. A consolidação automática dos resultados a partir dos dados registrados permite que a organização acompanhe a evolução da competição com menor esforço manual.
+
+A rastreabilidade individual por atleta e turno também gera valor, pois permite compreender de onde vem cada registro e como ele contribui para o resultado da equipe. Isso fortalece a transparência da apuração e reduz o risco de contestação ao final da prova.
+
+Além disso, a geração de uma base estruturada para auditoria pós-evento amplia o valor da solução além do momento da competição. Os dados deixam de existir apenas como anotações manuais e passam a compor um histórico organizado, exportável e reutilizável para conferência. Dessa forma, o sistema cria ganhos tanto operacionais quanto estratégicos para futuras edições do evento.
+
+---
+
+**Conclusão**
+
+A análise do Mapa de Valor evidencia que a proposta da aplicação está alinhada às principais necessidades operacionais do Red Bull 24 Horas. O cliente precisa registrar e validar dados de forma contínua, confiável e rastreável, enquanto suas principais dores estão relacionadas ao processo manual, à ausência de integração direta com as esteiras e à dificuldade de auditoria dos registros.
+
+Nesse contexto, a solução proposta atua como uma camada digital de organização e controle, sem depender de automação externa. Ao padronizar os registros, associar corretamente equipe, atleta, esteira, turno e checkpoints, e permitir a consolidação e exportação dos dados, o sistema contribui para uma apuração mais segura e eficiente.
+
+Assim, o valor da solução não está apenas em substituir a prancheta por uma interface digital, mas em reduzir riscos operacionais, aumentar a confiabilidade dos dados e oferecer uma base estruturada para conferência e auditoria. Dessa forma, o projeto se posiciona como uma resposta direta às dores do cliente e como um apoio essencial para a gestão da competição durante as 24 horas de prova.
 
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
