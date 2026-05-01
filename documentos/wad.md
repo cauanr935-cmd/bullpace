@@ -545,11 +545,21 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
 
-*A RTM consolida a rastreabilidade completa do sistema. Um elo quebrado invalida toda a cadeia — mantenha-a atualizada a cada sprint. A partir da sprint 3 não deve haver lacunas nos fluxos centrais.*
+A Matriz de Rastreabilidade de Requisitos (RTM) é uma ferramenta que mapeia o ciclo de vida completo de cada funcionalidade, ligando os requisitos pedidos às regras de negócio, desenvolvimento (telas e código) e testes correspondentes. Ela serve para garantir que tudo o que foi planejado foi efetivamente construído e testado, evitando pontas soltas ou entregas incompletas no projeto.
 
 | Persona | RF    | RN   | Endpoint    | Tela     | Teste | Evidência        |
 |---------|-------|------|-------------|----------|-------|------------------|
-| ...     | RF001 | RN01 | `/usuarios` | Cadastro | CT02  | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF001 | RN01 | `/api/equipes` | Seleção de Equipe | CT01 | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF002 | RN02, RN11 | `/api/turnos` | Início de Turno | CT02 | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | Painel de Checkpoint | CT03 | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | Encerramento de Turno | CT04 | print, log, relatório de cobertura |
+| Gestora de operações | RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | Lançamento de Ajuste | CT05 | print, log, relatório de cobertura |
+| Gestora / Promotor | RF006 | RN08 | `/api/placar/tempo` | Placar Geral (Modo TV) | CT06 | print, log, relatório de cobertura |
+| Gestora de operações | RF007 | RN09, RN12 | `/api/estatisticas/trocas` | Dashboard Admin | CT07 | print, log, relatório de cobertura |
+| Gestora / Promotor | RF008 | RN13, RN14 | `/api/placar/geral` | Placar Geral (Modo TV) | CT08 | print, log, relatório de cobertura |
+| Gestora / Promotor | RF009 | RN15 | `/api/placar/geral` | Placar Geral (Modo TV) | CT09 | print, log, relatório de cobertura |
+| Gestora / Promotor | RF010 | - | `/api/placar/geral` | Placar Geral (Modo TV) | CT10 | print, log, relatório de cobertura |
+| Gestora de operações | RF011 | - | `/api/relatorios/exportar` | Exportação (Admin) | CT11 | print, log, relatório de cobertura |
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
