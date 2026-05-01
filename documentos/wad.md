@@ -55,10 +55,10 @@ O modelo mapeia cinco forças externas que determinam a intensidade da concorrê
 <br>
 <div align="center">
   <sub><b>Figura 2.1.1 -  5 Forças de Porter</b></sub><br>
-  <img src="../assets/ForçasPcorrecao.png" width="100%" 
-  <sub>Fonte: Material produzido pelos autores (2026).<sup>
+  <img src="../assets/ForçasPcorrecao.png" width="100%">
+  <sub>Fonte: Material produzido pelos autores (2026).</sub>
 </div>
-<br>   
+<br>
 
 #### 1. Rivalidade entre concorrentes
 A rivalidade é classificada como baixa. O projeto é direcionado a um evento interno exclusivo da Red Bull, o que elimina a competição direta de mercado por outros possíveis rivais. Atualmente, o maior "concorrente" é o processo manual feito com pranchetas. Embora existam ferramentas de gestão no mercado, nenhuma é adaptada para a dinâmica específica de um revezamento de 24 horas, classificando, assim, a rivalidade como praticamente inexistente no nosso nicho de atuação.
