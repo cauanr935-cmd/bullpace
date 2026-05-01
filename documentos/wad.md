@@ -490,11 +490,21 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
-*Matriz de cobertura mostrando quais RN e endpoints implementam cada RF.*
+A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistema deve fazer (Requisitos Funcionais), as regras que deve respeitar (Regras de Negócio) e a sua implementação real no servidor (Endpoints). Ela serve como guia para os programadores, garantindo que toda funcionalidade exigida seja desenvolvida e processada no local correto da API.
 
 | RF    | RN associadas | Endpoint    | Método |
 |-------|---------------|-------------|--------|
-| RF001 | RN01, RN02    | `/usuarios` | POST   |
+| RF001 | RN01 | `/api/equipes` | GET |
+| RF002 | RN02, RN11 | `/api/turnos` | POST |
+| RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | POST |
+| RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | PATCH |
+| RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | PUT |
+| RF006 | RN08 | `/api/placar/tempo` | GET |
+| RF007 | RN09, RN12 | `/api/estatisticas/trocas` | GET |
+| RF008 | RN13, RN14 | `/api/placar/geral` | GET |
+| RF009 | RN15 | `/api/placar/geral` | GET |
+| RF010 | - | `/api/placar/geral` | GET |
+| RF011 | - | `/api/relatorios/exportar` | GET |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
@@ -816,7 +826,9 @@ SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education 
 
 PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
 
-WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013. (
+WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013. 
+
+ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
 
 
 # <a name="c9"></a>Anexos
