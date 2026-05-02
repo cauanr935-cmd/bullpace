@@ -55,7 +55,7 @@ As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Mic
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
 <br>
 <div align="center">
-  <b>Figura 2.1.1 — 5 Forças de Porter</b><br>
+  <b>Figura 1 — 5 Forças de Porter</b><br>
   <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -92,7 +92,7 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 
 <br>
 <div align="center">
-  <b>Figura xx Matriz Swot</b><br>
+  <b>Figura 2 Matriz Swot</b><br>
   <img src="../assets/swot.jpeg" width="100%"><br>
   <sub>Fonte: Template Lab (2026).</sub>
 </div>
@@ -239,7 +239,7 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [1]
 
 <div align="center">
-  <sub><b>Figura 2.1.4.1 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
+  <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
   <img src="../assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
@@ -314,7 +314,7 @@ Assim, o valor da solução não está apenas em substituir a prancheta por uma 
 A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
-  <sub><b>Figura 2.1.5.1 - Matriz de risco</b></sub><br>
+  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -349,15 +349,15 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004; NIELSEN, 2012).
 
 <div align="center">
-  <sub><b>Figura 2.2.1 Primeira persona</b></sub><br>
+  <sub><b>Figura 5 - Primeira persona</b></sub><br>
   <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026</sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 <div align="center">
-  <sub><b>Figura 2.2.1 Segunda persona</b></sub><br>
+  <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026</sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 
@@ -703,9 +703,9 @@ Esta seção apresenta os principais casos de uso do sistema, descrevendo como o
 Quando necessário, são utilizadas as relações <include> e <extend> no diagrama para indicar dependências ou comportamentos opcionais entre os casos de uso.
 
 <div align="center">
-  <sub>Diagrama de casos de uso</sub><br>
+  <sub><b>Figura 7 - Diagrama de casos de uso</b></sub><br>
   <img src="../assets/diagramacu.png" width="100%"><br>
-  <sup>Material produzido pelos autores, 2026<sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 **Casos de Uso:** 
