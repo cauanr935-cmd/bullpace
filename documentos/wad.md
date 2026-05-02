@@ -35,7 +35,7 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior.
+A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [[1]](#ref-1).
 
 Além da limitação do método manual, o contexto do evento também apresenta restrições técnicas importantes. Não há integração direta com as esteiras Technogym, e o uso de pulseiras sincronizadas não se mostra viável devido à dinâmica de revezamento, à quantidade de participantes e ao tempo necessário para sincronização antes de cada corrida. Dessa forma, a solução precisa considerar uma operação baseada em leitura visual da esteira e inserção manual assistida dos dados pelo operador.
 
@@ -51,7 +51,7 @@ Com isso, espera-se substituir o uso da prancheta por um fluxo digital mais conf
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [8] para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
+As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [[8]](#ref-8) para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
 <br>
 <div align="center">
@@ -86,7 +86,7 @@ Portanto, o equilíbrio geral das forças indica que o maior risco estratégico 
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-A análise SWOT é uma ferramenta de diagnóstico estratégico utilizada para compreender a posição de uma organização ou projeto a partir de quatro dimensões: forças, fraquezas, oportunidades e ameaças. As forças e fraquezas dizem respeito a fatores internos, ou seja, elementos ligados à própria instituição, sua operação, seus recursos e suas limitações. Já as oportunidades e ameaças representam fatores externos, relacionados ao mercado, ao público, aos concorrentes, aos substitutos e ao ambiente em que o projeto está inserido.
+A análise SWOT é uma ferramenta de diagnóstico estratégico utilizada para compreender a posição de uma organização ou projeto a partir de quatro dimensões: forças, fraquezas, oportunidades e ameaças. As forças e fraquezas dizem respeito a fatores internos, ou seja, elementos ligados à própria instituição, sua operação, seus recursos e suas limitações. Já as oportunidades e ameaças representam fatores externos, relacionados ao mercado, ao público, aos concorrentes, aos substitutos e ao ambiente em que o projeto está inserido [[6]](#ref-6).
 
 No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação da Red Bull enquanto parceira do projeto, considerando seu posicionamento institucional, a operação atual do evento e a proposta de desenvolvimento de uma solução web para registro e consolidação dos dados da competição. A análise permite identificar quais aspectos favorecem a implementação da solução, quais fragilidades precisam ser enfrentadas, quais oportunidades podem ampliar o valor do projeto e quais ameaças podem comprometer sua adoção.
 
@@ -236,7 +236,7 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [1]
+Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas.Essa estruturação metodológica baseia-se nos conceitos de design de proposta de valor. [[9]](#ref-9)
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
@@ -311,7 +311,7 @@ Assim, o valor da solução não está apenas em substituir a prancheta por uma 
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
-A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
+A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão [[4]](#ref-4), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
   <sub><b>Figura 4 - Matriz de risco</b></sub><br>
@@ -346,7 +346,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.2. Personas (sprint 1)
 
-As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004; NIELSEN, 2012).
+As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final [[2]](#ref-2)[[3]](#ref-3).
 
 <div align="center">
   <sub><b>Figura 5 - Primeira persona</b></sub><br>
@@ -364,7 +364,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto.
+As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto.[[10]](#ref-10) 
 
 Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
 
@@ -546,7 +546,7 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema.
+A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema [[13]](#ref-13) [[14]](#ref-14) [[16]](#ref-16).
 
 
 | ID | Título | Descrição | RF Associado |
@@ -597,7 +597,7 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### USAB — Usabilidade
 
-O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão.
+O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão [[12]](#ref-12).
 
 Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio externo. Ele se conecta aos RFs de seleção de equipe, seleção de atleta, início de turno, registro de checkpoint e encerramento de turno.
 
@@ -607,7 +607,7 @@ Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio e
 
 ### CONF — Confiabilidade
 
-O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas.
+O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas [[15]](#ref-15).
 
 Esse RNF é mensurável pela frequência de salvamento automático dos dados a cada checkpoint. Ele se conecta aos RFs de registro de turno, registro de checkpoint e consolidação dos resultados.
 
@@ -993,37 +993,39 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-[1] **RED BULL. TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+<a name="ref-1"></a>[1] RED BULL. **TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
 
-[2] **COOPER, Alan. The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
+<a name="ref-2"></a>[2] COOPER, Alan. **The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
 
-[3] **NIELSEN, Lene. Personas - User Focused Design. London**: Springer Science & Business Media, 2012.
+<a name="ref-3"></a>[3] NIELSEN, Lene. **Personas - User Focused Design**. London: Springer Science & Business Media, 2012.
 
-[4] **BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília**: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
+<a name="ref-4"></a>[4] BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. **Guia prático de gerenciamento de riscos**. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
 
-[5] P**ROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia**: PMI, 2017.
+<a name="ref-5"></a>[5] PROJECT MANAGEMENT INSTITUTE. **Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK)**. 6. ed. Pensilvânia: PMI, 2017.
 
-[6] **CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro**: Elsevier, 2017.
+<a name="ref-6"></a>[6] CHIAVENATO, Idalberto. **Planejamento Estratégico**: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
 
-[7] **KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo**: Pearson Education do Brasil, 2012.
+<a name="ref-7"></a>[7] KOTLER, Philip; KELLER, Kevin Lane. **Administração de Marketing**. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
 
-[8] **PORTER, Michael E. Estratégia Competitiva**: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
+<a name="ref-8"></a>[8] PORTER, Michael E. **Estratégia Competitiva**: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
 
-[9] **OSTERWALDER, Alexander et al. Value Proposition Design**: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
+<a name="ref-9"></a>[9] OSTERWALDER, Alexander *et al*. **Value Proposition Design**: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
 
-[10] **COHN, Mike. User Stories Applied: For Agile Software Development. Boston**: Addison-Wesley Professional, 2004.
+<a name="ref-10"></a>[10] COHN, Mike. **User Stories Applied**: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
 
-[11] **COOPER, Alan. The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianápolis: Sams Publishing, 1999.
+<a name="ref-11"></a>[11] COOPER, Alan. **The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianápolis: Sams Publishing, 1999.
 
-[12] **COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis**: John Wiley & Sons, 2014.
+<a name="ref-12"></a>[12] COOPER, Alan *et al*. **About Face**: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
 
-[13] **SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo**: Pearson Education do Brasil, 2019.
+<a name="ref-13"></a>[13] SOMMERVILLE, Ian. **Engenharia de Software**. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
 
-[14] **PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
+<a name="ref-14"></a>[14] PRESSMAN, Roger S.; MAXIM, Bruce R. **Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
 
-[15] **WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond**: Microsoft Press, 2013.
+<a name="ref-15"></a>[15] WIEGERS, Karl; BEATTY, Joy. **Software Requirements**. 3. ed. Redmond: Microsoft Press, 2013.
 
-[16] **ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston**: Business Rule Solutions, 2013.
+<a name="ref-16"></a>[16] ROSS, Ronald G. **Business Rule Concepts**: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
+
+<a name="ref-17"></a>[17] TEMPLATE LAB. **Matriz SWOT**. [S. l.], 2026. *(Nota: ajuste o local e link correto do Template Lab caso possua)*.
 
 # <a name="c9"></a>Anexos
 
