@@ -51,7 +51,7 @@ Com isso, espera-se substituir o uso da prancheta por um fluxo digital mais conf
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
+As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [8] para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
 <br>
 <div align="center">
@@ -993,38 +993,37 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-[1] RED BULL. **TAPI 1AMD2 – Aplicação Web:** RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+[1] **RED BULL. TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
 
-COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
+[2] **COOPER, Alan. The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
 
-NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
+[3] **NIELSEN, Lene. Personas - User Focused Design. London**: Springer Science & Business Media, 2012.
 
-BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
+[4] **BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília**: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
 
-PMI - PROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia: PMI, 2017.
+[5] P**ROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia**: PMI, 2017.
 
-CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
+[6] **CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro**: Elsevier, 2017.
 
-KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
+[7] **KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo**: Pearson Education do Brasil, 2012.
 
-PORTER, Michael E. Estratégia Competitiva: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
+[8] **PORTER, Michael E. Estratégia Competitiva**: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
 
-OSTERWALDER, Alexander et al. Value Proposition Design: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
+[9] **OSTERWALDER, Alexander et al. Value Proposition Design**: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
 
-COHN, Mike. User Stories Applied: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
+[10] **COHN, Mike. User Stories Applied: For Agile Software Development. Boston**: Addison-Wesley Professional, 2004.
 
-COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
+[11] **COOPER, Alan. The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianápolis: Sams Publishing, 1999.
 
-COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
+[12] **COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis**: John Wiley & Sons, 2014.
 
-SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
+[13] **SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo**: Pearson Education do Brasil, 2019.
 
-PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
+[14] **PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
 
-WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013. 
+[15] **WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond**: Microsoft Press, 2013.
 
-ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
-
+[16] **ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston**: Business Rule Solutions, 2013.
 
 # <a name="c9"></a>Anexos
 
