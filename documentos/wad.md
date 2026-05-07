@@ -779,7 +779,45 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
-*Ao menos um fluxo prioritário, mostrando a interação entre as camadas Controller → Service → Repository → Banco. Linhas de vida verticais, ativação correta, mensagens síncronas e assíncronas diferenciadas, retornos tracejados.*
+# 3.2.4 — Fluxo Prioritário do Diagrama de Sequência
+
+## Fluxo escolhido
+
+Registro de checkpoint durante um turno ativo.
+
+## Justificativa
+
+A seção 3.2.4 solicita a modelagem de um fluxo do sistema. Como o evento dura 24 horas e o resultado depende dos checkpoints registrados ao longo da prova, esse é o fluxo que faz mais sentido escolher.
+
+Três motivos. Primeiro, é o que mais se repete no evento. Com 16 atletas por equipe, duas equipes em prova e checkpoints em intervalo regular, esse fluxo roda centenas de vezes em uma edição. Se ele falha, a apuração trava.
+
+Segundo, é o fluxo que concentra as principais regras de negócio do sistema. RN06 (não pode KM menor que o último), RN18 (KM acumulado é obrigatório) e RN19 (checkpoint só com turno ativo). Essas três só aparecem aqui.
+
+Terceiro, é o que vai pro CSV de auditoria. Os checkpoints são a base do relatório final que a Red Bull vai usar pra conferir resultado. Caso esses dados apresentem inconsistências, a confiabilidade da apuração final fica comprometida.
+
+## Camadas que vão entrar no diagrama
+
+- Controller — recebe a requisição HTTP do iPad do promotor.
+- Service — aplica RN06, RN18 e RN19.
+- Repository — abstrai o acesso aos dados.
+- Banco — persistência via Supabase (PostgreSQL).
+
+## Conexão com o WAD
+
+- US04 — Registro de KM acumulado, pace médio e velocidade média.
+- RF004 — Registro de Checkpoints.
+- RF005 — Controle Temporal dos Registros.
+- RN06 — Progressão de Quilometragem.
+- RN18 — Obrigatoriedade do Campo KM Acumulado.
+- RN19 — Checkpoint Vinculado a Turno Ativo.
+
+## Próximos passos
+
+- Mapear a interação entre as camadas pra esse fluxo.
+- Detalhar mensagens, validações e retornos.
+- Construir o diagrama no Draw.io.
+- Exportar em PNG e inserir na seção 3.2.4 do WAD.
+- Revisão final.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
