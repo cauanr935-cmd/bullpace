@@ -795,7 +795,19 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ## 3.3. Wireframes (sprint 2)
 
-*Posicione aqui as imagens do wireframe construído para sua solução e, opcionalmente, o link para acesso (mantenha o link sempre público para visualização)*
+Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
+
+O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
+
+<br>
+<div align="center">
+  <b>Figura 3.3.x — Visualização modo TV</b><br>
+  <img src="../assets/tela_modoTV.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+O wireframe apresentado na Figura 3.3.X representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
 ## 3.4. Guia de estilos (sprint 3)
 
