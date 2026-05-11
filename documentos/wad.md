@@ -781,8 +781,6 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 # 3.2.4 — Mapeamento das Camadas
 
-Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
-
 ## O que acontece, em uma frase
 
 O promotor preenche o KM acumulado no iPad e clica em "salvar". Esse clique vira uma requisição HTTP que percorre 4 camadas até chegar no banco, e a resposta volta pelo mesmo caminho.
@@ -831,11 +829,6 @@ A resposta percorre o caminho inverso: Banco → Repository → Service → Cont
 - RN12 — Registro de Tempo Automático
 - RN18 — Obrigatoriedade do Campo KM Acumulado
 - RN19 — Checkpoint Vinculado a Turno Ativo
-
-## Próximos passos
-
-1. Listar cada mensagem do diagrama (síncrona, assíncrona, retorno).
-2. Construir o diagrama no Draw.io.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
