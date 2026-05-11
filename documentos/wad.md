@@ -781,7 +781,7 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 # 3.2.4 — Mapeamento das Camadas
 
-Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama no Card 5.
+Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
 
 ## O que acontece, em uma frase
 
