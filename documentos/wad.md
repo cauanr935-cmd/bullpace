@@ -917,15 +917,17 @@ O Modo TV é uma interface destinada especialmente para à exibição da competi
 
 O wireframe apresentado na Figura 3.3.X representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
+
+A Figura 3.3.Y ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
 <div align="center">
-  <b>Figura 3.3.x — Encerramento de turno</b><br>
-  <img src="../assets/3.3.x-turno.encerrado.png" width="100%"><br>
+  <b>Figura 3.3.Y — Tela de comparação final entre equipes </b><br>
+  <img src="../assets/tela_placarfinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
-O wireframe apresentado na figura 3.3.x representa a tela de encerramento de turno, que é mostrada no sistema quando o operador finaliza o turno de um atleta. Ao clicar no botao novo turno o sistema leva o operador a tela de seleção de atletas da mesma equipe, onde ele pode selecionar um novo atleta para iniciar o turno.
+O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados maiscompletos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
 
 ## 3.4. Guia de estilos (sprint 3)
 
