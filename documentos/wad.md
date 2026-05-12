@@ -852,7 +852,7 @@ A Figura 3.3.Y ilustra o wireframe da tela de placar final. Atendendo à necessi
 <br>
 <div align="center">
   <b>Figura 3.3.Y — Tela de comparação final entre equipes </b><br>
-  <img src="../assets/tela_placarFinal.png" width="100%"><br>
+  <img src="../assets/tela_placarfinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
