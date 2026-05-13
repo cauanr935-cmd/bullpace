@@ -782,8 +782,8 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 <br>
 <div align="center">
-  <b>Figura x — Esboço do Diagrama de Sequência</b><br>
-  <img src="../assets/DiagramadeSequenciaEsboço.png" width="100%"><br>
+  <b>Figura x — Diagrama de Sequência</b><br>
+  <img src="../assets/diagramaSequencia.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
