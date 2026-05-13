@@ -777,8 +777,6 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 *Diagrama UML de classes com entidades, atributos, relacionamentos e responsabilidades. Diferencie **associação**, **agregação** (losango vazio), **composição** (losango cheio) e **herança** (triângulo vazio). Multiplicidade explícita em toda associação.*
 
-### 3.2.4. Diagrama de Sequência UML (sprint 3)
-
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
