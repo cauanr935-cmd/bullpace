@@ -780,22 +780,159 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
 
-<br>
-<div align="center">
-  <b>Figura x — Diagrama de Sequência</b><br>
-  <img src="../assets/diagramaSequencia.png" width="100%"><br>
-  <sub>Fonte: Elaborado pelos autores (2026).</sub>
-</div>
-<br>
+### 3.2.4. Diagrama de Sequência UML (sprint 3)
+
+
+O diagrama de sequência é um dos diagramas comportamentais previstos pela *Unified Modeling Language* (UML) e tem como finalidade representar a interação entre os componentes de um sistema ao longo do tempo, evidenciando a ordem cronológica em que as mensagens são trocadas entre os participantes de um determinado cenário de uso (SOMMERVILLE, 2019). Diferentemente dos diagramas estruturais, que descrevem a organização estática do sistema, o diagrama de sequência enfoca a dinâmica da execução, tornando explícita a comunicação que ocorre entre atores, controladores, serviços, repositórios e fontes de dados durante a realização de uma funcionalidade específica. Cada participante é representado por uma linha de vida (*lifeline*), exibida verticalmente. As mensagens trocadas entre essas linhas de vida são dispostas horizontalmente e ordenadas de cima para baixo, refletindo a progressão temporal da interação. Mensagens síncronas — aquelas em que o remetente aguarda a resposta antes de prosseguir — são representadas por setas com ponta sólida, enquanto as respostas são indicadas por setas tracejadas (PRESSMAN; MAXIM, 2016).
+
+No contexto do projeto BullPace, o diagrama de sequência cumpre um papel central na documentação e na validação da arquitetura MVC (*Model-View-Controller*) adotada pela equipe. A aplicação web foi desenvolvida para substituir o registro manual em prancheta utilizado no evento Red Bull 24 Horas, uma competição de revezamento em esteira com duração de 24 horas. Nesse ambiente, a rastreabilidade e a confiabilidade dos dados são requisitos críticos, uma vez que a quilometragem acumulada por cada equipe determina o resultado final da competição. O uso do diagrama de sequência permite à equipe de desenvolvimento verificar se os fluxos de comunicação entre as camadas da aplicação — *Controller*, *Service*, *Repository* e *Banco de Dados* — estão corretamente definidos antes da implementação. Além disso, o diagrama serve como instrumento de comunicação entre os membros do grupo e o parceiro de projeto (Red Bull), tornando visível o comportamento esperado do sistema em linguagem compreensível tanto para perfis técnicos quanto para stakeholders operacionais.
+
+#### Diagrama de Sequência — Registro de Checkpoint
+
+O diagrama de sequência apresentado na Figura 3.2.4 descreve o fluxo de interação referente ao registro de um checkpoint na aplicação BullPace. Essa funcionalidade corresponde ao Requisito Funcional RF004 — *Registro de Checkpoints* — e está diretamente associada às Regras de Negócio RN06, RN12, RN18 e RN19, as quais disciplinam, respectivamente, a progressão incremental da quilometragem, o registro automático de *timestamp*, a obrigatoriedade do campo de KM acumulado e a vinculação do checkpoint a um turno ativo.
 
 
 
+O diagrama é organizado em dois blocos de interação distintos: o **fluxo principal**, que corresponde ao cenário de sucesso, e o **fluxo alternativo**, que descreve o comportamento do sistema diante de uma entrada inválida.
 
-<div align="center">
-  <sub><b>Figura X - Diagrama de sequência</b></sub><br>
-  <img src="../assets/diagramaSequencia.png" width="100%" alt="Diagrama de sequência"><br>
-  <sup>Material produzido pelos autores, 2026<sup>
-</div>
+##### Participantes (*Lifelines*)
+
+O diagrama conta com cinco participantes: o **Usuário**, que representa o operador de campo responsável por interagir com a interface da aplicação web por meio de um dispositivo tablet durante a operação do evento; o **Controller**, camada responsável por receber as requisições HTTP provenientes do cliente e delegar o processamento à camada de serviço; o **Service**, camada que concentra as regras de negócio da aplicação e orquestra as operações de verificação e persistência dos dados; o **Repository**, camada de acesso a dados responsável por executar as operações de leitura e escrita no banco de dados; e o **Banco de Dados**, componente de persistência responsável pelo armazenamento definitivo dos registros da competição.
+
+##### Fluxo principal — checkpoint válido
+
+O fluxo principal representa o cenário em que o operador registra um checkpoint com todos os dados obrigatórios preenchidos corretamente, em especial o campo de KM acumulado, conforme exigido pela Regra de Negócio RN18. A sequência de interações ocorre da seguinte forma:
+
+1. **Requisição do usuário:** o operador submete os dados do checkpoint pela interface web, gerando uma requisição HTTP do tipo `POST` direcionada ao endpoint `/api/checkpoint` na camada *Controller*.
+
+2. **Delegação ao serviço:** o *Controller* repassa os dados recebidos para a camada *Service*, invocando o método `salvarCheckpoint(dados)`. Essa delegação segue o princípio de separação de responsabilidades da arquitetura MVC, mantendo o *Controller* isento de lógica de negócio.
+
+3. **Validações no Service:** antes de qualquer operação de escrita, o *Service* executa três verificações em sequência, todas internas ao seu bloco de ativação. A tabela a seguir apresenta cada validação, a regra de negócio correspondente e o erro retornado em caso de falha:
+
+| Validação | Regra | Erro |
+|---|---|---|
+| KM acumulado preenchido? | RN18 | HTTP 400 — "KM acumulado é obrigatório" |
+
+4. **Consulta do último checkpoint (RN06, RF12):** para executar a terceira validação, o *Service* invoca o método `buscarUltimoCheckpoint(turno_id)` no *Repository*, que executa `SELECT * FROM checkpoint` no *Banco de Dados* e retorna o registro mais recente do turno em andamento. Essa verificação garante a progressão incremental da quilometragem, impedindo a gravação de um valor inferior ao último checkpoint registrado, conforme determina a Regra de Negócio RN06.
+
+5. **Inserção do checkpoint:** aprovadas todas as validações, o *Service* instrui o *Repository* a persistir o novo registro por meio da chamada `inserir_checkpoint`, que executa `INSERT INTO checkpoints (...) VALUES (...)` no *Banco de Dados*. O banco retorna o registro inserido com `id` e `created_at` preenchidos automaticamente, atendendo à Regra de Negócio RN12, que veda qualquer edição manual de horários pelo operador.
+
+6. **Resposta ao usuário:** a confirmação de sucesso percorre o caminho de retorno — *Repository* → *Service* → *Controller* — e o *Controller* serializa o objeto em JSON e responde `HTTP 201 Created` ao dispositivo do operador, sinalizando que o checkpoint foi registrado com êxito.
+
+##### Fluxo alternativo — erro de validação
+
+Quando uma validação falha, o *Service* interrompe o fluxo antes da inserção. O `INSERT` não é executado e o banco de dados permanece intacto. O comportamento segue o princípio de validação precoce (*fail fast*): o erro é detectado e devolvido o mais cedo possível, evitando o consumo desnecessário de recursos das camadas inferiores da aplicação e garantindo um *feedback* imediato e compreensível ao operador.
+
+Tomando a RN06 como exemplo: o operador envia um KM inferior ao último registrado. O fluxo segue normalmente até o *Service* consultar o *Repository* pelo último checkpoint do turno. Ao detectar a regressão, o *Service* devolve erro ao *Controller*, que responde `HTTP 422` ao dispositivo. A inserção não é chamada. A mesma lógica se aplica às demais validações: se a RN19 falhar (turno encerrado), o erro é retornado antes mesmo de qualquer consulta ao *Repository*; se a RN18 falhar (KM em branco), o erro é retornado antes de qualquer consulta ao banco.
+
+No fluxo alternativo ilustrado no diagrama — KM enviado como `null` —, o *Controller* recebe a requisição `POST /api/checkpoints` com `km_acumulado: null`, repassa ao *Service* via `salvarCheckpoint(dados)`, e o *Service* detecta a violação da RN18, retornando `HTTP 400` ao operador com a mensagem *"Insira um valor válido no campo de KMs percorrido"*. Esse comportamento está alinhado ao requisito não funcional USAB — Usabilidade, que prevê uma interface intuitiva e operável sob pressão, sem necessidade de consulta a manuais externos.
+
+##### Requisitos e regras de negócio envolvidos
+
+Os Requisitos Funcionais e Regras de Negócio diretamente contemplados pelo diagrama são: RF004 — Registro de Checkpoints; RF005 — Controle Temporal dos Registros; RN06 — Progressão de Quilometragem; RN12 — Registro de Tempo Automático; RN18 — Obrigatoriedade do Campo KM Acumulado; e RN19 — Checkpoint Vinculado a Turno Ativo.
+
+
+## Controller
+
+Porta de entrada. Recebe o `POST /api/checkpoints` que sai do iPad, com `turno_id` e `km_acumulado` no body (e opcionalmente `pace_medio` e `velocidade_media`).
+
+A função dele é bem limitada: confere se os campos obrigatórios chegaram, se os tipos batem, e passa pra frente. Quem decide se o dado é válido em termos de regra de negócio é o Service, não ele.
+
+Quando o Service termina, o Controller pega o resultado e devolve pro front com o status code certo: 201 quando salva, 400 ou 422 se algum campo veio errado, 500 se algo quebrou no caminho.
+
+## Service
+
+É a camada onde fica a lógica do BullPace. Antes de qualquer coisa ser salva, o Service confere três coisas:
+
+- Existe um turno ativo com esse `turno_id`? (RN19)
+- O `km_acumulado` veio preenchido? (RN18)
+- O novo KM é maior ou igual ao último checkpoint do mesmo turno? (RN06)
+
+Se qualquer uma dessas falhar, para tudo e devolve erro. Não chega no Repository.
+
+Se passou, monta o objeto checkpoint final com o timestamp do servidor (RN12 não deixa o operador editar horário manualmente) e chama o Repository pra salvar.
+
+## Repository
+
+Camada que conversa com o banco. O Service entrega um objeto pronto pra salvar, e o Repository traduz isso em SQL — `INSERT INTO checkpoints (...) VALUES (...)` em cima do Supabase.
+
+Não tem regra de negócio aqui. Se o objeto chegou, é porque o Service já validou tudo. A função do Repository é executar a operação e devolver o registro com o `id` que o banco gerou.
+
+Essa separação serve pra isolar o banco do resto. Se um dia a gente trocar de Supabase pra outra coisa, só o Repository muda.
+
+## Banco
+
+Supabase com PostgreSQL. Recebe o INSERT, salva na tabela `checkpoints` com as foreign keys pra `turnos`, `atletas`, `equipes` e `esteiras`, e devolve a linha completa com `id` e `created_at` preenchidos.
+
+## A volta
+
+A resposta percorre o caminho inverso: Banco → Repository → Service → Controller → Front. O Repository devolve a linha crua do banco, o Service pode acrescentar algum campo calculado se precisar, e o Controller serializa em JSON antes de mandar pro iPad.
+
+## RNs e RFs envolvidos
+
+- RF004 — Registro de Checkpoints
+- RF005 — Controle Temporal dos Registros
+- RN06 — Progressão de Quilometragem
+- RN12 — Registro de Tempo Automático
+- RN18 — Obrigatoriedade do Campo KM Acumulado
+- RN19 — Checkpoint Vinculado a Turno Ativo
+
+#### 3.2.4 — Mensagens, Validações e Retornos
+
+## Tipo de mensagem
+
+Como o sistema é uma API web, todas as mensagens entre as camadas são síncronas. Não tem assíncrono nesse fluxo. No diagrama, síncrona é seta de ponta cheia, retorno é linha tracejada.
+
+## Mensagens do fluxo principal
+
+**iPad → Controller**
+`POST /api/checkpoints` com `turno_id`, `km_acumulado` e opcionalmente `pace_medio` e `velocidade_media` no body.
+
+**Controller → Service**
+`salvarCheckpoint(dados)`.
+
+**Service → Repository (consulta)**
+`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
+
+**Repository → Banco (consulta)**
+`SELECT * FROM checkpoints WHERE turno_id = ? ORDER BY created_at DESC LIMIT 1`.
+
+**Service → Repository (inserção)**
+`inserirCheckpoint(objeto)`. Só rola se as três validações passaram.
+
+**Repository → Banco (inserção)**
+`INSERT INTO checkpoints (...) VALUES (...)`.
+
+## Retornos
+
+Cada retorno é uma seta tracejada de volta. O Banco devolve o registro inserido com `id` e `created_at` pro Repository, que devolve o objeto checkpoint pro Service, que devolve pro Controller, que serializa em JSON e responde `HTTP 201 Created` pro iPad.
+
+## Validações no Service
+
+As três checagens acontecem dentro do Service, em ordem. No diagrama elas não viram setas ficam dentro do bloco de ativação dele.
+
+| Validação | Regra | Erro |
+|---|---|---|
+| Turno ativo existe? | RN19 | 422  "Turno não está ativo" |
+| KM acumulado preenchido? | RN18 | 400  "KM acumulado é obrigatório" |
+| Novo KM ≥ último KM do turno? | RN06 | 422  "KM não pode ser menor que o anterior" |
+
+## Fluxo alternativo - erro de validação
+
+Quando uma validação falha, o Service para antes de chamar o Repository pra inserir. O INSERT não acontece e o banco fica intacto.
+
+Pega o exemplo da RN06: o iPad manda um KM menor que o último. O fluxo segue normal até o Service consultar o Repository pelo último checkpoint do turno. Quando o Service compara e detecta o KM regressivo, ele devolve erro pro Controller, que responde `HTTP 422` pro iPad. A inserção nem é chamada.
+
+Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem precisa consultar o Repository devolve erro direto. Se a RN18 falhar (KM em branco), também devolve antes.
+
+## RNs e RFs envolvidos
+
+- RF004 — Registro de Checkpoints
+- RF005 — Controle Temporal dos Registros
+- RN06 — Progressão de Quilometragem
+- RN12 — Registro de Tempo Automático
+- RN18 — Obrigatoriedade do Campo KM Acumulado
+- RN19 — Checkpoint Vinculado a Turno Ativo
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
