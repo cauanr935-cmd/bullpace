@@ -779,6 +779,18 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
+
+<br>
+<div align="center">
+  <b>Figura x — Esboço do Diagrama de Sequência</b><br>
+  <img src="../assets/DiagramadeSequenciaEsboço.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+
+
+
 <div align="center">
   <sub><b>Figura X - Diagrama de sequência</b></sub><br>
   <img src="../assets/diagramaSequencia.png" width="100%" alt="Diagrama de sequência"><br>
