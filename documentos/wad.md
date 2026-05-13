@@ -962,6 +962,25 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
 
+#### Tela de seleção de esteira
+
+Esse é o wireframe da tela de seleção de esteira, acessada pelo operador do evento a partir da tela de gerenciamento de turno do atleta. Sua principal função é permitir a definição de qual esteira terá seus dados utilizados pelo sistema durante o registro do turno em andamento.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de seleção de esteira</b><br>
+  <img src="../assets/wf_es.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+
+A interface apresenta dois elementos interativos em formato de botão, representando as duas esteiras disponíveis para cada equipe para utilização no evento. A organização visual desses elementos foi projetada para facilitar a identificação rápida da esteira desejada e tornar o processo de seleção mais intuitivo para o operador.
+
+Ao selecionar uma das opções, o sistema passa a utilizar os dados da esteira escolhida para realizar o registro das informações exibidas na tela de gerenciamento de turno.
+A interface também disponibiliza um botão “voltar”, localizado no canto superior esquerdo da tela, responsável por retornar o usuário para a tela de gerenciamento de turno do atleta sem alterar a navegação do fluxo principal do sistema.
+
+
 #### Modo TV
 
 O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
