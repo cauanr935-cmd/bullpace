@@ -779,6 +779,13 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
+
+<div align="center">
+  <sub>Diagrama de Sequência</sub><br>
+  <img src="../assets/DiagramaDeSequência.png" width="100%"><br>
+  <sup>Material produzido pelos autores, 2026<sup>
+</div>
+
 #### Mapeamento das Camadas
 
 O fluxo escolhido pra modelar foi o registro de checkpoint, que percorre as quatro camadas da arquitetura MVC do BullPace: Controller, Service, Repository e Banco.
