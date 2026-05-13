@@ -909,7 +909,7 @@ Um wireframe consiste em uma representação visual esquemática que atua como o
 
 #### Tela de seleção de equipe
 
-A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por permitir que o operador do evento defina qual equipe terá seus atletas e turnos acompanhados durante o registro de dados.
+A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
 
 <br>
 <div align="center">
@@ -921,7 +921,7 @@ A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por pe
 
 A interface apresenta dois elementos interativos em formato de botão, cada um representando uma equipe distinta. A organização visual desses elementos foi projetada para facilitar a identificação rápida das equipes e tornar a navegação mais intuitiva para o usuário.
 
-Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos atletas vinculados à equipe correspondente.”
+Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
 
 #### Modo TV
 
