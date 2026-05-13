@@ -962,6 +962,29 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
 
+#### Tela de gerenciamento de turnos
+
+Esse é o wireframe da tela de gerenciamento de turno do atleta, acessada pelo operador do evento após escolher um corredor na tela seleção de atletas. Sua principal função é permitir o controle do turno em andamento e o registro periódico dos dados capturados da esteira utilizada.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de gerenciamento de turnos</b><br>
+  <img src="../assets/wf_ger.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+Na parte superior da interface, é exibido o nome do atleta atualmente em atividade no evento, permitindo ao operador identificar rapidamente qual corredor está realizando o turno naquele momento. Logo abaixo, a tela apresenta em destaque o nome e a fotografia do atleta selecionado, indicando qual participante terá o seu turno iniciado.
+
+A região da interface abaixo da foto do atleta é composta pelos campos de monitoramento da corrida, responsáveis por exibir os dados coletados da esteira. Os indicadores apresentados são: duração do turno, distância percorrida, pace e velocidade média. Antes do turno ser iniciado, todos os valores permanecem zerados. Após o início do turno do atleta, os dados passam a ser registrados pelo sistema, sendo atualizados na interface a cada novo checkpoint realizado.
+
+O botão “INICIAR TURNO”, localizado na parte inferior direita da tela, é responsável por iniciar o turno do atleta selecionado. Caso já exista um turno em andamento, ele é automaticamente encerrado antes do início do novo registro. Após a ativação do turno, esse botão altera sua funcionalidade e passa a atuar como botão de checkpoint, permitindo ao operador registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. A cada novo checkpoint realizado, as informações exibidas na interface são sobrescritas pelos dados mais recentes capturados pelo sistema.
+
+O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite ao operador finalizar manualmente o turno atualmente em execução, independentemente de qual atleta esteja em ação na esteira.
+
+A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o usuário para a tela de seleção de atletas. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a tela de seleção de esteira, na qual será definida qual esteira terá seus dados monitorados e registrados pelo sistema durante o turno do atleta.
+
+
 #### Modo TV
 
 O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
