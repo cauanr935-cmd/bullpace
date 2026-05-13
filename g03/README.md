@@ -83,7 +83,17 @@ npm start
     * 
 * 0.3.0 - XX/XX/2024
     * 
-* 0.2.0 - XX/XX/2024
+* 0.2.0 - 15/05/2026
+    * Wireframe
+
+        * Seção 3.3 com imagens do wireframe
+    * Modelagem do Banco de Dados
+
+        * Seção 3.2.3: Diagrama de Classes do Domínio (notação UML com multiplicidades, associação, agregação, composição e herança)
+        * Seção 3.2.4: Diagrama de Sequência UML (fluxo Controller → Service → Repository → Banco, com mensagens síncronas e assíncronas e retornos tracejados)
+        * Seção 3.6.1: Modelo Entidade-Relacionamento (ER) conceitual (notação Chen ou Crow's Foot, consistente)
+        * Seção 3.6.2: Diagrama Entidade-Relacionamento (DER) (cardinalidades explícitas em ambos os lados, PK e FK identificadas, coerente com o diagrama de classes)
+        * Seção 3.6.3: Modelo Relacional e Modelo Físico (arquivo migration.sql com DDL executável, constraints NOT NULL, UNIQUE, FOREIGN KEY, CHECK, CREATE INDEX, e ordem correta de dependências entre tabelas)
     * 
 * 0.1.0 - 30/04/2024
     * Entendimento do negócio
