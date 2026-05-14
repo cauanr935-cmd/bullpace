@@ -923,7 +923,9 @@ Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usu
 
 #### Tela de seleção de esteira
 
-Esse é o wireframe da tela de seleção de esteira, acessada pelo operador do evento a partir da tela de gerenciamento de turno do atleta. Sua principal função é permitir a definição de qual esteira terá seus dados utilizados pelo sistema durante o registro do turno em andamento.
+Esse é o wireframe da interface de definição de esteira utilizada durante o turno de um atleta. Ela é acessada pelo operador do evento a partir da interface de gerenciamento de turno e faz parte do fluxo operacional necessário para que o sistema associe corretamente os dados registrados ao corredor atualmente em atividade.
+
+Sua principal função é permitir que o operador defina qual das duas esteiras disponíveis da equipe será utilizada durante o turno em andamento. 
 
 <br>
 <div align="center">
@@ -934,11 +936,11 @@ Esse é o wireframe da tela de seleção de esteira, acessada pelo operador do e
 <br>
 
 
-A interface apresenta dois elementos interativos em formato de botão, representando as duas esteiras disponíveis para cada equipe para utilização no evento. A organização visual desses elementos foi projetada para facilitar a identificação rápida da esteira desejada e tornar o processo de seleção mais intuitivo para o operador.
+A interface apresenta dois blocos interativos que agem como botões, identificados como “Esteira 1” e “Esteira 2”. Esses elementos foram organizados de forma simples e objetiva para tornar a operação mais rápida durante o evento, reduzindo o tempo necessário para navegação e minimizando possíveis erros de identificação por parte do operador.
 
-Ao selecionar uma das opções, o sistema passa a utilizar os dados da esteira escolhida para realizar o registro das informações exibidas na tela de gerenciamento de turno.
-A interface também disponibiliza um botão “voltar”, localizado no canto superior esquerdo da tela, responsável por retornar o usuário para a tela de gerenciamento de turno do atleta sem alterar a navegação do fluxo principal do sistema.
+Ao selecionar uma das opções, o sistema passa a considerar exclusivamente os dados provenientes da esteira escolhida durante o registro do turno do atleta. Dessa forma, as informações exibidas na interface de gerenciamento de turno — como duração do turno, distância percorrida, pace e velocidade média — passam a ser associadas à esteira definida pelo operador.
 
+A interface também disponibiliza um botão “voltar”, localizado no canto superior esquerdo, responsável por retornar o operador para a interface de gerenciamento de turno sem alterar os dados já registrados ou a esteira atualmente vinculada ao turno em andamento.
 
 #### Modo TV
 
