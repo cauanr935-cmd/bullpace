@@ -932,7 +932,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 <br>
 <div align="center">
   <b>Figura 3.3.x — Exportação de dados</b><br>
-  <img src="../assets/wireframe-export.dados.png" width="100%"><br>
+  <img src="../assets/Wireframe.Export.dados.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
