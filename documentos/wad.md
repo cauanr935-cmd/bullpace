@@ -1007,7 +1007,7 @@ A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por pe
 
 <br>
 <div align="center">
-  <b>Figura 3.3.X — Tela de seleção de equipe</b><br>
+  <b>Figura xx — Tela de seleção de equipe</b><br>
   <img src="../assets/wf_eq.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
