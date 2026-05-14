@@ -1193,6 +1193,41 @@ updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possu
 turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
 equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
 
+3.6.3.3 Descrição das entidades 
+
+evento
+
+A tabela evento representa cada edição do Red Bull 24 Horas registrada no sistema. Armazena dados gerais como nome, cidade, estado, datas de início e fim da prova e o status atual (planejado, em andamento ou encerrado). Cada evento agrega duas equipes competidoras e funciona como nó raiz da modelagem, vinculando todas as demais entidades a uma edição específica da competição. Essa estrutura permite que o sistema suporte futuras edições do evento sem misturar dados históricos de provas diferentes.
+
+equipe
+
+A tabela equipe armazena as duas equipes competidoras de cada evento. Cada equipe possui nome, status (ativa ou finalizada), o total de quilômetros acumulados (km_total) e está vinculada a um evento por meio da chave estrangeira id_evento. Conforme a RN01, todo evento possui exatamente duas equipes, e cada equipe agrega seus 16 atletas e suas 2 esteiras. O campo km_total é mantido automaticamente por trigger no banco e representa a soma dos turnos encerrados da equipe, sendo o valor usado para determinar a vencedora conforme a RN23.
+
+atleta
+
+A tabela atleta representa os participantes pré-cadastrados de cada equipe. Cada atleta possui nome, status (ativo ou inativo) e está vinculado a uma equipe por meio da FK id_equipe. Conforme a RN02, os 16 atletas de cada equipe devem estar previamente cadastrados antes do evento, sendo proibida a criação de novos perfis durante a operação. Um atleta pode realizar múltiplos turnos ao longo das 24 horas (RN13), mas cada turno está sempre vinculado a um único atleta.
+
+esteira
+
+A tabela esteira armazena os equipamentos físicos utilizados na prova. Cada esteira é da marca Technogym e contém informações de marca, modelo, número de série e status (livre, em uso ou manutenção). A esteira está vinculada simultaneamente a uma equipe (via id_equipe) e ao evento (via id_evento), facilitando consultas por evento sem necessidade de JOIN com a tabela equipe. Conforme a RN01, cada equipe possui exatamente duas esteiras, e o sistema sugere a alternância entre elas a cada novo turno conforme a RN05.
+
+funcao
+
+A tabela funcao é um catálogo de papéis operacionais que podem ser exercidos no sistema. Cada registro possui nome (ex: 'operador', 'coordenador'), descrição textual e status (ativa ou inativa). Espera-se que essa tabela contenha um número pequeno e fixo de linhas, representando os perfis necessários à operação do evento. A função é referenciada por cada sessao_operacional, indicando o papel exercido durante o intervalo de operação.
+
+sessao_operacional
+
+A tabela sessao_operacional registra os intervalos de tempo durante os quais uma função operacional foi exercida em um determinado evento. Cada sessão possui vínculo com um evento (id_evento) e uma função (id_funcao), além dos timestamps de início (inicio_em) e fim (fim_em) e o status (ativa ou encerrada). Diferentemente das demais tabelas, sessao_operacional não adota soft delete por se tratar de um log temporal de natureza append-only. Cada turno e cada checkpoint registrados durante a sessão mantêm vínculo com ela, garantindo a rastreabilidade da autoria das operações.
+
+turno
+
+A tabela turno representa cada sessão de corrida individual de um atleta em uma esteira. É uma das entidades centrais da modelagem, conectando atleta, esteira, equipe e a sessão operacional em que o registro foi realizado. Cada turno armazena horários de início e fim, status (em andamento, encerrado ou cancelado), o total de quilômetros percorridos (km_turno) e referências às quatro entidades relacionadas. A FK id_equipe, embora derivável por transitividade via atleta ou esteira, foi mantida como denormalização controlada para viabilizar a constraint da RN04, que garante a unicidade do turno ativo por equipe via índice UNIQUE parcial.
+
+checkpoint
+
+A tabela checkpoint armazena os registros periódicos de quilometragem inseridos durante um turno ativo a cada 5 minutos (RN07). Cada checkpoint contém o KM acumulado obrigatório (RN18), campos opcionais de pace médio e velocidade média, timestamp automático do servidor (RN12), e vínculos tanto com o turno (id_turno) quanto com a sessão operacional em que foi registrado (id_sessao_operacional). A coluna is_ajuste permanece no schema como flag preparada para a futura tabela ajuste, ainda não implementada nesta versão. A incrementalidade dos valores de KM dentro de um mesmo turno é garantida no nível da aplicação (RN06).
+
+
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 *posicione aqui uma lista de consultas SQL compostas, realizadas pelo back-end da aplicação web, com sua respectiva lógica proposicional, descrita conforme template abaixo. Lembre-se que para usar LaTeX em markdown, basta você colocar as expressões entre $ ou $$*
