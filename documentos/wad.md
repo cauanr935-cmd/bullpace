@@ -35,7 +35,7 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [1](#ref-1).
+A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior.
 
 Além da limitação do método manual, o contexto do evento também apresenta restrições técnicas importantes. Não há integração direta com as esteiras Technogym, e o uso de pulseiras sincronizadas não se mostra viável devido à dinâmica de revezamento, à quantidade de participantes e ao tempo necessário para sincronização antes de cada corrida. Dessa forma, a solução precisa considerar uma operação baseada em leitura visual da esteira e inserção manual assistida dos dados pelo operador.
 
@@ -51,11 +51,11 @@ Com isso, espera-se substituir o uso da prancheta por um fluxo digital mais conf
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [8](#ref-8) para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
+As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na Figura 2.1.1.
 <br>
 <div align="center">
-  <b>Figura 1 — 5 Forças de Porter</b><br>
+  <b>Figura 2.1.1 — 5 Forças de Porter</b><br>
   <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -86,13 +86,13 @@ Portanto, o equilíbrio geral das forças indica que o maior risco estratégico 
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
-A análise SWOT é uma ferramenta de diagnóstico estratégico utilizada para compreender a posição de uma organização ou projeto a partir de quatro dimensões: forças, fraquezas, oportunidades e ameaças. As forças e fraquezas dizem respeito a fatores internos, ou seja, elementos ligados à própria instituição, sua operação, seus recursos e suas limitações. Já as oportunidades e ameaças representam fatores externos, relacionados ao mercado, ao público, aos concorrentes, aos substitutos e ao ambiente em que o projeto está inserido [6](#ref-6).
+A análise SWOT é uma ferramenta de diagnóstico estratégico utilizada para compreender a posição de uma organização ou projeto a partir de quatro dimensões: forças, fraquezas, oportunidades e ameaças. As forças e fraquezas dizem respeito a fatores internos, ou seja, elementos ligados à própria instituição, sua operação, seus recursos e suas limitações. Já as oportunidades e ameaças representam fatores externos, relacionados ao mercado, ao público, aos concorrentes, aos substitutos e ao ambiente em que o projeto está inserido.
 
 No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação da Red Bull enquanto parceira do projeto, considerando seu posicionamento institucional, a operação atual do evento e a proposta de desenvolvimento de uma solução web para registro e consolidação dos dados da competição. A análise permite identificar quais aspectos favorecem a implementação da solução, quais fragilidades precisam ser enfrentadas, quais oportunidades podem ampliar o valor do projeto e quais ameaças podem comprometer sua adoção.
 
 <br>
 <div align="center">
-  <b>Figura 2 Matriz Swot</b><br>
+  <b>Figura xx Matriz Swot</b><br>
   <img src="../assets/swot.jpeg" width="100%"><br>
   <sub>Fonte: Template Lab (2026).</sub>
 </div>
@@ -236,10 +236,10 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas.Essa estruturação metodológica baseia-se nos conceitos de design de proposta de valor. [9](#ref-9)
+Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [1]
 
 <div align="center">
-  <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
+  <sub><b>Figura 2.1.4.1 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
   <img src="../assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
@@ -311,10 +311,10 @@ Assim, o valor da solução não está apenas em substituir a prancheta por uma 
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
-A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão [4](#ref-4), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
+A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
-  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
+  <sub><b>Figura 2.1.5.1 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -346,25 +346,25 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 ## 2.2. Personas (sprint 1)
 
-As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final [2](#ref-2) [3](#ref-3).
+As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004; NIELSEN, 2012).
 
 <div align="center">
-  <sub><b>Figura 5 - Primeira persona</b></sub><br>
+  <sub><b>Figura 2.2.1 Primeira persona</b></sub><br>
   <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
+  <sup>Material produzido pelos autores, 2026</sup>
 </div>
 
 <div align="center">
-  <sub><b>Figura 6 - Segunda persona</b></sub><br>
+  <sub><b>Figura 2.2.1 Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
+  <sup>Material produzido pelos autores, 2026</sup>
 </div>
 
 
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto.[10](#ref-10) 
+As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto.
 
 Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
 
@@ -546,7 +546,7 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema [13](#ref-13) [14](#ref-14) [16](#ref-16).
+A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema.
 
 
 | ID | Título | Descrição | RF Associado |
@@ -597,7 +597,7 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### USAB — Usabilidade
 
-O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão [12](#ref-12).
+O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão.
 
 Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio externo. Ele se conecta aos RFs de seleção de equipe, seleção de atleta, início de turno, registro de checkpoint e encerramento de turno.
 
@@ -607,7 +607,7 @@ Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio e
 
 ### CONF — Confiabilidade
 
-O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas [15](#ref-15).
+O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas.
 
 Esse RNF é mensurável pela frequência de salvamento automático dos dados a cada checkpoint. Ele se conecta aos RFs de registro de turno, registro de checkpoint e consolidação dos resultados.
 
@@ -703,9 +703,9 @@ Esta seção apresenta os principais casos de uso do sistema, descrevendo como o
 Quando necessário, são utilizadas as relações <include> e <extend> no diagrama para indicar dependências ou comportamentos opcionais entre os casos de uso.
 
 <div align="center">
-  <sub><b>Figura 7 - Diagrama de casos de uso</b></sub><br>
+  <sub>Diagrama de casos de uso</sub><br>
   <img src="../assets/diagramacu.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
+  <sup>Material produzido pelos autores, 2026<sup>
 </div>
 
 **Casos de Uso:** 
@@ -775,19 +775,9 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ### 3.2.3. Diagrama de Classes do Domínio (sprint 2)
 
-Já li o WAD e analisei o diagrama na conversa anterior, então posso ir direto para a descrição. Aqui está o texto completo e pronto para colar na seção **3.2.3** do WAD:
-
----
-
-## 3.2.3. Diagrama de Classes do Domínio (sprint 2)
-
----
-
 O diagrama de classes do domínio representa a estrutura estática do sistema BullPace, evidenciando as entidades envolvidas na operação do Red Bull 24 Horas, seus atributos, métodos e os relacionamentos que governam o fluxo de dados entre elas. O modelo foi construído segundo a notação UML, diferenciando associações, generalizações e dependências conforme o padrão da linguagem (SOMMERVILLE, 2019).
 
---- 
-
-### Hierarquia de Usuários
+#### Hierarquia de Usuários
 
 A classe **Usuários** é a superclasse do sistema e centraliza os atributos compartilhados por todos os perfis: `+id: int` (público) e `-tipoUsuário: string` (privado). A partir dela, três subclasses são derivadas por herança, representada no diagrama pelo triângulo vazio da notação UML:
 
@@ -797,9 +787,7 @@ A classe **Usuários** é a superclasse do sistema e centraliza os atributos com
 
 **Corredor(a)** representa o atleta participante da competição. Possui os atributos `+nome: string` e `+equipe: string`, além do método `+correr()`. A classe está associada diretamente a **Equipe** (multiplicidade n:1) e a **RegistrarCorrida** (multiplicidade 1:n), uma vez que um corredor pode realizar múltiplos turnos ao longo do evento.
 
----
-
-### Entidades Centrais do Domínio
+#### Entidades Centrais do Domínio
 
 **RegistrarCorrida** é a classe de maior centralidade no modelo, pois encapsula o dado mais crítico da competição: o registro de cada turno realizado por um atleta em uma esteira. Seus atributos são todos privados: `-id: Int`, `-dataHoraInicio: date`, `-dataHoraFim: date`, `-kmInicial: decimal`, `-kmFinal: decimal`, `-kmPercorrido: decimal`, `-fotoComprovante: string` e `-status: string`. Os métodos `-calcularKmPercorrido()`, `-anexarFoto()`, `-finalizarRegistro()` e `-calcularTotalKm()` encapsulam as regras de negócio ligadas ao registro e consolidação da quilometragem — em especial a RN06 (progressão de quilometragem), a RN10 (cálculo do placar em tempo real) e a RN12 (timestamp automático, impedindo edição manual de horários pelo operador). A presença dos campos `kmInicial` e `kmFinal` viabiliza o cálculo do `kmPercorrido` sem dependência de integração direta com as esteiras Technogym, respeitando a restrição de design REST definida no projeto.
 
@@ -809,9 +797,7 @@ A classe **Usuários** é a superclasse do sistema e centraliza os atributos com
 
 **Esteira** representa o equipamento físico sobre o qual cada corredor executa seu turno. Possui os atributos `+id: int`, `+marca: string`, `+modelo: string` e `+turno: string`, e os métodos `+registrarTempo()` e `+registrarKm()`, que formalizam a captura dos dados de desempenho por turno. Por não haver integração direta com as esteiras Technogym, esses métodos representam o ponto de entrada manual assistida pelo operador, conforme a restrição REST do projeto. A associação com **RegistrarCorrida** é de n:n: uma esteira hospeda múltiplos turnos ao longo do evento, e cada registro de corrida está vinculado a uma esteira específica.
 
----
-
-### Relacionamentos
+#### Relacionamentos
 
 | Relacionamento | Tipo | Cardinalidade | Descrição |
 |---|---|---|---|
@@ -823,67 +809,20 @@ A classe **Usuários** é a superclasse do sistema e centraliza os atributos com
 | Equipe → Esteira | Associação | n : n | Equipes utilizam esteiras em turnos distintos ao longo da competição |
 | Promotor(a) → RegistrarCorrida | Dependência (tracejado) | 1 : n | O promotor aciona os fluxos de registro de entrada e saída do corredor |
 | Coordenador(a) → RegistrarCorrida | Dependência (tracejado) | 1 : n | O coordenador valida, corrige e visualiza os registros de corrida |
-| | | | |
 
----
-
-### Cobertura de Requisitos
+#### Cobertura de Requisitos
 
 O diagrama de classes cobre diretamente os principais requisitos funcionais e regras de negócio do sistema. A classe **RegistrarCorrida**, com seus atributos de KM inicial, final e percorrido, atende ao RF002 (registro de turno) e ao RF003 (registro de checkpoint), e reflete a RN06 (progressão de quilometragem) por meio do método `calcularKmPercorrido()`. Os campos `dataHoraInicio` e `dataHoraFim` garantem a rastreabilidade temporal exigida pela RN12, impedindo edição manual de horários. O atributo `totalKM` de **Equipe** alimenta o placar em tempo real e o resultado final, atendendo às RNs RN10 e RN17. O atributo `status` de **RegistrarCorrida** e de **Equipe** viabiliza o controle dos turnos ativos e o encerramento da competição, necessários para os RFs RF004 e RF010. Por fim, a separação entre os perfis **Promotor(a)** e **Coordenador(a)** na hierarquia de usuários reflete os papéis operacionais identificados nas personas do projeto, garantindo que as responsabilidades de registro e supervisão estejam formalmente representadas na estrutura do domínio.
 
----
-
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
+#### 3.2.4 — Mapeamento das Camadas
 
-O diagrama de sequência é um dos diagramas comportamentais previstos pela *Unified Modeling Language* (UML) e tem como finalidade representar a interação entre os componentes de um sistema ao longo do tempo, evidenciando a ordem cronológica em que as mensagens são trocadas entre os participantes de um determinado cenário de uso (SOMMERVILLE, 2019). Diferentemente dos diagramas estruturais, que descrevem a organização estática do sistema, o diagrama de sequência enfoca a dinâmica da execução, tornando explícita a comunicação que ocorre entre atores, controladores, serviços, repositórios e fontes de dados durante a realização de uma funcionalidade específica. Cada participante é representado por uma linha de vida (*lifeline*), exibida verticalmente. As mensagens trocadas entre essas linhas de vida são dispostas horizontalmente e ordenadas de cima para baixo, refletindo a progressão temporal da interação. Mensagens síncronas — aquelas em que o remetente aguarda a resposta antes de prosseguir — são representadas por setas com ponta sólida, enquanto as respostas são indicadas por setas tracejadas (PRESSMAN; MAXIM, 2016).
+Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
 
-No contexto do projeto BullPace, o diagrama de sequência cumpre um papel central na documentação e na validação da arquitetura MVC (*Model-View-Controller*) adotada pela equipe. A aplicação web foi desenvolvida para substituir o registro manual em prancheta utilizado no evento Red Bull 24 Horas, uma competição de revezamento em esteira com duração de 24 horas. Nesse ambiente, a rastreabilidade e a confiabilidade dos dados são requisitos críticos, uma vez que a quilometragem acumulada por cada equipe determina o resultado final da competição. O uso do diagrama de sequência permite à equipe de desenvolvimento verificar se os fluxos de comunicação entre as camadas da aplicação — *Controller*, *Service*, *Repository* e *Banco de Dados* — estão corretamente definidos antes da implementação. Além disso, o diagrama serve como instrumento de comunicação entre os membros do grupo e o parceiro de projeto (Red Bull), tornando visível o comportamento esperado do sistema em linguagem compreensível tanto para perfis técnicos quanto para stakeholders operacionais.
+## O que acontece, em uma frase
 
-#### Diagrama de Sequência — Registro de Checkpoint
-
-O diagrama de sequência apresentado na Figura 3.2.4 descreve o fluxo de interação referente ao registro de um checkpoint na aplicação BullPace. Essa funcionalidade corresponde ao Requisito Funcional RF004 — *Registro de Checkpoints* — e está diretamente associada às Regras de Negócio RN06, RN12, RN18 e RN19, as quais disciplinam, respectivamente, a progressão incremental da quilometragem, o registro automático de *timestamp*, a obrigatoriedade do campo de KM acumulado e a vinculação do checkpoint a um turno ativo.
-
-
-
-O diagrama é organizado em dois blocos de interação distintos: o **fluxo principal**, que corresponde ao cenário de sucesso, e o **fluxo alternativo**, que descreve o comportamento do sistema diante de uma entrada inválida.
-
-##### Participantes (*Lifelines*)
-
-O diagrama conta com cinco participantes: o **Usuário**, que representa o operador de campo responsável por interagir com a interface da aplicação web por meio de um dispositivo tablet durante a operação do evento; o **Controller**, camada responsável por receber as requisições HTTP provenientes do cliente e delegar o processamento à camada de serviço; o **Service**, camada que concentra as regras de negócio da aplicação e orquestra as operações de verificação e persistência dos dados; o **Repository**, camada de acesso a dados responsável por executar as operações de leitura e escrita no banco de dados; e o **Banco de Dados**, componente de persistência responsável pelo armazenamento definitivo dos registros da competição.
-
-##### Fluxo principal — checkpoint válido
-
-O fluxo principal representa o cenário em que o operador registra um checkpoint com todos os dados obrigatórios preenchidos corretamente, em especial o campo de KM acumulado, conforme exigido pela Regra de Negócio RN18. A sequência de interações ocorre da seguinte forma:
-
-1. **Requisição do usuário:** o operador submete os dados do checkpoint pela interface web, gerando uma requisição HTTP do tipo `POST` direcionada ao endpoint `/api/checkpoint` na camada *Controller*.
-
-2. **Delegação ao serviço:** o *Controller* repassa os dados recebidos para a camada *Service*, invocando o método `salvarCheckpoint(dados)`. Essa delegação segue o princípio de separação de responsabilidades da arquitetura MVC, mantendo o *Controller* isento de lógica de negócio.
-
-3. **Validações no Service:** antes de qualquer operação de escrita, o *Service* executa três verificações em sequência, todas internas ao seu bloco de ativação. A tabela a seguir apresenta cada validação, a regra de negócio correspondente e o erro retornado em caso de falha:
-
-| Validação | Regra | Erro |
-|---|---|---|
-| KM acumulado preenchido? | RN18 | HTTP 400 — "KM acumulado é obrigatório" |
-
-4. **Consulta do último checkpoint (RN06, RF12):** para executar a terceira validação, o *Service* invoca o método `buscarUltimoCheckpoint(turno_id)` no *Repository*, que executa `SELECT * FROM checkpoint` no *Banco de Dados* e retorna o registro mais recente do turno em andamento. Essa verificação garante a progressão incremental da quilometragem, impedindo a gravação de um valor inferior ao último checkpoint registrado, conforme determina a Regra de Negócio RN06.
-
-5. **Inserção do checkpoint:** aprovadas todas as validações, o *Service* instrui o *Repository* a persistir o novo registro por meio da chamada `inserir_checkpoint`, que executa `INSERT INTO checkpoints (...) VALUES (...)` no *Banco de Dados*. O banco retorna o registro inserido com `id` e `created_at` preenchidos automaticamente, atendendo à Regra de Negócio RN12, que veda qualquer edição manual de horários pelo operador.
-
-6. **Resposta ao usuário:** a confirmação de sucesso percorre o caminho de retorno — *Repository* → *Service* → *Controller* — e o *Controller* serializa o objeto em JSON e responde `HTTP 201 Created` ao dispositivo do operador, sinalizando que o checkpoint foi registrado com êxito.
-
-##### Fluxo alternativo — erro de validação
-
-Quando uma validação falha, o *Service* interrompe o fluxo antes da inserção. O `INSERT` não é executado e o banco de dados permanece intacto. O comportamento segue o princípio de validação precoce (*fail fast*): o erro é detectado e devolvido o mais cedo possível, evitando o consumo desnecessário de recursos das camadas inferiores da aplicação e garantindo um *feedback* imediato e compreensível ao operador.
-
-Tomando a RN06 como exemplo: o operador envia um KM inferior ao último registrado. O fluxo segue normalmente até o *Service* consultar o *Repository* pelo último checkpoint do turno. Ao detectar a regressão, o *Service* devolve erro ao *Controller*, que responde `HTTP 422` ao dispositivo. A inserção não é chamada. A mesma lógica se aplica às demais validações: se a RN19 falhar (turno encerrado), o erro é retornado antes mesmo de qualquer consulta ao *Repository*; se a RN18 falhar (KM em branco), o erro é retornado antes de qualquer consulta ao banco.
-
-No fluxo alternativo ilustrado no diagrama — KM enviado como `null` —, o *Controller* recebe a requisição `POST /api/checkpoints` com `km_acumulado: null`, repassa ao *Service* via `salvarCheckpoint(dados)`, e o *Service* detecta a violação da RN18, retornando `HTTP 400` ao operador com a mensagem *"Insira um valor válido no campo de KMs percorrido"*. Esse comportamento está alinhado ao requisito não funcional USAB — Usabilidade, que prevê uma interface intuitiva e operável sob pressão, sem necessidade de consulta a manuais externos.
-
-##### Requisitos e regras de negócio envolvidos
-
-Os Requisitos Funcionais e Regras de Negócio diretamente contemplados pelo diagrama são: RF004 — Registro de Checkpoints; RF005 — Controle Temporal dos Registros; RN06 — Progressão de Quilometragem; RN12 — Registro de Tempo Automático; RN18 — Obrigatoriedade do Campo KM Acumulado; e RN19 — Checkpoint Vinculado a Turno Ativo.
-
+O promotor preenche o KM acumulado no iPad e clica em "salvar". Esse clique vira uma requisição HTTP que percorre 4 camadas até chegar no banco, e a resposta volta pelo mesmo caminho.
 
 ## Controller
 
@@ -999,25 +938,9 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 *Documente os design patterns utilizados (Repository, Strategy, Factory, DTO etc.) e quais princípios SOLID se aplicam. Justifique a adoção de cada padrão com base em uma necessidade real do projeto.*
 
-### Wireframes:
+## 3.3. Wireframes (sprint 2)
 
-#### Tela de seleção de equipe
-
-A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
-
-<br>
-<div align="center">
-  <b>Figura xx — Tela de seleção de equipe</b><br>
-  <img src="../assets/wf_eq.png" width="100%"><br>
-  <sub>Fonte: Elaborado pelos autores (2026).</sub>
-</div>
-<br>
-
-A interface apresenta dois elementos interativos em formato de botão, cada um representando uma equipe distinta. A organização visual desses elementos foi projetada para facilitar a identificação rápida das equipes e tornar a navegação mais intuitiva para o usuário.
-
-Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
-
-#### Modo TV
+Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
 
 O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
 
@@ -1036,12 +959,22 @@ A Figura 3.3.Y ilustra o wireframe da tela de placar final. Atendendo à necessi
 <br>
 <div align="center">
   <b>Figura 3.3.Y — Tela de comparação final entre equipes </b><br>
-  <img src="../assets/tela_placarFinal.png" width="100%"><br>
+  <img src="../assets/tela_placarfinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
 O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados maiscompletos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.x — Exportação de dados</b><br>
+  <img src="../assets/Wireframe.Export.dados.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+Após o encerramento do evento, a tela de Placar Final disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
 
 ## 3.4. Guia de estilos (sprint 3)
 
@@ -1239,39 +1172,38 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-<a name="ref-1"></a>[1] RED BULL. **TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+[1] RED BULL. **TAPI 1AMD2 – Aplicação Web:** RED BULL 24 HORAS. São Paulo: Inteli, 2026.
 
-<a name="ref-2"></a>[2] COOPER, Alan. **The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
+COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
 
-<a name="ref-3"></a>[3] NIELSEN, Lene. **Personas - User Focused Design**. London: Springer Science & Business Media, 2012.
+NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
 
-<a name="ref-4"></a>[4] BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. **Guia prático de gerenciamento de riscos**. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
+BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
 
-<a name="ref-5"></a>[5] PROJECT MANAGEMENT INSTITUTE. **Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK)**. 6. ed. Pensilvânia: PMI, 2017.
+PMI - PROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia: PMI, 2017.
 
-<a name="ref-6"></a>[6] CHIAVENATO, Idalberto. **Planejamento Estratégico**: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
+CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
 
-<a name="ref-7"></a>[7] KOTLER, Philip; KELLER, Kevin Lane. **Administração de Marketing**. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
+KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
 
-<a name="ref-8"></a>[8] PORTER, Michael E. **Estratégia Competitiva**: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
+PORTER, Michael E. Estratégia Competitiva: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
 
-<a name="ref-9"></a>[9] OSTERWALDER, Alexander *et al*. **Value Proposition Design**: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
+OSTERWALDER, Alexander et al. Value Proposition Design: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
 
-<a name="ref-10"></a>[10] COHN, Mike. **User Stories Applied**: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
+COHN, Mike. User Stories Applied: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
 
-<a name="ref-11"></a>[11] COOPER, Alan. **The inmates are running the asylum**: why high tech products drive us crazy and how to restore the sanity. Indianápolis: Sams Publishing, 1999.
+COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
 
-<a name="ref-12"></a>[12] COOPER, Alan *et al*. **About Face**: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
+COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
 
-<a name="ref-13"></a>[13] SOMMERVILLE, Ian. **Engenharia de Software**. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
+SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
 
-<a name="ref-14"></a>[14] PRESSMAN, Roger S.; MAXIM, Bruce R. **Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
+PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
 
-<a name="ref-15"></a>[15] WIEGERS, Karl; BEATTY, Joy. **Software Requirements**. 3. ed. Redmond: Microsoft Press, 2013.
+WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013.
 
-<a name="ref-16"></a>[16] ROSS, Ronald G. **Business Rule Concepts**: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
+ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
 
-<a name="ref-17"></a>[17] TEMPLATE LAB. **Matriz SWOT**. [S. l.], 2026. *(Nota: ajuste o local e link correto do Template Lab caso possua)*.
 
 # <a name="c9"></a>Anexos
 
