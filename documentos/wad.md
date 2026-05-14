@@ -1083,7 +1083,7 @@ A estrutura de arquivos de *migrations* e suas respectivas dependências organiz
 
 ## Scripts das Migrations
 
-Abaixo estão os scripts correspondentes à modelagem física do sistema.
+Abaixo encontram-se os scripts de *migrations* que implementam a modelagem física do sistema. Eles agrupam as instruções DDL (Data Definition Language) para a construção progressiva do banco de dados, definindo entidades, colunas e restrições de validação (constraints).
 
 **0001_create_evento.sql**
 ```sql
