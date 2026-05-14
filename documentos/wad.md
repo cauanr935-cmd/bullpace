@@ -847,7 +847,7 @@ Como o sistema é uma API web, todas as mensagens entre as camadas são síncron
 `salvarCheckpoint(dados)`.
 
 **Service → Repository (consulta)**
-`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
+1`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
 
 **Repository → Banco (consulta)**
 `SELECT * FROM checkpoints WHERE turno_id = ? ORDER BY created_at DESC LIMIT 1`.
@@ -967,9 +967,30 @@ Após o encerramento do evento, a tela de Placar Final disponibiliza um botão d
 
 *Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
 
+
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-*Posicione aqui o DER com cardinalidades explícitas em ambos os lados de cada relação e identificação de PK/FK. O DER deve ser coerente com o diagrama de classes (3.2.3).*
+O Diagrama Entidade-Relacionamento (DER) representa o refinamento lógico do modelo conceitual apresentado na seção anterior. Nesta etapa, as entidades deixam de ser apenas conceitos de negócio e passam a ser descritas com atributos relevantes à estrutura do banco, identificação de chaves primárias (PK), chaves estrangeiras (FK) e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
+
+Diferentemente do modelo ER, cujo foco é conceitual, o DER aproxima a modelagem da organização lógica que será usada no banco de dados. Por isso, ele evidencia a dependência entre entidades, os vínculos entre os dados e a posição esperada das PKs e FKs no esquema. Além disso, o diagrama foi mantido coerente com o *Diagrama de Classes do Domínio (Seção 3.2.3), preservando as entidades centrais do sistema: **EVENTO, **EQUIPE, **ATLETA, **ESTEIRA, **TURNO, **CHECKPOINT, **FUNCAO* e *SESSAO_OPERACIONAL*.
+
+<div align="center">
+  <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
+  <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores(2026)</sup>
+</div>
+
+No DER, as cardinalidades explicitam a quantidade de ocorrências que uma entidade pode ter em relação a outra. No núcleo da prova, *EVENTO* se relaciona com *EQUIPE* em uma relação *1:N, pois um evento pode possuir várias equipes, enquanto cada equipe pertence a um único evento. A mesma lógica aparece entre **EVENTO* e *ESTEIRA*, já que um evento pode disponibilizar várias esteiras, mas cada esteira está associada a um único evento.
+
+Também foram definidas relações *1:N* entre *EQUIPE* e *ATLETA, **ATLETA* e *TURNO, **ESTEIRA* e *TURNO, e **TURNO* e *CHECKPOINT*. Assim, uma equipe pode conter vários atletas; um atleta pode realizar vários turnos; uma esteira pode ser vinculada a vários turnos; e um turno pode gerar vários checkpoints.
+
+Na parte operacional, *FUNCAO* se relaciona com *SESSAO_OPERACIONAL* em uma relação *1:N, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão operacional está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador, gestor ou coordenador. Além disso, cada **SESSAO_OPERACIONAL* pertence a um *EVENTO* e pode iniciar *TURNOS* e registrar *CHECKPOINTS*, permitindo rastrear ações relevantes da operação.
+
+A relação *EQUIPE–ESTEIRA* foi definida como *1:N* porque, no escopo atual da operação, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não pretende registrar histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi necessária a criação de uma tabela associativa.
+
+A nomenclatura das chaves foi padronizada em id_<entidade> para PKs e FKs. Quando uma entidade participa de um relacionamento operacional específico, a chave estrangeira deve indicar claramente esse vínculo. Por exemplo, id_sessao_operacional em *CHECKPOINT* identifica a sessão responsável pelo registro daquele checkpoint.
+
+Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardinalidades, indica dependência entre entidades e antecipa a posição das PKs e FKs no esquema lógico. Com isso, a transição para o modelo relacional passa a ser direta e verificável.
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
