@@ -1022,7 +1022,23 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
-*Posicione aqui os diagramas de modelos relacionais do banco de dados, apresentando todos os esquemas de tabelas e suas relações. Inclua as migrations DDL numeradas e reproduzíveis (`CREATE TABLE`, `CREATE INDEX`, constraints `NOT NULL`, `UNIQUE`, `FOREIGN KEY`, `CHECK`). Utilize texto para complementar suas explicações quando necessário.*
+O modelo relacional é a representação lógica do banco de dados, organizando 
+as informações em tabelas interligadas por chaves primárias e estrangeiras. 
+Ele estabelece a estrutura dos dados e suas relações de forma abstrata, 
+independente de como o armazenamento é implementado fisicamente. Já o 
+modelo físico traduz essa estrutura em código executável para um sistema 
+gerenciador de banco de dados específico, incluindo a definição de tipos 
+de dados, restrições, índices e demais elementos que afetam o desempenho 
+e a integridade do sistema. No BullPace, ambos os modelos foram construídos 
+sobre o PostgreSQL, gerenciado pela infraestrutura do Supabase, com decisões 
+voltadas à confiabilidade dos registros ao longo das 24 horas de competição: 
+adoção de *soft delete* para preservar o histórico de todos os registros 
+conforme a RN14, uso de *constraints* 'CHECK' para validar valores de status, 
+índices parciais para garantir regras como a RN04 (um único turno em 
+andamento por equipe) e *triggers* para automação dos campos de auditoria. 
+Esta seção apresenta o modelo relacional textual derivado do DER da seção 
+3.6.2, o diagrama do modelo físico e o código DDL completo da migration 
+responsável pela criação do esquema.
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
