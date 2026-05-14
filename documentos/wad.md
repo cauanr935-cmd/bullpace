@@ -974,7 +974,7 @@ Esse é o wireframe da tela de escolha de corredores da equipe selecionada na et
 </div>
 <br>
 
-As fotografias dos atletas são organizadas em grade por toda a área central da tela em quadros interativos agindo como botões, permitindo identificação rápida e acesso intuitivo às funções da interface. Ao selecionar um dos quadros, o usuário é direcionado para a tela de início do turno correspondente ao atleta da foto escolhida.
+As fotografias dos corredores são organizadas em grade por toda a área central da tela em quadros interativos agindo como botões, permitindo identificação rápida e acesso intuitivo às funções da interface. Ao selecionar um dos quadros, o usuário é direcionado para a tela de início do turno correspondente ao corredor da foto escolhida.
 
 A interface também disponibiliza outros dois botões: um localizado na esquerda superior, que retorna o usuário para a tela de seleção de equipe; e outro com a função de pausar turnos, utilizada para interromper o registro de dados do turno atual.
 
