@@ -1056,7 +1056,32 @@ Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardin
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
-*Posicione aqui os diagramas de modelos relacionais do banco de dados, apresentando todos os esquemas de tabelas e suas relações. Inclua as migrations DDL numeradas e reproduzíveis (`CREATE TABLE`, `CREATE INDEX`, constraints `NOT NULL`, `UNIQUE`, `FOREIGN KEY`, `CHECK`). Utilize texto para complementar suas explicações quando necessário.*
+# Modelo físico
+
+O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
+
+# Migrations
+
+As *migrations* são arquivos em SQL versionados que tem a função de descrever as mudanças no banco de dados de forma reproduzível e totalmente ordenada. Cada *migration* representa um passo na "história" evolutiva do banco.
+
+## Justificativa para a numeração
+
+A numeração é utilizada para garantir que o banco de dados seja criado na ordem correta. Caso uma tabela dependente seja criada fora de ordem, como, por exemplo, a criação da tabela `TURNO` antes da tabela `ATLETA`, o sistema retornará um erro, pois `TURNO` possui uma chave estrangeira (FK) que referencia `ATLETA`.
+
+A estrutura de arquivos de *migrations* e suas respectivas dependências organiza-se da seguinte maneira:
+
+* `0001_create_evento.sql`: sem dependências externas;
+* `0002_create_funcao.sql`: sem dependências externas;
+* `0003_create_equipe.sql`: depende de `EVENTO`;
+* `0004_create_atleta.sql`: depende de `EQUIPE`;
+* `0005_create_esteira.sql`: depende de `EQUIPE`;
+* `0006_create_sessao_operacional.sql`: depende de `EVENTO` e `FUNCAO`;
+* `0007_create_turno.sql`: depende de `ATLETA`, `ESTEIRA` e `SESSAO_OPERACIONAL`;
+* `0008_create_checkpoint.sql`: depende de `TURNO` e `SESSAO_OPERACIONAL`;
+* `0009_insert_dados_iniciais.sql`: depende de `FUNCAO`;
+* `0010_create_views.sql`: depende de todas as tabelas.
+
+
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
