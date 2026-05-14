@@ -921,11 +921,35 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
 
+#### Tela de gerenciamento de turnos
+
+Esse é o wireframe da interface de gerenciamento de turno dos corredores, acessada pelo operador do evento após a escolha de um participante na tela de seleção de corredor. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao corredor em atividade.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de gerenciamento de turnos</b><br>
+  <img src="../assets/wf_ger.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+Na parte superior da interface, é exibido o nome do corredor atualmente em atividade, permitindo que o operador identifique rapidamente qual participante está utilizando a esteira naquele momento. Logo abaixo, são apresentados em destaque o nome e a fotografia do corredor selecionado na tela anterior, indicando qual integrante da equipe será associado ao próximo início de turno.
+
+A região central da interface é composta pelos campos responsáveis por exibir as informações obtidas da esteira atualmente vinculada ao corredor em atividade. Os indicadores apresentados são: duração do turno atual, distância percorrida, pace e velocidade média. Antes do início da atividade, todos os campos permanecem zerados. Após o início da corrida, os dados passam a ser atualizados gradualmente por meio do sistema de checkpoints, responsável por substituir os valores exibidos pelas informações mais recentes capturadas da esteira.
+
+O botão “INICIAR TURNO”, localizado na parte inferior direita da interface, é responsável por iniciar a corrida do corredor selecionado. Caso outro participante ainda esteja em atividade, o sistema encerra automaticamente o monitoramento anterior antes de iniciar o novo registro, garantindo que apenas um corredor permaneça associado ao registro de dados naquele momento.
+
+Após o início da corrida, o botão “INICIAR TURNO” altera seu comportamento e passa a atuar como botão de checkpoint. A partir desse momento, o operador pode utilizá-lo para registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. Sempre que um novo checkpoint é realizado, os dados exibidos nos campos de monitoramento são atualizados com as informações mais recentes recebidas pelo sistema.
+
+O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite que o operador finalize manualmente a corrida atualmente em andamento. Ao ser acionado, o monitoramento do corredor ativo é interrompido imediatamente, encerrando a atualização dos dados exibidos na interface.
+
+A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o operador para a interface de seleção dos corredores sem alterar os dados já associados à corrida em andamento. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a interface de definição da esteira utilizada durante o turno atual, permitindo escolher qual equipamento terá seus dados considerados pelo sistema durante o registro das informações do corredor ativo.
+
 #### Tela de seleção de esteira
 
 Esse é o wireframe da interface de definição de esteira utilizada durante o turno de um atleta. Ela é acessada pelo operador do evento a partir da interface de gerenciamento de turno e faz parte do fluxo operacional necessário para que o sistema associe corretamente os dados registrados ao corredor atualmente em atividade.
 
-Sua principal função é permitir que o operador defina qual das duas esteiras disponíveis da equipe será utilizada durante o turno em andamento. 
+Sua principal função é permitir que o operador defina qual das duas esteiras disponíveis da equipe será utilizada durante o turno em andamento.
 
 <br>
 <div align="center">
@@ -934,7 +958,6 @@ Sua principal função é permitir que o operador defina qual das duas esteiras 
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
-
 
 A interface apresenta dois blocos interativos que agem como botões, identificados como “Esteira 1” e “Esteira 2”. Esses elementos foram organizados de forma simples e objetiva para tornar a operação mais rápida durante o evento, reduzindo o tempo necessário para navegação e minimizando possíveis erros de identificação por parte do operador.
 
@@ -1223,7 +1246,7 @@ SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education 
 
 PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
 
-WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013. 
+WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013.
 
 ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
 
