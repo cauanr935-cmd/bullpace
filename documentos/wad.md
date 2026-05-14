@@ -789,7 +789,11 @@ No contexto do projeto BullPace, o diagrama de sequência cumpre um papel centra
 
 O diagrama de sequência apresentado na Figura 3.2.4 descreve o fluxo de interação referente ao registro de um checkpoint na aplicação BullPace. Essa funcionalidade corresponde ao Requisito Funcional RF004 — *Registro de Checkpoints* — e está diretamente associada às Regras de Negócio RN06, RN12, RN18 e RN19, as quais disciplinam, respectivamente, a progressão incremental da quilometragem, o registro automático de *timestamp*, a obrigatoriedade do campo de KM acumulado e a vinculação do checkpoint a um turno ativo.
 
-
+<div align="center">
+  <sub>Figura 3.2.4 — Diagrama de Sequência</sub><br>
+  <img src="../assets/DiagramaDeSequência.png" width="100%"><br>
+  <sup>Material produzido pelos autores, 2026.</sup>
+</div>
 
 O diagrama é organizado em dois blocos de interação distintos: o **fluxo principal**, que corresponde ao cenário de sucesso, e o **fluxo alternativo**, que descreve o comportamento do sistema diante de uma entrada inválida.
 
