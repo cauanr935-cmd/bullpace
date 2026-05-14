@@ -962,6 +962,25 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
 
+#### Tela de seleção de atleta 
+
+Esse é o wireframe da tela de escolha de atletas da equipe definida na etapa anterior. Nela, o usuário visualiza o nome do atleta atualmente registrado para o turno em andamento, além de fotografias dos 16 corredores da equipe.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de seleção de atleta</b><br>
+  <img src="../assets/wf_at.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+Os atletas são organizados em blocos interativos em formato de botão, permitindo identificação rápida e acesso intuitivo às funções da interface. Ao selecionar um dos botões, o usuário é direcionado para a tela de início do turno correspondente ao atleta escolhido.
+
+A interface também disponibiliza um botão de retorno para a tela de seleção de equipes e a opção “pausar turnos”, utilizada para interromper temporariamente o registro de dados.
+
+Devido à grande quantidade de elementos apresentados simultaneamente, a área vertical da interface ultrapassa as dimensões convencionais de um tablet. Por esse motivo, a tela pode ser arrastada verticalmente para permitir a visualização completa do conteúdo. A região que excede a resolução do display está representada pela cor cinza.
+
+
 #### Modo TV
 
 O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
