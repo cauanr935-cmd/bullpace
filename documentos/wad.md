@@ -960,11 +960,11 @@ A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por pe
 
 A interface apresenta dois elementos interativos em formato de botão, cada um representando uma equipe distinta. A organização visual desses elementos foi projetada para facilitar a identificação rápida das equipes e tornar a navegação mais intuitiva para o usuário.
 
-Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
+Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
 
 #### Tela de gerenciamento de turnos
 
-Esse é o wireframe da tela de gerenciamento de turno do atleta, acessada pelo operador do evento após escolher um corredor na tela seleção de atletas. Sua principal função é permitir o controle do turno em andamento e o registro periódico dos dados capturados da esteira utilizada.
+Esse é o wireframe da interface de gerenciamento de turno dos corredores, acessada pelo operador do evento após a escolha de um participante na tela de seleção de corredor. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao corredor em atividade.
 
 <br>
 <div align="center">
@@ -974,15 +974,17 @@ Esse é o wireframe da tela de gerenciamento de turno do atleta, acessada pelo o
 </div>
 <br>
 
-Na parte superior da interface, é exibido o nome do atleta atualmente em atividade no evento, permitindo ao operador identificar rapidamente qual corredor está realizando o turno naquele momento. Logo abaixo, a tela apresenta em destaque o nome e a fotografia do atleta selecionado, indicando qual participante terá o seu turno iniciado.
+Na parte superior da interface, é exibido o nome do corredor atualmente em atividade, permitindo que o operador identifique rapidamente qual participante está utilizando a esteira naquele momento. Logo abaixo, são apresentados em destaque o nome e a fotografia do corredor selecionado na tela anterior, indicando qual integrante da equipe será associado ao próximo início de turno.
 
-A região da interface abaixo da foto do atleta é composta pelos campos de monitoramento da corrida, responsáveis por exibir os dados coletados da esteira. Os indicadores apresentados são: duração do turno, distância percorrida, pace e velocidade média. Antes do turno ser iniciado, todos os valores permanecem zerados. Após o início do turno do atleta, os dados passam a ser registrados pelo sistema, sendo atualizados na interface a cada novo checkpoint realizado.
+A região central da interface é composta pelos campos responsáveis por exibir as informações obtidas da esteira atualmente vinculada ao corredor em atividade. Os indicadores apresentados são: duração do turno atual, distância percorrida, pace e velocidade média. Antes do início da atividade, todos os campos permanecem zerados. Após o início da corrida, os dados passam a ser atualizados gradualmente por meio do sistema de checkpoints, responsável por substituir os valores exibidos pelas informações mais recentes capturadas da esteira.
 
-O botão “INICIAR TURNO”, localizado na parte inferior direita da tela, é responsável por iniciar o turno do atleta selecionado. Caso já exista um turno em andamento, ele é automaticamente encerrado antes do início do novo registro. Após a ativação do turno, esse botão altera sua funcionalidade e passa a atuar como botão de checkpoint, permitindo ao operador registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. A cada novo checkpoint realizado, as informações exibidas na interface são sobrescritas pelos dados mais recentes capturados pelo sistema.
+O botão “INICIAR TURNO”, localizado na parte inferior direita da interface, é responsável por iniciar a corrida do corredor selecionado. Caso outro participante ainda esteja em atividade, o sistema encerra automaticamente o monitoramento anterior antes de iniciar o novo registro, garantindo que apenas um corredor permaneça associado ao registro de dados naquele momento.
 
-O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite ao operador finalizar manualmente o turno atualmente em execução, independentemente de qual atleta esteja em ação na esteira.
+Após o início da corrida, o botão “INICIAR TURNO” altera seu comportamento e passa a atuar como botão de checkpoint. A partir desse momento, o operador pode utilizá-lo para registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. Sempre que um novo checkpoint é realizado, os dados exibidos nos campos de monitoramento são atualizados com as informações mais recentes recebidas pelo sistema.
 
-A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o usuário para a tela de seleção de atletas. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a tela de seleção de esteira, na qual será definida qual esteira terá seus dados monitorados e registrados pelo sistema durante o turno do atleta.
+O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite que o operador finalize manualmente a corrida atualmente em andamento. Ao ser acionado, o monitoramento do corredor ativo é interrompido imediatamente, encerrando a atualização dos dados exibidos na interface.
+
+A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o operador para a interface de seleção dos corredores sem alterar os dados já associados à corrida em andamento. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a interface de definição da esteira utilizada durante o turno atual, permitindo escolher qual equipamento terá seus dados considerados pelo sistema durante o registro das informações do corredor ativo.
 
 
 #### Modo TV
