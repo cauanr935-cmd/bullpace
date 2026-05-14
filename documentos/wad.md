@@ -962,23 +962,23 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.”
 
-#### Tela de seleção de atleta 
+#### Tela de seleção de corredor 
 
-Esse é o wireframe da tela de escolha de atletas da equipe definida na etapa anterior. Nela, o usuário visualiza o nome do atleta atualmente registrado para o turno em andamento, além de fotografias dos 16 corredores da equipe.
+Esse é o wireframe da tela de escolha de corredores da equipe selecionada na etapa anterior (tela de seleção de equipe). Nela, o usuário visualiza o nome do corredor atualmente registrado para o turno em andamento, além de fotografias dos 16 membros da equipe.
 
 <br>
 <div align="center">
-  <b>Figura 3.3.X — Tela de seleção de atleta</b><br>
-  <img src="../assets/wf_at.png" width="100%"><br>
+  <b>Figura 3.3.X — Tela de seleção de corredor</b><br>
+  <img src="../assets/wf_cor.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
-Os atletas são organizados em blocos interativos em formato de botão, permitindo identificação rápida e acesso intuitivo às funções da interface. Ao selecionar um dos botões, o usuário é direcionado para a tela de início do turno correspondente ao atleta escolhido.
+As fotografias dos atletas são organizadas em grade por toda a área central da tela em quadros interativos agindo como botões, permitindo identificação rápida e acesso intuitivo às funções da interface. Ao selecionar um dos quadros, o usuário é direcionado para a tela de início do turno correspondente ao atleta da foto escolhida.
 
-A interface também disponibiliza um botão de retorno para a tela de seleção de equipes e a opção “pausar turnos”, utilizada para interromper temporariamente o registro de dados.
+A interface também disponibiliza outros dois botões: um localizado na esquerda superior, que retorna o usuário para a tela de seleção de equipe; e outro com a função de pausar turnos, utilizada para interromper o registro de dados do turno atual.
 
-Devido à grande quantidade de elementos apresentados simultaneamente, a área vertical da interface ultrapassa as dimensões convencionais de um tablet. Por esse motivo, a tela pode ser arrastada verticalmente para permitir a visualização completa do conteúdo. A região que excede a resolução do display está representada pela cor cinza.
+Devido à grande quantidade de elementos apresentados simultaneamente, a área vertical da interface ultrapassa as dimensões convencionais de um tablet. Por esse motivo, a tela pode ser tem rolagem vertical para permitir a visualização completa do conteúdo. A região que excede a resolução do display está representada pela cor cinza, ocupando aproximadamente toda a metade inferior do wireframe.
 
 
 #### Modo TV
