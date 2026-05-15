@@ -946,11 +946,11 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 ## 3.3. Wireframes (sprint 2)
 
-Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
+Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente, o alinhamento entre a arquitetura e a solução desenvolvida.
 
 ### Fluxo geral dos Wireframes:
 
-A figura abaixo é o wireframe completo da aplicação web, incluindo as principais telas, o fluxo de navegação entre elas e comentários explicativos, sendo representados na imagem como  quadros, setas pretas e setas vermelhas, respectivamente.
+A figura abaixo é o wireframe completo da aplicação web, incluindo as principais telas, o fluxo de navegação entre elas e comentários explicativos, sendo representados na imagem como quadros, setas pretas e setas vermelhas, respectivamente.
 
 Na imagem, é possível visualizar quais telas estão associadas à função do operador (representada pela área contornada por linhas vermelhas) e do organizador do evento (representada pela área contornada por linhas azuis).
 
@@ -980,7 +980,7 @@ Esse é o wireframe da tela de seleção de função do sistema, responsável po
 
 A tela apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
 
-Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno corredores. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
+Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno dos corredores. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
 
 Já a opção “ORGANIZADOR” direciona o usuário para as funcionalidades administrativas do sistema, voltadas ao acompanhamento das informações organizacionais da competição.
 
@@ -1005,6 +1005,8 @@ Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usu
 
 ### Tela de seleção dos atletas
 
+Esse é o wireframe da interface de seleção de corredor, acessada pelo operador do evento após a escolha de uma equipe. Sua principal função é apresentar a lista de integrantes do time e permitir a rápida seleção do próximo participante que assumirá a esteira.
+
 <br>
 <div align="center">
   <b>Figura 12 — Tela de seleção dos atletas</b><br>
@@ -1012,6 +1014,14 @@ Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usu
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
+
+Na parte superior da interface, o sistema apresenta o nome da equipe que foi selecionada e, logo abaixo, destaca o nome do corredor que está atualmente em atividade. Essa disposição contextualiza o operador, garantindo que ele tenha certeza de qual time está gerenciando e quem é o atleta responsável pela esteira naquele exato momento.
+
+A região central da interface é dedicada à exibição dos integrantes da equipe por meio de uma grade interativa. Cada espaço apresenta um contêiner para a fotografia do participante, acompanhado do seu respectivo nome logo abaixo. É a partir dessa listagem que o operador realiza a seleção do próximo participante. Ao clicar no perfil de um dos corredores, o operador é direcionado para a interface de gerenciamento de turnos, dando continuidade ao processo de captação de informações do revezamento.
+
+Na parte inferior da tela, encontra-se o botão de ação “PAUSAR TURNOS”. Essa funcionalidade de controle permite que o operador interrompa temporariamente o fluxo do revezamento daquela equipe, seja por uma possível troca de equipamento ou qualquer eventualidade que exija a pausa do monitoramento antes da escolha de um novo atleta.
+
+Por fim, a interface conta com o botão “VOLTAR” posicionado no canto superior esquerdo. Este elemento de navegação permite ao operador retornar para a tela anterior de menu de seleção de equipes, descartando o fluxo de troca de corredor atual sem realizar nenhuma alteração no sistema.
 
 #### Tela de gerenciamento de turnos
 
@@ -1053,13 +1063,13 @@ Sua principal função é permitir que o operador defina qual das duas esteiras 
 
 A interface apresenta dois blocos interativos que agem como botões, identificados como “Esteira 1” e “Esteira 2”. Esses elementos foram organizados de forma simples e objetiva para tornar a operação mais rápida durante o evento, reduzindo o tempo necessário para navegação e minimizando possíveis erros de identificação por parte do operador.
 
-Ao selecionar uma das opções, o sistema passa a considerar exclusivamente os dados provenientes da esteira escolhida durante o registro do turno do atleta. Dessa forma, as informações exibidas na interface de gerenciamento de turno — como duração do turno, distância percorrida, pace e velocidade média — passam a ser associadas à esteira definida pelo operador.
+Ao selecionar uma das opções, o sistema passa a considerar exclusivamente os dados provenientes da esteira escolhida durante o registro do turno do atleta. Dessa forma, as informações exibidas na interface de gerenciamento de turno (como duração do turno, distância percorrida, pace e velocidade média) passam a ser associadas à esteira definida pelo operador.
 
 A interface também disponibiliza um botão “voltar”, localizado no canto superior esquerdo, responsável por retornar o operador para a interface de gerenciamento de turno sem alterar os dados já registrados ou a esteira atualmente vinculada ao turno em andamento.
 
 #### Modo TV
 
-O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 15. 
+O Modo TV é uma interface destinada especialmente para a exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 15. 
 
 <br>
 <div align="center">
@@ -1087,6 +1097,8 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 
 ### Tela de exportação de dados
 
+
+
 <br>
 <div align="center">
   <b>Figura 17 — Exportação de dados</b><br>
@@ -1095,7 +1107,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 </div>
 <br>
 
-Conforme ilustrado na Figura 17, após o encerramento do evento, a tela de Placar Final, disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
+Conforme ilustrado na Figura 17, após o encerramento do evento, a tela de Placar Final disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
 
 ## 3.4. Guia de estilos (sprint 3)
 
