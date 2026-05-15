@@ -1109,32 +1109,41 @@ Após o encerramento do evento, a tela de Placar Final disponibiliza um botão d
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
-*Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
+Nesta seção, é apresentado o Modelo Entidade-Relacionamento do sistema em nível conceitual. O objetivo é identificar as principais entidades, seus atributos e os relacionamentos que representam as regras do domínio, sem ainda entrar em detalhes como tipos de dados, chaves primárias, chaves estrangeiras ou restrições de implementação.
 
+No contexto deste projeto, o modelo conceitual contempla a organização da prova por meio de **EVENTO**, a estruturação das **EQUIPES** e de seus **ATLETAS**, a disponibilização de **ESTEIRAS**, a realização de **TURNOS**, o registro de **CHECKPOINTS** e o controle operacional associado a **FUNCAO** e **SESSAO_OPERACIONAL**. Nesta etapa, o foco está na identificação das entidades, de seus atributos relevantes e dos relacionamentos que expressam as regras do domínio.
+
+<div align="center">
+  <sub>Imagem 1 - Modelo Entidade-Relacionamento Conceitual</sub><br>
+  <img src="assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
+  <sup>Fonte: Autores</sup>
+</div>
+
+No modelo apresentado, **EVENTO** atua como entidade organizadora da prova, relacionando-se com **EQUIPE**, **ESTEIRA** e **SESSAO_OPERACIONAL**. Cada **EQUIPE** é composta por **ATLETA**; cada **ATLETA** realiza **TURNO**; e cada **TURNO** gera registros de **CHECKPOINT**. A entidade **FUNCAO** classifica o tipo de atuação associado às sessões operacionais, permitindo representar funções como operador e coordenador sem adicionar entidades para cada perfil, fornecendo um modelo mais escalável. 
+
+Como se trata de um modelo conceitual, os atributos exibidos no diagrama devem ser interpretados apenas como características relevantes das entidades, e não como definição formal de tipos, chaves primárias, chaves estrangeiras ou restrições de implementação. Dessa forma, o modelo ER cumpre seu papel de estabilizar o vocabulário do domínio e servir de base para o detalhamento lógico apresentado no DER e, posteriormente, para sua tradução em relações no modelo relacional.
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-O Diagrama Entidade-Relacionamento (DER) representa o refinamento lógico do modelo conceitual apresentado na seção anterior. Nesta etapa, as entidades deixam de ser apenas conceitos de negócio e passam a ser descritas com atributos relevantes à estrutura do banco, identificação de chaves primárias (PK), chaves estrangeiras (FK) e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
+O **Diagrama Entidade-Relacionamento (DER)** representa o refinamento lógico do Modelo Entidade-Relacionamento apresentado na seção anterior. Enquanto o ER conceitual tem como foco identificar entidades, atributos e relacionamentos do domínio, o DER detalha essa estrutura com **chaves primárias (PK)**, **chaves estrangeiras (FK)** e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
 
-Diferentemente do modelo ER, cujo foco é conceitual, o DER aproxima a modelagem da organização lógica que será usada no banco de dados. Por isso, ele evidencia a dependência entre entidades, os vínculos entre os dados e a posição esperada das PKs e FKs no esquema. Além disso, o diagrama foi mantido coerente com o *Diagrama de Classes do Domínio (Seção 3.2.3), preservando as entidades centrais do sistema: **EVENTO, **EQUIPE, **ATLETA, **ESTEIRA, **TURNO, **CHECKPOINT, **FUNCAO* e *SESSAO_OPERACIONAL*.
+Dessa forma, o DER aproxima a modelagem da estrutura que será usada no banco de dados, indicando quais entidades dependem de outras e como os vínculos entre os dados serão representados logicamente. O diagrama também foi mantido coerente com o **Diagrama de Classes do Domínio (Seção 3.2.3)**, preservando as entidades centrais do sistema: **EVENTO**, **EQUIPE**, **ATLETA**, **ESTEIRA**, **TURNO**, **CHECKPOINT**, **FUNCAO** e **SESSAO_OPERACIONAL**.
 
 <div align="center">
   <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
   <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores(2026)</sup>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
 
-No DER, as cardinalidades explicitam a quantidade de ocorrências que uma entidade pode ter em relação a outra. No núcleo da prova, *EVENTO* se relaciona com *EQUIPE* em uma relação *1:N, pois um evento pode possuir várias equipes, enquanto cada equipe pertence a um único evento. A mesma lógica aparece entre **EVENTO* e *ESTEIRA*, já que um evento pode disponibilizar várias esteiras, mas cada esteira está associada a um único evento.
+No DER, as cardinalidades indicam a quantidade de ocorrências possíveis entre as entidades. No núcleo da prova, as relações principais foram modeladas como **1:N**, como em **EVENTO–EQUIPE**, **EVENTO–ESTEIRA**, **EQUIPE–ATLETA**, **ATLETA–TURNO**, **ESTEIRA–TURNO** e **TURNO–CHECKPOINT**. Isso significa que um evento pode possuir várias equipes e esteiras, uma equipe pode conter vários atletas, um atleta pode realizar vários turnos, uma esteira pode ser vinculada a vários turnos e um turno pode gerar vários checkpoints.
 
-Também foram definidas relações *1:N* entre *EQUIPE* e *ATLETA, **ATLETA* e *TURNO, **ESTEIRA* e *TURNO, e **TURNO* e *CHECKPOINT*. Assim, uma equipe pode conter vários atletas; um atleta pode realizar vários turnos; uma esteira pode ser vinculada a vários turnos; e um turno pode gerar vários checkpoints.
+Na parte operacional, **FUNCAO** se relaciona com **SESSAO_OPERACIONAL** em uma relação **1:N**, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador ou coordenador. Além disso, cada **SESSAO_OPERACIONAL** pertence a um **EVENTO** e pode registrar ações relevantes da operação, como o início de turnos e o registro de checkpoints.
 
-Na parte operacional, *FUNCAO* se relaciona com *SESSAO_OPERACIONAL* em uma relação *1:N, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão operacional está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador, gestor ou coordenador. Além disso, cada **SESSAO_OPERACIONAL* pertence a um *EVENTO* e pode iniciar *TURNOS* e registrar *CHECKPOINTS*, permitindo rastrear ações relevantes da operação.
+A relação **EQUIPE–ESTEIRA** também foi definida como **1:N**, pois, no escopo atual, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não contempla histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi criada uma tabela associativa para esse vínculo.
 
-A relação *EQUIPE–ESTEIRA* foi definida como *1:N* porque, no escopo atual da operação, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não pretende registrar histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi necessária a criação de uma tabela associativa.
+A nomenclatura das chaves segue o padrão `id_<entidade>` para facilitar a leitura e a futura implementação. As chaves primárias identificam unicamente cada registro, enquanto as chaves estrangeiras indicam as dependências entre as entidades. Por exemplo, a presença de `id_evento` em **EQUIPE** representa o vínculo entre equipe e evento, enquanto `id_turno` em **CHECKPOINT** indica a qual turno cada checkpoint pertence.
 
-A nomenclatura das chaves foi padronizada em id_<entidade> para PKs e FKs. Quando uma entidade participa de um relacionamento operacional específico, a chave estrangeira deve indicar claramente esse vínculo. Por exemplo, id_sessao_operacional em *CHECKPOINT* identifica a sessão responsável pelo registro daquele checkpoint.
-
-Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardinalidades, indica dependência entre entidades e antecipa a posição das PKs e FKs no esquema lógico. Com isso, a transição para o modelo relacional passa a ser direta e verificável.
+Assim, o DER complementa o modelo ER ao detalhar cardinalidades, dependências e chaves necessárias para a estrutura lógica dos dados. Com isso, ele prepara a transição para o modelo relacional, no qual esses relacionamentos passam a ser representados por tabelas e chaves estrangeiras.
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
