@@ -1097,7 +1097,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 
 ### Tela de exportação de dados
 
-
+Esse é o wireframe da interface de exportação de dados, acessado a partir da tela de placar final após a conclusão do evento. Sua principal finalidade é viabilizar a extração e o download de relatórios detalhados referentes às métricas e aos resultados consolidados da competição, conferindo ao usuário flexibilidade na parametrização dos dados que comporão o documento gerado.
 
 <br>
 <div align="center">
@@ -1106,8 +1106,9 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
+Conforme ilustrado na Figura 17, a interface permite que o usuário aplique filtros opcionais por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além disso, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos.
 
-Conforme ilustrado na Figura 17, após o encerramento do evento, a tela de Placar Final disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
+Para a geração dos arquivos, o formato PDF cria um documento em formato de "texto corrido", enquanto os formatos CSV e XLSX produzem planilhas com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme as parametrizações definidas e disponibiliza para o download. Por fim, o botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
 
 ## 3.4. Guia de estilos (sprint 3)
 
