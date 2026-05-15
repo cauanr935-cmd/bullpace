@@ -950,7 +950,7 @@ Um wireframe consiste em uma representação visual esquemática que atua como o
 
 ### Tela de seleção de função
 
-Esse é o wireframe da interface de seleção de função do sistema, responsável por definir qual perfil de utilização será acessado. Sua principal função é direcionar o usuário para o conjunto de interfaces correspondente às suas responsabilidades dentro da operação do evento.
+Esse é o wireframe da tela de seleção de função do sistema, responsável por definir qual tipo de acesso será utilizado pelo usuário. Sua principal função é direcionar o usuário para o conjunto de funcionalidades correspondente às suas responsabilidades dentro da operação do evento.
 
 <br>
 <div align="center">
@@ -960,13 +960,13 @@ Esse é o wireframe da interface de seleção de função do sistema, responsáv
 </div>
 <br>
 
-A interface apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
+A tela apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
 
-Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo de interfaces utilizado durante o acompanhamento operacional da corrida, incluindo as funcionalidades relacionadas ao controle dos turnos, definição de esteira e registro de checkpoints.
+Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno corredores. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
 
-Já a opção “ORGANIZADOR” direciona o usuário para o conjunto de interfaces destinadas ao gerenciamento administrativo do evento, permitindo acesso às telas específicas da organização da competição.
+Já a opção “ORGANIZADOR” direciona o usuário para as funcionalidades administrativas do sistema, voltadas ao acompanhamento das informações organizacionais da competição.
 
-A simplicidade visual da interface foi planejada para facilitar a identificação imediata das funções disponíveis e agilizar o acesso ao fluxo correto do sistema, especialmente em contextos de operação dinâmica durante o evento.
+A simplicidade visual da tela foi planejada para facilitar a identificação imediata das funções disponíveis e agilizar o acesso ao fluxo correto do sistema, especialmente em contextos de operação dinâmica durante o evento.
 
 #### Tela de seleção de equipe
 
