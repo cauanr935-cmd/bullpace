@@ -775,6 +775,12 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
 
 ### 3.2.3. Diagrama de Classes do Domínio (sprint 2)
 
+<div align="center">
+  <sub><b>Figura X - Diagrama de classes</b></sub><br>
+  <img src="../assets/diagramaDeClasses.jpeg" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
 O diagrama de classes do domínio representa a estrutura estática do sistema BullPace, evidenciando as entidades envolvidas na operação do Red Bull 24 Horas, seus atributos, métodos e os relacionamentos que governam o fluxo de dados entre elas. O modelo foi construído segundo a notação UML, diferenciando associações, generalizações e dependências conforme o padrão da linguagem (SOMMERVILLE, 2019).
 
 #### Hierarquia de Usuários
@@ -789,26 +795,26 @@ A classe **Usuários** é a superclasse do sistema e centraliza os atributos com
 
 #### Entidades Centrais do Domínio
 
-**RegistrarCorrida** é a classe de maior centralidade no modelo, pois encapsula o dado mais crítico da competição: o registro de cada turno realizado por um atleta em uma esteira. Seus atributos são todos privados: `-id: Int`, `-dataHoraInicio: date`, `-dataHoraFim: date`, `-kmInicial: decimal`, `-kmFinal: decimal`, `-kmPercorrido: decimal`, `-fotoComprovante: string` e `-status: string`. Os métodos `-calcularKmPercorrido()`, `-anexarFoto()`, `-finalizarRegistro()` e `-calcularTotalKm()` encapsulam as regras de negócio ligadas ao registro e consolidação da quilometragem — em especial a RN06 (progressão de quilometragem), a RN10 (cálculo do placar em tempo real) e a RN12 (timestamp automático, impedindo edição manual de horários pelo operador). A presença dos campos `kmInicial` e `kmFinal` viabiliza o cálculo do `kmPercorrido` sem dependência de integração direta com as esteiras Technogym, respeitando a restrição de design REST definida no projeto.
+**RegistrarCorrida** é a classe de maior centralidade no modelo, pois encapsula o dado mais crítico da competição: o registro de cada turno realizado por um atleta em uma esteira. Seus atributos são todos privados: `-id: Int`, `-dataHoraInicio: date`, `-dataHoraFim: date`, `-kmInicial: decimal`, `-kmFinal: decimal`, `-kmPercorrido: decimal`, `-fotoComprovante: string` e `-status: string`. Os métodos `-calcularKmPercorrido()`, `-anexarFoto()`, `-finalizarRegistro()` e `-calcularTotalKm()` encapsulam as regras de negócio ligadas ao registro e consolidação da quilometragem, em especial a RN06 (progressão de quilometragem), a RN10 (cálculo do placar em tempo real) e a RN12 (timestamp automático, impedindo edição manual de horários pelo operador). A presença dos campos `kmInicial` e `kmFinal` viabiliza o cálculo do `kmPercorrido` sem dependência de integração direta com as esteiras Technogym.
 
-**Evento** representa a instância da competição e serve como âncora temporal do sistema. Seus atributos públicos são `+id: int`, `+estado: string`, `+cidade: string` e `+data: date`, e seus métodos `+iniciarEvento()` e `+encerrarEvento()` controlam o ciclo de vida da competição. A relação com **RegistrarCorrida** é de 1:n — um único evento agrega múltiplos registros de corrida, produzidos por diferentes corredores em diferentes esteiras ao longo das 24 horas. A relação com **Esteira** também é de 1:n, pois um evento opera simultaneamente com múltiplas esteiras.
+**Evento** representa a instância da competição e serve como âncora temporal do sistema. Seus atributos públicos são `+id: int`, `+estado: string`, `+cidade: string` e `+data: date`, e seus métodos `+iniciarEvento()` e `+encerrarEvento()` controlam o ciclo de vida da competição. A relação com **RegistrarCorrida** é de 1:n: um único evento agrega múltiplos registros de corrida, produzidos por diferentes corredores em diferentes esteiras ao longo das 24 horas. A relação com **Esteira** também é de 1:n, pois um evento opera simultaneamente com múltiplas esteiras.
 
-**Equipe** agrega os corredores e acumula a quilometragem coletiva que determina o resultado da competição. Seus atributos são `-id: int` (privado), `+nome: string` (público), `-totalKM: decimal` (privado) e `+status: string` (público). O atributo `totalKM` é o valor consolidado exibido no placar em tempo real e na tela de resultado final, atendendo aos RFs RF008 e RF009. O `status` controla o estado da equipe ao longo do evento, sendo relevante para o encerramento e a geração do resultado final (RF010). A multiplicidade com **Corredor(a)** é n:1 (vários corredores compõem uma equipe), e com **Esteira** é n:n, pois uma equipe utiliza múltiplas esteiras e uma esteira pode ser utilizada por corredores da mesma equipe em turnos distintos.
+**Equipe** agrega os corredores e acumula a quilometragem coletiva que determina o resultado da competição. Seus atributos são `-id: int` (privado), `+nome: string` (público), `-totalKM: decimal` (privado) e `+status: string` (público). O atributo `totalKM` é o valor consolidado exibido no placar em tempo real e na tela de resultado final, atendendo aos RFs RF008 e RF009. O `status` controla o estado da equipe ao longo do evento, sendo relevante para o encerramento e a geração do resultado final (RF010). A multiplicidade com **Corredor(a)** é n:1, e com **Esteira** é n:n.
 
-**Esteira** representa o equipamento físico sobre o qual cada corredor executa seu turno. Possui os atributos `+id: int`, `+marca: string`, `+modelo: string` e `+turno: string`, e os métodos `+registrarTempo()` e `+registrarKm()`, que formalizam a captura dos dados de desempenho por turno. Por não haver integração direta com as esteiras Technogym, esses métodos representam o ponto de entrada manual assistida pelo operador, conforme a restrição REST do projeto. A associação com **RegistrarCorrida** é de n:n: uma esteira hospeda múltiplos turnos ao longo do evento, e cada registro de corrida está vinculado a uma esteira específica.
+**Esteira** representa o equipamento físico sobre o qual cada corredor executa seu turno. Possui os atributos `+id: int`, `+marca: string`, `+modelo: string` e `+turno: string`, e os métodos `+registrarTempo()` e `+registrarKm()`, que formalizam a captura dos dados de desempenho por turno. Por não haver integração direta com as esteiras Technogym, esses métodos representam o ponto de entrada manual assistida pelo operador. A associação com **RegistrarCorrida** é de n:n: uma esteira hospeda múltiplos turnos ao longo do evento, e cada registro de corrida está vinculado a uma esteira específica.
 
 #### Relacionamentos
 
 | Relacionamento | Tipo | Cardinalidade | Descrição |
 |---|---|---|---|
-| Usuários → Promotor(a) / Coordenador(a) / Corredor(a) | Generalização (herança) | — | Subclasses especializadas que herdam `id` e `tipoUsuário` da superclasse |
-| Corredor(a) → RegistrarCorrida | Associação | 1 : n | Um corredor realiza múltiplos turnos ao longo das 24 horas |
-| Corredor(a) → Equipe | Associação | n : 1 | Múltiplos corredores compõem uma única equipe |
-| RegistrarCorrida → Evento | Associação | n : 1 | Múltiplos registros de corrida pertencem a um único evento |
-| Evento → Esteira | Associação | 1 : n | Um evento disponibiliza múltiplas esteiras para uso simultâneo |
-| Equipe → Esteira | Associação | n : n | Equipes utilizam esteiras em turnos distintos ao longo da competição |
-| Promotor(a) → RegistrarCorrida | Dependência (tracejado) | 1 : n | O promotor aciona os fluxos de registro de entrada e saída do corredor |
-| Coordenador(a) → RegistrarCorrida | Dependência (tracejado) | 1 : n | O coordenador valida, corrige e visualiza os registros de corrida |
+| Usuários -> Promotor(a) / Coordenador(a) / Corredor(a) | Generalização (herança) | - | Subclasses especializadas que herdam `id` e `tipoUsuário` da superclasse |
+| Corredor(a) -> RegistrarCorrida | Associação | 1 : n | Um corredor realiza múltiplos turnos ao longo das 24 horas |
+| Corredor(a) -> Equipe | Associação | n : 1 | Múltiplos corredores compõem uma única equipe |
+| RegistrarCorrida -> Evento | Associação | n : 1 | Múltiplos registros de corrida pertencem a um único evento |
+| Evento -> Esteira | Associação | 1 : n | Um evento disponibiliza múltiplas esteiras para uso simultâneo |
+| Equipe -> Esteira | Associação | n : n | Equipes utilizam esteiras em turnos distintos ao longo da competição |
+| Promotor(a) -> RegistrarCorrida | Dependência (tracejado) | 1 : n | O promotor aciona os fluxos de registro de entrada e saída do corredor |
+| Coordenador(a) -> RegistrarCorrida | Dependência (tracejado) | 1 : n | O coordenador valida, corrige e visualiza os registros de corrida |
 
 #### Cobertura de Requisitos
 
@@ -942,6 +948,68 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
 
+#### Tela de seleção de equipe
+
+A tela de escolha de equipe, apresentada na figura 3.3.X, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de seleção de equipe</b><br>
+  <img src="../assets/wf_eq.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+A interface apresenta dois elementos interativos em formato de botão, cada um representando uma equipe distinta. A organização visual desses elementos foi projetada para facilitar a identificação rápida das equipes e tornar a navegação mais intuitiva para o usuário.
+
+Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
+
+#### Tela de gerenciamento de turnos
+
+Esse é o wireframe da interface de gerenciamento de turno dos corredores, acessada pelo operador do evento após a escolha de um participante na tela de seleção de corredor. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao corredor em atividade.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de gerenciamento de turnos</b><br>
+  <img src="../assets/wf_ger.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+Na parte superior da interface, é exibido o nome do corredor atualmente em atividade, permitindo que o operador identifique rapidamente qual participante está utilizando a esteira naquele momento. Logo abaixo, são apresentados em destaque o nome e a fotografia do corredor selecionado na tela anterior, indicando qual integrante da equipe será associado ao próximo início de turno.
+
+A região central da interface é composta pelos campos responsáveis por exibir as informações obtidas da esteira atualmente vinculada ao corredor em atividade. Os indicadores apresentados são: duração do turno atual, distância percorrida, pace e velocidade média. Antes do início da atividade, todos os campos permanecem zerados. Após o início da corrida, os dados passam a ser atualizados gradualmente por meio do sistema de checkpoints, responsável por substituir os valores exibidos pelas informações mais recentes capturadas da esteira.
+
+O botão “INICIAR TURNO”, localizado na parte inferior direita da interface, é responsável por iniciar a corrida do corredor selecionado. Caso outro participante ainda esteja em atividade, o sistema encerra automaticamente o monitoramento anterior antes de iniciar o novo registro, garantindo que apenas um corredor permaneça associado ao registro de dados naquele momento.
+
+Após o início da corrida, o botão “INICIAR TURNO” altera seu comportamento e passa a atuar como botão de checkpoint. A partir desse momento, o operador pode utilizá-lo para registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. Sempre que um novo checkpoint é realizado, os dados exibidos nos campos de monitoramento são atualizados com as informações mais recentes recebidas pelo sistema.
+
+O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite que o operador finalize manualmente a corrida atualmente em andamento. Ao ser acionado, o monitoramento do corredor ativo é interrompido imediatamente, encerrando a atualização dos dados exibidos na interface.
+
+A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o operador para a interface de seleção dos corredores sem alterar os dados já associados à corrida em andamento. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a interface de definição da esteira utilizada durante o turno atual, permitindo escolher qual equipamento terá seus dados considerados pelo sistema durante o registro das informações do corredor ativo.
+
+#### Tela de seleção de esteira
+
+Esse é o wireframe da interface de definição de esteira utilizada durante o turno de um atleta. Ela é acessada pelo operador do evento a partir da interface de gerenciamento de turno e faz parte do fluxo operacional necessário para que o sistema associe corretamente os dados registrados ao corredor atualmente em atividade.
+
+Sua principal função é permitir que o operador defina qual das duas esteiras disponíveis da equipe será utilizada durante o turno em andamento.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de seleção de esteira</b><br>
+  <img src="../assets/wf_es.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+A interface apresenta dois blocos interativos que agem como botões, identificados como “Esteira 1” e “Esteira 2”. Esses elementos foram organizados de forma simples e objetiva para tornar a operação mais rápida durante o evento, reduzindo o tempo necessário para navegação e minimizando possíveis erros de identificação por parte do operador.
+
+Ao selecionar uma das opções, o sistema passa a considerar exclusivamente os dados provenientes da esteira escolhida durante o registro do turno do atleta. Dessa forma, as informações exibidas na interface de gerenciamento de turno — como duração do turno, distância percorrida, pace e velocidade média — passam a ser associadas à esteira definida pelo operador.
+
+A interface também disponibiliza um botão “voltar”, localizado no canto superior esquerdo, responsável por retornar o operador para a interface de gerenciamento de turno sem alterar os dados já registrados ou a esteira atualmente vinculada ao turno em andamento.
+
+#### Modo TV
+
 O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na Figura 3.3.X. 
 
 <br>
@@ -1004,13 +1072,478 @@ Após o encerramento do evento, a tela de Placar Final disponibiliza um botão d
 
 *Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
 
+
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-*Posicione aqui o DER com cardinalidades explícitas em ambos os lados de cada relação e identificação de PK/FK. O DER deve ser coerente com o diagrama de classes (3.2.3).*
+O Diagrama Entidade-Relacionamento (DER) representa o refinamento lógico do modelo conceitual apresentado na seção anterior. Nesta etapa, as entidades deixam de ser apenas conceitos de negócio e passam a ser descritas com atributos relevantes à estrutura do banco, identificação de chaves primárias (PK), chaves estrangeiras (FK) e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
+
+Diferentemente do modelo ER, cujo foco é conceitual, o DER aproxima a modelagem da organização lógica que será usada no banco de dados. Por isso, ele evidencia a dependência entre entidades, os vínculos entre os dados e a posição esperada das PKs e FKs no esquema. Além disso, o diagrama foi mantido coerente com o *Diagrama de Classes do Domínio (Seção 3.2.3), preservando as entidades centrais do sistema: **EVENTO, **EQUIPE, **ATLETA, **ESTEIRA, **TURNO, **CHECKPOINT, **FUNCAO* e *SESSAO_OPERACIONAL*.
+
+<div align="center">
+  <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
+  <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores(2026)</sup>
+</div>
+
+No DER, as cardinalidades explicitam a quantidade de ocorrências que uma entidade pode ter em relação a outra. No núcleo da prova, *EVENTO* se relaciona com *EQUIPE* em uma relação *1:N, pois um evento pode possuir várias equipes, enquanto cada equipe pertence a um único evento. A mesma lógica aparece entre **EVENTO* e *ESTEIRA*, já que um evento pode disponibilizar várias esteiras, mas cada esteira está associada a um único evento.
+
+Também foram definidas relações *1:N* entre *EQUIPE* e *ATLETA, **ATLETA* e *TURNO, **ESTEIRA* e *TURNO, e **TURNO* e *CHECKPOINT*. Assim, uma equipe pode conter vários atletas; um atleta pode realizar vários turnos; uma esteira pode ser vinculada a vários turnos; e um turno pode gerar vários checkpoints.
+
+Na parte operacional, *FUNCAO* se relaciona com *SESSAO_OPERACIONAL* em uma relação *1:N, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão operacional está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador, gestor ou coordenador. Além disso, cada **SESSAO_OPERACIONAL* pertence a um *EVENTO* e pode iniciar *TURNOS* e registrar *CHECKPOINTS*, permitindo rastrear ações relevantes da operação.
+
+A relação *EQUIPE–ESTEIRA* foi definida como *1:N* porque, no escopo atual da operação, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não pretende registrar histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi necessária a criação de uma tabela associativa.
+
+A nomenclatura das chaves foi padronizada em id_<entidade> para PKs e FKs. Quando uma entidade participa de um relacionamento operacional específico, a chave estrangeira deve indicar claramente esse vínculo. Por exemplo, id_sessao_operacional em *CHECKPOINT* identifica a sessão responsável pelo registro daquele checkpoint.
+
+Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardinalidades, indica dependência entre entidades e antecipa a posição das PKs e FKs no esquema lógico. Com isso, a transição para o modelo relacional passa a ser direta e verificável.
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
-*Posicione aqui os diagramas de modelos relacionais do banco de dados, apresentando todos os esquemas de tabelas e suas relações. Inclua as migrations DDL numeradas e reproduzíveis (`CREATE TABLE`, `CREATE INDEX`, constraints `NOT NULL`, `UNIQUE`, `FOREIGN KEY`, `CHECK`). Utilize texto para complementar suas explicações quando necessário.*
+A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
+
+3.6.3.2 Modelo Relacional textual
+
+A notação utilizada nas tabelas a seguir é:
+
+__sublinhado__ — chave primária (PK)
+* antes do nome — chave estrangeira (FK)
+→ tabela.coluna — destino da FK
+? ao final — NULL permitido
+Sem marcação — NOT NULL
+
+evento
+evento (
+    __id_evento__,
+    nome,
+    cidade,
+    estado,
+    data_inicio,             -- timestamptz
+    data_fim?,               -- timestamptz; preenchido ao encerrar
+    status,                  -- CHECK ∈ {planejado, em_andamento, encerrado}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+equipe
+equipe (
+    __id_equipe__,
+    *id_evento  → evento.id_evento,
+    nome,
+    status,                  -- CHECK ∈ {ativa, finalizada}
+    km_total,                -- decimal; atualizado via trigger
+    created_at,
+    updated_at,
+    deleted_at?
+)
+atleta
+atleta (
+    __id_atleta__,
+    *id_equipe  → equipe.id_equipe,
+    nome,
+    status,                  -- CHECK ∈ {ativo, inativo}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+esteira
+esteira (
+    __id_esteira__,
+    *id_equipe  → equipe.id_equipe,
+    *id_evento  → evento.id_evento,
+    marca,
+    modelo,
+    numero_serie,
+    status,                  -- CHECK ∈ {livre, em_uso, manutencao}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+funcao
+funcao (
+    __id_funcao__,
+    nome,                    -- UNIQUE; ex: 'operador', 'coordenador'
+    descricao,
+    status,                  -- CHECK ∈ {ativa, inativa}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+sessao_operacional
+sessao_operacional (
+    __id_sessao_operacional__,
+    *id_evento  → evento.id_evento,
+    *id_funcao  → funcao.id_funcao,
+    inicio_em,               -- timestamptz; padrão: now()
+    fim_em?,                 -- timestamptz; NULL = sessão ativa
+    status                   -- CHECK ∈ {ativa, encerrada}
+)
+turno
+turno (
+    __id_turno__,
+    *id_atleta              → atleta.id_atleta,
+    *id_esteira             → esteira.id_esteira,
+    *id_equipe              → equipe.id_equipe,
+    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
+    horario_inicio,          -- timestamptz
+    horario_fim?,            -- timestamptz
+    status,                  -- CHECK ∈ {em_andamento, encerrado, cancelado}
+    km_turno,                -- decimal; atualizado via trigger
+    created_at,
+    updated_at,
+    deleted_at?
+)
+checkpoint
+checkpoint (
+    __id_checkpoint__,
+    *id_turno               → turno.id_turno,
+    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
+    km_acumulado,
+    pace_medio?,
+    velocidade_media?,
+    registrado_em,           -- timestamptz; padrão: now()
+    is_ajuste,               -- boolean; default false
+    deleted_at?
+)
+Constraints adicionais
+UNIQUE compostas:
+
+equipe(id_evento, nome) — uma equipe não pode repetir nome no mesmo evento.
+esteira(id_equipe, numero_serie) — número de série único por equipe.
+funcao(nome) — nome de função único globalmente (catálogo).
+
+UNIQUE parcial (suporta RN04):
+
+turno(id_equipe) WHERE status = 'em_andamento' AND deleted_at IS NULL — apenas um turno em andamento por equipe.
+
+CHECK não-triviais:
+
+evento: data_fim > data_inicio (quando data_fim preenchido)
+turno: horario_fim > horario_inicio (quando horario_fim preenchido)
+sessao_operacional: fim_em > inicio_em (quando fim_em preenchido)
+checkpoint: km_acumulado >= 0
+checkpoint: pace_medio > 0 (quando preenchido)
+checkpoint: velocidade_media > 0 (quando preenchido)
+turno: km_turno >= 0
+equipe: km_total >= 0
+
+Política de ON DELETE:
+Todas as FKs adotam política ON DELETE RESTRICT, preservando o histórico de registros e impedindo a remoção acidental de entidades vinculadas a turnos, checkpoints ou sessões já registradas.
+Soft delete:
+A coluna deleted_at timestamptz NULL está presente em evento, equipe, atleta, esteira, funcao, turno e checkpoint. Não está presente em sessao_operacional, que funciona como log temporal append-only.
+Triggers automáticas:
+
+updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possuem essa coluna.
+turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
+equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
+# 3.6.3.1 Modelo físico
+
+O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
+
+# Migrations
+
+As *migrations* são arquivos em SQL versionados que tem a função de descrever as mudanças no banco de dados de forma reproduzível e totalmente ordenada. Cada *migration* representa um passo na "história" evolutiva do banco.
+
+## Justificativa para a numeração
+
+A numeração é utilizada para garantir que o banco de dados seja criado na ordem correta. Caso uma tabela dependente seja criada fora de ordem, como, por exemplo, a criação da tabela `TURNO` antes da tabela `ATLETA`, o sistema retornará um erro, pois `TURNO` possui uma chave estrangeira (FK) que referencia `ATLETA`.
+
+A estrutura de arquivos de *migrations* e suas respectivas dependências organiza-se da seguinte maneira:
+
+* `0001_create_evento.sql`: sem dependências externas;
+* `0002_create_funcao.sql`: sem dependências externas;
+* `0003_create_equipe.sql`: depende de `EVENTO`;
+* `0004_create_atleta.sql`: depende de `EQUIPE`;
+* `0005_create_esteira.sql`: depende de `EQUIPE`;
+* `0006_create_sessao_operacional.sql`: depende de `EVENTO` e `FUNCAO`;
+* `0007_create_turno.sql`: depende de `ATLETA`, `ESTEIRA` e `SESSAO_OPERACIONAL`;
+* `0008_create_checkpoint.sql`: depende de `TURNO` e `SESSAO_OPERACIONAL`;
+* `0009_insert_dados_iniciais.sql`: depende de `FUNCAO`;
+* `0010_create_views.sql`: depende de todas as tabelas.
+
+## Scripts das Migrations
+
+Abaixo encontram-se os scripts de *migrations* que implementam a modelagem física do sistema. Eles agrupam as instruções DDL (Data Definition Language) para a construção progressiva do banco de dados, definindo entidades, colunas e restrições de validação (constraints).
+
+**0001_create_evento.sql**
+```sql
+CREATE TABLE evento (
+    id_evento      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    cidade         VARCHAR(100) NOT NULL,
+    estado         VARCHAR(100) NOT NULL,
+    data_inicio    DATE NOT NULL,
+    data_fim       DATE NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'planejado',
+
+    CONSTRAINT ck_evento_status CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
+    CONSTRAINT ck_evento_datas CHECK (data_fim > data_inicio)
+);
+```
+
+**0002_create_funcao.sql**
+```sql
+CREATE TABLE funcao (
+    id_funcao      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL UNIQUE,
+    descricao      VARCHAR(100),
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT ck_funcao_status CHECK (status IN ('ativo', 'inativo'))
+);
+```
+**0003_create_equipe.sql**
+
+```sql
+CREATE TABLE equipe (
+    id_equipe      SERIAL PRIMARY KEY,
+    id_evento      INT NOT NULL,
+    nome           VARCHAR(100) NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativa',
+    km_total       DECIMAL NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_equipe_evento
+        FOREIGN KEY (id_evento)
+        REFERENCES evento(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_equipe_nome_evento UNIQUE (id_evento, nome),
+    CONSTRAINT ck_equipe_status CHECK (status IN ('ativa', 'finalizada', 'inativa')),
+    CONSTRAINT ck_equipe_km_total CHECK (km_total >= 0)
+);
+```
+**0004_create_atleta.sql**
+```sql
+CREATE TABLE atleta (
+    id_atleta      SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    nome           VARCHAR(150) NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT fk_atleta_equipe
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipe(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_atleta_nome_equipe UNIQUE (id_equipe, nome),
+    CONSTRAINT ck_atleta_status CHECK (status IN ('ativo', 'inativo'))
+);
+
+CREATE INDEX idx_atleta_equipe ON atleta(id_equipe);
+```
+
+**0005_create_esteira.sql**
+```sql
+CREATE TABLE esteira (
+    id_esteira     SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    id_evento      INT NOT NULL,
+    marca          VARCHAR(100) NOT NULL DEFAULT 'Technogym',
+    modelo         VARCHAR(100),
+    numero_serie   DECIMAL UNIQUE,
+    status         VARCHAR(100) NOT NULL DEFAULT 'livre',
+
+    CONSTRAINT fk_esteira_equipe
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipe(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_esteira_status CHECK (status IN ('livre', 'em_uso', 'manutencao', 'indisponivel'))
+);
+
+CREATE INDEX idx_esteira_evento ON esteira(id_evento);
+CREATE INDEX idx_esteira_equipe ON esteira(id_equipe);
+```
+
+**0006_create_sessao_operacional.sql**
+```sql
+CREATE TABLE sessao_operacional (
+    id_sessao_operacional SERIAL PRIMARY KEY,
+    id_evento             INT NOT NULL,
+    id_funcao             INT NOT NULL,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
+    status                VARCHAR(100) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT fk_sessao_evento
+        FOREIGN KEY (id_evento)
+        REFERENCES evento(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_sessao_funcao
+        FOREIGN KEY (id_funcao)
+        REFERENCES funcao(id_funcao)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_sessao_status CHECK (status IN ('ativa', 'encerrada', 'cancelada')),
+    CONSTRAINT ck_sessao_datas CHECK (fim_em IS NULL OR fim_em > inicio_em)
+);
+
+CREATE INDEX idx_sessao_evento ON sessao_operacional(id_evento);
+CREATE INDEX idx_sessao_funcao ON sessao_operacional(id_funcao);
+CREATE INDEX idx_sessao_status ON sessao_operacional(status);
+```
+
+**0007_create_turno.sql**
+```sql
+CREATE TABLE turno (
+    id_turno               SERIAL PRIMARY KEY,
+    id_atleta              INT NOT NULL,
+    id_esteira             INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
+    status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
+    km_turno               DECIMAL NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_turno_atleta
+        FOREIGN KEY (id_atleta)
+        REFERENCES atleta(id_atleta)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turno_esteira
+        FOREIGN KEY (id_esteira)
+        REFERENCES esteira(id_esteira)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turno_sessao_operacional
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessao_operacional(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_turno_status CHECK (status IN ('em_andamento', 'encerrado', 'cancelado')),
+    CONSTRAINT ck_turno_datas CHECK (horario_fim IS NULL OR horario_fim > horario_inicio),
+    CONSTRAINT ck_turno_km CHECK (km_turno >= 0)
+);
+
+CREATE INDEX idx_turno_atleta ON turno(id_atleta);
+CREATE INDEX idx_turno_esteira ON turno(id_esteira);
+CREATE INDEX idx_turno_sessao_operacional ON turno(id_sessao_operacional);
+CREATE INDEX idx_turno_status ON turno(status);
+
+CREATE UNIQUE INDEX uq_turno_ativo_esteira ON turno(id_esteira) WHERE status = 'em_andamento';
+CREATE UNIQUE INDEX uq_turno_ativo_atleta ON turno(id_atleta) WHERE status = 'em_andamento';
+```
+
+**0008_create_checkpoint.sql**
+```sql
+CREATE TABLE checkpoint (
+    id_checkpoint          SERIAL PRIMARY KEY,
+    id_turno               INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    km_acumulado           DECIMAL NOT NULL,
+    pace_medio             DECIMAL,
+    velocidade_media       DECIMAL,
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_checkpoint_turno
+        FOREIGN KEY (id_turno)
+        REFERENCES turno(id_turno)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_checkpoint_sessao_operacional
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessao_operacional(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_checkpoint_km CHECK (km_acumulado >= 0),
+    CONSTRAINT ck_checkpoint_pace CHECK (pace_medio IS NULL OR pace_medio >= 0),
+    CONSTRAINT ck_checkpoint_velocidade CHECK (velocidade_media IS NULL OR velocidade_media >= 0)
+);
+
+CREATE INDEX idx_checkpoint_turno ON checkpoint(id_turno);
+CREATE INDEX idx_checkpoint_sessao_operacional ON checkpoint(id_sessao_operacional);
+CREATE INDEX idx_checkpoint_registrado_em ON checkpoint(registrado_em DESC);
+CREATE INDEX idx_checkpoint_turno_data ON checkpoint(id_turno, registrado_em DESC);
+```
+
+**0009_insert_dados_iniciais.sql**
+
+```sql
+INSERT INTO funcao (nome, descricao, status) VALUES
+    ('operador', 'Responsável por iniciar turnos e registrar dados', 'ativo'),
+    ('gestor', 'Responsável por acompanhar a operação', 'ativo');
+```
+
+**0010_create_views.sql**
+```sql
+CREATE OR REPLACE VIEW vw_placar_parcial AS
+WITH ultimo_checkpoint_por_turno AS (
+    SELECT DISTINCT ON (id_turno) id_turno, km_acumulado, registrado_em
+    FROM checkpoint ORDER BY id_turno, registrado_em DESC
+)
+SELECT
+    ev.id_evento, ev.nome AS evento_nome, eq.id_equipe, eq.nome AS equipe_nome,
+    eq.status AS equipe_status, eq.km_total AS equipe_km_total,
+    COUNT(DISTINCT t.id_turno) AS total_turnos,
+    COALESCE(SUM(uc.km_acumulado), 0) AS km_total_parcial
+FROM evento ev
+JOIN equipe eq ON eq.id_evento = ev.id_evento
+LEFT JOIN atleta a ON a.id_equipe = eq.id_equipe
+LEFT JOIN turno t ON t.id_atleta = a.id_atleta
+LEFT JOIN ultimo_checkpoint_por_turno uc ON uc.id_turno = t.id_turno
+GROUP BY ev.id_evento, ev.nome, eq.id_equipe, eq.nome, eq.status, eq.km_total;
+
+CREATE OR REPLACE VIEW vw_historico_completo AS
+SELECT
+    ev.id_evento, ev.nome AS evento_nome,
+    eq.id_equipe, eq.nome AS equipe_nome,
+    a.id_atleta, a.nome AS atleta_nome,
+    est.id_esteira, est.marca AS esteira_marca, est.modelo AS esteira_modelo, est.numero_serie AS esteira_numero_serie,
+    t.id_turno, t.horario_inicio, t.horario_fim, t.status AS turno_status, t.km_turno,
+    so_turno.id_sessao_operacional AS id_sessao_inicio_turno, f_turno.nome AS funcao_inicio_turno,
+    cp.id_checkpoint, cp.km_acumulado, cp.pace_medio, cp.velocidade_media, cp.registrado_em, cp.is_ajuste,
+    so_cp.id_sessao_operacional AS id_sessao_registro_checkpoint, f_cp.nome AS funcao_registro_checkpoint
+FROM evento ev
+JOIN equipe eq ON eq.id_evento = ev.id_evento
+JOIN atleta a ON a.id_equipe = eq.id_equipe
+JOIN turno t ON t.id_atleta = a.id_atleta
+JOIN esteira est ON est.id_esteira = t.id_esteira
+JOIN sessao_operacional so_turno ON so_turno.id_sessao_operacional = t.id_sessao_operacional
+JOIN funcao f_turno ON f_turno.id_funcao = so_turno.id_funcao
+LEFT JOIN checkpoint cp ON cp.id_turno = t.id_turno
+LEFT JOIN sessao_operacional so_cp ON so_cp.id_sessao_operacional = cp.id_sessao_operacional
+LEFT JOIN funcao f_cp ON f_cp.id_funcao = so_cp.id_funcao
+ORDER BY ev.id_evento, eq.id_equipe, t.horario_inicio, cp.registrado_em;
+```
+
+
+
+
+3.6.3.3 Descrição das entidades
+
+evento
+
+A tabela evento representa cada edição do Red Bull 24 Horas registrada no sistema. Armazena dados gerais como nome, cidade, estado, datas de início e fim da prova e o status atual (planejado, em andamento ou encerrado). Cada evento agrega duas equipes competidoras e funciona como nó raiz da modelagem, vinculando todas as demais entidades a uma edição específica da competição. Essa estrutura permite que o sistema suporte futuras edições do evento sem misturar dados históricos de provas diferentes.
+
+equipe
+
+A tabela equipe armazena as duas equipes competidoras de cada evento. Cada equipe possui nome, status (ativa ou finalizada), o total de quilômetros acumulados (km_total) e está vinculada a um evento por meio da chave estrangeira id_evento. Conforme a RN01, todo evento possui exatamente duas equipes, e cada equipe agrega seus 16 atletas e suas 2 esteiras. O campo km_total é mantido automaticamente por trigger no banco e representa a soma dos turnos encerrados da equipe, sendo o valor usado para determinar a vencedora conforme a RN23.
+
+atleta
+
+A tabela atleta representa os participantes pré-cadastrados de cada equipe. Cada atleta possui nome, status (ativo ou inativo) e está vinculado a uma equipe por meio da FK id_equipe. Conforme a RN02, os 16 atletas de cada equipe devem estar previamente cadastrados antes do evento, sendo proibida a criação de novos perfis durante a operação. Um atleta pode realizar múltiplos turnos ao longo das 24 horas (RN13), mas cada turno está sempre vinculado a um único atleta.
+
+esteira
+
+A tabela esteira armazena os equipamentos físicos utilizados na prova. Cada esteira é da marca Technogym e contém informações de marca, modelo, número de série e status (livre, em uso ou manutenção). A esteira está vinculada simultaneamente a uma equipe (via id_equipe) e ao evento (via id_evento), facilitando consultas por evento sem necessidade de JOIN com a tabela equipe. Conforme a RN01, cada equipe possui exatamente duas esteiras, e o sistema sugere a alternância entre elas a cada novo turno conforme a RN05.
+
+funcao
+
+A tabela funcao é um catálogo de papéis operacionais que podem ser exercidos no sistema. Cada registro possui nome (ex: 'operador', 'coordenador'), descrição textual e status (ativa ou inativa). Espera-se que essa tabela contenha um número pequeno e fixo de linhas, representando os perfis necessários à operação do evento. A função é referenciada por cada sessao_operacional, indicando o papel exercido durante o intervalo de operação.
+
+sessao_operacional
+
+A tabela sessao_operacional registra os intervalos de tempo durante os quais uma função operacional foi exercida em um determinado evento. Cada sessão possui vínculo com um evento (id_evento) e uma função (id_funcao), além dos timestamps de início (inicio_em) e fim (fim_em) e o status (ativa ou encerrada). Diferentemente das demais tabelas, sessao_operacional não adota soft delete por se tratar de um log temporal de natureza append-only. Cada turno e cada checkpoint registrados durante a sessão mantêm vínculo com ela, garantindo a rastreabilidade da autoria das operações.
+
+turno
+
+A tabela turno representa cada sessão de corrida individual de um atleta em uma esteira. É uma das entidades centrais da modelagem, conectando atleta, esteira, equipe e a sessão operacional em que o registro foi realizado. Cada turno armazena horários de início e fim, status (em andamento, encerrado ou cancelado), o total de quilômetros percorridos (km_turno) e referências às quatro entidades relacionadas. A FK id_equipe, embora derivável por transitividade via atleta ou esteira, foi mantida como denormalização controlada para viabilizar a constraint da RN04, que garante a unicidade do turno ativo por equipe via índice UNIQUE parcial.
+
+checkpoint
+
+A tabela checkpoint armazena os registros periódicos de quilometragem inseridos durante um turno ativo a cada 5 minutos (RN07). Cada checkpoint contém o KM acumulado obrigatório (RN18), campos opcionais de pace médio e velocidade média, timestamp automático do servidor (RN12), e vínculos tanto com o turno (id_turno) quanto com a sessão operacional em que foi registrado (id_sessao_operacional). A coluna is_ajuste permanece no schema como flag preparada para a futura tabela ajuste, ainda não implementada nesta versão. A incrementalidade dos valores de KM dentro de um mesmo turno é garantida no nível da aplicação (RN06).
+
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
