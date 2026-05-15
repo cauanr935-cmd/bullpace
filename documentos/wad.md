@@ -948,13 +948,34 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
 
+### Tela de seleção de função
+
+Esse é o wireframe da tela de seleção de função do sistema, responsável por definir qual tipo de acesso será utilizado pelo usuário. Sua principal função é direcionar o usuário para o conjunto de funcionalidades correspondente às suas responsabilidades dentro da operação do evento.
+
+<br>
+<div align="center">
+  <b>Figura 9 — Tela de seleção de função</b><br>
+  <img src="../assets/wf_fun.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+A tela apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
+
+Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno corredores. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
+
+Já a opção “ORGANIZADOR” direciona o usuário para as funcionalidades administrativas do sistema, voltadas ao acompanhamento das informações organizacionais da competição.
+
+A simplicidade visual da tela foi planejada para facilitar a identificação imediata das funções disponíveis e agilizar o acesso ao fluxo correto do sistema, especialmente em contextos de operação dinâmica durante o evento.
+
 #### Tela de seleção de equipe
+
 
 A tela de escolha de equipe, apresentada na figura 9, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
 
 <br>
 <div align="center">
-  <b>Figura 9 — Tela de seleção de equipe</b><br>
+  <b>Figura 10 — Tela de seleção de equipe</b><br>
   <img src="../assets/wf_eq.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -970,7 +991,7 @@ Esse é o wireframe da interface de gerenciamento de turno dos corredores, acess
 
 <br>
 <div align="center">
-  <b>Figura 10 — Tela de gerenciamento de turnos</b><br>
+  <b>Figura 11 — Tela de gerenciamento de turnos</b><br>
   <img src="../assets/wf_ger.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -996,7 +1017,7 @@ Sua principal função é permitir que o operador defina qual das duas esteiras 
 
 <br>
 <div align="center">
-  <b>Figura 11 — Tela de seleção de esteira</b><br>
+  <b>Figura 12 — Tela de seleção de esteira</b><br>
   <img src="../assets/wf_es.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1010,23 +1031,23 @@ A interface também disponibiliza um botão “voltar”, localizado no canto su
 
 #### Modo TV
 
-O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 12. 
+O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 13. 
 
 <br>
 <div align="center">
-  <b>Figura 12 — Visualização modo TV</b><br>
+  <b>Figura 13 — Visualização modo TV</b><br>
   <img src="../assets/tela_modoTV.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
-O wireframe apresentado na figura 12 representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
+O wireframe apresentado na figura 13 representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
 
-A Figura 13 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
+A Figura 14 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
 <div align="center">
-  <b>Figura 13 — Tela de comparação final entre equipes </b><br>
+  <b>Figura 14 — Tela de comparação final entre equipes </b><br>
   <img src="../assets/tela_placarFinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1036,7 +1057,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 
 <br>
 <div align="center">
-  <b>Figura 14 — Exportação de dados</b><br>
+  <b>Figura 15 — Exportação de dados</b><br>
   <img src="../assets/Wf_ExportarDados.jpeg" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
