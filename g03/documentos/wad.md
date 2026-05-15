@@ -948,7 +948,7 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
 
-### Wireframe geral
+### Fluxo geral dos Wireframes:
 
 A figura abaixo é o wireframe completo da aplicação web, incluindo as principais telas, o fluxo de navegação entre elas e comentários explicativos, sendo representados na imagem como  quadros, setas pretas e setas vermelhas, respectivamente.
 
@@ -962,9 +962,9 @@ Na imagem, é possível visualizar quais telas estão associadas à função do 
 </div>
 <br>
 
-Para todo o desenvolvimento gráfico do wireframe, foi utilizado o Figma - um software que age como uma ferramenta de design gráfico.
+Para todo o desenvolvimento gráfico do wireframe, foi utilizado o Figma, um software que age como uma ferramenta de design gráfico.
 
-### Descrição detalhada das telas do wireframe e seus fluxos de navegação
+### 3.3.1 Descrição detalhada das telas do wireframe e seus fluxos de navegação
 
 ### Tela de seleção de função
 
@@ -972,7 +972,7 @@ Esse é o wireframe da tela de seleção de função do sistema, responsável po
 
 <br>
 <div align="center">
-  <b>Figura 9 — Tela de seleção de função</b><br>
+  <b>Figura 10 — Tela de seleção de função</b><br>
   <img src="../assets/wf_fun.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -989,11 +989,11 @@ A simplicidade visual da tela foi planejada para facilitar a identificação ime
 #### Tela de seleção de equipe
 
 
-A tela de escolha de equipe, apresentada na figura 9, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
+A tela de escolha de equipe, apresentada na figura 11, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
 
 <br>
 <div align="center">
-  <b>Figura 10 — Tela de seleção de equipe</b><br>
+  <b>Figura 11 — Tela de seleção de equipe</b><br>
   <img src="../assets/wf_eq.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1003,13 +1003,23 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
 
+### Tela de selção dos atletas
+
+<br>
+<div align="center">
+  <b>Figura 12 — Tela de seleção dos atletass</b><br>
+  <img src="../assets/tela_selecao_atletas.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
 #### Tela de gerenciamento de turnos
 
 Esse é o wireframe da interface de gerenciamento de turno dos corredores, acessada pelo operador do evento após a escolha de um participante na tela de seleção de corredor. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao corredor em atividade.
 
 <br>
 <div align="center">
-  <b>Figura 11 — Tela de gerenciamento de turnos</b><br>
+  <b>Figura 13 — Tela de gerenciamento de turnos</b><br>
   <img src="../assets/wf_ger.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1035,7 +1045,7 @@ Sua principal função é permitir que o operador defina qual das duas esteiras 
 
 <br>
 <div align="center">
-  <b>Figura 12 — Tela de seleção de esteira</b><br>
+  <b>Figura 14 — Tela de seleção de esteira</b><br>
   <img src="../assets/wf_es.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1049,33 +1059,37 @@ A interface também disponibiliza um botão “voltar”, localizado no canto su
 
 #### Modo TV
 
-O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 13. 
+O Modo TV é uma interface destinada especialmente para à exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 15. 
 
 <br>
 <div align="center">
-  <b>Figura 13 — Visualização modo TV</b><br>
+  <b>Figura 15 — Visualização modo TV</b><br>
   <img src="../assets/tela_modoTV.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
-O wireframe apresentado na figura 13 representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
+O wireframe apresentado na figura 15 representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
+### Tela de placar final
 
-A Figura 14 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
+A Figura 16 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
 <div align="center">
-  <b>Figura 14 — Tela de comparação final entre equipes </b><br>
+  <b>Figura 16 — Tela de comparação final entre equipes </b><br>
   <img src="../assets/tela_placarFinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
+
 O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados maiscompletos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
+
+### Tela de exportação de dados
 
 <br>
 <div align="center">
-  <b>Figura 15 — Exportação de dados</b><br>
+  <b>Figura 17 — Exportação de dados</b><br>
   <img src="../assets/Wf_ExportarDados.jpeg" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
