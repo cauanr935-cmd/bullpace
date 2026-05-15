@@ -948,7 +948,28 @@ Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem p
 
 Um wireframe consiste em uma representação visual esquemática que atua como o esqueleto estrutural de uma interface de usuário. O objetivo dessa ferramenta é estabelecer a hierarquia da informação e fluxos básicos de navegação, sem a aplicação de estilos visuais definitivos, como cores ou tipografia. A partir dessa estruturação inicial, é possível organizar a tela com foco exclusivo nas suas funcionalidades e usabilidades. A utilização de wireframes é fundamental no processo de desenvolvimento de um software, pois garante que toda a interface seja coerente com a lógica estabelecida pelos requisitos e regras de negócio do projeto. Além disso, a validação prévia desses layouts reduz a necessidade de retrabalho nas fases de design final e programação, garantindo, principalmente o alinhamento entre a arquitetura e a solução desenvolvida.
 
+### Tela de seleção de função
+
+Esse é o wireframe da interface de seleção de função do sistema, responsável por definir qual perfil de utilização será acessado. Sua principal função é direcionar o usuário para o conjunto de interfaces correspondente às suas responsabilidades dentro da operação do evento.
+
+<br>
+<div align="center">
+  <b>Figura 3.3.X — Tela de seleção de função</b><br>
+  <img src="../assets/wf_fun.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+A interface apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
+
+Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo de interfaces utilizado durante o acompanhamento operacional da corrida, incluindo as funcionalidades relacionadas ao controle dos turnos, definição de esteira e registro de checkpoints.
+
+Já a opção “ORGANIZADOR” direciona o usuário para o conjunto de interfaces destinadas ao gerenciamento administrativo do evento, permitindo acesso às telas específicas da organização da competição.
+
+A simplicidade visual da interface foi planejada para facilitar a identificação imediata das funções disponíveis e agilizar o acesso ao fluxo correto do sistema, especialmente em contextos de operação dinâmica durante o evento.
+
 #### Tela de seleção de equipe
+
 
 A tela de escolha de equipe, apresentada na figura 9, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
 
