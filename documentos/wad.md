@@ -1174,177 +1174,35 @@ Assim, o DER complementa o modelo ER ao detalhar cardinalidades, dependências e
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
-A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
+Nesta seção, a modelagem do banco de dados avança do DER para uma representação mais próxima da implementação. O **modelo relacional** organiza as entidades em tabelas, indicando chaves primárias e estrangeiras. Já o **modelo físico** detalha como essa estrutura será implementada no banco de dados, com tipos, restrições, índices e comandos SQL.
 
-### 3.6.3.2 Modelo Relacional Textual
- 
-A notação utilizada nas tabelas a seguir é:
- 
-- **sublinhado** — chave primária (PK)
-- `*` antes do nome — chave estrangeira (FK)
-- `→ tabela.coluna` — destino da FK
-- `?` ao final — NULL permitido
-- Sem marcação — NOT NULL
----
- 
-#### evento
- 
-```
-evento (
-    id_evento,
-    nome,
-    cidade,
-    estado,
-    data_inicio,             -- timestamptz
-    data_fim?,               -- timestamptz; preenchido ao encerrar
-    status,                  -- CHECK ∈ {planejado, em_andamento, finalizado, cancelado}
-    created_at
-)
-```
- 
----
- 
-#### equipe
- 
-```
-equipe (
-    id_equipe,
-    *id_evento  → evento.id_evento,
-    nome,
-    status,                  -- CHECK ∈ {ativa, inativa, finalizada}
-    km_total,                -- decimal; atualizado via trigger
-    created_at
-)
-```
- 
----
- 
-#### atleta
- 
-```
-atleta (
-    id_atleta,
-    *id_equipe  → equipe.id_equipe,
-    nome,
-    status,                  -- CHECK ∈ {ativo, inativo}
-    created_at
-)
-```
- 
----
- 
-#### esteira
- 
-```
-esteira (
-    id_esteira,
-    *id_equipe  → equipe.id_equipe,
-    *id_evento  → evento.id_evento,
-    marca,
-    modelo,
-    numero_serie,
-    status,                  -- CHECK ∈ {livre, em_uso, manutencao}
-    created_at
-)
-```
- 
----
- 
-#### funcao
- 
-```
-funcao (
-    id_funcao,
-    nome,                    -- UNIQUE; ex: 'operador', 'coordenador'
-    descricao,
-    status,                  -- CHECK ∈ {ativa, inativa}
-    created_at
-)
-```
- 
----
- 
-#### sessao\_operacional
- 
-```
-sessao_operacional (
-    id_sessao_operacional,
-    *id_evento  → evento.id_evento,
-    *id_funcao  → funcao.id_funcao,
-    inicio_em,               -- timestamptz; padrão: now()
-    fim_em?,                 -- timestamptz; NULL = sessão ativa
-    status                   -- CHECK ∈ {ativa, encerrada}
-)
-```
- 
----
- 
-#### turno
- 
-```
-turno (
-    id_turno,
-    *id_atleta              → atleta.id_atleta,
-    *id_esteira             → esteira.id_esteira,
-    *id_equipe              → equipe.id_equipe,
-    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
-    horario_inicio,          -- timestamptz
-    horario_fim?,            -- timestamptz
-    status,                  -- CHECK ∈ {em_andamento, encerrado, cancelado}
-    km_turno,                -- decimal; atualizado via trigger
-    created_at
-)
-```
- 
----
- 
-#### checkpoint
- 
-```
-checkpoint (
-    id_checkpoint,
-    *id_turno               → turno.id_turno,
-    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
-    km_acumulado,
-    pace_medio?,
-    velocidade_media?,
-    registrado_em,           -- timestamptz; padrão: now()
-    is_ajuste               -- boolean; default false
-)
-```
- 
----
- 
-#### Constraints Adicionais
- 
-**UNIQUE compostas:**
- 
-- `equipe(id_evento, nome)` — uma equipe não pode repetir nome no mesmo evento.
-- `esteira(id_equipe, numero_serie)` — número de série único por equipe.
-- `funcao(nome)` — nome de função único globalmente (catálogo).
-**UNIQUE parcial** (suporta RN04):
- 
-- `turno(id_equipe) WHERE status = 'em_andamento' AND deleted_at IS NULL` — apenas um turno em andamento por equipe.
-**CHECK não triviais:**
- 
-- `evento`: `data_fim > data_inicio` (quando `data_fim` preenchido).
-- `turno`: `horario_fim > horario_inicio` (quando `horario_fim` preenchido).
-- `sessao_operacional`: `fim_em > inicio_em` (quando `fim_em` preenchido).
-- `checkpoint`: `km_acumulado >= 0`.
-- `checkpoint`: `pace_medio > 0` (quando preenchido).
-- `checkpoint`: `velocidade_media > 0` (quando preenchido).
-- `turno`: `km_turno >= 0`.
-- `equipe`: `km_total >= 0`.
-**Política de ON DELETE:**
- 
-Todas as FKs adotam política `ON DELETE RESTRICT`, preservando o histórico de registros e impedindo a remoção acidental de entidades vinculadas a turnos, *checkpoints* ou sessões já registradas.
- 
-**Soft delete:**
- 
-A coluna `deleted_at timestamptz NULL` está presente em `evento`, `equipe`, `atleta`, `esteira`, `funcao`, `turno` e `checkpoint`. Não está presente em `sessao_operacional`, que funciona como log temporal *append-only*.
+Nesta etapa, é apresentado o modelo relacional textual derivado do DER da seção 3.6.2. O modelo físico será complementado posteriormente com a migration responsável pela criação do esquema no PostgreSQL.
+
+#### 3.6.3.1. Modelo Relacional Textual
+
+O modelo relacional textual apresenta as tabelas do sistema em formato resumido, destacando suas chaves primárias e estrangeiras. Ele funciona como uma tradução direta do DER para uma estrutura lógica de banco de dados, servindo como base para a implementação física.
+
+O modelo relacional descreve os esquemas em formato textual. Convenção: **PK em negrito**, FK em *itálico*.
+
+```text
+eventos(**id_evento**, nome, cidade, estado, data_inicio, data_fim, status)
+
+equipes(**id_equipe**, *id_evento*, nome, status, km_total)
+
+atletas(**id_atleta**, *id_equipe*, nome, status)
+
+esteiras(**id_esteira**, *id_equipe*, *id_evento*, marca, modelo, numero_serie, status)
+
+funcoes(**id_funcao**, nome, descricao, status)
+
+sessoes_operacionais(**id_sessao_operacional**, *id_evento*, *id_funcao*, inicio_em, fim_em, status)
+
+turnos(**id_turno**, *id_atleta*, *id_esteira*, *id_sessao_operacional*, horario_inicio, horario_fim, status, km_turno)
+
+checkpoints(**id_checkpoint**, *id_turno*, *id_sessao_operacional*, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
  
 
-## 3.6.3.1 Modelo físico
+## 3.6.3.2 Modelo físico
 
 O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
 
