@@ -1136,116 +1136,154 @@ Para a geração dos arquivos, o formato PDF cria um documento em formato de "te
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
-*Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
+Nesta seção, é apresentado o Modelo Entidade-Relacionamento do sistema em nível conceitual. O objetivo é identificar as principais entidades, seus atributos e os relacionamentos que representam as regras do domínio, sem ainda entrar em detalhes como tipos de dados, chaves primárias, chaves estrangeiras ou restrições de implementação.
 
+No contexto deste projeto, o modelo conceitual contempla a organização da prova por meio de **EVENTO**, a estruturação das **EQUIPES** e de seus **ATLETAS**, a disponibilização de **ESTEIRAS**, a realização de **TURNOS**, o registro de **CHECKPOINTS** e o controle operacional associado a **FUNCAO** e **SESSAO_OPERACIONAL**. Nesta etapa, o foco está na identificação das entidades, de seus atributos relevantes e dos relacionamentos que expressam as regras do domínio.
+
+<div align="center">
+  <sub>Imagem 1 - Modelo Entidade-Relacionamento Conceitual</sub><br>
+  <img src="assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
+  <sup>Fonte: Autores</sup>
+</div>
+
+No modelo apresentado, **EVENTO** atua como entidade organizadora da prova, relacionando-se com **EQUIPE**, **ESTEIRA** e **SESSAO_OPERACIONAL**. Cada **EQUIPE** é composta por **ATLETA**; cada **ATLETA** realiza **TURNO**; e cada **TURNO** gera registros de **CHECKPOINT**. A entidade **FUNCAO** classifica o tipo de atuação associado às sessões operacionais, permitindo representar funções como operador e coordenador sem adicionar entidades para cada perfil, fornecendo um modelo mais escalável. 
+
+Como se trata de um modelo conceitual, os atributos exibidos no diagrama devem ser interpretados apenas como características relevantes das entidades, e não como definição formal de tipos, chaves primárias, chaves estrangeiras ou restrições de implementação. Dessa forma, o modelo ER cumpre seu papel de estabilizar o vocabulário do domínio e servir de base para o detalhamento lógico apresentado no DER e, posteriormente, para sua tradução em relações no modelo relacional.
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-O Diagrama Entidade-Relacionamento (DER) representa o refinamento lógico do modelo conceitual apresentado na seção anterior. Nesta etapa, as entidades deixam de ser apenas conceitos de negócio e passam a ser descritas com atributos relevantes à estrutura do banco, identificação de chaves primárias (PK), chaves estrangeiras (FK) e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
+O **Diagrama Entidade-Relacionamento (DER)** representa o refinamento lógico do Modelo Entidade-Relacionamento apresentado na seção anterior. Enquanto o ER conceitual tem como foco identificar entidades, atributos e relacionamentos do domínio, o DER detalha essa estrutura com **chaves primárias (PK)**, **chaves estrangeiras (FK)** e cardinalidades explícitas em cada relação (LUCIDCHART, 2026).
 
-Diferentemente do modelo ER, cujo foco é conceitual, o DER aproxima a modelagem da organização lógica que será usada no banco de dados. Por isso, ele evidencia a dependência entre entidades, os vínculos entre os dados e a posição esperada das PKs e FKs no esquema. Além disso, o diagrama foi mantido coerente com o *Diagrama de Classes do Domínio (Seção 3.2.3), preservando as entidades centrais do sistema: **EVENTO, **EQUIPE, **ATLETA, **ESTEIRA, **TURNO, **CHECKPOINT, **FUNCAO* e *SESSAO_OPERACIONAL*.
+Dessa forma, o DER aproxima a modelagem da estrutura que será usada no banco de dados, indicando quais entidades dependem de outras e como os vínculos entre os dados serão representados logicamente. O diagrama também foi mantido coerente com o **Diagrama de Classes do Domínio (Seção 3.2.3)**, preservando as entidades centrais do sistema: **EVENTO**, **EQUIPE**, **ATLETA**, **ESTEIRA**, **TURNO**, **CHECKPOINT**, **FUNCAO** e **SESSAO_OPERACIONAL**.
 
 <div align="center">
   <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
   <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores(2026)</sup>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
 
-No DER, as cardinalidades explicitam a quantidade de ocorrências que uma entidade pode ter em relação a outra. No núcleo da prova, *EVENTO* se relaciona com *EQUIPE* em uma relação *1:N, pois um evento pode possuir várias equipes, enquanto cada equipe pertence a um único evento. A mesma lógica aparece entre **EVENTO* e *ESTEIRA*, já que um evento pode disponibilizar várias esteiras, mas cada esteira está associada a um único evento.
+No DER, as cardinalidades indicam a quantidade de ocorrências possíveis entre as entidades. No núcleo da prova, as relações principais foram modeladas como **1:N**, como em **EVENTO–EQUIPE**, **EVENTO–ESTEIRA**, **EQUIPE–ATLETA**, **ATLETA–TURNO**, **ESTEIRA–TURNO** e **TURNO–CHECKPOINT**. Isso significa que um evento pode possuir várias equipes e esteiras, uma equipe pode conter vários atletas, um atleta pode realizar vários turnos, uma esteira pode ser vinculada a vários turnos e um turno pode gerar vários checkpoints.
 
-Também foram definidas relações *1:N* entre *EQUIPE* e *ATLETA, **ATLETA* e *TURNO, **ESTEIRA* e *TURNO, e **TURNO* e *CHECKPOINT*. Assim, uma equipe pode conter vários atletas; um atleta pode realizar vários turnos; uma esteira pode ser vinculada a vários turnos; e um turno pode gerar vários checkpoints.
+Na parte operacional, **FUNCAO** se relaciona com **SESSAO_OPERACIONAL** em uma relação **1:N**, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador ou coordenador. Além disso, cada **SESSAO_OPERACIONAL** pertence a um **EVENTO** e pode registrar ações relevantes da operação, como o início de turnos e o registro de checkpoints.
 
-Na parte operacional, *FUNCAO* se relaciona com *SESSAO_OPERACIONAL* em uma relação *1:N, pois uma função pode estar associada a várias sessões operacionais, enquanto cada sessão operacional está vinculada a uma única função. Essa função representa o perfil de atuação utilizado no sistema, como operador, gestor ou coordenador. Além disso, cada **SESSAO_OPERACIONAL* pertence a um *EVENTO* e pode iniciar *TURNOS* e registrar *CHECKPOINTS*, permitindo rastrear ações relevantes da operação.
+A relação **EQUIPE–ESTEIRA** também foi definida como **1:N**, pois, no escopo atual, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não contempla histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi criada uma tabela associativa para esse vínculo.
 
-A relação *EQUIPE–ESTEIRA* foi definida como *1:N* porque, no escopo atual da operação, as esteiras são atribuídas diretamente a uma equipe durante o evento. Assim, uma equipe pode utilizar uma ou mais esteiras, enquanto cada esteira permanece vinculada a apenas uma equipe. Como o modelo atual não pretende registrar histórico de compartilhamento, troca ou realocação de esteiras entre equipes, não foi necessária a criação de uma tabela associativa.
+A nomenclatura das chaves segue o padrão `id_<entidade>` para facilitar a leitura e a futura implementação. As chaves primárias identificam unicamente cada registro, enquanto as chaves estrangeiras indicam as dependências entre as entidades. Por exemplo, a presença de `id_evento` em **EQUIPE** representa o vínculo entre equipe e evento, enquanto `id_turno` em **CHECKPOINT** indica a qual turno cada checkpoint pertence.
 
-A nomenclatura das chaves foi padronizada em id_<entidade> para PKs e FKs. Quando uma entidade participa de um relacionamento operacional específico, a chave estrangeira deve indicar claramente esse vínculo. Por exemplo, id_sessao_operacional em *CHECKPOINT* identifica a sessão responsável pelo registro daquele checkpoint.
-
-Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardinalidades, indica dependência entre entidades e antecipa a posição das PKs e FKs no esquema lógico. Com isso, a transição para o modelo relacional passa a ser direta e verificável.
+Assim, o DER complementa o modelo ER ao detalhar cardinalidades, dependências e chaves necessárias para a estrutura lógica dos dados. Com isso, ele prepara a transição para o modelo relacional, no qual esses relacionamentos passam a ser representados por tabelas e chaves estrangeiras.
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
-A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional, que descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. E o modelo físico, que traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
+A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
 
-### 3.6.3.1 Modelo Relacional textual
-
+### 3.6.3.2 Modelo Relacional Textual
+ 
 A notação utilizada nas tabelas a seguir é:
-
-__sublinhado__ — chave primária (PK)
-* antes do nome — chave estrangeira (FK)
-→ tabela.coluna — destino da FK
-? ao final — NULL permitido
-Sem marcação — NOT NULL
-
-evento
+ 
+- **sublinhado** — chave primária (PK)
+- `*` antes do nome — chave estrangeira (FK)
+- `→ tabela.coluna` — destino da FK
+- `?` ao final — NULL permitido
+- Sem marcação — NOT NULL
+---
+ 
+#### evento
+ 
+```
 evento (
-    __id_evento__,
+    id_evento,
     nome,
     cidade,
     estado,
     data_inicio,             -- timestamptz
     data_fim?,               -- timestamptz; preenchido ao encerrar
-    status,                  -- CHECK ∈ {planejado, em_andamento, encerrado}
-    created_at,
-    updated_at,
-    deleted_at?
+    status,                  -- CHECK ∈ {planejado, em_andamento, finalizado, cancelado}
+    created_at
 )
-equipe
+```
+ 
+---
+ 
+#### equipe
+ 
+```
 equipe (
-    __id_equipe__,
+    id_equipe,
     *id_evento  → evento.id_evento,
     nome,
-    status,                  -- CHECK ∈ {ativa, finalizada}
+    status,                  -- CHECK ∈ {ativa, inativa, finalizada}
     km_total,                -- decimal; atualizado via trigger
-    created_at,
-    updated_at,
-    deleted_at?
+    created_at
 )
-atleta
+```
+ 
+---
+ 
+#### atleta
+ 
+```
 atleta (
-    __id_atleta__,
+    id_atleta,
     *id_equipe  → equipe.id_equipe,
     nome,
     status,                  -- CHECK ∈ {ativo, inativo}
-    created_at,
-    updated_at,
-    deleted_at?
+    created_at
 )
-esteira
+```
+ 
+---
+ 
+#### esteira
+ 
+```
 esteira (
-    __id_esteira__,
+    id_esteira,
     *id_equipe  → equipe.id_equipe,
     *id_evento  → evento.id_evento,
     marca,
     modelo,
     numero_serie,
     status,                  -- CHECK ∈ {livre, em_uso, manutencao}
-    created_at,
-    updated_at,
-    deleted_at?
+    created_at
 )
-funcao
+```
+ 
+---
+ 
+#### funcao
+ 
+```
 funcao (
-    __id_funcao__,
+    id_funcao,
     nome,                    -- UNIQUE; ex: 'operador', 'coordenador'
     descricao,
     status,                  -- CHECK ∈ {ativa, inativa}
-    created_at,
-    updated_at,
-    deleted_at?
+    created_at
 )
-sessao_operacional
+```
+ 
+---
+ 
+#### sessao\_operacional
+ 
+```
 sessao_operacional (
-    __id_sessao_operacional__,
+    id_sessao_operacional,
     *id_evento  → evento.id_evento,
     *id_funcao  → funcao.id_funcao,
     inicio_em,               -- timestamptz; padrão: now()
     fim_em?,                 -- timestamptz; NULL = sessão ativa
     status                   -- CHECK ∈ {ativa, encerrada}
 )
-turno
+```
+ 
+---
+ 
+#### turno
+ 
+```
 turno (
-    __id_turno__,
+    id_turno,
     *id_atleta              → atleta.id_atleta,
     *id_esteira             → esteira.id_esteira,
     *id_equipe              → equipe.id_equipe,
@@ -1254,117 +1292,67 @@ turno (
     horario_fim?,            -- timestamptz
     status,                  -- CHECK ∈ {em_andamento, encerrado, cancelado}
     km_turno,                -- decimal; atualizado via trigger
-    created_at,
-    updated_at,
-    deleted_at?
+    created_at
 )
-checkpoint
+```
+ 
+---
+ 
+#### checkpoint
+ 
+```
 checkpoint (
-    __id_checkpoint__,
+    id_checkpoint,
     *id_turno               → turno.id_turno,
     *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
     km_acumulado,
     pace_medio?,
     velocidade_media?,
     registrado_em,           -- timestamptz; padrão: now()
-    is_ajuste,               -- boolean; default false
-    deleted_at?
+    is_ajuste               -- boolean; default false
 )
-Constraints adicionais
-UNIQUE compostas:
+```
+ 
+---
+ 
+#### Constraints Adicionais
+ 
+**UNIQUE compostas:**
+ 
+- `equipe(id_evento, nome)` — uma equipe não pode repetir nome no mesmo evento.
+- `esteira(id_equipe, numero_serie)` — número de série único por equipe.
+- `funcao(nome)` — nome de função único globalmente (catálogo).
+**UNIQUE parcial** (suporta RN04):
+ 
+- `turno(id_equipe) WHERE status = 'em_andamento' AND deleted_at IS NULL` — apenas um turno em andamento por equipe.
+**CHECK não triviais:**
+ 
+- `evento`: `data_fim > data_inicio` (quando `data_fim` preenchido).
+- `turno`: `horario_fim > horario_inicio` (quando `horario_fim` preenchido).
+- `sessao_operacional`: `fim_em > inicio_em` (quando `fim_em` preenchido).
+- `checkpoint`: `km_acumulado >= 0`.
+- `checkpoint`: `pace_medio > 0` (quando preenchido).
+- `checkpoint`: `velocidade_media > 0` (quando preenchido).
+- `turno`: `km_turno >= 0`.
+- `equipe`: `km_total >= 0`.
+**Política de ON DELETE:**
+ 
+Todas as FKs adotam política `ON DELETE RESTRICT`, preservando o histórico de registros e impedindo a remoção acidental de entidades vinculadas a turnos, *checkpoints* ou sessões já registradas.
+ 
+**Soft delete:**
+ 
+A coluna `deleted_at timestamptz NULL` está presente em `evento`, `equipe`, `atleta`, `esteira`, `funcao`, `turno` e `checkpoint`. Não está presente em `sessao_operacional`, que funciona como log temporal *append-only*.
+ 
 
-equipe(id_evento, nome) — uma equipe não pode repetir nome no mesmo evento.
-esteira(id_equipe, numero_serie) — número de série único por equipe.
-funcao(nome) — nome de função único globalmente (catálogo).
-
-UNIQUE parcial (suporta RN04):
-
-turno(id_equipe) WHERE status = 'em_andamento' AND deleted_at IS NULL — apenas um turno em andamento por equipe.
-
-CHECK não-triviais:
-
-evento: data_fim > data_inicio (quando data_fim preenchido)
-turno: horario_fim > horario_inicio (quando horario_fim preenchido)
-sessao_operacional: fim_em > inicio_em (quando fim_em preenchido)
-checkpoint: km_acumulado >= 0
-checkpoint: pace_medio > 0 (quando preenchido)
-checkpoint: velocidade_media > 0 (quando preenchido)
-turno: km_turno >= 0
-equipe: km_total >= 0
-
-Política de ON DELETE:
-Todas as FKs adotam política ON DELETE RESTRICT, preservando o histórico de registros e impedindo a remoção acidental de entidades vinculadas a turnos, checkpoints ou sessões já registradas.
-Soft delete:
-A coluna deleted_at timestamptz NULL está presente em evento, equipe, atleta, esteira, funcao, turno e checkpoint. Não está presente em sessao_operacional, que funciona como log temporal append-only.
-Triggers automáticas:
-
-updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possuem essa coluna.
-turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
-equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
-
-
-### Descrição das entidades
-
-evento
-
-A tabela evento representa cada edição do Red Bull 24 Horas registrada no sistema. Armazena dados gerais como nome, cidade, estado, datas de início e fim da prova e o status atual (planejado, em andamento ou encerrado). Cada evento agrega duas equipes competidoras e funciona como nó raiz da modelagem, vinculando todas as demais entidades a uma edição específica da competição. Essa estrutura permite que o sistema suporte futuras edições do evento sem misturar dados históricos de provas diferentes.
-
-equipe
-
-A tabela equipe armazena as duas equipes competidoras de cada evento. Cada equipe possui nome, status (ativa ou finalizada), o total de quilômetros acumulados (km_total) e está vinculada a um evento por meio da chave estrangeira id_evento. Conforme a RN01, todo evento possui exatamente duas equipes, e cada equipe agrega seus 16 atletas e suas 2 esteiras. O campo km_total é mantido automaticamente por trigger no banco e representa a soma dos turnos encerrados da equipe, sendo o valor usado para determinar a vencedora conforme a RN23.
-
-atleta
-
-A tabela atleta representa os participantes pré-cadastrados de cada equipe. Cada atleta possui nome, status (ativo ou inativo) e está vinculado a uma equipe por meio da FK id_equipe. Conforme a RN02, os 16 atletas de cada equipe devem estar previamente cadastrados antes do evento, sendo proibida a criação de novos perfis durante a operação. Um atleta pode realizar múltiplos turnos ao longo das 24 horas (RN13), mas cada turno está sempre vinculado a um único atleta.
-
-esteira
-
-A tabela esteira armazena os equipamentos físicos utilizados na prova. Cada esteira é da marca Technogym e contém informações de marca, modelo, número de série e status (livre, em uso ou manutenção). A esteira está vinculada simultaneamente a uma equipe (via id_equipe) e ao evento (via id_evento), facilitando consultas por evento sem necessidade de JOIN com a tabela equipe. Conforme a RN01, cada equipe possui exatamente duas esteiras, e o sistema sugere a alternância entre elas a cada novo turno conforme a RN05.
-
-funcao
-
-A tabela funcao é um catálogo de papéis operacionais que podem ser exercidos no sistema. Cada registro possui nome (ex: 'operador', 'coordenador'), descrição textual e status (ativa ou inativa). Espera-se que essa tabela contenha um número pequeno e fixo de linhas, representando os perfis necessários à operação do evento. A função é referenciada por cada sessao_operacional, indicando o papel exercido durante o intervalo de operação.
-
-sessao_operacional
-
-A tabela sessao_operacional registra os intervalos de tempo durante os quais uma função operacional foi exercida em um determinado evento. Cada sessão possui vínculo com um evento (id_evento) e uma função (id_funcao), além dos timestamps de início (inicio_em) e fim (fim_em) e o status (ativa ou encerrada). Diferentemente das demais tabelas, sessao_operacional não adota soft delete por se tratar de um log temporal de natureza append-only. Cada turno e cada checkpoint registrados durante a sessão mantêm vínculo com ela, garantindo a rastreabilidade da autoria das operações.
-
-turno
-
-A tabela turno representa cada sessão de corrida individual de um atleta em uma esteira. É uma das entidades centrais da modelagem, conectando atleta, esteira, equipe e a sessão operacional em que o registro foi realizado. Cada turno armazena horários de início e fim, status (em andamento, encerrado ou cancelado), o total de quilômetros percorridos (km_turno) e referências às quatro entidades relacionadas. A FK id_equipe, embora derivável por transitividade via atleta ou esteira, foi mantida como denormalização controlada para viabilizar a constraint da RN04, que garante a unicidade do turno ativo por equipe via índice UNIQUE parcial.
-
-checkpoint
-
-A tabela checkpoint armazena os registros periódicos de quilometragem inseridos durante um turno ativo a cada 5 minutos (RN07). Cada checkpoint contém o KM acumulado obrigatório (RN18), campos opcionais de pace médio e velocidade média, timestamp automático do servidor (RN12), e vínculos tanto com o turno (id_turno) quanto com a sessão operacional em que foi registrado (id_sessao_operacional). A coluna is_ajuste permanece no schema como flag preparada para a futura tabela ajuste, ainda não implementada nesta versão. A incrementalidade dos valores de KM dentro de um mesmo turno é garantida no nível da aplicação (RN06).
-
-###  Relacionamentos e cardinalidades
-
-| Tabela 1 | Tabela 2 | Chave Estrangeira | Cardinalidade | Descrição |
-| --- | --- | --- | --- | --- |
-| evento | equipe | equipe.id_evento | 1:N | Um evento possui várias equipes, mas cada equipe pertence a um único evento. |
-| evento | esteira | esteira.id_evento | 1:N | Um evento possui várias esteiras, mas cada esteira pertence a um único evento. Relação derivada por denormalização para facilitar consultas. |
-| evento | sessao_operacional | sessao_operacional.id_evento | 1:N | Um evento possui várias sessões operacionais, mas cada sessão pertence a um único evento. |
-| equipe | atleta | atleta.id_equipe | 1:N | Uma equipe possui vários atletas, mas cada atleta pertence a uma única equipe. |
-| equipe | esteira | esteira.id_equipe | 1:N | Uma equipe possui várias esteiras, mas cada esteira pertence a uma única equipe. |
-| equipe | turno | turno.id_equipe | 1:N | Uma equipe possui vários turnos ao longo da competição, mas cada turno pertence a uma única equipe. Relação derivada por denormalização controlada para habilitar a constraint da RN04. |
-| atleta | turno | turno.id_atleta | 1:N | Um atleta pode realizar vários turnos durante as 24 horas, mas cada turno pertence a um único atleta. |
-| esteira | turno | turno.id_esteira | 1:N | Uma esteira pode receber vários turnos ao longo do evento, mas cada turno utiliza uma única esteira. |
-| funcao | sessao_operacional | sessao_operacional.id_funcao | 1:N | Uma função pode ser exercida em várias sessões operacionais, mas cada sessão exerce uma única função. |
-| sessao_operacional | turno | turno.id_sessao_operacional | 1:N | Uma sessão operacional pode iniciar vários turnos, mas cada turno é iniciado em uma única sessão. |
-| sessao_operacional | checkpoint | checkpoint.id_sessao_operacional | 1:N | Uma sessão operacional pode registrar vários checkpoints, mas cada checkpoint é registrado em uma única sessão. |
-| turno | checkpoint | checkpoint.id_turno | 1:N | Um turno possui vários checkpoints registrados a cada 5 minutos, mas cada checkpoint pertence a um único turno. |
-
-*Fonte: Elaborado pelos autores (2026).*
-
-# 3.6.3.2 Modelo físico
+## 3.6.3.1 Modelo físico
 
 O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
 
-# Migrations
+### Migrations
 
 As *migrations* são arquivos em SQL versionados que tem a função de descrever as mudanças no banco de dados de forma reproduzível e totalmente ordenada. Cada *migration* representa um passo na "história" evolutiva do banco.
 
-## Justificativa para a numeração
+### Justificativa para a numeração
 
 A numeração é utilizada para garantir que o banco de dados seja criado na ordem correta. Caso uma tabela dependente seja criada fora de ordem, como, por exemplo, a criação da tabela `TURNO` antes da tabela `ATLETA`, o sistema retornará um erro, pois `TURNO` possui uma chave estrangeira (FK) que referencia `ATLETA`.
 
@@ -1381,7 +1369,7 @@ A estrutura de arquivos de *migrations* e suas respectivas dependências organiz
 * `0009_insert_dados_iniciais.sql`: depende de `FUNCAO`;
 * `0010_create_views.sql`: depende de todas as tabelas.
 
-## Scripts das Migrations
+### Scripts das Migrations
 
 Abaixo encontram-se os scripts de *migrations* que implementam a modelagem física do sistema. Eles agrupam as instruções DDL (Data Definition Language) para a construção progressiva do banco de dados, definindo entidades, colunas e restrições de validação (constraints).
 
@@ -1510,6 +1498,7 @@ CREATE TABLE turno (
     id_turno               SERIAL PRIMARY KEY,
     id_atleta              INT NOT NULL,
     id_esteira             INT NOT NULL,
+    id_equipe              INT NOT NULL,
     id_sessao_operacional  INT NOT NULL,
     horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
     horario_fim            TIMESTAMP,
@@ -1627,6 +1616,43 @@ LEFT JOIN sessao_operacional so_cp ON so_cp.id_sessao_operacional = cp.id_sessao
 LEFT JOIN funcao f_cp ON f_cp.id_funcao = so_cp.id_funcao
 ORDER BY ev.id_evento, eq.id_equipe, t.horario_inicio, cp.registrado_em;
 ```
+
+
+
+
+### 3.6.3.3 Descrição das entidades
+
+#### evento
+
+A tabela evento representa cada edição do Red Bull 24 Horas registrada no sistema. Armazena dados gerais como nome, cidade, estado, datas de início e fim da prova e o status atual (planejado, em andamento ou encerrado). Cada evento agrega duas equipes competidoras e funciona como nó raiz da modelagem, vinculando todas as demais entidades a uma edição específica da competição. Essa estrutura permite que o sistema suporte futuras edições do evento sem misturar dados históricos de provas diferentes.
+
+#### equipe
+
+A tabela equipe armazena as duas equipes competidoras de cada evento. Cada equipe possui nome, status (ativa ou finalizada), o total de quilômetros acumulados (km_total) e está vinculada a um evento por meio da chave estrangeira id_evento. Conforme a RN01, todo evento possui exatamente duas equipes, e cada equipe agrega seus 16 atletas e suas 2 esteiras. O campo km_total é mantido automaticamente por trigger no banco e representa a soma dos turnos encerrados da equipe, sendo o valor usado para determinar a vencedora conforme a RN23.
+
+#### atleta
+
+A tabela atleta representa os participantes pré-cadastrados de cada equipe. Cada atleta possui nome, status (ativo ou inativo) e está vinculado a uma equipe por meio da FK id_equipe. Conforme a RN02, os 16 atletas de cada equipe devem estar previamente cadastrados antes do evento, sendo proibida a criação de novos perfis durante a operação. Um atleta pode realizar múltiplos turnos ao longo das 24 horas (RN13), mas cada turno está sempre vinculado a um único atleta.
+
+#### esteira
+
+A tabela esteira armazena os equipamentos físicos utilizados na prova. Cada esteira é da marca Technogym e contém informações de marca, modelo, número de série e status (livre, em uso ou manutenção). A esteira está vinculada simultaneamente a uma equipe (via id_equipe) e ao evento (via id_evento), facilitando consultas por evento sem necessidade de JOIN com a tabela equipe. Conforme a RN01, cada equipe possui exatamente duas esteiras, e o sistema sugere a alternância entre elas a cada novo turno conforme a RN05.
+
+#### funcao
+
+A tabela funcao é um catálogo de papéis operacionais que podem ser exercidos no sistema. Cada registro possui nome (ex: 'operador', 'coordenador'), descrição textual e status (ativa ou inativa). Espera-se que essa tabela contenha um número pequeno e fixo de linhas, representando os perfis necessários à operação do evento. A função é referenciada por cada sessao_operacional, indicando o papel exercido durante o intervalo de operação.
+
+#### sessao_operacional
+
+A tabela sessao_operacional registra os intervalos de tempo durante os quais uma função operacional foi exercida em um determinado evento. Cada sessão possui vínculo com um evento (id_evento) e uma função (id_funcao), além dos timestamps de início (inicio_em) e fim (fim_em) e o status (ativa ou encerrada). Diferentemente das demais tabelas, sessao_operacional não adota soft delete por se tratar de um log temporal de natureza append-only. Cada turno e cada checkpoint registrados durante a sessão mantêm vínculo com ela, garantindo a rastreabilidade da autoria das operações.
+
+#### turno
+
+A tabela turno representa cada sessão de corrida individual de um atleta em uma esteira. É uma das entidades centrais da modelagem, conectando atleta, esteira, equipe e a sessão operacional em que o registro foi realizado. Cada turno armazena horários de início e fim, status (em andamento, encerrado ou cancelado), o total de quilômetros percorridos (km_turno) e referências às quatro entidades relacionadas. A FK id_equipe, embora derivável por transitividade via atleta ou esteira, foi mantida como denormalização controlada para viabilizar a constraint da RN04, que garante a unicidade do turno ativo por equipe via índice UNIQUE parcial.
+
+#### checkpoint
+
+A tabela checkpoint armazena os registros periódicos de quilometragem inseridos durante um turno ativo a cada 5 minutos (RN07). Cada checkpoint contém o KM acumulado obrigatório (RN18), campos opcionais de pace médio e velocidade média, timestamp automático do servidor (RN12), e vínculos tanto com o turno (id_turno) quanto com a sessão operacional em que foi registrado (id_sessao_operacional). A coluna is_ajuste permanece no schema como flag preparada para a futura tabela ajuste, ainda não implementada nesta versão. A incrementalidade dos valores de KM dentro de um mesmo turno é garantida no nível da aplicação (RN06).
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
