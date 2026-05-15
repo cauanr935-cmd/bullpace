@@ -1101,7 +1101,7 @@ Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardin
 
 A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
 
-3.6.3.2 Modelo Relacional textual
+### 3.6.3.2 Modelo Relacional textual
 
 A notação utilizada nas tabelas a seguir é:
 
@@ -1510,7 +1510,7 @@ ORDER BY ev.id_evento, eq.id_equipe, t.horario_inicio, cp.registrado_em;
 
 
 
-3.6.3.3 Descrição das entidades
+### 3.6.3.3 Descrição das entidades
 
 evento
 
@@ -1543,6 +1543,25 @@ A tabela turno representa cada sessão de corrida individual de um atleta em uma
 checkpoint
 
 A tabela checkpoint armazena os registros periódicos de quilometragem inseridos durante um turno ativo a cada 5 minutos (RN07). Cada checkpoint contém o KM acumulado obrigatório (RN18), campos opcionais de pace médio e velocidade média, timestamp automático do servidor (RN12), e vínculos tanto com o turno (id_turno) quanto com a sessão operacional em que foi registrado (id_sessao_operacional). A coluna is_ajuste permanece no schema como flag preparada para a futura tabela ajuste, ainda não implementada nesta versão. A incrementalidade dos valores de KM dentro de um mesmo turno é garantida no nível da aplicação (RN06).
+
+### 3.6.3.4 Relacionamentos e cardinalidades
+
+| Tabela 1 | Tabela 2 | Chave Estrangeira | Cardinalidade | Descrição |
+| --- | --- | --- | --- | --- |
+| evento | equipe | equipe.id_evento | 1:N | Um evento possui várias equipes, mas cada equipe pertence a um único evento. |
+| evento | esteira | esteira.id_evento | 1:N | Um evento possui várias esteiras, mas cada esteira pertence a um único evento. Relação derivada por denormalização para facilitar consultas. |
+| evento | sessao_operacional | sessao_operacional.id_evento | 1:N | Um evento possui várias sessões operacionais, mas cada sessão pertence a um único evento. |
+| equipe | atleta | atleta.id_equipe | 1:N | Uma equipe possui vários atletas, mas cada atleta pertence a uma única equipe. |
+| equipe | esteira | esteira.id_equipe | 1:N | Uma equipe possui várias esteiras, mas cada esteira pertence a uma única equipe. |
+| equipe | turno | turno.id_equipe | 1:N | Uma equipe possui vários turnos ao longo da competição, mas cada turno pertence a uma única equipe. Relação derivada por denormalização controlada para habilitar a constraint da RN04. |
+| atleta | turno | turno.id_atleta | 1:N | Um atleta pode realizar vários turnos durante as 24 horas, mas cada turno pertence a um único atleta. |
+| esteira | turno | turno.id_esteira | 1:N | Uma esteira pode receber vários turnos ao longo do evento, mas cada turno utiliza uma única esteira. |
+| funcao | sessao_operacional | sessao_operacional.id_funcao | 1:N | Uma função pode ser exercida em várias sessões operacionais, mas cada sessão exerce uma única função. |
+| sessao_operacional | turno | turno.id_sessao_operacional | 1:N | Uma sessão operacional pode iniciar vários turnos, mas cada turno é iniciado em uma única sessão. |
+| sessao_operacional | checkpoint | checkpoint.id_sessao_operacional | 1:N | Uma sessão operacional pode registrar vários checkpoints, mas cada checkpoint é registrado em uma única sessão. |
+| turno | checkpoint | checkpoint.id_turno | 1:N | Um turno possui vários checkpoints registrados a cada 5 minutos, mas cada checkpoint pertence a um único turno. |
+
+*Fonte: Elaborado pelos autores (2026).*
 
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
