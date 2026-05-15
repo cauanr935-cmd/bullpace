@@ -1056,6 +1056,143 @@ Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardin
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
+A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
+
+3.6.3.2 Modelo Relacional textual 
+
+A notação utilizada nas tabelas a seguir é:
+
+__sublinhado__ — chave primária (PK)
+* antes do nome — chave estrangeira (FK)
+→ tabela.coluna — destino da FK
+? ao final — NULL permitido
+Sem marcação — NOT NULL
+
+evento
+evento (
+    __id_evento__,
+    nome,
+    cidade,
+    estado,
+    data_inicio,             -- timestamptz
+    data_fim?,               -- timestamptz; preenchido ao encerrar
+    status,                  -- CHECK ∈ {planejado, em_andamento, encerrado}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+equipe
+equipe (
+    __id_equipe__,
+    *id_evento  → evento.id_evento,
+    nome,
+    status,                  -- CHECK ∈ {ativa, finalizada}
+    km_total,                -- decimal; atualizado via trigger
+    created_at,
+    updated_at,
+    deleted_at?
+)
+atleta
+atleta (
+    __id_atleta__,
+    *id_equipe  → equipe.id_equipe,
+    nome,
+    status,                  -- CHECK ∈ {ativo, inativo}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+esteira
+esteira (
+    __id_esteira__,
+    *id_equipe  → equipe.id_equipe,
+    *id_evento  → evento.id_evento,
+    marca,
+    modelo,
+    numero_serie,
+    status,                  -- CHECK ∈ {livre, em_uso, manutencao}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+funcao
+funcao (
+    __id_funcao__,
+    nome,                    -- UNIQUE; ex: 'operador', 'coordenador'
+    descricao,
+    status,                  -- CHECK ∈ {ativa, inativa}
+    created_at,
+    updated_at,
+    deleted_at?
+)
+sessao_operacional
+sessao_operacional (
+    __id_sessao_operacional__,
+    *id_evento  → evento.id_evento,
+    *id_funcao  → funcao.id_funcao,
+    inicio_em,               -- timestamptz; padrão: now()
+    fim_em?,                 -- timestamptz; NULL = sessão ativa
+    status                   -- CHECK ∈ {ativa, encerrada}
+)
+turno
+turno (
+    __id_turno__,
+    *id_atleta              → atleta.id_atleta,
+    *id_esteira             → esteira.id_esteira,
+    *id_equipe              → equipe.id_equipe,
+    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
+    horario_inicio,          -- timestamptz
+    horario_fim?,            -- timestamptz
+    status,                  -- CHECK ∈ {em_andamento, encerrado, cancelado}
+    km_turno,                -- decimal; atualizado via trigger
+    created_at,
+    updated_at,
+    deleted_at?
+)
+checkpoint
+checkpoint (
+    __id_checkpoint__,
+    *id_turno               → turno.id_turno,
+    *id_sessao_operacional  → sessao_operacional.id_sessao_operacional,
+    km_acumulado,
+    pace_medio?,
+    velocidade_media?,
+    registrado_em,           -- timestamptz; padrão: now()
+    is_ajuste,               -- boolean; default false
+    deleted_at?
+)
+Constraints adicionais
+UNIQUE compostas:
+
+equipe(id_evento, nome) — uma equipe não pode repetir nome no mesmo evento.
+esteira(id_equipe, numero_serie) — número de série único por equipe.
+funcao(nome) — nome de função único globalmente (catálogo).
+
+UNIQUE parcial (suporta RN04):
+
+turno(id_equipe) WHERE status = 'em_andamento' AND deleted_at IS NULL — apenas um turno em andamento por equipe.
+
+CHECK não-triviais:
+
+evento: data_fim > data_inicio (quando data_fim preenchido)
+turno: horario_fim > horario_inicio (quando horario_fim preenchido)
+sessao_operacional: fim_em > inicio_em (quando fim_em preenchido)
+checkpoint: km_acumulado >= 0
+checkpoint: pace_medio > 0 (quando preenchido)
+checkpoint: velocidade_media > 0 (quando preenchido)
+turno: km_turno >= 0
+equipe: km_total >= 0
+
+Política de ON DELETE:
+Todas as FKs adotam política ON DELETE RESTRICT, preservando o histórico de registros e impedindo a remoção acidental de entidades vinculadas a turnos, checkpoints ou sessões já registradas.
+Soft delete:
+A coluna deleted_at timestamptz NULL está presente em evento, equipe, atleta, esteira, funcao, turno e checkpoint. Não está presente em sessao_operacional, que funciona como log temporal append-only.
+Triggers automáticas:
+
+updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possuem essa coluna.
+turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
+equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
+=======
 # 3.6.3.1 Modelo físico
 
 O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
