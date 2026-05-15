@@ -781,6 +781,45 @@ Quando necessário, são utilizadas as relações <include> e <extend> no diagra
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
+O diagrama de classes do domínio representa a estrutura estática do sistema BullPace, evidenciando as entidades envolvidas na operação do Red Bull 24 Horas, seus atributos, métodos e os relacionamentos que governam o fluxo de dados entre elas. O modelo foi construído segundo a notação UML, diferenciando associações, generalizações e dependências conforme o padrão da linguagem (SOMMERVILLE, 2019).
+
+#### Hierarquia de Usuários
+
+A classe **Usuários** é a superclasse do sistema e centraliza os atributos compartilhados por todos os perfis: `+id: int` (público) e `-tipoUsuário: string` (privado). A partir dela, três subclasses são derivadas por herança, representada no diagrama pelo triângulo vazio da notação UML:
+
+**Promotor(a) de Field Marketing** é o perfil operacional do evento. Possui o atributo `+equipe: string` e os métodos `-registrarEntradaCorredor()` e `-registrarSaídaCorredor()`, que correspondem diretamente ao controle de início e encerramento dos turnos de cada atleta na esteira. Esse papel é o executor principal das User Stories US01 a US10, sendo responsável pelo registro contínuo ao longo das 24 horas da competição.
+
+**Coordenador(a) de Operações de Campo** é o perfil de supervisão e intervenção. Seus métodos `+corrigirRegistro()`, `+validarDados()`, `+visualizarDados()` e `-atualizarRanking()` permitem a gestão e a correção centralizada dos dados registrados pelos promotores. Esse perfil corresponde à Gestora de Operações descrita nas personas do projeto, responsável por validar resultados e garantir a integridade dos dados para a apuração final.
+
+**Corredor(a)** representa o atleta participante da competição. Possui os atributos `+nome: string` e `+equipe: string`, além do método `+correr()`. A classe está associada diretamente a **Equipe** (multiplicidade n:1) e a **RegistrarCorrida** (multiplicidade 1:n), uma vez que um corredor pode realizar múltiplos turnos ao longo do evento.
+
+#### Entidades Centrais do Domínio
+
+**RegistrarCorrida** é a classe de maior centralidade no modelo, pois encapsula o dado mais crítico da competição: o registro de cada turno realizado por um atleta em uma esteira. Seus atributos são todos privados: `-id: Int`, `-dataHoraInicio: date`, `-dataHoraFim: date`, `-kmInicial: decimal`, `-kmFinal: decimal`, `-kmPercorrido: decimal`, `-fotoComprovante: string` e `-status: string`. Os métodos `-calcularKmPercorrido()`, `-anexarFoto()`, `-finalizarRegistro()` e `-calcularTotalKm()` encapsulam as regras de negócio ligadas ao registro e consolidação da quilometragem, em especial a RN06 (progressão de quilometragem), a RN10 (cálculo do placar em tempo real) e a RN12 (timestamp automático, impedindo edição manual de horários pelo operador). A presença dos campos `kmInicial` e `kmFinal` viabiliza o cálculo do `kmPercorrido` sem dependência de integração direta com as esteiras Technogym.
+
+**Evento** representa a instância da competição e serve como âncora temporal do sistema. Seus atributos públicos são `+id: int`, `+estado: string`, `+cidade: string` e `+data: date`, e seus métodos `+iniciarEvento()` e `+encerrarEvento()` controlam o ciclo de vida da competição. A relação com **RegistrarCorrida** é de 1:n: um único evento agrega múltiplos registros de corrida, produzidos por diferentes corredores em diferentes esteiras ao longo das 24 horas. A relação com **Esteira** também é de 1:n, pois um evento opera simultaneamente com múltiplas esteiras.
+
+**Equipe** agrega os corredores e acumula a quilometragem coletiva que determina o resultado da competição. Seus atributos são `-id: int` (privado), `+nome: string` (público), `-totalKM: decimal` (privado) e `+status: string` (público). O atributo `totalKM` é o valor consolidado exibido no placar em tempo real e na tela de resultado final, atendendo aos RFs RF008 e RF009. O `status` controla o estado da equipe ao longo do evento, sendo relevante para o encerramento e a geração do resultado final (RF010). A multiplicidade com **Corredor(a)** é n:1, e com **Esteira** é n:n.
+
+**Esteira** representa o equipamento físico sobre o qual cada corredor executa seu turno. Possui os atributos `+id: int`, `+marca: string`, `+modelo: string` e `+turno: string`, e os métodos `+registrarTempo()` e `+registrarKm()`, que formalizam a captura dos dados de desempenho por turno. Por não haver integração direta com as esteiras Technogym, esses métodos representam o ponto de entrada manual assistida pelo operador. A associação com **RegistrarCorrida** é de n:n: uma esteira hospeda múltiplos turnos ao longo do evento, e cada registro de corrida está vinculado a uma esteira específica.
+
+#### Relacionamentos
+
+| Relacionamento | Tipo | Cardinalidade | Descrição |
+|---|---|---|---|
+| Usuários -> Promotor(a) / Coordenador(a) / Corredor(a) | Generalização (herança) | - | Subclasses especializadas que herdam `id` e `tipoUsuário` da superclasse |
+| Corredor(a) -> RegistrarCorrida | Associação | 1 : n | Um corredor realiza múltiplos turnos ao longo das 24 horas |
+| Corredor(a) -> Equipe | Associação | n : 1 | Múltiplos corredores compõem uma única equipe |
+| RegistrarCorrida -> Evento | Associação | n : 1 | Múltiplos registros de corrida pertencem a um único evento |
+| Evento -> Esteira | Associação | 1 : n | Um evento disponibiliza múltiplas esteiras para uso simultâneo |
+| Equipe -> Esteira | Associação | n : n | Equipes utilizam esteiras em turnos distintos ao longo da competição |
+| Promotor(a) -> RegistrarCorrida | Dependência (tracejado) | 1 : n | O promotor aciona os fluxos de registro de entrada e saída do corredor |
+| Coordenador(a) -> RegistrarCorrida | Dependência (tracejado) | 1 : n | O coordenador valida, corrige e visualiza os registros de corrida |
+
+#### Cobertura de Requisitos
+
+O diagrama de classes cobre diretamente os principais requisitos funcionais e regras de negócio do sistema. A classe **RegistrarCorrida**, com seus atributos de KM inicial, final e percorrido, atende ao RF002 (registro de turno) e ao RF003 (registro de checkpoint), e reflete a RN06 (progressão de quilometragem) por meio do método `calcularKmPercorrido()`. Os campos `dataHoraInicio` e `dataHoraFim` garantem a rastreabilidade temporal exigida pela RN12, impedindo edição manual de horários. O atributo `totalKM` de **Equipe** alimenta o placar em tempo real e o resultado final, atendendo às RNs RN10 e RN17. O atributo `status` de **RegistrarCorrida** e de **Equipe** viabiliza o controle dos turnos ativos e o encerramento da competição, necessários para os RFs RF004 e RF010. Por fim, a separação entre os perfis **Promotor(a)** e **Coordenador(a)** na hierarquia de usuários reflete os papéis operacionais identificados nas personas do projeto, garantindo que as responsabilidades de registro e supervisão estejam formalmente representadas na estrutura do domínio.
+
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
 #### 3.2.4 — Mapeamento das Camadas
@@ -851,7 +890,7 @@ Como o sistema é uma API web, todas as mensagens entre as camadas são síncron
 `salvarCheckpoint(dados)`.
 
 **Service → Repository (consulta)**
-1`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
+`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
 
 **Repository → Banco (consulta)**
 `SELECT * FROM checkpoints WHERE turno_id = ? ORDER BY created_at DESC LIMIT 1`.
@@ -998,7 +1037,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 <br>
 <div align="center">
   <b>Figura 3.3.x — Exportação de dados</b><br>
-  <img src="../assets/Wireframe.Export.dados.png" width="100%"><br>
+  <img src="../assets/Wf_ExportarDados.jpeg" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
@@ -1062,7 +1101,7 @@ Assim, o DER resolve aquilo que o modelo ER ainda não detalha: explicita cardin
 
 A modelagem do banco de dados do BullPace foi estruturada em dois níveis complementares. O modelo relacional descreve a organização lógica das informações, definindo tabelas, atributos e os relacionamentos entre elas por meio de chaves primárias e estrangeiras. Já o modelo físico traduz essa estrutura em código executável para o PostgreSQL, incluindo tipos de dados, restrições de integridade, índices e demais mecanismos que asseguram o funcionamento do sistema. A escolha do PostgreSQL, gerenciado pelo Supabase, foi determinante para implementar diretamente no banco regras de negócio críticas à apuração da competição: o soft delete preserva todo o histórico conforme a RN14, constraints CHECK validam os valores de status, índices parciais garantem regras como a RN04 (turno ativo único por equipe) e triggers automatizam tanto campos de auditoria quanto totais de quilometragem por turno e por equipe. Esta seção apresenta o modelo relacional textual derivado do DER da seção 3.6.2, o diagrama do modelo físico e o código DDL completo da migration que cria o esquema.
 
-3.6.3.2 Modelo Relacional textual 
+3.6.3.2 Modelo Relacional textual
 
 A notação utilizada nas tabelas a seguir é:
 
@@ -1196,8 +1235,6 @@ Triggers automáticas:
 updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possuem essa coluna.
 turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
 equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
-
-=======
 # 3.6.3.1 Modelo físico
 
 O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
@@ -1240,7 +1277,7 @@ CREATE TABLE evento (
 
     CONSTRAINT ck_evento_status CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
     CONSTRAINT ck_evento_datas CHECK (data_fim > data_inicio)
-); 
+);
 ```
 
 **0002_create_funcao.sql**
@@ -1473,7 +1510,7 @@ ORDER BY ev.id_evento, eq.id_equipe, t.horario_inicio, cp.registrado_em;
 
 
 
-3.6.3.3 Descrição das entidades 
+3.6.3.3 Descrição das entidades
 
 evento
 
