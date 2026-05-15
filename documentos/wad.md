@@ -26,7 +26,7 @@
 
 [7. Conclusões e trabalhos futuros](#c7)
 
-[8. Referências](c#8)
+[8. Referências](#c8)
 
 [Anexos](#c9)
 
@@ -51,7 +51,7 @@ Com isso, espera-se substituir o uso da prancheta por um fluxo digital mais conf
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [2](#ref-2), para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
+As 5 Forças de Porter são um modelo estratégico desenvolvido pelo professor Michael Porter (Harvard, 1979) [2](#ref-2), para analisar o nível de competitividade de um setor e apoiar a tomada de decisões estratégicas.
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na figura 1.
 <br>
 <div align="center">
@@ -76,13 +76,13 @@ A ameaça é média. Os substitutos imediatos não são outras plataformas digit
 #### 5. Poder de barganha dos clientes
 O poder de barganha é alto. O projeto possui um cenário de monopsônio, onde há apenas um cliente direto: a Red Bull (representada pelo time de Field Marketing). Como único "comprador" e definidor de requisitos, o cliente tem total controle sobre o escopo, as prioridades e os critérios de aceitação. A ausência de outros clientes no horizonte do projeto aumenta a autoridade da Red Bull para exigir ajustes e determinar o sucesso ou fracasso da solução.
 
-### Conclusão
+#### Conclusão
 Com base nessa análise das cinco forças do projeto, pode ser concluído que o ambiente competitivo se mostra favorável à implementação da ferramenta. A rivalidade praticamente inexistente, somada ao baixo poder de barganha dos fornecedores, contribui para um cenário de "oceano azul", no qual a pressão externa de mercado é mínima pelo nível de especificidade do nicho e grande diversidade de recursos tecnológicos.
 
 Entretanto, o equilíbrio estratégico do projeto é sensível a dois fatores: 
-O primeiro é o poder de barganha elevado da Red Bull, que, por ser um cliente único, transforma a relação comercial em uma dependência direta de validação e alinhamento de expectativas.. O segundo é a ameaça de substitutos, que foi classificada como média, uma vez que a simplicidade do método analógico já utilizado (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade na usabilidade no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
+O primeiro é o poder de barganha elevado da Red Bull, que, por ser um cliente único, transforma a relação comercial em uma dependência direta de validação e alinhamento de expectativas. O segundo é a ameaça de substitutos, que foi classificada como média, uma vez que a simplicidade do método analógico já utilizado (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade na usabilidade no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
 
-Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é algum fator externo ou de competição, mas sim de relação com o parceiro e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir total alinhamento com os critérios do cliente, garantindo a superioridade da ferramenta desenvolvida em relação ao método substituto, tornando assim,a solução indispensável durante as 24 horas de operação.
+Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é algum fator externo ou de competição, mas sim de relação com o parceiro e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir total alinhamento com os critérios do cliente, garantindo a superioridade da ferramenta desenvolvida em relação ao método substituto, tornando assim, a solução indispensável durante as 24 horas de operação.
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
@@ -92,13 +92,13 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 
 <br>
 <div align="center">
-  <b>Figura 2 -  Matriz Swot</b><br>
+  <b>Figura 2 — Matriz Swot</b><br>
   <img src="../assets/swot.jpeg" width="100%"><br>
   <sub>Fonte: Template Lab (2026).</sub>
 </div>
 <br>
 
-## Interno
+### Interno
 
 ### Forças
 
@@ -136,7 +136,7 @@ A duração de 24 horas também intensifica essas fraquezas. Com o passar do eve
 
 Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
 
-## Externo
+### Externo
 
 ### Oportunidades
 
@@ -234,7 +234,7 @@ A avaliação considerará como critérios de sucesso: consistência dos dados r
 
 Caso seja viável, em uma etapa posterior, a solução poderá ser validada com o parceiro em uma simulação assistida ou demonstração guiada, permitindo coletar feedback do time de Field Marketing sobre usabilidade, aderência ao fluxo real e confiabilidade percebida.  
 
-### 2.1.4. Value Proposition Canvas (sprint 1): 
+### 2.1.4. Value Proposition Canvas (sprint 1) 
 
 Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [4](#ref-4).
 
@@ -314,9 +314,9 @@ Assim, o valor da solução não está apenas em substituir a prancheta por uma 
 A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos gestores mensurar, avaliar e ordenar eventos de incerteza que possam comprometer os objetivos estratégicos e operacionais. Estruturada em uma escala de 5x5, ela cruza os eixos de probabilidade, definida como a possibilidade de ocorrência, e impacto, que representa a severidade da consequência, para determinar a magnitude do risco. Essa metodologia possibilita a classificação dos eventos em níveis como pequeno, moderado, alto e crítico, orientando a adoção de respostas adequadas para evitar, reduzir, compartilhar ou aceitar o risco. Conforme o Ministério do Planejamento, Desenvolvimento e Gestão (2017) [5](#ref-5), tal abordagem foi aplicada em nosso projeto para identificar situações adversas e subsidiar a implementação de controles que mitiguem a probabilidade de falhas no andamento do trabalho.
 
 <div align="center">
-  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
+  <sub><b>Figura 4 — Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026<sup>
+<sup>Material produzido pelos autores, 2026</sup>
 </div>
 
 #### Ameaças
@@ -326,7 +326,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 | **R01** | Instabilidade de Conexão no Local do Evento | Queda ou oscilação do Wi-Fi durante o evento, impedindo o registro em tempo real dos checkpoints. | Alto | Baixa | Alinhar antecipadamente com a organizadora a infraestrutura de Wi-Fi (Starlink ou equivalente) e implementar cache local no app para manter o registro mesmo com queda momentânea. | Red Bull |
 | **R02** | Indisponibilidade do Banco de Dados | O serviço de banco (Supabase) ficar fora do ar durante o evento, impedindo o registro de checkpoints. | Crítico | Baixa | Validação prévia do ambiente em simulação e backup local mínimo no app para continuar os registros caso o banco caia. | Cauan |
 | **R03** | Inconsistência nos Checkpoints (KM Regressivo) | Operador digitar km menor que o checkpoint anterior por engano, comprometendo o cálculo do total acumulado. | Médio | Média | Validação no sistema que bloqueia o salvamento se o km for menor que o último registrado no mesmo turno. | Fernando |
-| **R04** | Falha no Registro de Transição | Falha ao registar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "operadores de prova" e logs de segurança com timestamp de alta precisão. | André |
+| **R04** | Falha no Registro de Transição | Falha ao registrar o momento exato da troca de atletas, corrompendo métricas individuais de pace. | Alto | Média | Interface de confirmação rápida para o "operadores de prova" e logs de segurança com timestamp de alta precisão. | André |
 | **R05** | Não Conformidade visual (Brandbook) | Rejeição da interface pelo Compliance da Red Bull por descumprimento das diretrizes de marca. | Médio | Baixa | Validação contínua com a equipe de marca da Red Bull durante as sprints de design. | Augusto |
 | **R06** | Latência na Atualização do Placar | Atraso perceptível entre o registro do checkpoint e a atualização do placar exibido em tela, prejudicando a experiência durante o evento. | Médio | Alta | Otimização do envio de dados e atualização eficiente do placar conforme a stack a ser definida no planejamento técnico. | Red Bull |
 | **R07** | Erro Operacional (Digitação Incorreta) | Operador digitar quilometragem errada na transição, corrompendo os resultados. | Alto | Alta | Bloqueios lógicos (ex: impedir saltos de KM impossíveis) e dupla validação visual na UI. | Fernando / André |
@@ -349,14 +349,14 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a equipe tome decisões baseadas em necessidades reais de uso, como a rapidez exigida pelo time operacional. Elas alinham as expectativas dos stakeholders e priorizam funcionalidades que resolvem dores críticas, garantindo a eficácia do produto final (COOPER, 2004, [6](#ref-6); NIELSEN, 2012, [7](#ref-7)).
 
 <div align="center">
-  <sub><b>Figura 5 - Primeira persona</b></sub><br>
-  <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
+  <sub><b>Figura 5 — Primeira persona</b></sub><br>
+  <img src="../assets/personaUm.jpg" width="100%" alt="Primeira Persona"><br>
   <sup>Material produzido pelos autores, 2026</sup>
 </div>
 
 <div align="center">
-  <sub><b>Figura 6 - Segunda persona</b></sub><br>
-  <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
+  <sub><b>Figura 6 — Segunda persona</b></sub><br>
+  <img src="../assets/personaDois.jpg" width="100%" alt="Segunda Persona"><br>
   <sup>Material produzido pelos autores, 2026</sup>
 </div>
 
@@ -546,7 +546,7 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema. [9](#ref-9), [10](#ref-10) e [11](#ref-11).
+A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restrições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema. [9](#ref-9), [10](#ref-10) e [11](#ref-11).
 
 
 | ID | Título | Descrição | RF Associado |
@@ -593,7 +593,7 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### 3.1.3.1 Fundamentação dos Eixos
 
-## Explicação dos RNFs por eixo
+#### Explicação dos RNFs por eixo
 
 ### USAB — Usabilidade
 
@@ -768,7 +768,7 @@ Quando necessário, são utilizadas as relações 'include' e 'extend' no diagra
 **Divulgar resultado**
 * **Atores:** Organização do evento
 * **Pré-condição:** Resultado final gerado
-**Pós-condição:** Resultado disponibilizado ao público
+* **Pós-condição:** Resultado disponibilizado ao público
 * **Descrição:** A organização divulga o resultado final da competição ao término do evento.
 
 
@@ -778,7 +778,7 @@ Quando necessário, são utilizadas as relações 'include' e 'extend' no diagra
 <div align="center">
   <sub><b>Figura 8 - Diagrama de classes</b></sub><br>
   <img src="../assets/diagramaDeClasses.jpeg" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
+  <sup>Material produzido pelos autores, 2026</sup>
 </div>
 
 O diagrama de classes do domínio representa a estrutura estática do sistema BullPace, evidenciando as entidades envolvidas na operação do Red Bull 24 Horas, seus atributos, métodos e os relacionamentos que governam o fluxo de dados entre elas. O modelo foi construído segundo a notação UML, diferenciando associações, generalizações e dependências conforme o padrão da linguagem (SOMMERVILLE, 2019).
