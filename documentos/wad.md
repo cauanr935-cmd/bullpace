@@ -1114,8 +1114,8 @@ Nesta seção, é apresentado o Modelo Entidade-Relacionamento do sistema em ní
 No contexto deste projeto, o modelo conceitual contempla a organização da prova por meio de **EVENTO**, a estruturação das **EQUIPES** e de seus **ATLETAS**, a disponibilização de **ESTEIRAS**, a realização de **TURNOS**, o registro de **CHECKPOINTS** e o controle operacional associado a **FUNCAO** e **SESSAO_OPERACIONAL**. Nesta etapa, o foco está na identificação das entidades, de seus atributos relevantes e dos relacionamentos que expressam as regras do domínio.
 
 <div align="center">
-  <sub>Imagem 1 - Modelo Entidade-Relacionamento Conceitual</sub><br>
-  <img src="assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
+  <sub><b>Figura 16 - Modelo Entidade-Relacionamento Conceitual</b></sub><br>
+  <img src="../assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
   <sup>Fonte: Autores</sup>
 </div>
 
@@ -1130,7 +1130,7 @@ O **Diagrama Entidade-Relacionamento (DER)** representa o refinamento lógico do
 Dessa forma, o DER aproxima a modelagem da estrutura que será usada no banco de dados, indicando quais entidades dependem de outras e como os vínculos entre os dados serão representados logicamente. O diagrama também foi mantido coerente com o **Diagrama de Classes do Domínio (Seção 3.2.3)**, preservando as entidades centrais do sistema: **EVENTO**, **EQUIPE**, **ATLETA**, **ESTEIRA**, **TURNO**, **CHECKPOINT**, **FUNCAO** e **SESSAO_OPERACIONAL**.
 
 <div align="center">
-  <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
+  <sub><b>Figura 17 - Diagrama Entidade-Relacionamento (DER)</b></sub><br>
   <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
