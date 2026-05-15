@@ -1003,12 +1003,12 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
 
-### Tela de selção dos atletas
+### Tela de seleção dos atletas
 
 <br>
 <div align="center">
-  <b>Figura 12 — Tela de seleção dos atletass</b><br>
-  <img src="../assets/tela_selecao_atletas.png" width="100%"><br>
+  <b>Figura 12 — Tela de seleção dos atletas</b><br>
+  <img src="../assets/tela_seleçao_atletas.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
@@ -1083,7 +1083,7 @@ A Figura 16 ilustra o wireframe da tela de placar final. Atendendo à necessidad
 <br>
 
 
-O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados maiscompletos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
+O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados mais completos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
 
 ### Tela de exportação de dados
 
@@ -1095,7 +1095,7 @@ O _layout_ dos painéis permite identificar o desfecho da competição de forma 
 </div>
 <br>
 
-Após o encerramento do evento, a tela de Placar Final disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
+Conforme ilustrado na Figura 17, após o encerramento do evento, a tela de Placar Final, disponibiliza um botão de relatório que direciona o usuário à tela de Exportação de Dados. Essa tela tem como objetivo permitir a geração de documentos contendo as métricas e resultados registrados ao longo da competição. O usuário pode, opcionalmente, aplicar filtros por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além dos filtros, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos. Por padrão, as categorias "Resumo geral" e "Detalhamento por turno" já vêm habilitadas. O formato PDF gera um documento diagramado com a identidade visual oficial do evento, enquanto os formatos CSV e XLSX produzem arquivos com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme os filtros e categorias definidos e inicia automaticamente o download do arquivo. O botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
 
 ## 3.4. Guia de estilos (sprint 3)
 
