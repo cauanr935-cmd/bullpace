@@ -1192,6 +1192,281 @@ Triggers automáticas:
 updated_at é atualizado por trigger BEFORE UPDATE em todas as tabelas que possuem essa coluna.
 turno.km_turno é recalculado por trigger AFTER INSERT em checkpoint.
 equipe.km_total é recalculado por trigger AFTER UPDATE em turno, quando o status muda para 'encerrado'.
+=======
+# 3.6.3.1 Modelo físico
+
+O Modelo Físico é a implementação real do banco de dados por meio da linguagem SQL. É nesta etapa que se elaboram os comandos `CREATE TABLE`, se definem os tipos exatos de cada coluna e aplica-se as *constraints* (restrições) que garantem a integridade de todos os dados.
+
+# Migrations
+
+As *migrations* são arquivos em SQL versionados que tem a função de descrever as mudanças no banco de dados de forma reproduzível e totalmente ordenada. Cada *migration* representa um passo na "história" evolutiva do banco.
+
+## Justificativa para a numeração
+
+A numeração é utilizada para garantir que o banco de dados seja criado na ordem correta. Caso uma tabela dependente seja criada fora de ordem, como, por exemplo, a criação da tabela `TURNO` antes da tabela `ATLETA`, o sistema retornará um erro, pois `TURNO` possui uma chave estrangeira (FK) que referencia `ATLETA`.
+
+A estrutura de arquivos de *migrations* e suas respectivas dependências organiza-se da seguinte maneira:
+
+* `0001_create_evento.sql`: sem dependências externas;
+* `0002_create_funcao.sql`: sem dependências externas;
+* `0003_create_equipe.sql`: depende de `EVENTO`;
+* `0004_create_atleta.sql`: depende de `EQUIPE`;
+* `0005_create_esteira.sql`: depende de `EQUIPE`;
+* `0006_create_sessao_operacional.sql`: depende de `EVENTO` e `FUNCAO`;
+* `0007_create_turno.sql`: depende de `ATLETA`, `ESTEIRA` e `SESSAO_OPERACIONAL`;
+* `0008_create_checkpoint.sql`: depende de `TURNO` e `SESSAO_OPERACIONAL`;
+* `0009_insert_dados_iniciais.sql`: depende de `FUNCAO`;
+* `0010_create_views.sql`: depende de todas as tabelas.
+
+## Scripts das Migrations
+
+Abaixo encontram-se os scripts de *migrations* que implementam a modelagem física do sistema. Eles agrupam as instruções DDL (Data Definition Language) para a construção progressiva do banco de dados, definindo entidades, colunas e restrições de validação (constraints).
+
+**0001_create_evento.sql**
+```sql
+CREATE TABLE evento (
+    id_evento      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    cidade         VARCHAR(100) NOT NULL,
+    estado         VARCHAR(100) NOT NULL,
+    data_inicio    DATE NOT NULL,
+    data_fim       DATE NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'planejado',
+
+    CONSTRAINT ck_evento_status CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
+    CONSTRAINT ck_evento_datas CHECK (data_fim > data_inicio)
+); 
+```
+
+**0002_create_funcao.sql**
+```sql
+CREATE TABLE funcao (
+    id_funcao      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL UNIQUE,
+    descricao      VARCHAR(100),
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT ck_funcao_status CHECK (status IN ('ativo', 'inativo'))
+);
+```
+**0003_create_equipe.sql**
+
+```sql
+CREATE TABLE equipe (
+    id_equipe      SERIAL PRIMARY KEY,
+    id_evento      INT NOT NULL,
+    nome           VARCHAR(100) NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativa',
+    km_total       DECIMAL NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_equipe_evento
+        FOREIGN KEY (id_evento)
+        REFERENCES evento(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_equipe_nome_evento UNIQUE (id_evento, nome),
+    CONSTRAINT ck_equipe_status CHECK (status IN ('ativa', 'finalizada', 'inativa')),
+    CONSTRAINT ck_equipe_km_total CHECK (km_total >= 0)
+);
+```
+**0004_create_atleta.sql**
+```sql
+CREATE TABLE atleta (
+    id_atleta      SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    nome           VARCHAR(150) NOT NULL,
+    status         VARCHAR(100) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT fk_atleta_equipe
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipe(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_atleta_nome_equipe UNIQUE (id_equipe, nome),
+    CONSTRAINT ck_atleta_status CHECK (status IN ('ativo', 'inativo'))
+);
+
+CREATE INDEX idx_atleta_equipe ON atleta(id_equipe);
+```
+
+**0005_create_esteira.sql**
+```sql
+CREATE TABLE esteira (
+    id_esteira     SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    id_evento      INT NOT NULL,
+    marca          VARCHAR(100) NOT NULL DEFAULT 'Technogym',
+    modelo         VARCHAR(100),
+    numero_serie   DECIMAL UNIQUE,
+    status         VARCHAR(100) NOT NULL DEFAULT 'livre',
+
+    CONSTRAINT fk_esteira_equipe
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipe(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_esteira_status CHECK (status IN ('livre', 'em_uso', 'manutencao', 'indisponivel'))
+);
+
+CREATE INDEX idx_esteira_evento ON esteira(id_evento);
+CREATE INDEX idx_esteira_equipe ON esteira(id_equipe);
+```
+
+**0006_create_sessao_operacional.sql**
+```sql
+CREATE TABLE sessao_operacional (
+    id_sessao_operacional SERIAL PRIMARY KEY,
+    id_evento             INT NOT NULL,
+    id_funcao             INT NOT NULL,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
+    status                VARCHAR(100) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT fk_sessao_evento
+        FOREIGN KEY (id_evento)
+        REFERENCES evento(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_sessao_funcao
+        FOREIGN KEY (id_funcao)
+        REFERENCES funcao(id_funcao)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_sessao_status CHECK (status IN ('ativa', 'encerrada', 'cancelada')),
+    CONSTRAINT ck_sessao_datas CHECK (fim_em IS NULL OR fim_em > inicio_em)
+);
+
+CREATE INDEX idx_sessao_evento ON sessao_operacional(id_evento);
+CREATE INDEX idx_sessao_funcao ON sessao_operacional(id_funcao);
+CREATE INDEX idx_sessao_status ON sessao_operacional(status);
+```
+
+**0007_create_turno.sql**
+```sql
+CREATE TABLE turno (
+    id_turno               SERIAL PRIMARY KEY,
+    id_atleta              INT NOT NULL,
+    id_esteira             INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
+    status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
+    km_turno               DECIMAL NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_turno_atleta
+        FOREIGN KEY (id_atleta)
+        REFERENCES atleta(id_atleta)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turno_esteira
+        FOREIGN KEY (id_esteira)
+        REFERENCES esteira(id_esteira)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turno_sessao_operacional
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessao_operacional(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_turno_status CHECK (status IN ('em_andamento', 'encerrado', 'cancelado')),
+    CONSTRAINT ck_turno_datas CHECK (horario_fim IS NULL OR horario_fim > horario_inicio),
+    CONSTRAINT ck_turno_km CHECK (km_turno >= 0)
+);
+
+CREATE INDEX idx_turno_atleta ON turno(id_atleta);
+CREATE INDEX idx_turno_esteira ON turno(id_esteira);
+CREATE INDEX idx_turno_sessao_operacional ON turno(id_sessao_operacional);
+CREATE INDEX idx_turno_status ON turno(status);
+
+CREATE UNIQUE INDEX uq_turno_ativo_esteira ON turno(id_esteira) WHERE status = 'em_andamento';
+CREATE UNIQUE INDEX uq_turno_ativo_atleta ON turno(id_atleta) WHERE status = 'em_andamento';
+```
+
+**0008_create_checkpoint.sql**
+```sql
+CREATE TABLE checkpoint (
+    id_checkpoint          SERIAL PRIMARY KEY,
+    id_turno               INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    km_acumulado           DECIMAL NOT NULL,
+    pace_medio             DECIMAL,
+    velocidade_media       DECIMAL,
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_checkpoint_turno
+        FOREIGN KEY (id_turno)
+        REFERENCES turno(id_turno)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_checkpoint_sessao_operacional
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessao_operacional(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_checkpoint_km CHECK (km_acumulado >= 0),
+    CONSTRAINT ck_checkpoint_pace CHECK (pace_medio IS NULL OR pace_medio >= 0),
+    CONSTRAINT ck_checkpoint_velocidade CHECK (velocidade_media IS NULL OR velocidade_media >= 0)
+);
+
+CREATE INDEX idx_checkpoint_turno ON checkpoint(id_turno);
+CREATE INDEX idx_checkpoint_sessao_operacional ON checkpoint(id_sessao_operacional);
+CREATE INDEX idx_checkpoint_registrado_em ON checkpoint(registrado_em DESC);
+CREATE INDEX idx_checkpoint_turno_data ON checkpoint(id_turno, registrado_em DESC);
+```
+
+**0009_insert_dados_iniciais.sql**
+
+```sql
+INSERT INTO funcao (nome, descricao, status) VALUES
+    ('operador', 'Responsável por iniciar turnos e registrar dados', 'ativo'),
+    ('gestor', 'Responsável por acompanhar a operação', 'ativo');
+```
+
+**0010_create_views.sql**
+```sql
+CREATE OR REPLACE VIEW vw_placar_parcial AS
+WITH ultimo_checkpoint_por_turno AS (
+    SELECT DISTINCT ON (id_turno) id_turno, km_acumulado, registrado_em
+    FROM checkpoint ORDER BY id_turno, registrado_em DESC
+)
+SELECT
+    ev.id_evento, ev.nome AS evento_nome, eq.id_equipe, eq.nome AS equipe_nome,
+    eq.status AS equipe_status, eq.km_total AS equipe_km_total,
+    COUNT(DISTINCT t.id_turno) AS total_turnos,
+    COALESCE(SUM(uc.km_acumulado), 0) AS km_total_parcial
+FROM evento ev
+JOIN equipe eq ON eq.id_evento = ev.id_evento
+LEFT JOIN atleta a ON a.id_equipe = eq.id_equipe
+LEFT JOIN turno t ON t.id_atleta = a.id_atleta
+LEFT JOIN ultimo_checkpoint_por_turno uc ON uc.id_turno = t.id_turno
+GROUP BY ev.id_evento, ev.nome, eq.id_equipe, eq.nome, eq.status, eq.km_total;
+
+CREATE OR REPLACE VIEW vw_historico_completo AS
+SELECT
+    ev.id_evento, ev.nome AS evento_nome,
+    eq.id_equipe, eq.nome AS equipe_nome,
+    a.id_atleta, a.nome AS atleta_nome,
+    est.id_esteira, est.marca AS esteira_marca, est.modelo AS esteira_modelo, est.numero_serie AS esteira_numero_serie,
+    t.id_turno, t.horario_inicio, t.horario_fim, t.status AS turno_status, t.km_turno,
+    so_turno.id_sessao_operacional AS id_sessao_inicio_turno, f_turno.nome AS funcao_inicio_turno,
+    cp.id_checkpoint, cp.km_acumulado, cp.pace_medio, cp.velocidade_media, cp.registrado_em, cp.is_ajuste,
+    so_cp.id_sessao_operacional AS id_sessao_registro_checkpoint, f_cp.nome AS funcao_registro_checkpoint
+FROM evento ev
+JOIN equipe eq ON eq.id_evento = ev.id_evento
+JOIN atleta a ON a.id_equipe = eq.id_equipe
+JOIN turno t ON t.id_atleta = a.id_atleta
+JOIN esteira est ON est.id_esteira = t.id_esteira
+JOIN sessao_operacional so_turno ON so_turno.id_sessao_operacional = t.id_sessao_operacional
+JOIN funcao f_turno ON f_turno.id_funcao = so_turno.id_funcao
+LEFT JOIN checkpoint cp ON cp.id_turno = t.id_turno
+LEFT JOIN sessao_operacional so_cp ON so_cp.id_sessao_operacional = cp.id_sessao_operacional
+LEFT JOIN funcao f_cp ON f_cp.id_funcao = so_cp.id_funcao
+ORDER BY ev.id_evento, eq.id_equipe, t.horario_inicio, cp.registrado_em;
+```
+
+
+
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
