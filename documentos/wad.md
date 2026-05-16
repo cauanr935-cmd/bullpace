@@ -1145,7 +1145,7 @@ No contexto deste projeto, o modelo conceitual contempla a organização da prov
 
 <div align="center">
   <sub><b>Figura 19 - Modelo Entidade-Relacionamento Conceitual</b></sub><br>
-  <img src="assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
+  <img src="../assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
   <sup>Fonte: Autores</sup>
 </div>
 
