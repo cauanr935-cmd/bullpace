@@ -825,9 +825,13 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
 
-## O que acontece, em uma frase
-
-O promotor preenche o KM acumulado no iPad e clica em "salvar". Esse clique vira uma requisição HTTP que percorre 4 camadas até chegar no banco, e a resposta volta pelo mesmo caminho.
+<br>
+<div align="center">
+  <b>Figura 9 — Diagrama de sequência</b><br>
+  <img src="../assets/wf_geral.png" width="100%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
 
 ## Controller
 
@@ -955,7 +959,7 @@ No diagrama, é possível visualizar quais telas estão associadas à função d
 
 <br>
 <div align="center">
-  <b>Figura 9 — Wireframe de todas as telas e seu fluxo</b><br>
+  <b>Figura 10 — Wireframe de todas as telas e seu fluxo</b><br>
   <img src="../assets/wf_geral.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -971,7 +975,7 @@ A tela de seleção de função do sistema é responsável por definir qual tipo
 
 <br>
 <div align="center">
-  <b>Figura 10 — Tela de seleção de função</b><br>
+  <b>Figura 11 — Tela de seleção de função</b><br>
   <img src="../assets/wf_fun.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -988,11 +992,11 @@ A simplicidade visual da tela foi planejada para facilitar a identificação ime
 #### Tela de seleção de equipe
 
 
-A tela de escolha de equipe, apresentada na figura 11, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
+A tela de escolha de equipe, apresentada na figura 12, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
 
 <br>
 <div align="center">
-  <b>Figura 11 — Tela de seleção de equipe</b><br>
+  <b>Figura 12 — Tela de seleção de equipe</b><br>
   <img src="../assets/wf_eq.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1008,7 +1012,7 @@ A interface de seleção de corredor é acessada pelo operador do evento após a
 
 <br>
 <div align="center">
-  <b>Figura 12 — Tela de seleção dos atletas</b><br>
+  <b>Figura 13 — Tela de seleção dos atletas</b><br>
   <img src="../assets/tela_seleçao_atletas.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1028,7 +1032,7 @@ A interface de gerenciamento de turno dos corredores é acessada pelo operador d
 
 <br>
 <div align="center">
-  <b>Figura 13 — Tela de gerenciamento de turnos</b><br>
+  <b>Figura 14 — Tela de gerenciamento de turnos</b><br>
   <img src="../assets/wf_ger.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1054,7 +1058,7 @@ Sua principal função é permitir que o operador defina qual das duas esteiras 
 
 <br>
 <div align="center">
-  <b>Figura 14 — Tela de seleção de esteira</b><br>
+  <b>Figura 15 — Tela de seleção de esteira</b><br>
   <img src="../assets/wf_es.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1068,11 +1072,11 @@ A interface também disponibiliza um botão “voltar”, localizado no canto su
 
 #### Modo TV
 
-O Modo TV é uma interface destinada especialmente para a exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 15. 
+O Modo TV é uma interface destinada especialmente para a exibição da competição ao gestor. A organização estrutural e a disposição dos elementos dessa interface são apresentadas na figura 16. 
 
 <br>
 <div align="center">
-  <b>Figura 15 — Visualização modo TV</b><br>
+  <b>Figura 16 — Visualização modo TV</b><br>
   <img src="../assets/tela_modoTV.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1082,10 +1086,10 @@ Este layout representa o primeiro estado do Modo TV, que corresponde ao período
 
 ### Tela de placar final
 
-A Figura 16 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
+A Figura 17 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
 <div align="center">
-  <b>Figura 16 — Tela de comparação final entre equipes </b><br>
+  <b>Figura 17 — Tela de comparação final entre equipes </b><br>
   <img src="../assets/tela_placarFinal.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -1100,12 +1104,12 @@ A interface de exportação de dados é acessada a partir da tela de placar fina
 
 <br>
 <div align="center">
-  <b>Figura 17 — Exportação de dados</b><br>
+  <b>Figura 18 — Exportação de dados</b><br>
   <img src="../assets/Wf_ExportarDados.jpeg" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
-Conforme ilustrado na Figura 17, a interface permite que o usuário aplique filtros opcionais por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além disso, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos.
+Conforme ilustrado na Figura 18, a interface permite que o usuário aplique filtros opcionais por equipe, atleta, esteira ou período de tempo para restringir o escopo dos dados exportados. Além disso, é possível selecionar simultaneamente uma ou mais categorias de informações a serem incluídas no documento, como resumo geral, detalhamento por turno, histórico de checkpoints, dados individuais dos atletas e log de eventos.
 
 Para a geração dos arquivos, o formato PDF cria um documento em formato de "texto corrido", enquanto os formatos CSV e XLSX produzem planilhas com dados estruturados para análise em ferramentas externas. Ao acionar o botão "EXPORTAR RELATÓRIO", o sistema processa as informações conforme as parametrizações definidas e disponibiliza para o download. Por fim, o botão "voltar" encerra a operação de exportação e redireciona o usuário de volta à tela de Placar Final.
 
@@ -1140,7 +1144,7 @@ Nesta seção, é apresentado o Modelo Entidade-Relacionamento do sistema em ní
 No contexto deste projeto, o modelo conceitual contempla a organização da prova por meio de **EVENTO**, a estruturação das **EQUIPES** e de seus **ATLETAS**, a disponibilização de **ESTEIRAS**, a realização de **TURNOS**, o registro de **CHECKPOINTS** e o controle operacional associado a **FUNCAO** e **SESSAO_OPERACIONAL**. Nesta etapa, o foco está na identificação das entidades, de seus atributos relevantes e dos relacionamentos que expressam as regras do domínio.
 
 <div align="center">
-  <sub>Imagem 1 - Modelo Entidade-Relacionamento Conceitual</sub><br>
+  <sub><b>Figura 19 - Modelo Entidade-Relacionamento Conceitual</b></sub><br>
   <img src="assets/modeloEr.png" width="100%" alt="Modelo Entidade-Relacionamento conceitual do sistema"><br>
   <sup>Fonte: Autores</sup>
 </div>
@@ -1156,7 +1160,7 @@ O **Diagrama Entidade-Relacionamento (DER)** representa o refinamento lógico do
 Dessa forma, o DER aproxima a modelagem da estrutura que será usada no banco de dados, indicando quais entidades dependem de outras e como os vínculos entre os dados serão representados logicamente. O diagrama também foi mantido coerente com o **Diagrama de Classes do Domínio (Seção 3.2.3)**, preservando as entidades centrais do sistema: **EVENTO**, **EQUIPE**, **ATLETA**, **ESTEIRA**, **TURNO**, **CHECKPOINT**, **FUNCAO** e **SESSAO_OPERACIONAL**.
 
 <div align="center">
-  <sub>Imagem 2 - Diagrama Entidade-Relacionamento (DER)</sub><br>
+  <sub><b>Figura 20 - Diagrama Entidade-Relacionamento (DER)</b></sub><br>
   <img src="../assets/diagramaER.jpeg" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
