@@ -828,7 +828,7 @@ Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentr
 <br>
 <div align="center">
   <b>Figura 9 — Diagrama de sequência</b><br>
-  <img src="../assets/wf_geral.png" width="100%"><br>
+  <img src="../assets/DiagramaDeSequência.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
