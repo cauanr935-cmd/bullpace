@@ -36,6 +36,7 @@
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
 A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [1](#ref-1).
+A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [1](#ref-1).
 
 Além da limitação do método manual, o contexto do evento também apresenta restrições técnicas importantes. Não há integração direta com as esteiras Technogym, e o uso de pulseiras sincronizadas não se mostra viável devido à dinâmica de revezamento, à quantidade de participantes e ao tempo necessário para sincronização antes de cada corrida. Dessa forma, a solução precisa considerar uma operação baseada em leitura visual da esteira e inserção manual assistida dos dados pelo operador.
 
@@ -55,6 +56,7 @@ As 5 Forças de Porter é um modelo estratégico desenvolvido pelo professor Mic
 O modelo mapeia cinco forças externas que determinam a intensidade da concorrência e, consequentemente, a atratividade e rentabilidade de um mercado conforme apresentado na figura 1.
 <br>
 <div align="center">
+  <b>Figura 1 — 5 Forças de Porter</b><br>
   <b>Figura 1 — 5 Forças de Porter</b><br>
   <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
@@ -240,6 +242,7 @@ Esta seção detalha o alinhamento estratégico entre as necessidades operaciona
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
+  <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
   <img src="../assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
@@ -315,6 +318,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 <div align="center">
   <sub><b>Figura 4 - Matriz de risco</b></sub><br>
+  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -350,14 +354,16 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 <div align="center">
   <sub><b>Figura 5 - Primeira persona</b></sub><br>
+  <sub><b>Figura 5 - Primeira persona</b></sub><br>
   <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026</sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
+  <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026</sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 
@@ -705,7 +711,7 @@ Quando necessário, são utilizadas as relações 'include' e 'extend' no diagra
 <div align="center">
   <sub>Figura 7 - Diagrama de casos de uso</sub><br>
   <img src="../assets/diagramacu.png" width="100%"><br>
-  <sup>Material produzido pelos autores, 2026<sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 **Casos de Uso:** 
@@ -1764,7 +1770,7 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-[1] RED BULL. **TAPI 1AMD2 – Aplicação Web:** RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+<a name="ref-1"></a>[1] RED BULL. **TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
 
 [2] PORTER, Michael E. Estratégia Competitiva: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
 
