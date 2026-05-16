@@ -57,7 +57,6 @@ O modelo mapeia cinco forças externas que determinam a intensidade da concorrê
 <br>
 <div align="center">
   <b>Figura 1 — 5 Forças de Porter</b><br>
-  <b>Figura 1 — 5 Forças de Porter</b><br>
   <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -242,7 +241,6 @@ Esta seção detalha o alinhamento estratégico entre as necessidades operaciona
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
-  <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
   <img src="../assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
@@ -318,7 +316,6 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 <div align="center">
   <sub><b>Figura 4 - Matriz de risco</b></sub><br>
-  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -354,13 +351,11 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 <div align="center">
   <sub><b>Figura 5 - Primeira persona</b></sub><br>
-  <sub><b>Figura 5 - Primeira persona</b></sub><br>
   <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 <div align="center">
-  <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
