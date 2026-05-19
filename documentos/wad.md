@@ -1121,7 +1121,9 @@ Para a geração dos arquivos, o formato PDF cria um documento em formato de "te
 
 ## 3.4. Guia de estilos (sprint 3)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução*
+O Guia de Estilos é o documento central que define a identidade visual e regras de interface da nossa solução. Serve principalmente para padronizar todos os elementos visuais do projeto, incluindo paleta de cores, tipografia, iconografia, espaçamentos e o comportamento dos componentes interativos.
+
+A estruturação deste seção é fundamental pois garante a consistência e coeeão visual e funcional em toda a aplicação. Um padrão bem definido acelera o processo de desenvolvimento, facilita a manutenção do código e, principalmente, proporciona uma experiência de usuário (UX) mais fluida, intuitiva e profissional, evitando divergências entre diferentes telas.
 
 ### 3.4.1 Cores
 
