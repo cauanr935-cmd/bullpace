@@ -696,7 +696,33 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-*Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
+### 3.2.1. Arquitetura em Camadas (sprint 3)
+
+A aplicação BullPace foi organizada seguindo o padrão de Arquitetura em Camadas, na variante Controller-Service-Repository, que é a forma mais comum de estruturar aplicações web em Node.js com Express. Esse padrão separa o código em quatro camadas com responsabilidades bem definidas, o que ajuda no trabalho em grupo e facilita a manutenção do projeto ao longo das sprints.
+
+A ideia central é que cada camada cuida de uma etapa do processamento da requisição. A comunicação entre elas é unidirecional: a requisição entra pela camada mais externa (Controller) e desce até a mais interna (Model), enquanto a resposta percorre o caminho inverso. Essa separação evita que regras de negócio fiquem misturadas com acesso ao banco ou com formatação da resposta HTTP.
+
+Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisição percorrendo as quatro camadas já foi documentado na seção 3.2.4 (Diagrama de Sequência), que mostra como o registro de checkpoint passa pelo Controller, Service, Repository e Banco no caso prático do BullPace.
+
+<br>
+<div align="center">
+  <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
+  <img src="../assets/3.2.1-arquitetura-camadas.png" width="80%"><br>
+  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+#### Camada Controller
+
+A camada Controller é a porta de entrada da aplicação. Ela recebe as requisições HTTP que chegam à API (vindas do iPad usado pelo operador no evento) e devolve as respostas para o cliente. No BullPace, essa camada faz três coisas principais.
+
+Primeiro, ela confere se o formato da requisição está correto, verificando se os campos obrigatórios chegaram, se os tipos batem com o esperado e se o body foi enviado no padrão certo. Se algo está fora, ela já devolve erro 400 ou 422 antes mesmo de chamar as outras camadas.
+
+Segundo, ela traduz a requisição HTTP em uma chamada de função para o Service. Quem decide se o dado é válido em termos de regra de negócio é o Service, não o Controller. Essa separação é importante porque mantém o Controller leve e focado só no contrato HTTP.
+
+Terceiro, ela formata a resposta. Pega o que o Service retornou, monta o JSON de resposta e devolve com o status code apropriado: 201 quando criou um recurso, 200 quando consultou, 404 quando não encontrou, 500 se algo quebrou no caminho.
+
+O Controller **não conhece regras de negócio**, **não acessa o banco diretamente** e **não faz validações que dependem do estado da aplicação**. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
