@@ -696,8 +696,7 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-O diagrama de classes arquitetural mostra como as partes internas do sistema estão organizadas e conectadas. Nele, são representados os principais componentes da aplicação, como controllers, services, repository e models, facilitando o entendimento da estrutura e funcionamento do sistema.
-
+*Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
@@ -820,6 +819,9 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 | **Funcao — SessaoOperacional** | Associação | 1 : 0..* | Uma função pode estar associada a várias sessões operacionais. |
 | **Funcao — FuncaoOperador / FuncaoCoordenador** | Herança | - | Operador e coordenador são especializações de função. |
 
+### 3.2.3.1. Diagrama de Classes Arquitetural
+
+O diagrama de classes arquitetural mostra como as partes internas do sistema estão organizadas e conectadas. Nele, são representados os principais componentes da aplicação, como controllers, services, repository e models, facilitando o entendimento da estrutura e funcionamento do sistema.
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
