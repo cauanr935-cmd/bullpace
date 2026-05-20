@@ -1659,9 +1659,11 @@ ORDER BY e.km_total DESC;
 
 #2 | ---
 --- | ---
-**Proposições lógicas** | 
+**Proposições lógicas** | $A$: Equipe não foi removida (e.deleted_at IS NULL) <br> $B$: Equipe está ativa (e.status = 'ativa') <br> $C$: Equipe já tem km acumulado (e.km_total > 0) <br> $D$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
 <br>
 **Expressão lógica proposicional** |
+<br> $A \land B \land (C \lor D)$
+<br>
 
 
 
