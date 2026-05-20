@@ -1670,10 +1670,20 @@ ORDER BY e.km_total DESC;
 
 Histórico de checkpoints com anomalia no pace 
 
-*Expressão SQL** |
+**Expressão SQL** |
 
 ``` sql
-
+SELECT cp.id_checkpoint, cp.km_acumulado,
+  cp.pace_medio, cp.velocidade_media, cp.registrado_em
+FROM checkpoint cp
+INNER JOIN turno t ON cp.id_turno = t.id_turno
+WHERE cp.deleted_at IS NULL
+  AND t.id_equipe = 1
+  AND (
+    cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
+    OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
+  )
+ORDER BY cp.registrado_em DESC;
 ```
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
