@@ -1685,6 +1685,13 @@ WHERE cp.deleted_at IS NULL
   )
 ORDER BY cp.registrado_em DESC;
 ```
+#3 | ---
+--- | ---
+**Proposições lógicas** | $A$: Checkpoint não foi removido (cp.deleted_at IS NULL) <br> $B$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $C$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $D$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land (C \lor D)$
+<br>
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
