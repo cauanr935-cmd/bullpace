@@ -1612,9 +1612,10 @@ ORDER BY
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
 
 
-*Template de SQL + lógica proposicional*
-#1 | --- 
---- | ---
+## Consulta 1
+
+Buscar checkpoints válidos de um turno ativo
+
 **Expressão SQL** |
 ``` sql
 SELECT cp.id_checkpoint, cp.km_acumulado,
@@ -1625,8 +1626,13 @@ ON cp.id_turno = t.id_turno
 WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
 IS NULL; 
 ```
-**Proposições lógicas** | $A$: O estado é 'California' (state = 'California') <br> $B$: O ID do fornecedor não é 900 (supplier_id ≠ 900) <br> $C$: O ID do fornecedor é 100 (supplier_id = 100)
-**Expressão lógica proposicional** | $(A \land B) \lor C$
+#1 | ---
+--- | ---
+**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento') <br> $C$: O checkpoint não foi removido (cp.deleted_at IS NULL)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land C$
+<br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B) \lor C$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
 
