@@ -696,7 +696,8 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-*Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
+O diagrama de classes arquitetural mostra como as partes internas do sistema estão organizadas e conectadas. Nele, são representados os principais componentes da aplicação, como controllers, services, repository e models, facilitando o entendimento da estrutura e funcionamento do sistema.
+
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
