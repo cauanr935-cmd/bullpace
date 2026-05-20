@@ -1640,7 +1640,20 @@ IS NULL;
 Placar consolidade por equipe
 
 **Expressão SQL** |
-```
+
+``` sql
+SELECT e.id_equipe, e.nome, e.km_total,
+  COUNT(DISTINCT t.id_turno) AS total_turnos,
+  COUNT(DISTINCT t.id_atleta) AS atletas_ativos
+FROM equipe e
+LEFT JOIN turno t
+  ON t.id_equipe = e.id_equipe
+  AND t.deleted_at IS NULL
+WHERE e.deleted_at IS NULL
+  AND e.status = 'ativa'
+  AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
+GROUP BY e.id_equipe, e.nome, e.km_total
+ORDER BY e.km_total DESC;
 
 ```
 
