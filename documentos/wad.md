@@ -57,7 +57,6 @@ O modelo mapeia cinco forças externas que determinam a intensidade da concorrê
 <br>
 <div align="center">
   <b>Figura 1 — 5 Forças de Porter</b><br>
-  <b>Figura 1 — 5 Forças de Porter</b><br>
   <img src="../assets/ForçasPcorrecao.png" width="100%"><br>
   <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
@@ -242,7 +241,6 @@ Esta seção detalha o alinhamento estratégico entre as necessidades operaciona
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
-  <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
   <img src="../assets/cpv.png" width="100%" alt="canva da proposta de valor"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
@@ -318,7 +316,6 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 
 <div align="center">
   <sub><b>Figura 4 - Matriz de risco</b></sub><br>
-  <sub><b>Figura 4 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores, 2026<sup>
 </div>
@@ -354,13 +351,11 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 <div align="center">
   <sub><b>Figura 5 - Primeira persona</b></sub><br>
-  <sub><b>Figura 5 - Primeira persona</b></sub><br>
   <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 <div align="center">
-  <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
@@ -1614,17 +1609,27 @@ ORDER BY
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
-*posicione aqui uma lista de consultas SQL compostas, realizadas pelo back-end da aplicação web, com sua respectiva lógica proposicional, descrita conforme template abaixo. Lembre-se que para usar LaTeX em markdown, basta você colocar as expressões entre $ ou $$*
+A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
+
 
 *Template de SQL + lógica proposicional*
-#1 | ---
+#1 | --- 
 --- | ---
-**Expressão SQL** | SELECT * FROM suppliers WHERE (state = 'California' AND supplier_id <> 900) OR (supplier_id = 100); 
+**Expressão SQL** |
+``` sql
+SELECT cp.id_checkpoint, cp.km_acumulado,
+cp.registrado_em
+FROM checkpoint cp
+INNER JOIN turno t
+ON cp.id_turno = t.id_turno 
+WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
+IS NULL; 
+```
 **Proposições lógicas** | $A$: O estado é 'California' (state = 'California') <br> $B$: O ID do fornecedor não é 900 (supplier_id ≠ 900) <br> $C$: O ID do fornecedor é 100 (supplier_id = 100)
 **Expressão lógica proposicional** | $(A \land B) \lor C$
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B) \lor C$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
-*Dica: edite a tabela verdade fora do markdown, para ter melhor controle*
+
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
