@@ -819,6 +819,9 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 | **Funcao — SessaoOperacional** | Associação | 1 : 0..* | Uma função pode estar associada a várias sessões operacionais. |
 | **Funcao — FuncaoOperador / FuncaoCoordenador** | Herança | - | Operador e coordenador são especializações de função. |
 
+### 3.2.3.1. Diagrama de Classes Arquitetural
+
+O diagrama de classes arquitetural mostra como as partes internas do sistema estão organizadas e conectadas. Nele, são representados os principais componentes da aplicação, como controllers, services, repository e models, facilitando o entendimento da estrutura e funcionamento do sistema.
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
