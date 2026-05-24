@@ -830,7 +830,7 @@ Diagrama com controller incluso
 Diagrama com service incluso
 
 #### Repository
-Diagrama com repository incluso
+Diagrama com repository incluso[]
 
 #### Model
 
