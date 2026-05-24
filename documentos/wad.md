@@ -826,6 +826,9 @@ https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_
 #### Controller
 Diagrama com controller incluso
 
+#### Service
+Diagrama com service incluso
+
 #### Model
 
 Diagrama com Model concluido
