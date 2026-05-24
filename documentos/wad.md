@@ -821,8 +821,14 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 ### 3.2.3.1. Diagrama de classes arquitetural
 
+https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_loc=-1113%2C852%2C4893%2C2871%2C0_0&invitationId=inv_3a6e3cbb-0e69-418f-9f14-1d77d0fb2ed6
 
+#### Controller
+Diagrama com controller incluso
 
+#### Model
+
+Diagrama com Model concluido
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
