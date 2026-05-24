@@ -819,6 +819,10 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 | **Funcao — SessaoOperacional** | Associação | 1 : 0..* | Uma função pode estar associada a várias sessões operacionais. |
 | **Funcao — FuncaoOperador / FuncaoCoordenador** | Herança | - | Operador e coordenador são especializações de função. |
 
+### 3.2.3.1. Diagrama de classes arquitetural
+
+
+
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
@@ -1668,7 +1672,7 @@ ORDER BY e.km_total DESC;
 
 ## Consulta 3
 
-Histórico de checkpoints com anomalia no pace 
+Essa consulta lista checkpoints da equipe 1 cujo pace médio foi menor que 4 min/km (velocidade muito alta) OU cuja velocidade média superou 20 km/h. Auxilia a coordenadora na detecção de registros possivelmente incorretos para eventual ajuste (RF005).
 
 **Expressão SQL** |
 
