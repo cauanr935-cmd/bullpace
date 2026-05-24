@@ -823,18 +823,30 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_loc=-1113%2C852%2C4893%2C2871%2C0_0&invitationId=inv_3a6e3cbb-0e69-418f-9f14-1d77d0fb2ed6
 
-#### Controller
-Diagrama com controller incluso
+# Documentação do Diagrama de Classes Arquitetural
 
-#### Service
-Diagrama com service incluso
+## 1. Visão Geral do Diagrama
+ Diferente de um diagrama de classes de domínio tradicional (focado apenas nos atributos das entidades de banco de dados), este diagrama modela a **estrutura de alto nível do software**. 
 
-#### Repository
-Diagrama com repository incluso[]
+Ele representa os componentes reais da arquitetura (Controllers, Services e Repositories) como classes do sistema, mapeando com precisão suas responsabilidades, injeções de dependência e o fluxo de comunicação entre as camadas. O design segue o padrão de **Arquitetura em Camadas Verticais**, garantindo a separação de responsabilidades e um fluxo de dependência estritamente unidirecional.
 
-#### Model
-
-Diagrama com Model concluido
+```text
+┌────────────────────────────────────────────────────────┐
+│   CAMADA CONTROLLER (Classes de Interface/Entrada)     │ 
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│     CAMADA SERVICE (Classes de Regras de Negócio)      │ 
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ 
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│       CAMADA MODEL (Classes de Entidade/Domínio)       │ 
+└────────────────────────────────────────────────────────┘
+```
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
