@@ -1665,10 +1665,19 @@ CREATE INDEX idx_operador_sessao_operacional
 ```
 **0012_create_coordenador**
 ```sql
-CREATE TABLE coordenador(
-    id_coordenador SERIAL PRIMARY KEY,
-    nome VARCHAR(150)
-)
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
 ```
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
