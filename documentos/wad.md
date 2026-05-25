@@ -1154,9 +1154,17 @@ A estruturação deste seção é fundamental pois garante a consistência e coe
 *Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
 
 ### 3.4.2 Tipografia
+A definição tipográfica da aplicação web surge da necessidade operacional de garantir a correta leitura, inserção e conferência de dados ao longo das 24 horas ininterruptas de competição. Diante de fatores limitantes como a fadiga visual da equipe de campo, especialmente durante os turnos da madrugada, e a necessidade de acompanhamento em tempo real por meio do painel de controle (Modo TV), a interface exige elementos textuais que reduzam a sobrecarga cognitiva do usuário.
 
-*Apresente aqui a tipografia da solução, com famílias de fontes e suas respectivas funções*
+Nesse contexto, definiu-se a utilização da família tipográfica Inter. A adoção dessa fonte sem serifa (sans-serif) fundamenta-se na sua alta legibilidade em diferentes resoluções de tela e distâncias focais. Além disso, a fonte apresenta excelente clareza estrutural para caracteres numéricos, um fator crítico para a apuração precisa de métricas como quilometragem acumulada, pace e tempo de prova.
 
+Para assegurar a organização da informação e a padronização visual do sistema, a hierarquia tipográfica foi estruturada da seguinte forma:
+
+Títulos e Placar (Bold, 24px ou superior): Aplicados nas métricas consolidadas e elementos de maior relevância, como o total de quilômetros por equipe. O peso estrutural elevado visa viabilizar o contraste e a leitura imediata à distância pela equipe de coordenação.
+
+Corpo de Texto (Regular e Medium, 16px): Direcionado aos componentes de interação direta no iPad, como a grade de seleção dos 16 atletas, indicativos de status das esteiras e botões operacionais. O dimensionamento adequado previne erros de toque e facilita o uso do sistema durante as rápidas transições de turno.
+
+Legendas e Textos de Apoio (Regular, 12px a 14px): Restritos a informações auxiliares, como rótulos indicativos dos campos opcionais (pace médio e velocidade média) e unidades de medida. Essa aplicação evita a poluição visual, mantendo o foco do operador nos dados essenciais para o registro do checkpoint.
 ### 3.4.3 Iconografia e imagens 
 
 *(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
