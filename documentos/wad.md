@@ -1653,7 +1653,12 @@ CREATE TABLE operador(
 )
 ```
 **0012_create_coordenador**
-
+```sql
+CREATE TABLE coordenador(
+    id_coordenador SERIAL PRIMARY KEY,
+    nome VARCHAR(150)
+)
+```
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
