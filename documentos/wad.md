@@ -1219,23 +1219,25 @@ O modelo relacional textual apresenta as tabelas do sistema em formato resumido,
 
 O modelo relacional descreve os esquemas em formato textual:
 
-eventos(**id_evento**, nome, cidade, estado, data_inicio, data_fim, status)
+eventos(id_evento, nome, cidade, estado, data_inicio, data_fim, status)
 
-equipes(**id_equipe**, *id_evento*, nome, status, km_total)
+equipes(id_equipe, id_evento, nome, status, km_total)
 
-atletas(**id_atleta**, *id_equipe*, nome, status)
+atletas(id_atleta, id_equipe, nome, status)
 
-esteiras(**id_esteira**, *id_equipe*, *id_evento*, marca, modelo, numero_serie, status)
+esteiras(id_esteira, id_equipe, id_evento, marca, modelo, numero_serie, status)
 
-funcoes(**id_funcao**, nome, descricao, status)
+funcoes(id_funcao, nome, descricao, status)
 
-sessoes_operacionais(**id_sessao_operacional**, *id_evento*, *id_funcao*, inicio_em, fim_em, status)
+sessoes_operacionais(id_sessao_operacional, id_evento, id_funcao, inicio_em, fim_em, status)
 
-turnos(**id_turno**, *id_atleta*, *id_esteira*, *id_sessao_operacional*, horario_inicio, horario_fim, status, km_turno)
+turnos(id_turno, id_atleta, id_esteira, id_sessao_operacional, horario_inicio, horario_fim, status, km_turno)
 
-checkpoints(**id_checkpoint**, *id_turno*, *id_sessao_operacional*, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
+checkpoints(id_checkpoint, id_turno, id_sessao_operacional, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
 
-operador(**id_operador**, *nome*)
+operador(id_operador, nome, id_sessao_operacional)
+
+coordenador(id_coordenador, nome, id_sessao_operacional)
 
 
 #### 3.6.3.2 Modelo Físico
@@ -1246,20 +1248,20 @@ A implementação abaixo foi organizada em migrations para garantir a criação 
 
 ### Migrations
 
-A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` e `checkpoints`.
+A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` ,`checkpoints`, `operador` e `coordenador`.
 
 - `0001_create_eventos.sql`: sem dependências externas;
 - `0002_create_funcoes.sql`: sem dependências externas;
-- `0003_create_equipes.sql`: depende de `eventos`;
-- `0004_create_atletas.sql`: depende de `equipes`;
-- `0005_create_esteiras.sql`: depende de `eventos` e `equipes`;
-- `0006_create_sessoes_operacionais.sql`: depende de `eventos` e `funcoes`;
-- `0007_create_turnos.sql`: depende de `atletas`, `esteiras` e `sessoes_operacionais`;
-- `0008_create_checkpoints.sql`: depende de `turnos` e `sessoes_operacionais`;
-- `0009_insert_dados_iniciais.sql`: depende de `funcoes`;
+- `0003_create_equipes.sql`: depende de eventos;
+- `0004_create_atletas.sql`: depende de equipes;
+- `0005_create_esteiras.sql`: depende de eventos e equipes;
+- `0006_create_sessoes_operacionais.sql`: depende de eventos e funcoes;
+- `0007_create_turnos.sql`: depende de atletas, esteiras e sessoes_operacionais;
+- `0008_create_checkpoints.sql`: depende de turnos e sessoes_operacionais;
+- `0009_insert_dados_iniciais.sql`: depende de funcoes;
 - `0010_create_views.sql`: depende das tabelas anteriores;
-- `0011_create_operador` : sem dependências externas;
-- `0012_create_coordenador` : sem dependências externa,
+- `0011_create_operador.sql`: depende de sessoes_operacionais;
+- `0012_create_coordenador.sql`: depende de sessoes_operacionais.
 
 ### Scripts das Migrations
 
@@ -1647,10 +1649,19 @@ ORDER BY
 ```
 **0011_create_operador.sql**
 ```sql
-CREATE TABLE operador(
-    id_operador SERIAL PRIMARY KEY,
-    nome VARCHAR(150),
-)
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
 ```
 **0012_create_coordenador**
 ```sql
