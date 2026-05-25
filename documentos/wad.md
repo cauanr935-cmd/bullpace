@@ -372,142 +372,607 @@ Esse formato ajuda a equipe a transformar necessidades reais em entregas planej�
 
 Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
 
-**US01**
+## 2.3. User Stories
 
-**Identificação** | US01  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero selecionar a equipe na tela inicial para que todos os registros seguintes sejam vinculados corretamente ao grupo em competição.  
-**Critério de aceite 1** | Dado que o sistema exibe as equipes cadastradas, quando o promotor tocar em uma equipe, então o sistema deve abrir a tela de operação daquela equipe.  
-**Critério de aceite 2** | Dado que uma equipe foi selecionada, então todos os registros criados a partir dali devem ficar vinculados a essa equipe.  
-**Critérios INVEST** | **I (Independente):** Pode ser implementada de forma isolada, pois representa a tela inicial do fluxo operacional e tem como função principal definir a equipe ativa antes de qualquer registro. <br><br> **N (Negociável):** O formato da seleção pode variar entre botões, cards ou lista. O ponto obrigatório é que uma equipe seja selecionada antes do início dos registros. <br><br> **V (Valiosa):** Sem essa US, o fluxo operacional não pode ser iniciado corretamente, pois os registros precisam estar vinculados à equipe correspondente para evitar inconsistências na apuração. <br><br> **E (Estimável):** Envolve uma tela com as equipes disponíveis e a persistência da escolha durante a sessão. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** Trata-se de uma tela única e objetiva, adequada para ser desenvolvida dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem validar se as equipes são exibidas corretamente e se os registros posteriores ficam vinculados à equipe escolhida.
+As User Stories descrevem as funcionalidades do sistema a partir das necessidades dos usuários. No contexto do BullPace, elas foram organizadas considerando o novo fluxo da aplicação: seleção de perfil, identificação do promotor, autenticação da gestora, operação da prova, registro de turnos e checkpoints, correções auditáveis, acompanhamento dos resultados e exportação dos dados.
 
+---
 
-**US02**
+### US01 — Selecionar perfil de acesso
 
-**Identificação** | US02  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero selecionar um dos 16 atletas da equipe selecionada para que os registros de turnos estejam associados ao atleta escolhido.  
-**Critério de aceite 1** | Dado que a equipe foi selecionada, quando o promotor visualizar a lista de atletas, então os 16 atletas da equipe devem estar disponíveis para seleção.  
-**Critério de aceite 2** | Dado que um atleta foi escolhido, então o sistema deve identificá-lo como atleta ativo para o próximo registro de turno.  
-**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada de forma isolada com uma equipe previamente definida ou mockada. No fluxo completo, depende apenas da equipe selecionada na US01. <br><br> **N (Negociável):** A forma de listar os 16 atletas pode variar entre grid, lista ou cards. O ponto obrigatório é que o atleta selecionado seja vinculado aos registros seguintes. <br><br> **V (Valiosa):** Essa US permite a rastreabilidade individual dos atletas. Sem ela, os registros ficariam associados apenas à equipe, prejudicando a análise de desempenho individual. <br><br> **E (Estimável):** Envolve a exibição de uma lista com 16 atletas e a persistência da escolha como atleta ativo. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A história é focada em uma única ação principal: selecionar um atleta da equipe. Por isso, cabe dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite validam se os 16 atletas corretos aparecem e se o sistema reconhece o atleta selecionado como ativo para o próximo turno.
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US01 |
+| **Persona** | Promotor de Field Marketing / Gestora de Operações |
+| **User Story** | Como usuário do sistema, seja **Promotor de Field Marketing** ou **Gestora de Operações**, quero selecionar meu perfil de acesso ao entrar na aplicação para que o sistema direcione minha experiência conforme minhas permissões e responsabilidades no evento. |
 
+**Critérios de aceite**
 
-**US03**
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que o usuário acessa a aplicação, quando a tela inicial for carregada, então o sistema deve exibir as opções de perfil disponíveis: **Promotor de Field Marketing** e **Gestora de Operações**. |
+| **Critério de aceite 2** | Dado que o usuário seleciona o perfil de **Promotor de Field Marketing**, então o sistema deve direcioná-lo para a identificação do promotor que realizará os registros operacionais. |
+| **Critério de aceite 3** | Dado que o usuário seleciona o perfil de **Gestora de Operações**, então o sistema deve direcioná-la para uma etapa de acesso autenticado antes de liberar funcionalidades administrativas. |
 
-**Identificação** | US03  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero iniciar o turno de um atleta, para garantir que os checkpoints estejam associados àquele turno.  
-**Critério de aceite 1** | Dado que um atleta foi selecionado, quando o promotor clicar em “Iniciar turno”, então o sistema deve registrar automaticamente o timestamp de início.  
-**Critério de aceite 2** | Dado que o turno foi iniciado, então o sistema deve criar um turno novo e vincular todos os checkpoints a esse turno.  
-**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada de forma isolada com um atleta previamente selecionado ou mockado. No fluxo completo, depende da seleção de atleta, mas entrega uma funcionalidade própria: criar um turno com timestamp automático. <br><br> **N (Negociável):** A forma de iniciar o turno pode variar entre botão simples, dupla confirmação ou outro padrão de interação. O ponto obrigatório é o registro automático do timestamp de início. <br><br> **V (Valiosa):** Essa US cria a sessão de corrida do atleta. Sem ela, os checkpoints não teriam um turno específico ao qual se associar. <br><br> **E (Estimável):** Envolve um botão de início, gravação automática de timestamp e criação de um turno vinculado ao atleta. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A funcionalidade é compacta e possui escopo bem delimitado, sendo adequada para desenvolvimento dentro de uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem verificar se o timestamp é registrado ao iniciar o turno e se os checkpoints futuros ficam associados ao turno criado.
+**Critérios INVEST**
 
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser desenvolvida separadamente das demais telas, pois representa o primeiro ponto de entrada da aplicação e apenas define qual fluxo será acessado. |
+| **N — Negociável** | A forma visual de seleção pode variar entre botões, cards ou tela de escolha simples. O ponto obrigatório é diferenciar claramente os perfis de acesso. |
+| **V — Valiosa** | Garante que cada tipo de usuário acesse o sistema de acordo com suas permissões, evitando que um promotor entre diretamente em funcionalidades administrativas. |
+| **E — Estimável** | A implementação envolve uma tela inicial com duas opções de perfil e redirecionamento para fluxos distintos, permitindo estimativa clara de esforço. |
+| **S — Pequena** | Possui escopo reduzido, pois se limita à seleção inicial do perfil de acesso e ao encaminhamento para a próxima etapa do fluxo. |
+| **T — Testável** | Pode ser validada verificando se cada opção de perfil leva corretamente à tela seguinte correspondente. |
 
-**US04**
+---
 
-**Identificação** | US04  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero inserir o KM acumulado, e como opcionais o Pace Médio e a Velocidade Média lidos na esteira para que o histórico de desempenho do atleta seja registrado integralmente.  
-**Critério de aceite 1** | Dado que um checkpoint está sendo registrado, quando o promotor preencher o KM acumulado e confirmar, então o dado deve ser salvo com sucesso.  
-**Critério de aceite 2** | Dado que o sistema esteja no formulário de checkpoint, então os campos Pace Médio e Velocidade Média devem ser opcionais e, quando preenchidos, também devem ser salvos no registro.  
-**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada com um turno previamente criado ou mockado. No fluxo completo, os checkpoints passam a ser vinculados ao turno criado na US03. <br><br> **N (Negociável):** A disposição dos campos de Pace Médio e Velocidade Média pode variar na interface. O ponto obrigatório é que o KM acumulado esteja sempre disponível e seja salvo corretamente. <br><br> **V (Valiosa):** Essa US registra os dados de performance do atleta ao longo do turno. Sem ela, o sistema teria apenas início e fim de sessão, sem histórico de desempenho. <br><br> **E (Estimável):** Envolve um formulário com campo obrigatório de KM acumulado e campos opcionais de Pace Médio e Velocidade Média. Estimativa aproximada: 1 a 2 dias. <br><br> **S (Pequena):** Apesar de conter três campos, todos pertencem ao mesmo evento de checkpoint, mantendo a história pequena e objetiva. <br><br> **T (Testável):** Os critérios de aceite permitem validar se o KM acumulado é salvo obrigatoriamente e se os campos opcionais são salvos quando preenchidos.
+### US02 — Identificar promotor responsável pela operação
 
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US02 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero selecionar meu nome a partir de uma lista de promotores previamente cadastrados para que os registros feitos durante a operação fiquem associados corretamente à minha identidade. |
 
-**US05**
+**Critérios de aceite**
 
-**Identificação** | US05  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero encerrar o turno do atleta para que os dados daquela sessão sejam salvos, mostrando os resultados daquele turno associado ao atleta.  
-**Critério de aceite 1** | Dado que o turno está em andamento, quando o promotor clicar em “Encerrar turno”, então o sistema deve salvar o encerramento daquele turno.  
-**Critério de aceite 2** | Dado que o turno foi encerrado, então o sistema deve exibir os resultados consolidados daquela sessão vinculados ao atleta correspondente.  
-**Critérios INVEST** | **I (Independente):** Pode ser implementada e testada com um turno previamente criado ou mockado. No fluxo completo, complementa a US03 ao encerrar a sessão iniciada. <br><br> **N (Negociável):** A forma de exibir os resultados do turno pode variar entre resumo em tela, modal ou seção dedicada. O ponto obrigatório é que o encerramento salve a sessão e apresente os resultados vinculados ao atleta. <br><br> **V (Valiosa):** Essa US fecha o ciclo do turno. Sem ela, a sessão permaneceria em aberto e os dados não seriam consolidados para o atleta. <br><br> **E (Estimável):** Envolve o encerramento do turno, gravação do horário final e exibição dos resultados consolidados da sessão. Estimativa aproximada: 1 dia. <br><br> **S (Pequena):** A funcionalidade é focada no fechamento de uma sessão já iniciada, com escopo reduzido e adequado para uma sprint. <br><br> **T (Testável):** Os critérios de aceite permitem validar se o sistema salva o encerramento do turno e exibe os resultados vinculados ao atleta correspondente.
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que o usuário selecionou o perfil de **Promotor de Field Marketing**, quando a tela de identificação for exibida, então o sistema deve apresentar uma lista com os promotores cadastrados. |
+| **Critério de aceite 2** | Dado que o promotor seleciona seu nome, então o sistema deve registrar essa identidade como responsável pelas próximas ações operacionais realizadas na aplicação. |
+| **Critério de aceite 3** | Dado que o promotor realizou uma ação, como iniciar turno, registrar checkpoint ou encerrar turno, então o registro salvo deve manter a identificação do promotor responsável. |
 
+**Critérios INVEST**
 
-**US06**
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada de forma isolada após a seleção do perfil de promotor, sem depender do fluxo completo de turnos e checkpoints. |
+| **N — Negociável** | A forma de exibir os promotores pode variar entre lista, cards ou busca simples. O ponto obrigatório é que o promotor consiga se identificar antes de operar o sistema. |
+| **V — Valiosa** | A identificação do responsável aumenta a rastreabilidade dos registros e permite saber quem realizou cada ação durante o evento. |
+| **E — Estimável** | Envolve listagem de usuários cadastrados, seleção de um nome e persistência da identidade ativa na sessão operacional. |
+| **S — Pequena** | A história trata de uma única ação principal: escolher quem está operando o sistema naquele momento. |
+| **T — Testável** | Pode ser testada verificando se o nome selecionado é mantido como responsável nos registros criados posteriormente. |
 
-**Identificação** | US06  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero visualizar o status atual das duas esteiras da equipe para saber qual está livre e qual está em uso.  
-**Critério de aceite 1** | Dado que a tela da equipe esteja aberta, então o sistema deve exibir claramente as duas esteiras vinculadas à equipe selecionada.  
-**Critério de aceite 2** | Dado que uma esteira esteja associada a um turno em andamento, então seu status deve aparecer como “em uso”.  
-**Critério de aceite 3** | Dado que uma esteira não esteja associada a um turno em andamento, então seu status deve aparecer como “livre”.  
-**Critérios INVEST** | 
+---
 
+### US03 — Trocar rapidamente o promotor ativo
 
-**US07**
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US03 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero acessar um ícone de perfil em todas as telas operacionais para trocar rapidamente o promotor ativo quando outra pessoa assumir a operação do iPad. |
 
-**Identificação** | US07  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero vincular o turno do atleta a uma das esteiras da equipe para que o registro fique associado ao equipamento utilizado.  
-**Critério de aceite 1** | Dado que um atleta foi selecionado para iniciar um turno, quando o promotor escolher uma esteira, então o sistema deve vincular aquele turno à esteira escolhida.  
-**Critério de aceite 2** | Dado que o turno foi iniciado com uma esteira vinculada, então todos os checkpoints daquele turno devem manter o vínculo com a mesma esteira.  
-**Critério de aceite 3** | Dado que uma esteira esteja em uso, então o sistema deve impedir que outro turno seja iniciado nela simultaneamente.  
-**Critérios INVEST** | 
+**Critérios de aceite**
 
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que o promotor está em uma tela operacional, então o sistema deve exibir um ícone de perfil visível e acessível. |
+| **Critério de aceite 2** | Dado que o promotor clica no ícone de perfil, quando seleciona outro nome da lista de promotores cadastrados, então o sistema deve atualizar o responsável pelas próximas ações. |
+| **Critério de aceite 3** | Dado que o promotor ativo foi alterado, então os registros anteriores devem manter o responsável original, sem sobrescrever o histórico já salvo. |
 
-**US08**
+**Critérios INVEST**
 
-**Identificação** | US08  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero selecionar um atleta que já possui turnos registrados para iniciar um novo turno sem sobrescrever o histórico anterior.  
-**Critério de aceite 1** | Dado que um atleta já possui um ou mais turnos registrados, quando ele for selecionado novamente, então o sistema deve permitir iniciar um novo turno para esse mesmo atleta.  
-**Critério de aceite 2** | Dado que o novo turno foi iniciado, então ele deve ser salvo como um turno distinto dos turnos anteriores.  
-**Critério de aceite 3** | Dado que o atleta possui histórico anterior, então os dados dos turnos passados devem permanecer preservados.  
-**Critérios INVEST** | 
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser desenvolvida como complemento da identificação do promotor, sem depender da implementação completa de todos os fluxos operacionais. |
+| **N — Negociável** | O ícone pode estar no cabeçalho, menu superior ou lateral. O ponto obrigatório é permitir a troca rápida do responsável sem reiniciar todo o fluxo. |
+| **V — Valiosa** | Reduz erros de autoria nos registros, especialmente em um evento longo, no qual operadores podem se alternar durante as 24 horas. |
+| **E — Estimável** | A implementação envolve um componente de perfil, uma ação de troca de usuário ativo e a persistência da nova identidade para registros futuros. |
+| **S — Pequena** | A história é focada em uma única funcionalidade: alterar rapidamente o promotor responsável pela operação. |
+| **T — Testável** | Pode ser validada verificando se, após a troca de perfil, os novos registros ficam associados ao novo promotor e os registros antigos preservam o responsável anterior. |
 
+---
 
-**US09**
+### US04 — Acessar funcionalidades administrativas com autenticação
 
-**Identificação** | US09  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero receber um alerta de timer regressivo para registrar os checkpoints no tempo correto durante o turno.  
-**Critério de aceite 1** | Dado que um turno esteja em andamento, então o sistema deve exibir um timer regressivo para orientar o próximo registro de checkpoint.  
-**Critério de aceite 2** | Dado que o timer chegue ao fim, então o sistema deve sinalizar visualmente que um novo checkpoint precisa ser registrado.  
-**Critério de aceite 3** | Dado que um checkpoint seja salvo, então o sistema deve reiniciar o timer para o próximo intervalo de registro.  
-**Critérios INVEST** | 
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US04 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero acessar o sistema por meio de autenticação para utilizar funcionalidades operacionais e administrativas com privilégios, incluindo a correção de registros antigos e checkpoints. |
 
+**Critérios de aceite**
 
-**US10**
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a usuária seleciona o perfil de **Gestora de Operações**, então o sistema deve solicitar uma etapa de autenticação antes de liberar o acesso. |
+| **Critério de aceite 2** | Dado que as credenciais informadas são válidas, então o sistema deve liberar o acesso às funcionalidades de gestora. |
+| **Critério de aceite 3** | Dado que as credenciais informadas são inválidas, então o sistema deve impedir o acesso às funcionalidades administrativas. |
+| **Critério de aceite 4** | Dado que a gestora está autenticada, então ela deve poder acessar as funcionalidades operacionais do promotor e também funcionalidades privilegiadas de correção e auditoria. |
 
-**Identificação** | US10  
-**Persona** | Promotor de Field Marketing  
-**User Story** | Como promotor de Field Marketing, quero finalizar a equipe com confirmação para consolidar os resultados de todos os atletas.  
-**Critério de aceite 1** | Dado que não exista turno em andamento para a equipe, quando o promotor clicar em “Finalizar equipe”, então o sistema deve solicitar confirmação antes de concluir a ação.  
-**Critério de aceite 2** | Dado que a finalização seja confirmada, então o sistema deve consolidar os resultados de todos os atletas daquela equipe.  
-**Critério de aceite 3** | Dado que a equipe foi finalizada, então o sistema deve impedir alterações diretas nos registros consolidados.  
-**Critérios INVEST** | 
+**Critérios INVEST**
 
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada separadamente do fluxo operacional, pois trata do acesso da gestora e da liberação de permissões administrativas. |
+| **N — Negociável** | O método de autenticação pode variar conforme a decisão técnica do grupo, como senha simples, código de acesso ou autenticação integrada. O ponto obrigatório é restringir funções administrativas à gestora. |
+| **V — Valiosa** | Protege ações sensíveis, como alteração de registros antigos, evitando que qualquer operador comum modifique dados importantes da apuração. |
+| **E — Estimável** | Envolve tela de autenticação, validação de credenciais e definição de permissões, o que torna o escopo estimável. |
+| **S — Pequena** | A história é limitada ao acesso autenticado da gestora e à liberação do perfil administrativo. |
+| **T — Testável** | Pode ser testada com credenciais válidas e inválidas, verificando se o sistema libera ou bloqueia corretamente as funcionalidades administrativas. |
 
-**US11**
+---
 
-**Identificação** | US11  
-**Persona** | Coordenadora de operações de campo 
-**User Story** | Como Coordenadora de operações de campo , quero visualizar a tela de resultado da equipe para conferir o total consolidado antes do encerramento da competição.  
-**Critério de aceite 1** | Dado que a equipe tenha sido finalizada, quando a Coordenadora de operações de campo  acessar a tela de resultado, então o sistema deve exibir o total de quilômetros acumulados da equipe.  
-**Critério de aceite 2** | Dado que a tela de resultado esteja aberta, então o sistema deve apresentar os valores consolidados de forma clara e legível.  
-**Critério de aceite 3** | Dado que os resultados estejam consolidados, então o sistema deve exibir os dados associados à equipe correspondente.  
-**Critérios INVEST** | 
+### US05 — Selecionar equipe em operação
 
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US05 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero selecionar a equipe que será acompanhada para que todos os registros posteriores sejam vinculados corretamente ao grupo em competição. |
 
-**US12**
+**Critérios de aceite**
 
-**Identificação** | US12  
-**Persona** | Coordenadora de operações de campo   
-**User Story** | Como Coordenadora de operações de campo , quero comparar as duas equipes lado a lado para identificar a vencedora da competição.  
-**Critério de aceite 1** | Dado que ambas as equipes tenham sido finalizadas, quando a coordenadora acessar a comparação final, então o sistema deve exibir os resultados das duas equipes lado a lado.  
-**Critério de aceite 2** | Dado que uma equipe tenha maior quilometragem acumulada que a outra, então o sistema deve destacá-la visualmente como vencedora.  
-**Critério de aceite 3** | Dado que as duas equipes tenham a mesma quilometragem acumulada, então o sistema deve exibir o resultado como empate.  
-**Critérios INVEST** | 
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que o promotor está identificado no sistema, quando a tela de seleção de equipe for exibida, então o sistema deve apresentar as equipes cadastradas para o evento. |
+| **Critério de aceite 2** | Dado que o promotor seleciona uma equipe, então o sistema deve direcioná-lo para o fluxo operacional daquela equipe. |
+| **Critério de aceite 3** | Dado que uma equipe foi selecionada, então os registros seguintes, como seleção de atleta, vínculo de esteira, início de turno e checkpoints, devem permanecer associados à equipe escolhida. |
 
+**Critérios INVEST**
 
-**US13**
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a identificação do promotor, pois representa uma etapa específica do fluxo operacional e não exige que os turnos já estejam implementados. |
+| **N — Negociável** | A seleção pode ser feita por cards, botões ou lista. O ponto obrigatório é que apenas uma equipe seja definida como contexto ativo da operação. |
+| **V — Valiosa** | Garante que os registros da competição sejam associados à equipe correta, evitando inconsistências na consolidação da quilometragem. |
+| **E — Estimável** | Envolve listagem de equipes, seleção de uma equipe e persistência desse contexto nas próximas telas. |
+| **S — Pequena** | A história trata de uma ação única e bem delimitada: escolher a equipe em operação. |
+| **T — Testável** | Pode ser validada verificando se a equipe selecionada permanece associada aos registros criados no fluxo seguinte. |
 
-**Identificação** | US13  
-**Persona** | Coordenadora de operações de campo  
-**User Story** | ComoCoordenadora de operações de campo , quero exportar os dados consolidados em CSV para auditoria do evento.  
-**Critério de aceite 1** | Dado que os dados consolidados estejam disponíveis, quando a coordenadora clicar em “Exportar CSV”, então o sistema deve gerar um arquivo com os registros do evento.  
-**Critério de aceite 2** | Dado que o arquivo CSV seja exportado, então ele deve conter informações de equipes, atletas, esteiras, turnos e checkpoints.  
-**Critério de aceite 3** | Dado que existam timestamps registrados no sistema, então eles devem estar presentes no arquivo CSV exportado.  
-**Critérios INVEST** | 
+---
+
+### US06 — Selecionar atleta da equipe
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US06 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero selecionar um atleta da equipe escolhida para iniciar um novo turno associado ao participante correto. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que uma equipe foi selecionada, quando a tela de atletas for exibida, então o sistema deve apresentar apenas os atletas cadastrados naquela equipe. |
+| **Critério de aceite 2** | Dado que o promotor seleciona um atleta, então o sistema deve identificá-lo como atleta ativo para o próximo turno. |
+| **Critério de aceite 3** | Dado que um atleta já possui turnos registrados anteriormente, quando ele for selecionado novamente, então o sistema deve permitir iniciar um novo turno sem sobrescrever o histórico anterior. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a seleção de equipe, sem depender da lógica completa de checkpoint ou encerramento de turno. |
+| **N — Negociável** | A exibição dos atletas pode ocorrer em lista, cards ou grade. O ponto obrigatório é permitir a escolha de um atleta pertencente à equipe selecionada. |
+| **V — Valiosa** | Garante rastreabilidade individual, permitindo associar cada turno ao atleta correto e preservar o histórico de participação ao longo da prova. |
+| **E — Estimável** | A implementação envolve listar atletas da equipe, selecionar um atleta e manter esse atleta como contexto ativo para o próximo turno. |
+| **S — Pequena** | A história é focada em uma única ação operacional: selecionar o atleta que será associado ao próximo turno. |
+| **T — Testável** | Pode ser validada verificando se apenas atletas da equipe escolhida aparecem e se o atleta selecionado fica vinculado ao turno criado posteriormente. |
+
+---
+
+### US07 — Visualizar status das esteiras
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US07 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero visualizar as esteiras da equipe e seus respectivos status para saber qual equipamento está livre ou em uso antes de iniciar um turno. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que uma equipe foi selecionada, então o sistema deve exibir as esteiras vinculadas a essa equipe. |
+| **Critério de aceite 2** | Dado que uma esteira está associada a um turno em andamento, então o sistema deve exibir seu status como **em uso**. |
+| **Critério de aceite 3** | Dado que uma esteira não está associada a nenhum turno em andamento, então o sistema deve exibir seu status como **livre**. |
+| **Critério de aceite 4** | Dado que uma esteira está indisponível por manutenção ou falha operacional, então o sistema deve indicar seu status como indisponível, caso essa condição esteja registrada. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada como uma visualização própria das esteiras da equipe, sem exigir a criação completa do fluxo de turno. |
+| **N — Negociável** | A representação visual do status pode variar entre cores, ícones, etiquetas ou cards. O ponto obrigatório é deixar claro quais esteiras estão livres, em uso ou indisponíveis. |
+| **V — Valiosa** | Ajuda o promotor a evitar erros operacionais, como tentar iniciar um turno em uma esteira já ocupada. |
+| **E — Estimável** | Envolve consultar as esteiras da equipe e exibir seus estados conforme os turnos ativos e a situação operacional registrada. |
+| **S — Pequena** | A história é restrita à visualização do estado das esteiras, sem incluir ainda o vínculo com o turno. |
+| **T — Testável** | Pode ser validada verificando se o status exibido muda corretamente conforme a esteira esteja livre, em uso ou indisponível. |
+
+---
+
+### US08 — Vincular esteira ao turno
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US08 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero vincular uma esteira ao turno do atleta para que todos os registros daquela sessão fiquem associados ao equipamento utilizado. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que um atleta foi selecionado, quando o promotor escolher uma esteira livre, então o sistema deve permitir iniciar o turno vinculado a essa esteira. |
+| **Critério de aceite 2** | Dado que a esteira foi vinculada ao turno, então todos os checkpoints desse turno devem manter associação com o mesmo equipamento. |
+| **Critério de aceite 3** | Dado que uma esteira está em uso, então o sistema deve impedir que outro turno seja iniciado simultaneamente nessa mesma esteira. |
+| **Critério de aceite 4** | Dado que uma esteira esteja indisponível, então ela não deve estar disponível para seleção no início de um novo turno. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a seleção de atleta e esteira, sem depender da tela de resultados ou da exportação de dados. |
+| **N — Negociável** | A forma de seleção da esteira pode variar. O ponto obrigatório é garantir que o turno fique associado a uma esteira válida e disponível. |
+| **V — Valiosa** | Garante rastreabilidade entre atleta, turno e equipamento, permitindo auditoria em caso de falha de esteira ou inconsistência operacional. |
+| **E — Estimável** | A implementação envolve validar disponibilidade da esteira, vincular o equipamento ao turno e impedir conflitos de uso simultâneo. |
+| **S — Pequena** | A história é focada em uma única responsabilidade: associar a esteira correta ao turno. |
+| **T — Testável** | Pode ser validada tentando iniciar turnos com esteiras livres, em uso e indisponíveis, verificando se o sistema aceita ou bloqueia corretamente cada caso. |
+
+---
+
+### US09 — Iniciar turno do atleta
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US09 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero iniciar o turno de um atleta para registrar o começo da sessão com timestamp automático e permitir que os checkpoints sejam vinculados ao turno correto. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que o promotor selecionou equipe, atleta e esteira livre, quando clicar em **Iniciar turno**, então o sistema deve criar um novo turno vinculado a esses dados. |
+| **Critério de aceite 2** | Dado que o turno foi iniciado, então o sistema deve registrar automaticamente o horário de início com timestamp do servidor. |
+| **Critério de aceite 3** | Dado que já existe um turno em andamento para a mesma equipe, então o sistema deve impedir o início de outro turno até que o turno atual seja encerrado. |
+| **Critério de aceite 4** | Dado que o turno foi iniciado com sucesso, então a esteira vinculada deve passar para o status **em uso**. |
+| **Critério de aceite 5** | Dado que o turno foi iniciado, então o sistema deve associar a ação ao promotor ativo no momento do registro. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após as etapas de seleção de equipe, atleta, esteira e promotor ativo, sem depender da exportação ou do placar final. |
+| **N — Negociável** | A forma de iniciar o turno pode variar entre botão simples ou confirmação adicional. O ponto obrigatório é criar o turno com vínculo correto e timestamp automático. |
+| **V — Valiosa** | É uma funcionalidade central do sistema, pois marca o início da sessão do atleta e permite que os checkpoints sejam organizados corretamente. |
+| **E — Estimável** | Envolve validação de contexto ativo, criação de turno, timestamp automático, alteração de status da esteira e registro do promotor responsável. |
+| **S — Pequena** | Apesar de envolver algumas validações, a história possui uma ação principal bem delimitada: iniciar um turno. |
+| **T — Testável** | Pode ser validada verificando se o turno é criado corretamente, se o timestamp é automático, se a esteira muda de status e se o promotor responsável fica registrado. |
+
+---
+
+### US10 — Registrar checkpoint do turno
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US10 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero registrar checkpoints durante um turno ativo para salvar o KM acumulado e, opcionalmente, o pace médio e a velocidade média lidos na esteira. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que existe um turno ativo, quando o promotor registrar um checkpoint, então o sistema deve exigir o preenchimento do **KM acumulado**. |
+| **Critério de aceite 2** | Dado que o promotor preenche pace médio e velocidade média, então o sistema deve salvar esses dados como campos opcionais do checkpoint. |
+| **Critério de aceite 3** | Dado que o checkpoint é salvo, então o sistema deve registrar automaticamente o timestamp do servidor. |
+| **Critério de aceite 4** | Dado que já existe um checkpoint anterior no mesmo turno, quando o promotor informar um KM acumulado menor que o último valor registrado, então o sistema deve impedir o salvamento e exibir uma mensagem de erro. |
+| **Critério de aceite 5** | Dado que o checkpoint foi registrado, então ele deve ficar vinculado ao turno ativo, ao atleta, à equipe, à esteira e ao promotor responsável pela ação. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada a partir de um turno ativo previamente criado, sem depender da finalização da equipe ou da comparação final entre equipes. |
+| **N — Negociável** | A disposição dos campos na interface pode variar. O ponto obrigatório é que o KM acumulado seja obrigatório e os campos de pace médio e velocidade média sejam opcionais. |
+| **V — Valiosa** | É uma das funcionalidades mais importantes do sistema, pois substitui o registro em prancheta e cria o histórico de desempenho do atleta durante o turno. |
+| **E — Estimável** | Envolve formulário de checkpoint, validação do KM acumulado, campos opcionais, timestamp automático e persistência vinculada ao turno. |
+| **S — Pequena** | A história é focada no registro de um checkpoint, mesmo contendo validações internas relacionadas à consistência dos dados. |
+| **T — Testável** | Pode ser validada registrando checkpoints válidos, tentando salvar checkpoint sem KM acumulado e tentando inserir KM menor que o último valor registrado. |
+
+---
+
+### US11 — Receber alerta de tempo para checkpoint
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US11 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero receber um alerta de tempo durante o turno para lembrar o momento correto de registrar o próximo checkpoint. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que um turno está em andamento, então o sistema deve exibir um timer regressivo para orientar o próximo registro de checkpoint. |
+| **Critério de aceite 2** | Dado que o timer chega ao fim, então o sistema deve sinalizar visualmente que um novo checkpoint precisa ser registrado. |
+| **Critério de aceite 3** | Dado que um checkpoint foi salvo, então o sistema deve reiniciar o timer para o próximo intervalo de registro. |
+| **Critério de aceite 4** | Dado que o turno foi encerrado, então o sistema deve parar o timer daquele turno. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada como complemento visual do turno ativo, sem depender da exportação de dados ou da comparação final entre equipes. |
+| **N — Negociável** | A forma do alerta pode variar entre mudança de cor, aviso textual, ícone ou destaque visual. O ponto obrigatório é lembrar o promotor de registrar o checkpoint no tempo correto. |
+| **V — Valiosa** | Reduz o risco de esquecimento durante a operação, especialmente em um evento longo, repetitivo e sujeito à fadiga dos operadores. |
+| **E — Estimável** | Envolve controle de tempo, exibição de timer, sinalização visual e reinício do contador após o registro de checkpoint. |
+| **S — Pequena** | A história possui escopo bem delimitado: orientar o momento de registro dos checkpoints durante um turno ativo. |
+| **T — Testável** | Pode ser validada verificando se o timer aparece durante o turno, sinaliza o momento do checkpoint, reinicia após o registro e para ao encerrar o turno. |
+
+---
+
+### US12 — Encerrar turno do atleta
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US12 |
+| **Persona** | Promotor de Field Marketing |
+| **User Story** | Como **Promotor de Field Marketing**, quero encerrar o turno do atleta para salvar o resultado daquela sessão, liberar a esteira e permitir a continuidade do revezamento. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que existe um turno em andamento, quando o promotor clicar em **Encerrar turno**, então o sistema deve permitir o encerramento da sessão. |
+| **Critério de aceite 2** | Dado que o turno está sendo encerrado, então o sistema deve registrar automaticamente o timestamp de encerramento. |
+| **Critério de aceite 3** | Dado que existe um último checkpoint registrado, então o valor final do turno deve ser maior ou igual ao último KM acumulado salvo. |
+| **Critério de aceite 4** | Dado que o turno foi encerrado, então a esteira vinculada deve voltar ao status **livre**. |
+| **Critério de aceite 5** | Dado que o turno foi encerrado, então o sistema deve exibir ou disponibilizar o resumo da sessão associado ao atleta correspondente. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a criação de turnos e checkpoints, sem depender da finalização da equipe ou da exportação dos dados. |
+| **N — Negociável** | A forma de encerramento pode incluir botão simples, modal de confirmação ou resumo antes de salvar. O ponto obrigatório é finalizar o turno com timestamp, consistência de KM e liberação da esteira. |
+| **V — Valiosa** | Fecha o ciclo operacional de uma sessão de corrida e permite que o próximo atleta utilize a esteira sem sobrepor registros. |
+| **E — Estimável** | Envolve atualização do status do turno, registro de horário final, validação do KM final, liberação da esteira e exibição de resumo. |
+| **S — Pequena** | A história trata de uma única ação principal: encerrar um turno ativo. |
+| **T — Testável** | Pode ser validada encerrando um turno válido, tentando encerrar sem turno ativo e verificando se o status da esteira e o resumo do turno são atualizados corretamente. |
+
+---
+
+### US13 — Visualizar registros antigos
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US13 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero visualizar registros antigos de turnos e checkpoints para conferir informações lançadas durante a operação e identificar possíveis inconsistências. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora está autenticada, quando acessar a área de registros, então o sistema deve exibir turnos e checkpoints já registrados. |
+| **Critério de aceite 2** | Dado que os registros são exibidos, então eles devem apresentar informações como equipe, atleta, esteira, turno, KM acumulado, horário e responsável pelo registro. |
+| **Critério de aceite 3** | Dado que a gestora deseja localizar um registro específico, então o sistema deve permitir consulta ou filtragem por informações relevantes, como equipe, atleta, turno ou período. |
+| **Critério de aceite 4** | Dado que um registro foi encontrado, então a gestora deve conseguir visualizar seus detalhes antes de qualquer ação de correção. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada como uma tela de consulta administrativa, sem depender inicialmente da funcionalidade de correção. |
+| **N — Negociável** | A visualização pode ser feita por tabela, lista, cards ou filtros. O ponto obrigatório é permitir que a gestora consulte registros anteriores com informações suficientes para auditoria. |
+| **V — Valiosa** | Permite conferência e auditoria dos dados registrados, reduzindo o risco de decisões baseadas em informações incompletas ou difíceis de localizar. |
+| **E — Estimável** | Envolve listagem de registros, exibição de detalhes e filtros básicos de consulta. |
+| **S — Pequena** | A história se concentra na visualização de registros antigos, sem incluir ainda a alteração dos dados. |
+| **T — Testável** | Pode ser validada verificando se a gestora autenticada consegue visualizar registros existentes e localizar informações específicas por filtros ou consulta. |
+
+---
+
+### US14 — Corrigir checkpoints e registros antigos
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US14 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero corrigir checkpoints e registros antigos para ajustar inconsistências identificadas durante ou após a operação da prova. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora está autenticada, quando acessar um registro antigo, então o sistema deve permitir iniciar uma correção. |
+| **Critério de aceite 2** | Dado que um promotor comum tenta alterar um registro antigo, então o sistema deve impedir a alteração. |
+| **Critério de aceite 3** | Dado que a gestora altera um valor de checkpoint ou registro antigo, então o sistema deve salvar a alteração sem apagar o histórico original. |
+| **Critério de aceite 4** | Dado que uma correção foi realizada, então o sistema deve registrar a gestora responsável, o horário da alteração e os dados alterados. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a visualização de registros antigos, sem depender da exportação final em CSV. |
+| **N — Negociável** | A forma de correção pode variar entre modal, tela dedicada ou formulário lateral. O ponto obrigatório é restringir a alteração à gestora autenticada e preservar o histórico. |
+| **V — Valiosa** | Garante que inconsistências possam ser corrigidas sem comprometer a rastreabilidade da apuração, o que é essencial para a confiabilidade do resultado final. |
+| **E — Estimável** | Envolve controle de permissão, formulário de alteração, persistência do novo valor e registro de autoria da correção. |
+| **S — Pequena** | A história é focada na ação de corrigir registros antigos, deixando justificativas detalhadas e auditoria expandida para histórias complementares. |
+| **T — Testável** | Pode ser validada testando uma correção feita pela gestora, uma tentativa de alteração feita por promotor e a preservação do registro original após a mudança. |
+
+---
+
+### US15 — Justificar alterações em registros antigos
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US15 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero informar uma justificativa ao corrigir registros antigos para manter rastreabilidade sobre o motivo da alteração realizada. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora tenta corrigir um registro antigo, então o sistema deve exigir o preenchimento de uma justificativa. |
+| **Critério de aceite 2** | Dado que a justificativa não foi preenchida, então o sistema deve bloquear o salvamento da correção. |
+| **Critério de aceite 3** | Dado que a correção foi confirmada com justificativa, então o sistema deve salvar o motivo informado junto ao registro de alteração. |
+| **Critério de aceite 4** | Dado que uma alteração foi salva, então a justificativa deve ficar disponível para consulta posterior pela gestora. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada como complemento da correção de registros antigos, sem depender da exportação CSV ou da comparação final entre equipes. |
+| **N — Negociável** | A justificativa pode ser inserida em campo de texto livre, modal ou formulário de confirmação. O ponto obrigatório é que ela seja exigida antes de salvar a correção. |
+| **V — Valiosa** | Aumenta a transparência da operação e permite compreender por que determinado dado foi alterado, fortalecendo a auditoria do evento. |
+| **E — Estimável** | Envolve campo obrigatório de justificativa, validação de preenchimento e armazenamento junto ao registro de alteração. |
+| **S — Pequena** | A história é específica e limitada à justificativa das alterações, sem ampliar o escopo para toda a auditoria. |
+| **T — Testável** | Pode ser validada tentando salvar uma alteração sem justificativa, salvando com justificativa e consultando posteriormente o motivo registrado. |
+
+---
+
+### US16 — Auditar responsáveis por registros e alterações
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US16 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero visualizar quem realizou cada registro ou alteração no sistema para auditar a operação do evento e conferir a responsabilidade sobre os dados salvos. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora está autenticada, quando acessar os detalhes de um turno, checkpoint ou alteração, então o sistema deve exibir o responsável pela ação registrada. |
+| **Critério de aceite 2** | Dado que um promotor registrou um checkpoint, então o sistema deve manter associado ao registro o nome do promotor ativo no momento da ação. |
+| **Critério de aceite 3** | Dado que a gestora realizou uma correção em um registro antigo, então o sistema deve exibir a gestora como responsável pela alteração. |
+| **Critério de aceite 4** | Dado que houve alteração em um registro, então o sistema deve preservar o responsável original e o responsável pela correção, sem sobrescrever o histórico anterior. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a identificação dos usuários e o registro das ações no sistema, sem depender da exportação CSV ou da comparação final entre equipes. |
+| **N — Negociável** | A forma de exibição da autoria pode variar entre tabela, detalhes do registro, modal ou histórico de alterações. O ponto obrigatório é que a gestora consiga identificar quem realizou cada ação relevante. |
+| **V — Valiosa** | Essa US aumenta a rastreabilidade e a confiabilidade da operação, permitindo auditar registros e alterações feitas durante as 24 horas de prova. |
+| **E — Estimável** | Envolve a exibição de dados já associados aos registros, como responsável, horário da ação e tipo de operação realizada. |
+| **S — Pequena** | A história é focada na consulta da autoria dos registros e alterações, sem incluir novas regras de correção ou exportação. |
+| **T — Testável** | Pode ser validada verificando se registros feitos por promotores e alterações feitas pela gestora exibem corretamente seus respectivos responsáveis. |
+
+---
+
+### US17 — Visualizar placar em Modo TV
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US17 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero visualizar o placar das equipes em Modo TV para acompanhar o andamento da competição em uma tela consolidada e somente leitura. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora acessa o Modo TV, então o sistema deve exibir as duas equipes lado a lado. |
+| **Critério de aceite 2** | Dado que existam registros de turnos e checkpoints, então o sistema deve apresentar a quilometragem acumulada de cada equipe. |
+| **Critério de aceite 3** | Dado que um novo checkpoint válido é registrado, então o placar deve refletir a atualização da quilometragem da equipe correspondente. |
+| **Critério de aceite 4** | Dado que o Modo TV é uma tela de acompanhamento, então o sistema não deve permitir edição, exclusão ou alteração de registros por essa interface. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada como uma tela de visualização a partir dos dados já registrados, sem depender diretamente da exportação CSV. |
+| **N — Negociável** | O layout do Modo TV pode variar, desde que apresente as duas equipes de forma clara, legível e adequada para acompanhamento da competição. |
+| **V — Valiosa** | Permite que a gestão acompanhe a evolução das equipes sem depender de conferência manual, aumentando a visibilidade operacional durante o evento. |
+| **E — Estimável** | Envolve consulta dos dados consolidados, exibição das equipes e atualização visual do placar conforme novos registros são salvos. |
+| **S — Pequena** | A história se limita à visualização do placar em modo somente leitura, sem incluir funcionalidades administrativas. |
+| **T — Testável** | Pode ser validada verificando se as equipes aparecem corretamente, se a quilometragem é atualizada e se nenhuma ação de edição é permitida no Modo TV. |
+
+---
+
+### US18 — Finalizar equipe
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US18 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero finalizar uma equipe mediante confirmação para consolidar os resultados dos atletas e impedir alterações diretas nos registros consolidados. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que a gestora está autenticada, quando acessar a ação de finalizar equipe, então o sistema deve solicitar confirmação antes de concluir a finalização. |
+| **Critério de aceite 2** | Dado que existe turno em andamento para a equipe, então o sistema deve impedir a finalização até que o turno seja encerrado. |
+| **Critério de aceite 3** | Dado que a finalização foi confirmada e não há turno ativo, então o sistema deve consolidar os resultados da equipe. |
+| **Critério de aceite 4** | Dado que a equipe foi finalizada, então o sistema deve impedir alterações diretas nos registros consolidados, permitindo apenas correções auditáveis feitas pela gestora. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após o fluxo de turnos e checkpoints, sem depender da comparação final entre equipes. |
+| **N — Negociável** | A confirmação pode ocorrer por modal, tela dedicada ou etapa de revisão. O ponto obrigatório é impedir finalização acidental e garantir que não exista turno ativo. |
+| **V — Valiosa** | Garante o fechamento seguro dos dados de uma equipe, permitindo consolidar os resultados antes da comparação final. |
+| **E — Estimável** | Envolve validação de turnos ativos, confirmação da ação, atualização do status da equipe e bloqueio de alterações diretas. |
+| **S — Pequena** | A história possui uma ação principal clara: finalizar uma equipe e consolidar seus dados. |
+| **T — Testável** | Pode ser validada tentando finalizar uma equipe com turno ativo, finalizando uma equipe sem turno ativo e conferindo se os dados consolidados ficam protegidos contra alterações diretas. |
+
+---
+
+### US19 — Comparar resultado final entre equipes
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US19 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero comparar os resultados finais das equipes para identificar a vencedora da competição ou registrar empate quando as quilometragens forem iguais. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que as equipes foram finalizadas, quando a gestora acessar a comparação final, então o sistema deve exibir os resultados das duas equipes lado a lado. |
+| **Critério de aceite 2** | Dado que uma equipe possui maior quilometragem consolidada que a outra, então o sistema deve destacá-la como vencedora. |
+| **Critério de aceite 3** | Dado que as duas equipes possuem a mesma quilometragem consolidada, então o sistema deve exibir o resultado como empate. |
+| **Critério de aceite 4** | Dado que uma das equipes ainda não foi finalizada, então o sistema deve informar que a comparação final ainda não pode ser concluída. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a finalização das equipes e consolidação dos resultados, sem depender da exportação CSV. |
+| **N — Negociável** | A forma de destaque da equipe vencedora pode variar entre cor, selo, card maior ou texto indicativo. O ponto obrigatório é deixar claro o resultado final da competição. |
+| **V — Valiosa** | Atende ao objetivo central do evento, que é identificar qual equipe acumulou a maior quilometragem ao final das 24 horas. |
+| **E — Estimável** | Envolve consulta dos resultados consolidados, comparação de quilometragem e tratamento dos cenários de vitória ou empate. |
+| **S — Pequena** | A história é focada na comparação final entre equipes, sem incluir auditoria ou exportação dos dados. |
+| **T — Testável** | Pode ser validada com cenários em que a Equipe A vence, a Equipe B vence, ocorre empate ou uma das equipes ainda não foi finalizada. |
+
+---
+
+### US20 — Exportar dados consolidados em CSV
+
+| Campo | Descrição |
+|---|---|
+| **Identificação** | US20 |
+| **Persona** | Gestora de Operações |
+| **User Story** | Como **Gestora de Operações**, quero exportar os dados consolidados em CSV para auditoria, conferência pós-evento e análise dos registros da competição. |
+
+**Critérios de aceite**
+
+| Critério | Descrição |
+|---|---|
+| **Critério de aceite 1** | Dado que os dados da competição estão disponíveis, quando a gestora acionar a exportação, então o sistema deve gerar um arquivo CSV com os registros do evento. |
+| **Critério de aceite 2** | Dado que o arquivo CSV foi gerado, então ele deve conter informações de equipes, atletas, esteiras, turnos, checkpoints e timestamps registrados. |
+| **Critério de aceite 3** | Dado que existam correções ou ajustes auditáveis, então o arquivo exportado deve preservar informações relevantes sobre os registros alterados, incluindo justificativas quando aplicável. |
+| **Critério de aceite 4** | Dado que a exportação foi concluída, então o sistema deve disponibilizar o arquivo para download pela gestora. |
+
+**Critérios INVEST**
+
+| Critério | Avaliação |
+|---|---|
+| **I — Independente** | Pode ser implementada após a existência dos registros principais no banco, sem depender da visualização do Modo TV. |
+| **N — Negociável** | O nome do arquivo, a ordem das colunas e os filtros de exportação podem ser ajustados. O ponto obrigatório é exportar os dados necessários para auditoria em formato CSV. |
+| **V — Valiosa** | Permite que a Red Bull confira os dados após o evento, audite registros e utilize as informações para análises futuras. |
+| **E — Estimável** | Envolve consulta dos dados consolidados, geração do arquivo CSV e disponibilização para download. |
+| **S — Pequena** | A história é focada na exportação dos dados em CSV, sem incluir análises avançadas ou geração de relatórios visuais. |
+| **T — Testável** | Pode ser validada gerando um CSV e conferindo se o arquivo contém os dados esperados de equipes, atletas, esteiras, turnos, checkpoints, timestamps e ajustes. |
 
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
