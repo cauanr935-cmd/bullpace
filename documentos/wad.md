@@ -1235,6 +1235,8 @@ turnos(**id_turno**, *id_atleta*, *id_esteira*, *id_sessao_operacional*, horario
 
 checkpoints(**id_checkpoint**, *id_turno*, *id_sessao_operacional*, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
 
+operador(**id_operador**, *nome*)
+
 
 #### 3.6.3.2 Modelo Físico
 
@@ -1255,7 +1257,9 @@ A ordem das migrations respeita as dependências entre as tabelas. Tabelas indep
 - `0007_create_turnos.sql`: depende de `atletas`, `esteiras` e `sessoes_operacionais`;
 - `0008_create_checkpoints.sql`: depende de `turnos` e `sessoes_operacionais`;
 - `0009_insert_dados_iniciais.sql`: depende de `funcoes`;
-- `0010_create_views.sql`: depende das tabelas anteriores.
+- `0010_create_views.sql`: depende das tabelas anteriores;
+- `0011_create_operador` : sem dependências externas;
+- `0012_create_coordenador` : sem dependências externa,
 
 ### Scripts das Migrations
 
@@ -1641,6 +1645,14 @@ ORDER BY
     t.horario_inicio,
     cp.registrado_em;
 ```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador(
+    id_operador SERIAL PRIMARY KEY,
+    nome VARCHAR(150),
+)
+```
+**0012_create_coordenador**
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
