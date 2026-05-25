@@ -1267,9 +1267,10 @@ CREATE TABLE eventos (
     nome           VARCHAR(100) NOT NULL,
     cidade         VARCHAR(100) NOT NULL,
     estado         VARCHAR(100) NOT NULL,
-    data_inicio    TIMESTAMPTZ NOT NULL,
-    data_fim       TIMESTAMPTZ NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT ck_eventos_status
         CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
@@ -1287,6 +1288,7 @@ CREATE TABLE funcoes (
     nome           VARCHAR(100) NOT NULL,
     descricao      TEXT,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT uq_funcoes_nome
         UNIQUE (nome),
@@ -1305,6 +1307,7 @@ CREATE TABLE equipes (
     nome           VARCHAR(100) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
     km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_equipes_eventos
         FOREIGN KEY (id_evento)
@@ -1333,6 +1336,7 @@ CREATE TABLE atletas (
     id_equipe      INT NOT NULL,
     nome           VARCHAR(150) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_atletas_equipes
         FOREIGN KEY (id_equipe)
@@ -1361,6 +1365,7 @@ CREATE TABLE esteiras (
     modelo         VARCHAR(100),
     numero_serie   VARCHAR(100),
     status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
 
     CONSTRAINT fk_esteiras_equipes
         FOREIGN KEY (id_equipe)
@@ -1393,9 +1398,10 @@ CREATE TABLE sessoes_operacionais (
     id_sessao_operacional SERIAL PRIMARY KEY,
     id_evento             INT NOT NULL,
     id_funcao             INT NOT NULL,
-    inicio_em             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    fim_em                TIMESTAMPTZ,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
     status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at            BOOLEAN,
 
     CONSTRAINT fk_sessoes_operacionais_eventos
         FOREIGN KEY (id_evento)
@@ -1432,8 +1438,8 @@ CREATE TABLE turnos (
     id_atleta              INT NOT NULL,
     id_esteira             INT NOT NULL,
     id_sessao_operacional  INT NOT NULL,
-    horario_inicio         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    horario_fim            TIMESTAMPTZ,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
     status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
     km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
 
@@ -1493,7 +1499,7 @@ CREATE TABLE checkpoints (
     km_acumulado           DECIMAL(10,3) NOT NULL,
     pace_medio             DECIMAL(10,3),
     velocidade_media       DECIMAL(10,3),
-    registrado_em          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
     is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_checkpoints_turnos
