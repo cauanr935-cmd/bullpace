@@ -694,8 +694,6 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
-### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
-
 ### 3.2.1. Arquitetura em Camadas (sprint 3)
 
 A aplicação BullPace foi organizada seguindo o padrão de Arquitetura em Camadas, na variante Controller-Service-Repository, que é a forma mais comum de estruturar aplicações web em Node.js com Express. Esse padrão separa o código em quatro camadas com responsabilidades bem definidas, o que ajuda no trabalho em grupo e facilita a manutenção do projeto ao longo das sprints.
@@ -707,8 +705,8 @@ Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisi�
 <br>
 <div align="center">
   <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
-  <img src="../assets/3.2.1-arquitetura-camadas.png" width="80%"><br>
-  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+  <img src="../assets/3.2.1-arquitetura-camadas (7).png" width="80%"><br>
+  <sub>Fonte: Elaborado pelos autores.</sub>
 </div>
 <br>
 
@@ -723,6 +721,19 @@ Segundo, ela traduz a requisição HTTP em uma chamada de função para o Servic
 Terceiro, ela formata a resposta. Pega o que o Service retornou, monta o JSON de resposta e devolve com o status code apropriado: 201 quando criou um recurso, 200 quando consultou, 404 quando não encontrou, 500 se algo quebrou no caminho.
 
 O Controller **não conhece regras de negócio**, **não acessa o banco diretamente** e **não faz validações que dependem do estado da aplicação**. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
+#### Camada Service
+
+A camada Service é onde mora a lógica de negócio do BullPace. Quando o Controller recebe uma requisição e repassa pra cá, é o Service que decide se aquele dado pode mesmo ser salvo. Ele aplica as regras de negócio do projeto antes de deixar qualquer coisa seguir pro banco.
+
+Pega o registro de checkpoint como exemplo. Antes de gravar, o Service checa três regras em sequência:
+
+- O turno ainda está ativo? Não dá pra registrar checkpoint num turno já encerrado (RN19).
+- O KM acumulado veio preenchido? É o dado central da apuração, então é obrigatório (RN18).
+- O novo KM é maior ou igual ao último do mesmo turno? A quilometragem só cresce dentro de um turno, nunca regride (RN06).
+
+Se qualquer uma falhar, o Service barra ali mesmo e devolve o erro pro Controller. O Repository nem chega a ser chamado e o banco continua intacto. Só quando as três passam é que ele monta o objeto final, já com o timestamp do servidor, que a RN12 não deixa o operador editar na mão, e aí sim manda pro Repository salvar.
+
+Duas coisas o Service não faz: não conversa direto com o banco e não mexe em detalhes de HTTP, como status code ou formato de resposta. Ele fica no meio do caminho recebe o que o Controller validou no nível do contrato, aplica as regras de negócio, e entrega pro Repository um objeto pronto pra persistir.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
