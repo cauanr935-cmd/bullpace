@@ -836,17 +836,18 @@ Ele representa os componentes reais da arquitetura (Controllers, Services e Repo
 └──────────────────────────┬─────────────────────────────┘
                            ▼ - - - > (Dependência)
 ┌────────────────────────────────────────────────────────┐
-│     CAMADA SERVICE (Classes de Regras de Negócio)      │ 
+│     CAMADA SERVICE (Classes de Regras de Negócio)      │ ---> DATABASE
 └──────────────────────────┬─────────────────────────────┘
                            ▼ - - - > (Dependência)
 ┌────────────────────────────────────────────────────────┐
-│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ 
+│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ ---> DATABASE
 └──────────────────────────┬─────────────────────────────┘
                            ▼ - - - > (Dependência)
 ┌────────────────────────────────────────────────────────┐
 │       CAMADA MODEL (Classes de Entidade/Domínio)       │ 
 └────────────────────────────────────────────────────────┘
 ```
+
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
