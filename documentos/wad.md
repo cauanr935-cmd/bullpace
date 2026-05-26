@@ -821,7 +821,13 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 ### 3.2.3.1. Diagrama de classes arquitetural
 
-https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_loc=-1113%2C852%2C4893%2C2871%2C0_0&invitationId=inv_3a6e3cbb-0e69-418f-9f14-1d77d0fb2ed6
+<div align="center">
+  <sub><b>Figura 9 - Diagrama de Classes Arquitetural</b></sub><br>
+  <img src="../assets/DiagramaClasseArquitetural.png" width="75%" alt="Diagrama de Classes Arquitetural"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetural](#diagrama-de-classes-arquitetural).
 
 # Documentação do Diagrama de Classes Arquitetural
 
@@ -1911,4 +1917,4 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c9"></a>Anexos
 
-*Inclua aqui quaisquer complementos para seu projeto, como diagramas, imagens, tabelas etc. Organize em sub-tópicos utilizando headings menores (use ## ou ### para isso)*
+<a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
