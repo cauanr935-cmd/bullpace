@@ -1254,21 +1254,25 @@ O modelo relacional textual apresenta as tabelas do sistema em formato resumido,
 
 O modelo relacional descreve os esquemas em formato textual:
 
-eventos(**id_evento**, nome, cidade, estado, data_inicio, data_fim, status)
+eventos(id_evento, nome, cidade, estado, data_inicio, data_fim, status)
 
-equipes(**id_equipe**, *id_evento*, nome, status, km_total)
+equipes(id_equipe, id_evento, nome, status, km_total)
 
-atletas(**id_atleta**, *id_equipe*, nome, status)
+atletas(id_atleta, id_equipe, nome, status)
 
-esteiras(**id_esteira**, *id_equipe*, *id_evento*, marca, modelo, numero_serie, status)
+esteiras(id_esteira, id_equipe, id_evento, marca, modelo, numero_serie, status)
 
-funcoes(**id_funcao**, nome, descricao, status)
+funcoes(id_funcao, nome, descricao, status)
 
-sessoes_operacionais(**id_sessao_operacional**, *id_evento*, *id_funcao*, inicio_em, fim_em, status)
+sessoes_operacionais(id_sessao_operacional, id_evento, id_funcao, inicio_em, fim_em, status)
 
-turnos(**id_turno**, *id_atleta*, *id_esteira*, *id_sessao_operacional*, horario_inicio, horario_fim, status, km_turno)
+turnos(id_turno, id_atleta, id_esteira, id_sessao_operacional, horario_inicio, horario_fim, status, km_turno)
 
-checkpoints(**id_checkpoint**, *id_turno*, *id_sessao_operacional*, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
+checkpoints(id_checkpoint, id_turno, id_sessao_operacional, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
+
+operador(id_operador, nome, id_sessao_operacional)
+
+coordenador(id_coordenador, nome, id_sessao_operacional)
 
 
 #### 3.6.3.2 Modelo Físico
@@ -1279,18 +1283,20 @@ A implementação abaixo foi organizada em migrations para garantir a criação 
 
 ### Migrations
 
-A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` e `checkpoints`.
+A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` ,`checkpoints`, `operador` e `coordenador`.
 
 - `0001_create_eventos.sql`: sem dependências externas;
 - `0002_create_funcoes.sql`: sem dependências externas;
-- `0003_create_equipes.sql`: depende de `eventos`;
-- `0004_create_atletas.sql`: depende de `equipes`;
-- `0005_create_esteiras.sql`: depende de `eventos` e `equipes`;
-- `0006_create_sessoes_operacionais.sql`: depende de `eventos` e `funcoes`;
-- `0007_create_turnos.sql`: depende de `atletas`, `esteiras` e `sessoes_operacionais`;
-- `0008_create_checkpoints.sql`: depende de `turnos` e `sessoes_operacionais`;
-- `0009_insert_dados_iniciais.sql`: depende de `funcoes`;
-- `0010_create_views.sql`: depende das tabelas anteriores.
+- `0003_create_equipes.sql`: depende de eventos;
+- `0004_create_atletas.sql`: depende de equipes;
+- `0005_create_esteiras.sql`: depende de eventos e equipes;
+- `0006_create_sessoes_operacionais.sql`: depende de eventos e funcoes;
+- `0007_create_turnos.sql`: depende de atletas, esteiras e sessoes_operacionais;
+- `0008_create_checkpoints.sql`: depende de turnos e sessoes_operacionais;
+- `0009_insert_dados_iniciais.sql`: depende de funcoes;
+- `0010_create_views.sql`: depende das tabelas anteriores;
+- `0011_create_operador.sql`: depende de sessoes_operacionais;
+- `0012_create_coordenador.sql`: depende de sessoes_operacionais.
 
 ### Scripts das Migrations
 
@@ -1302,9 +1308,10 @@ CREATE TABLE eventos (
     nome           VARCHAR(100) NOT NULL,
     cidade         VARCHAR(100) NOT NULL,
     estado         VARCHAR(100) NOT NULL,
-    data_inicio    TIMESTAMPTZ NOT NULL,
-    data_fim       TIMESTAMPTZ NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT ck_eventos_status
         CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
@@ -1322,6 +1329,7 @@ CREATE TABLE funcoes (
     nome           VARCHAR(100) NOT NULL,
     descricao      TEXT,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT uq_funcoes_nome
         UNIQUE (nome),
@@ -1340,6 +1348,7 @@ CREATE TABLE equipes (
     nome           VARCHAR(100) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
     km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_equipes_eventos
         FOREIGN KEY (id_evento)
@@ -1368,6 +1377,7 @@ CREATE TABLE atletas (
     id_equipe      INT NOT NULL,
     nome           VARCHAR(150) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_atletas_equipes
         FOREIGN KEY (id_equipe)
@@ -1396,6 +1406,7 @@ CREATE TABLE esteiras (
     modelo         VARCHAR(100),
     numero_serie   VARCHAR(100),
     status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
 
     CONSTRAINT fk_esteiras_equipes
         FOREIGN KEY (id_equipe)
@@ -1428,9 +1439,10 @@ CREATE TABLE sessoes_operacionais (
     id_sessao_operacional SERIAL PRIMARY KEY,
     id_evento             INT NOT NULL,
     id_funcao             INT NOT NULL,
-    inicio_em             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    fim_em                TIMESTAMPTZ,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
     status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at            BOOLEAN,
 
     CONSTRAINT fk_sessoes_operacionais_eventos
         FOREIGN KEY (id_evento)
@@ -1467,8 +1479,8 @@ CREATE TABLE turnos (
     id_atleta              INT NOT NULL,
     id_esteira             INT NOT NULL,
     id_sessao_operacional  INT NOT NULL,
-    horario_inicio         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    horario_fim            TIMESTAMPTZ,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
     status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
     km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
 
@@ -1528,7 +1540,7 @@ CREATE TABLE checkpoints (
     km_acumulado           DECIMAL(10,3) NOT NULL,
     pace_medio             DECIMAL(10,3),
     velocidade_media       DECIMAL(10,3),
-    registrado_em          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
     is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_checkpoints_turnos
@@ -1670,7 +1682,38 @@ ORDER BY
     t.horario_inicio,
     cp.registrado_em;
 ```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
 
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
+```
+**0012_create_coordenador**
+```sql
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
+```
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
