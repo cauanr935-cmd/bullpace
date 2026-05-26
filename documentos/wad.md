@@ -1160,17 +1160,38 @@ A estruturação deste seção é fundamental pois garante a consistência e coe
 *Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
 
 ### 3.4.2 Tipografia
-A definição tipográfica da aplicação web surge da necessidade operacional de garantir a correta leitura, inserção e conferência de dados ao longo das 24 horas ininterruptas de competição. Diante de fatores limitantes como a fadiga visual da equipe de campo, especialmente durante os turnos da madrugada, e a necessidade de acompanhamento em tempo real por meio do painel de controle (Modo TV), a interface exige elementos textuais que reduzam a sobrecarga cognitiva do usuário.
+A escolha da tipografia para a aplicação web surge da necessidade de garantir uma leitura clara e facilitada em relação a inserção de dados durante a competição. Como a equipe de campo pode sofrer com o cansaço visual, a interface precisa de letras muito fáceis de ler.
 
-Nesse contexto, definiu-se a utilização da família tipográfica Inter. A adoção dessa fonte sem serifa (sans-serif) fundamenta-se na sua alta legibilidade em diferentes resoluções de tela e distâncias focais. Além disso, a fonte apresenta excelente clareza estrutural para caracteres numéricos, um fator crítico para a apuração precisa de métricas como quilometragem acumulada, pace e tempo de prova.
+Por isso, definimos o uso da fonte Inter para todo o projeto. Ela é simples e sem serifa. Além disso, apresenta os números de forma muito clara, o que ajuda na administração correta dos dados da prova, evitando erros.
 
-Para assegurar a organização da informação e a padronização visual do sistema, a hierarquia tipográfica foi estruturada da seguinte forma:
+Como utilizamos apenas a fonte Inter, a hierarquia visual do sistema foi criada variando apenas o tamanho e o peso da letra, conforme apresentado no Quadro 2.
 
-Títulos e Placar (Bold, 24px ou superior): Aplicados nas métricas consolidadas e elementos de maior relevância, como o total de quilômetros por equipe. O peso estrutural elevado visa viabilizar o contraste e a leitura imediata à distância pela equipe de coordenação.
+**Quadro 2 – Hierarquia visual da tipografia**
+| Estilo | Fonte | Especificações | Uso |
+| :--- | :--- | :--- | :--- |
+| **Título Principal (H1)** | Inter | 48px, Negrito | Títulos de destaque e páginas principais |
+| **Título de Seção (H2)** | Inter | 24px, Negrito | Divisões importantes do sistema |
+| **Texto Padrão (Body)** | Inter | 16px, Normal | Textos gerais, listas e tabelas |
+| **Texto Menor (Caption)** | Inter | 14px, Normal | Legendas e informações secundárias |
+| **Botão (Button)** | Inter | 16px, Negrito | Botões de ação do sistema |
+<div align="center">
 
-Corpo de Texto (Regular e Medium, 16px): Direcionado aos componentes de interação direta no iPad, como a grade de seleção dos 16 atletas, indicativos de status das esteiras e botões operacionais. O dimensionamento adequado previne erros de toque e facilita o uso do sistema durante as rápidas transições de turno.
+*Fonte: Elaborado pelos autores (2026).*
 
-Legendas e Textos de Apoio (Regular, 12px a 14px): Restritos a informações auxiliares, como rótulos indicativos dos campos opcionais (pace médio e velocidade média) e unidades de medida. Essa aplicação evita a poluição visual, mantendo o foco do operador nos dados essenciais para o registro do checkpoint.
+</div>
+
+A fim de proporcionar uma visualização concreta da aplicação prática desses estilos na interface, a Figura 20 demonstra a tipográfia completa, exibindo a variação do alfabeto e dos caracteres numéricos da fonte Inter.
+
+<div align="center">
+
+**Figura 20 – Espécime tipográfico e variações de estilo da fonte Inter**
+ <img src="../assets/bullpace_tipografia.png" width="100%"><br>
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter, mesmo operando sob diferentes escalas de peso e tamanho, apresenta o conforto visual necessário para a operação. Essa consistência contribui diretamente para a redução do esforço cognitivo do usuário, mitigando a ocorrência de falhas operacionais durante a inserção de dados no sistema.
+
 ### 3.4.3 Iconografia e imagens 
 
 *(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
