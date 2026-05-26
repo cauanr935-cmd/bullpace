@@ -1160,6 +1160,7 @@ Por isso, definimos o uso da fonte Inter para todo o projeto. Ela é simples e s
 
 Como utilizamos apenas a fonte Inter, a hierarquia visual do sistema foi criada variando apenas o tamanho e o peso da letra, conforme apresentado no Quadro 2.
 
+**Quadro 2 – Hierarquia visual da tipografia**
 | Estilo | Fonte | Especificações | Uso |
 | :--- | :--- | :--- | :--- |
 | **Título Principal (H1)** | Inter | 48px, Negrito | Títulos de destaque e páginas principais |
@@ -1167,6 +1168,23 @@ Como utilizamos apenas a fonte Inter, a hierarquia visual do sistema foi criada 
 | **Texto Padrão (Body)** | Inter | 16px, Normal | Textos gerais, listas e tabelas |
 | **Texto Menor (Caption)** | Inter | 14px, Normal | Legendas e informações secundárias |
 | **Botão (Button)** | Inter | 16px, Negrito | Botões de ação do sistema |
+<div align="center">
+
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A fim de proporcionar uma visualização concreta da aplicação prática desses estilos na interface, a Figura 20 demonstra a tipográfia completa, exibindo a variação do alfabeto e dos caracteres numéricos da fonte Inter.
+
+<div align="center">
+
+**Figura 20 – Espécime tipográfico e variações de estilo da fonte Inter**
+ <img src="../assets/bullpace_tipografia.png" width="100%"><br>
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter, mesmo operando sob diferentes escalas de peso e tamanho, apresenta o conforto visual necessário para a operação. Essa consistência contribui diretamente para a redução do esforço cognitivo do usuário, mitigando a ocorrência de falhas operacionais durante a inserção de dados no sistema.
 
 ### 3.4.3 Iconografia e imagens 
 
