@@ -1127,13 +1127,28 @@ Nesse contexto, as escolhas cromáticas foram fundamentadas em princípios de ac
 
 O Quadro 1 apresenta a paleta de cores utilizadas, organizadas por função na interface.
 
+**Quadro 1 – Paleta de cores e funções na interface**
 | Nome da Cor | Código HEX | Função na Interface |
 | :--- | :--- | :--- |
-| **Red Bull Red** | `#DB0840` |Usada em botões de ação principal, CTAs, destaques e elementos de urgência. |
+| **Red Bull Red** | `#DB0840` | Usada em botões de ação principal, CTAs, destakes e elementos de urgência. |
 | **Deep Navy** | `#001E3C` | Cor de fundo. Aplicada em cabeçalhos escuros e seções de destaque. |
 | **Bright Green** | `#7ED32C` | Usada em indicadores de vitória ou vantagem das equipes, e elementos de confirmação. |
 | **Vibrant Pink** | `#F30B47` | Reservada para alertas importantes, chamadas urgentes, locais de atenção em geral e elementos de alta ênfase visual. |
+<div align="center"> Fonte: Elaborado pelos autores (2026).
+</div>
+Para ilustrar a harmonia visual prática da combinação de cores escolhida, a Figura 19 apresenta a paleta do sistema, exibindo as amostras visuais correspondentes aos códigos de identificação citados.
 
+<div align="center">
+
+**Figura 19 – Amostras cromáticas e distribuição da paleta de cores**
+
+  <img src="../assets/bullpace_cores.png" width="100%"><br>
+
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A combinação e contraste gerados por essa seleção de cores cumprem os requisitos de acessibilidade estipulados para o projeto, viabilizando uma navegação mais fluida mesmo em ambientes com iluminação oscilante. Desse modo, a identidade visual estabelecida atua diretamente na redução da fadiga visual e aprimoramento da usabilidade da interface ao longo de todo o período da competição.
 ### 3.4.2 Tipografia
 
 *Apresente aqui a tipografia da solução, com famílias de fontes e suas respectivas funções*
