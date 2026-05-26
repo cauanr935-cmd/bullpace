@@ -819,9 +819,35 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 | **Funcao — SessaoOperacional** | Associação | 1 : 0..* | Uma função pode estar associada a várias sessões operacionais. |
 | **Funcao — FuncaoOperador / FuncaoCoordenador** | Herança | - | Operador e coordenador são especializações de função. |
 
-### 3.2.3.1. Diagrama de Classes Arquitetural
+### 3.2.3.1. Diagrama de classes arquitetural
 
-O diagrama de classes arquitetural mostra como as partes internas do sistema estão organizadas e conectadas. Nele, são representados os principais componentes da aplicação, como controllers, services, repository e models, facilitando o entendimento da estrutura e funcionamento do sistema.
+https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_loc=-1113%2C852%2C4893%2C2871%2C0_0&invitationId=inv_3a6e3cbb-0e69-418f-9f14-1d77d0fb2ed6
+
+# Documentação do Diagrama de Classes Arquitetural
+
+## 1. Visão Geral do Diagrama
+ Diferente de um diagrama de classes de domínio tradicional (focado apenas nos atributos das entidades de banco de dados), este diagrama modela a **estrutura de alto nível do software**. 
+
+Ele representa os componentes reais da arquitetura (Controllers, Services e Repositories) como classes do sistema, mapeando com precisão suas responsabilidades, injeções de dependência e o fluxo de comunicação entre as camadas. O design segue o padrão de **Arquitetura em Camadas Verticais**, garantindo a separação de responsabilidades e um fluxo de dependência estritamente unidirecional.
+
+```text
+┌────────────────────────────────────────────────────────┐
+│   CAMADA CONTROLLER (Classes de Interface/Entrada)     │ 
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│     CAMADA SERVICE (Classes de Regras de Negócio)      │ ---> DATABASE
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ ---> DATABASE
+└──────────────────────────┬─────────────────────────────┘
+                           ▼ - - - > (Dependência)
+┌────────────────────────────────────────────────────────┐
+│       CAMADA MODEL (Classes de Entidade/Domínio)       │ 
+└────────────────────────────────────────────────────────┘
+```
+
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
@@ -1623,9 +1649,10 @@ ORDER BY
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
 
 
-*Template de SQL + lógica proposicional*
-#1 | --- 
---- | ---
+## Consulta 1
+
+Essa consulta retorna todos os checkpoints não excluídos (soft delete) que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo e ainda não removidos sejam exibidos.
+
 **Expressão SQL** |
 ``` sql
 SELECT cp.id_checkpoint, cp.km_acumulado,
@@ -1636,11 +1663,73 @@ ON cp.id_turno = t.id_turno
 WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
 IS NULL; 
 ```
-**Proposições lógicas** | $A$: O estado é 'California' (state = 'California') <br> $B$: O ID do fornecedor não é 900 (supplier_id ≠ 900) <br> $C$: O ID do fornecedor é 100 (supplier_id = 100)
-**Expressão lógica proposicional** | $(A \land B) \lor C$
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B) \lor C$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+#1 | ---
+--- | ---
+**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento') <br> $C$: O checkpoint não foi removido (cp.deleted_at IS NULL)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land C$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B \land C)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
+## Consulta 2
 
+Essa consulta retorna o placar geral de todas as equipes ativas que já iniciaram a competição,ou seja, que possuem km registrado OU pelo menos um turno vinculado. Alimenta a tela de Modo TV (RF006) com ranking em tempo real.
+
+**Expressão SQL** |
+
+``` sql
+SELECT e.id_equipe, e.nome, e.km_total,
+  COUNT(DISTINCT t.id_turno) AS total_turnos,
+  COUNT(DISTINCT t.id_atleta) AS atletas_ativos
+FROM equipe e
+LEFT JOIN turno t
+  ON t.id_equipe = e.id_equipe
+  AND t.deleted_at IS NULL
+WHERE e.deleted_at IS NULL
+  AND e.status = 'ativa'
+  AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
+GROUP BY e.id_equipe, e.nome, e.km_total
+ORDER BY e.km_total DESC;
+
+```
+
+#2 | ---
+--- | ---
+**Proposições lógicas** | $A$: Equipe não foi removida (e.deleted_at IS NULL) <br> $B$: Equipe está ativa (e.status = 'ativa') <br> $C$: Equipe já tem km acumulado (e.km_total > 0) <br> $D$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land (C \lor D)$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## Consulta 3
+
+Essa consulta lista checkpoints da equipe 1 cujo pace médio foi menor que 4 min/km (velocidade muito alta) OU cuja velocidade média superou 20 km/h. Auxilia a coordenadora na detecção de registros possivelmente incorretos para eventual ajuste (RF005).
+
+**Expressão SQL** |
+
+``` sql
+SELECT cp.id_checkpoint, cp.km_acumulado,
+  cp.pace_medio, cp.velocidade_media, cp.registrado_em
+FROM checkpoint cp
+INNER JOIN turno t ON cp.id_turno = t.id_turno
+WHERE cp.deleted_at IS NULL
+  AND t.id_equipe = 1
+  AND (
+    cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
+    OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
+  )
+ORDER BY cp.registrado_em DESC;
+```
+#3 | ---
+--- | ---
+**Proposições lógicas** | $A$: Checkpoint não foi removido (cp.deleted_at IS NULL) <br> $B$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $C$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $D$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land (C \lor D)$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
