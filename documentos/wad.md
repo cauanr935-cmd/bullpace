@@ -1116,16 +1116,14 @@ Para a geração dos arquivos, o formato PDF cria um documento em formato de "te
 
 ## 3.4. Guia de estilos (sprint 3)
 
-O Guia de Estilos é o documento central que define a identidade visual e regras de interface da nossa solução. Serve principalmente para padronizar todos os elementos visuais do projeto, incluindo paleta de cores, tipografia, iconografia, espaçamentos e o comportamento dos componentes interativos.
-
-A estruturação deste seção é fundamental pois garante a consistência e coeeão visual e funcional em toda a aplicação. Um padrão bem definido acelera o processo de desenvolvimento, facilita a manutenção do código e, principalmente, proporciona uma experiência de usuário (UX) mais fluida, intuitiva e profissional, evitando divergências entre diferentes telas.
+O Guia de Estilos é o documento que define a identidade visual e regras de interface da solução. Serve principalmente para padronizar todos os elementos visuais do projeto, como por exemplo a paleta de cores, tipografia, iconografia, espaçamentos e o comportamento dos componentes interativos, a fim de garantir coesão visual e funcional em toda a aplicação desenvolvida.
+A estruturação desta seção é fundamental pois um padrão bem definido acelera o processo de desenvolvimento, além de facilitar a manutenção do código e proporcionar uma experiência de usuário mais fluida e intuitiva, evitando divergências significativas entre as telas. As escolhas visuais foram também orientadas pela identidade do evento Red Bull 24 horas, procurando passar uma imagem ousada, dinâmica e reconhecível.
 
 ### 3.4.1 Cores
 
 Definição da paleta de cores da aplicação transcende a estética visual, assumindo um papel funcional e ergonômico crítico na comunicação de estados do sistema e na orientação da equipe de campo. Considerando o cenário de uma competição ininterrupta de 24 horas, em que os operadores interagem com os dispositivos (iPads) e acompanham o painel de controle (Modo TV) sob diferentes condições de iluminação ambiental, da intensa luz diurna à penumbra da madrugada, o uso estratégico das cores é essencial para minimizar o esforço cognitivo e prevenir erros operacionais causados pela exaustão.
 
 Nesse contexto, as escolhas cromáticas foram fundamentadas em princípios de acessibilidade e alto contraste. O objetivo principal é garantir que a hierarquia da informação seja percebida intuitivamente, permitindo que a coordenação identifique rapidamente os indicadores essenciais, como o status de ocupação das esteiras, a transição de atletas e o sucesso no registro de checkpoints, sem a necessidade de processar textos extensos. A cor atua, portanto, como o primeiro sinalizador de ação e estado da interface, garantindo uma navegação segura e eficiente em momentos de alta pressão.
-
 
 ### 3.4.2 Tipografia
 
