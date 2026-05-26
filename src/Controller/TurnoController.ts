@@ -51,7 +51,7 @@ export async function iniciarTurno(input: IniciarTurnoInput): Promise<Turno> {
         id_esteira: input.id_esteira,
         id_sessao_operacional: input.id_sessao_operacional,
         horario_inicio: dataInicioFormatada,
-        status: 'em_andamento', // 🌟 Corrigido para alinhar com a constraint 'ck_turnos_status'
+        status: 'em_andamento', 
         km_turno: 0      
       }
     ])
@@ -78,7 +78,7 @@ export async function finalizarTurno(idTurno: number, kmFinal: number): Promise<
     .from('turnos')
     .update({
       horario_fim: horarioFim,
-      status: 'encerrado', // 🌟 Corrigido para alinhar com a constraint 'ck_turnos_status'
+      status: 'encerrado', 
       km_turno: kmFinal
     })
     .eq('id_turno', idTurno) 
