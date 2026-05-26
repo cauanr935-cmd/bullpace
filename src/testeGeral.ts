@@ -2,7 +2,7 @@ import { abrirSessao, encerrarSessao } from './Controller/SessaoController';
 import { iniciarTurno, finalizarTurno } from './Controller/TurnoController';
 import { registrarCheckpoint } from './Controller/CheckpointController';
 import { supabase } from './Controller/SessaoController';
-
+    
 async function executarTesteGeral() {
   console.log("Iniciando Teste Geral do Backend (Fluxo de Integração Real)...\n");
 
