@@ -36,6 +36,7 @@ function validarDadosInicioTurno(input: IniciarTurnoInput): void {
 
 /**
  * 2. REGRA DE NEGÓCIO: Inicia um novo turno de revezamento no banco de dados
+ * Ajustado para obedecer a constraint 'ck_turnos_status' utilizando o valor 'em_andamento'
  */
 export async function iniciarTurno(input: IniciarTurnoInput): Promise<Turno> {
   validarDadosInicioTurno(input);
@@ -50,8 +51,8 @@ export async function iniciarTurno(input: IniciarTurnoInput): Promise<Turno> {
         id_esteira: input.id_esteira,
         id_sessao_operacional: input.id_sessao_operacional,
         horario_inicio: dataInicioFormatada,
-        status: 'ATIVO', // Todo turno nasce com o status ATIVO
-        km_turno: 0      // Nasce com zero km rodados por esse atleta
+        status: 'em_andamento', // 🌟 Corrigido para alinhar com a constraint 'ck_turnos_status'
+        km_turno: 0      
       }
     ])
     .select()
@@ -68,7 +69,7 @@ export async function iniciarTurno(input: IniciarTurnoInput): Promise<Turno> {
 
 /**
  * 3. REGRA DE NEGÓCIO: Finaliza o turno quando o atleta sai da esteira
- * Salva a quilometragem finalizada daquele atleta e bota o horário de término.
+ * Ajustado para obedecer a constraint 'ck_turnos_status' utilizando o valor 'encerrado'
  */
 export async function finalizarTurno(idTurno: number, kmFinal: number): Promise<Turno> {
   const horarioFim = new Date().toISOString();
@@ -77,10 +78,10 @@ export async function finalizarTurno(idTurno: number, kmFinal: number): Promise<
     .from('turnos')
     .update({
       horario_fim: horarioFim,
-      status: 'FINALIZADO',
+      status: 'encerrado', // 🌟 Corrigido para alinhar com a constraint 'ck_turnos_status'
       km_turno: kmFinal
     })
-    .eq('id_turno', idTurno) // Filtra para atualizar apenas o turno correto
+    .eq('id_turno', idTurno) 
     .select()
     .single();
 

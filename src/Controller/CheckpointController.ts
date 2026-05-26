@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = 'https://fhxjysgowbdrfdwlxurv.supabase.co';
-// Chave anion, basiamente o identificador do projeto, é necessário para autenticar as requisições feitas para o banco de dados do supabase
+// Chave anon, basicamente o identificador do projeto, é necessário para autenticar as requisições feitas para o banco de dados do supabase
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZoeGp5c2dvd2JkcmZkd2x4dXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0ODM4NDQsImV4cCI6MjA5NDA1OTg0NH0.KCemCejnePNuLTYcMDrmHEt3Aqs6ntqNamphhBtGcyM'; 
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -82,23 +82,3 @@ export async function buscarCheckpointsPorTurno(idTurno: number): Promise<Checkp
   return (data || []) as Checkpoint[];
 }
 
-
-async function executarExemplo() {
-  try {
-    const novoCp = await registrarCheckpoint({
-      id_turno: 2,
-      id_sessao_operacional: 15,
-      km_acumulado: 12.5,
-      pace_medio: 5.5, 
-      velocidade_media: 10.9,
-      registrado_em: new Date(),
-      is_ajuste: false
-    });
-    
-    console.log("Salvo com sucesso no seu banco real!", novoCp);
-  } catch (error) {
-    console.error("Erro ao executar:", (error as Error).message);
-  }
-}
-
-executarExemplo();

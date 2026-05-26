@@ -34,6 +34,7 @@ function validarAberturaSessao(input: AbrirSessaoInput): void {
 
 /**
  * 2. REGRA DE NEGÓCIO: Inicia uma sessão de trabalho de um operador
+ * Ajustado para obedecer a constraint 'ck_sessoes_operacionais_status' utilizando o valor 'ativa'
  */
 export async function abrirSessao(input: AbrirSessaoInput): Promise<SessaoOperacional> {
   validarAberturaSessao(input);
@@ -41,13 +42,13 @@ export async function abrirSessao(input: AbrirSessaoInput): Promise<SessaoOperac
   const dataInicioFormatada = input.inicio_em instanceof Date ? input.inicio_em.toISOString() : input.inicio_em;
 
   const { data, error } = await supabase
-    .from('sessoes_operacionais') // Nome real da tabela no Supabase
+    .from('sessoes_operacionais') 
     .insert([
       {
         id_evento: input.id_evento,
         id_funcao: input.id_funcao,
         inicio_em: dataInicioFormatada,
-        status: 'ABERTA',
+        status: 'ativa', // Corrigido de 'ABERTA' para 'ativa'
         deleted_at: false
       }
     ])
@@ -65,6 +66,7 @@ export async function abrirSessao(input: AbrirSessaoInput): Promise<SessaoOperac
 
 /**
  * 3. REGRA DE NEGÓCIO: Encerra a sessão de trabalho do operador (Auditoria de término)
+ * Ajustado para obedecer a constraint 'ck_sessoes_operacionais_status' utilizando o valor 'encerrada'
  */
 export async function encerrarSessao(idSessao: number): Promise<SessaoOperacional> {
   const dataFimFormatada = new Date().toISOString();
@@ -73,7 +75,7 @@ export async function encerrarSessao(idSessao: number): Promise<SessaoOperaciona
     .from('sessoes_operacionais')
     .update({
       fim_em: dataFimFormatada,
-      status: 'ENCERRADA'
+      status: 'encerrada' // Corrigido de 'ENCERRADA' para 'encerrada'
     })
     .eq('id_sessao_operacional', idSessao)
     .select()
@@ -96,8 +98,8 @@ export async function buscarSessoesPorEvento(idEvento: number): Promise<SessaoOp
     .from('sessoes_operacionais')
     .select('*')
     .eq('id_evento', idEvento)
-    .eq('deleted_at', false) // Ignora sessões excluídas logicamente
-    .order('inicio_em', { ascending: false }); // Traz as mais recentes primeiro
+    .eq('deleted_at', false) 
+    .order('inicio_em', { ascending: false }); 
 
   if (error) {
     console.error(`[Erro Supabase ao buscar sessões]:`, error);
