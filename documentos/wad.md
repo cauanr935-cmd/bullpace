@@ -705,8 +705,8 @@ Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisi�
 <br>
 <div align="center">
   <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
-  <img src="../assets/3.2.1-arquitetura-camadas (7).png" width="80%"><br>
-  <sub>Fonte: Elaborado pelos autores.</sub>
+  <img src="../assets/3.2.1-arquitetura-camadas.png" width="80%"><br>
+ <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
 
@@ -720,7 +720,8 @@ Segundo, ela traduz a requisição HTTP em uma chamada de função para o Servic
 
 Terceiro, ela formata a resposta. Pega o que o Service retornou, monta o JSON de resposta e devolve com o status code apropriado: 201 quando criou um recurso, 200 quando consultou, 404 quando não encontrou, 500 se algo quebrou no caminho.
 
-O Controller **não conhece regras de negócio**, **não acessa o banco diretamente** e **não faz validações que dependem do estado da aplicação**. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
+O Controller não conhece regras de negócio, não acessa o banco diretamente e não faz validações que dependem do estado da aplicação. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
+
 #### Camada Service
 
 A camada Service é onde mora a lógica de negócio do BullPace. Quando o Controller recebe uma requisição e repassa pra cá, é o Service que decide se aquele dado pode mesmo ser salvo. Ele aplica as regras de negócio do projeto antes de deixar qualquer coisa seguir pro banco.
@@ -733,7 +734,17 @@ Pega o registro de checkpoint como exemplo. Antes de gravar, o Service checa tr�
 
 Se qualquer uma falhar, o Service barra ali mesmo e devolve o erro pro Controller. O Repository nem chega a ser chamado e o banco continua intacto. Só quando as três passam é que ele monta o objeto final, já com o timestamp do servidor, que a RN12 não deixa o operador editar na mão, e aí sim manda pro Repository salvar.
 
-Duas coisas o Service não faz: não conversa direto com o banco e não mexe em detalhes de HTTP, como status code ou formato de resposta. Ele fica no meio do caminho recebe o que o Controller validou no nível do contrato, aplica as regras de negócio, e entrega pro Repository um objeto pronto pra persistir.
+Duas coisas o Service não faz: não conversa direto com o banco e não mexe em detalhes de HTTP, como status code ou formato de resposta. Ele fica no meio do caminho: recebe o que o Controller validou no nível do contrato, aplica as regras de negócio, e entrega pro Repository um objeto pronto pra persistir.
+
+#### Camada Repository
+
+A camada Repository é a que conversa com o banco de dados. Quando o Service termina de validar tudo e monta o objeto pronto pra salvar, o Repository recebe esse objeto e transforma em comando SQL, rodando em cima do Supabase.
+
+No caso do checkpoint, depois que o Service libera, o Repository faz o `INSERT INTO checkpoints (...)` com os dados certos. Quando o Service precisa consultar algo antes, como buscar o último checkpoint do turno pra comparar o KM, o Repository monta o `SELECT` e devolve o resultado.
+
+O ponto principal é que essa é a única camada que toca no banco direto. Nenhuma outra parte do sistema escreve SQL ou acessa o Supabase por conta própria, e isso isola o banco do resto do código: se um dia a gente trocar o Supabase por outro banco, só o Repository muda, enquanto Controller e Service continuam iguais.
+
+Aqui também não entra regra de negócio. Se o objeto chegou até o Repository, é porque o Service já garantiu que tá tudo certo. O trabalho dele é executar a operação e devolver o que o banco respondeu, normalmente o registro já com o `id` gerado.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
