@@ -26,7 +26,7 @@
 
 [7. Conclusões e trabalhos futuros](#c7)
 
-[8. Referências](c#8)
+[8. Referências](#c8)
 
 [Anexos](#c9)
 
@@ -35,7 +35,6 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [1](#ref-1).
 A proposta do projeto surge a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior [1](#ref-1).
 
 Além da limitação do método manual, o contexto do evento também apresenta restrições técnicas importantes. Não há integração direta com as esteiras Technogym, e o uso de pulseiras sincronizadas não se mostra viável devido à dinâmica de revezamento, à quantidade de participantes e ao tempo necessário para sincronização antes de cada corrida. Dessa forma, a solução precisa considerar uma operação baseada em leitura visual da esteira e inserção manual assistida dos dados pelo operador.
@@ -81,9 +80,9 @@ O poder de barganha é alto. O projeto possui um cenário de monopsônio, onde h
 Com base nessa análise das cinco forças do projeto, pode ser concluído que o ambiente competitivo se mostra favorável à implementação da ferramenta. A rivalidade praticamente inexistente, somada ao baixo poder de barganha dos fornecedores, contribui para um cenário de "oceano azul", no qual a pressão externa de mercado é mínima pelo nível de especificidade do nicho e grande diversidade de recursos tecnológicos.
 
 Entretanto, o equilíbrio estratégico do projeto é sensível a dois fatores: 
-O primeiro é o poder de barganha elevado da Red Bull, que, por ser um cliente único, transforma a relação comercial em uma dependência direta de validação e alinhamento de expectativas.. O segundo é a ameaça de substitutos, que foi classificada como média, uma vez que a simplicidade do método analógico já utilizado (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade na usabilidade no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
+O primeiro é o poder de barganha elevado da Red Bull, que, por ser um cliente único, transforma a relação comercial em uma dependência direta de validação e alinhamento de expectativas. O segundo é a ameaça de substitutos, que foi classificada como média, uma vez que a simplicidade do método analógico já utilizado (prancheta) atua como uma zona de conforto para o usuário; qualquer falha técnica ou complexidade na usabilidade no sistema pode motivar uma regressão ao formato manual, que permanece viável e funcional para as necessidades básicas do evento.
 
-Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é algum fator externo ou de competição, mas sim de relação com o parceiro e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir total alinhamento com os critérios do cliente, garantindo a superioridade da ferramenta desenvolvida em relação ao método substituto, tornando assim,a solução indispensável durante as 24 horas de operação.
+Portanto, o equilíbrio geral das forças indica que o maior risco estratégico não é algum fator externo ou de competição, mas sim de relação com o parceiro e operacional. O sucesso do projeto não depende de vencer concorrentes, mas de garantir total alinhamento com os critérios do cliente, garantindo a superioridade da ferramenta desenvolvida em relação ao método substituto, tornando assim, a solução indispensável durante as 24 horas de operação.
 
 ### 2.1.2. Análise SWOT da Instituição Parceira (sprint 1)
 
@@ -99,7 +98,7 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 </div>
 <br>
 
-## Interno
+### Interno
 
 ### Forças
 
@@ -137,7 +136,7 @@ A duração de 24 horas também intensifica essas fraquezas. Com o passar do eve
 
 Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
 
-## Externo
+### Externo
 
 ### Oportunidades
 
@@ -181,7 +180,7 @@ Além disso, a natureza do Red Bull 24 Horas cria riscos operacionais próprios.
 
 A aceitação do time operacional também é uma ameaça importante. Se os operadores perceberem o sistema como difícil, lento ou pouco confiável, a tendência será recorrer ao método manual. Portanto, o sucesso do projeto depende de a solução proposta ser claramente melhor do que a prancheta, sem exigir complexidade adicional na operação.
 
-## Visão geral da SWOT
+### Visão geral da SWOT
 
 A análise SWOT mostra que a Red Bull parte de uma posição institucional forte para desenvolver o projeto. A marca possui reconhecimento global, associação consolidada com esporte e performance e experiência na criação de eventos proprietários de alto engajamento. Esses fatores favorecem o Red Bull 24 Horas e criam um ambiente positivo para a adoção de melhorias operacionais.
 
@@ -317,7 +316,7 @@ A matriz de riscos é uma ferramenta qualitativa e analítica que permite aos ge
 <div align="center">
   <sub><b>Figura 4 - Matriz de risco</b></sub><br>
   <img src="../assets/matrizRisco.png" width="100%" alt="Matriz de risco"><br>
-  <sup>Material produzido pelos autores, 2026<sup>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 #### Ameaças
@@ -355,13 +354,15 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
+A primeira persona representa **Ricardo**, operador de campo responsável pelo registro dos dados durante o evento. Sua função é acompanhar a troca dos atletas, selecionar equipe, atleta e esteira, iniciar e encerrar turnos e registrar checkpoints no sistema ao longo da prova. Essa persona foi escolhida porque está diretamente ligada ao momento mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, Ricardo é o principal usuário operacional, utilizando a aplicação para substituir a prancheta e garantir que os registros fiquem vinculados corretamente a equipe, atleta, esteira, turno e checkpoint.
+
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
   <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-
+A segunda persona representa **Camila**, coordenadora responsável pelo acompanhamento geral da competição e pela validação dos resultados. Sua função no evento é monitorar o andamento das equipes, conferir dados consolidados, tomar decisões em casos de inconsistência e garantir maior segurança na apuração final. Essa persona foi escolhida porque representa a necessidade de gestão, controle e confiabilidade dos dados ao longo das 24 horas. No sistema, Camila se relaciona principalmente com as telas de acompanhamento, Modo TV, resultados consolidados, comparação entre equipes e exportação dos dados para auditoria.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
@@ -479,9 +480,9 @@ Cada User Story também é acompanhada por critérios de aceite, que definem as 
 **US11**
 
 **Identificação** | US11  
-**Persona** | Gestora de operações  
-**User Story** | Como gestora de operações, quero visualizar a tela de resultado da equipe para conferir o total consolidado antes do encerramento da competição.  
-**Critério de aceite 1** | Dado que a equipe tenha sido finalizada, quando a gestora acessar a tela de resultado, então o sistema deve exibir o total de quilômetros acumulados da equipe.  
+**Persona** | Coordenadora de operações de campo 
+**User Story** | Como Coordenadora de operações de campo , quero visualizar a tela de resultado da equipe para conferir o total consolidado antes do encerramento da competição.  
+**Critério de aceite 1** | Dado que a equipe tenha sido finalizada, quando a Coordenadora de operações de campo  acessar a tela de resultado, então o sistema deve exibir o total de quilômetros acumulados da equipe.  
 **Critério de aceite 2** | Dado que a tela de resultado esteja aberta, então o sistema deve apresentar os valores consolidados de forma clara e legível.  
 **Critério de aceite 3** | Dado que os resultados estejam consolidados, então o sistema deve exibir os dados associados à equipe correspondente.  
 **Critérios INVEST** | 
@@ -490,9 +491,9 @@ Cada User Story também é acompanhada por critérios de aceite, que definem as 
 **US12**
 
 **Identificação** | US12  
-**Persona** | Gestora de operações  
-**User Story** | Como gestora de operações, quero comparar as duas equipes lado a lado para identificar a vencedora da competição.  
-**Critério de aceite 1** | Dado que ambas as equipes tenham sido finalizadas, quando a gestora acessar a comparação final, então o sistema deve exibir os resultados das duas equipes lado a lado.  
+**Persona** | Coordenadora de operações de campo   
+**User Story** | Como Coordenadora de operações de campo , quero comparar as duas equipes lado a lado para identificar a vencedora da competição.  
+**Critério de aceite 1** | Dado que ambas as equipes tenham sido finalizadas, quando a coordenadora acessar a comparação final, então o sistema deve exibir os resultados das duas equipes lado a lado.  
 **Critério de aceite 2** | Dado que uma equipe tenha maior quilometragem acumulada que a outra, então o sistema deve destacá-la visualmente como vencedora.  
 **Critério de aceite 3** | Dado que as duas equipes tenham a mesma quilometragem acumulada, então o sistema deve exibir o resultado como empate.  
 **Critérios INVEST** | 
@@ -501,9 +502,9 @@ Cada User Story também é acompanhada por critérios de aceite, que definem as 
 **US13**
 
 **Identificação** | US13  
-**Persona** | Gestora de operações  
-**User Story** | Como gestora de operações, quero exportar os dados consolidados em CSV para auditoria do evento.  
-**Critério de aceite 1** | Dado que os dados consolidados estejam disponíveis, quando a gestora clicar em “Exportar CSV”, então o sistema deve gerar um arquivo com os registros do evento.  
+**Persona** | Coordenadora de operações de campo  
+**User Story** | ComoCoordenadora de operações de campo , quero exportar os dados consolidados em CSV para auditoria do evento.  
+**Critério de aceite 1** | Dado que os dados consolidados estejam disponíveis, quando a coordenadora clicar em “Exportar CSV”, então o sistema deve gerar um arquivo com os registros do evento.  
 **Critério de aceite 2** | Dado que o arquivo CSV seja exportado, então ele deve conter informações de equipes, atletas, esteiras, turnos e checkpoints.  
 **Critério de aceite 3** | Dado que existam timestamps registrados no sistema, então eles devem estar presentes no arquivo CSV exportado.  
 **Critérios INVEST** | 
@@ -554,7 +555,7 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites/restições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema. [9](#ref-9), [10](#ref-10) e [11](#ref-11).
+A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os limites, restrições, condições e comportamentos que são obrigatórios e a aplicação deve respeitar para garantir sua confiabilidade e integridade dos registros da quilometragem ao longo das 24 horas de competição. Cada regra é obrigatoriamente numerada, implementável e testável, estando associada a um ou mais Requisitos Funcionais do sistema. [9](#ref-9), [10](#ref-10) e [11](#ref-11).
 
 
 | ID | Título | Descrição | RF Associado |
@@ -600,11 +601,11 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ---
 
-### 3.1.3.1 Fundamentação dos Eixos
+#### 3.1.3.1 Fundamentação dos Eixos
 
-## Explicação dos RNFs por eixo
+A seguir, são detalhadas as justificativas dos requisitos não funcionais a partir do contexto operacional do projeto.
 
-### USAB — Usabilidade
+#### USAB — Usabilidade
 
 O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão. [12](#ref-12).
 
@@ -614,7 +615,7 @@ Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio e
 
 ---
 
-### CONF — Confiabilidade
+#### CONF — Confiabilidade
 
 O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas. [13](#ref-13).
 
@@ -624,9 +625,9 @@ Esse RNF é mensurável pela frequência de salvamento automático dos dados a c
 
 ---
 
-### DES — Desempenho
+#### DES — Desempenho
 
-O requisito de desempenho foi derivado da necessidade de uso contínuo durante o evento, em um ambiente com trocas rápidas de corredores. O sistema não pode atrasar o operador no momento de iniciar turnos, registrar checkpoints ou consultar resultados.
+O requisito de desempenho foi derivado da necessidade de uso contínuo durante o evento, em um ambiente com trocas rápidas de atletas. O sistema não pode atrasar o operador no momento de iniciar turnos, registrar checkpoints ou consultar resultados.
 
 Esse RNF é mensurável pelo tempo de resposta do sistema, especialmente nas ações principais. Ele se conecta aos RFs de iniciar turno, salvar checkpoint, encerrar turno e visualizar resultados.
 
@@ -634,7 +635,7 @@ Esse RNF é mensurável pelo tempo de resposta do sistema, especialmente nas aç
 
 ---
 
-### SUP — Suportabilidade
+#### SUP — Suportabilidade
 
 O requisito de suportabilidade foi derivado do contexto de uso em ambiente de evento, especialmente em dispositivos móveis ou tablets, como iPads. Como a operação pode ocorrer fora de um ambiente tradicional de escritório, o sistema precisa funcionar em navegadores modernos sem instalação local.
 
@@ -644,7 +645,7 @@ Esse RNF é mensurável pela compatibilidade com Safari e Chrome em ambiente mob
 
 ---
 
-### SEG — Segurança
+#### SEG — Segurança
 
 O requisito de segurança foi derivado da necessidade de proteger os registros contra exclusões acidentais. Mesmo sem login, o sistema precisa preservar a rastreabilidade dos dados para auditoria e conferência pós-evento.
 
@@ -654,7 +655,7 @@ Esse RNF é mensurável pela garantia de que nenhum registro seja apagado perman
 
 ---
 
-### CAP — Capacidade
+#### CAP — Capacidade
 
 O requisito de capacidade foi derivado da operação simultânea das duas equipes durante o evento. Como cada equipe pode ter um operador registrando dados ao mesmo tempo, o sistema precisa suportar múltiplos usuários operando em paralelo.
 
@@ -664,7 +665,7 @@ Esse RNF é mensurável pelo suporte a pelo menos 2 operadores simultâneos, um 
 
 ---
 
-### REST — Restrições Design
+#### REST — Restrições Design
 
 O requisito de restrição de design foi derivado das limitações definidas pelo parceiro: não haverá integração direta com as esteiras Technogym, não haverá uso de pulseiras, não haverá login e não haverá dependência de APIs externas no MVP.
 
@@ -674,7 +675,7 @@ Esse RNF é mensurável pela ausência de dependências externas obrigatórias p
 
 ---
 
-### ORG — Organizacionais
+#### ORG — Organizacionais
 
 O requisito organizacional foi derivado da necessidade de alinhar o desenvolvimento ao processo acadêmico do projeto e garantir documentação, versionamento e rastreabilidade das decisões técnicas.
 
@@ -725,18 +726,18 @@ Quando necessário, são utilizadas as relações 'include' e 'extend' no diagra
 * **Pós-condição:** Evento configurado com regras definidas
 * **Descrição:** A organização define os parâmetros do evento, como duração, regras e estrutura geral da competição.
 
-**Cadastrar equipes e corredores**
+**Cadastrar equipes e atletas**
 * **Ator:** Organização do evento
 * **Pré-condição:** Evento previamente configurado
-* **Pós-condição:** Equipes e corredores registrados no sistema
-* **Descrição:** A organização cadastra as equipes participantes e seus corredores.
+* **Pós-condição:** Equipes e atletas registrados no sistema
+* **Descrição:** A organização cadastra as equipes participantes e seus atletas
 
 **Iniciar sessão de corrida**
 * **Ator:** Operador do evento
 * **Ator secundário:** Sistema de captura de dados
-* **Pré-condições:** Evento configurado | Corredores cadastrados | Esteiras disponíveis
+* **Pré-condições:** Evento configurado | atletas cadastrados | Esteiras disponíveis
 * **Pós-condições:** Sessão de corrida iniciada | Registro automático de dados ativado
-* **Descrição:** O operador inicia uma sessão de corrida associando um corredor a uma esteira, permitindo o início da coleta de dados.
+* **Descrição:** O operador inicia uma sessão de corrida associando um atleta a uma esteira, permitindo o início da coleta de dados.
 
 **Encerrar sessão de corrida**
 * **Ator:** Operador do evento
@@ -865,7 +866,7 @@ Ele representa os componentes reais da arquitetura (Controllers, Services e Repo
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
-#### 3.2.4 — Mapeamento das Camadas
+#### Mapeamento das camadas
 
 Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
 
@@ -922,7 +923,7 @@ A resposta percorre o caminho inverso: Banco → Repository → Service → Cont
 - RN18 — Obrigatoriedade do Campo KM Acumulado
 - RN19 — Checkpoint Vinculado a Turno Ativo
 
-#### 3.2.4 — Mensagens, Validações e Retornos
+#### Mensagens, validações e retornos
 
 ## Tipo de mensagem
 
@@ -1027,7 +1028,7 @@ A tela de seleção de função do sistema é responsável por definir qual tipo
 
 A tela apresenta dois blocos interativos em formato de botão, identificados como “OPERADOR” e “ORGANIZADOR”. Os elementos foram posicionados de forma centralizada e com grande destaque visual para tornar a escolha rápida, intuitiva e objetiva.
 
-Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno dos corredores. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
+Ao selecionar a opção “OPERADOR”, o usuário é direcionado para o fluxo operacional de telas para o operador do evento, utilizado durante o acompanhamento da corrida e das trocas de turno dos atletas. Esse acesso contempla funcionalidades relacionadas ao controle dos turnos, definição da esteira utilizada e registro manual de checkpoints.
 
 Já a opção “ORGANIZADOR” direciona o usuário para as funcionalidades administrativas do sistema, voltadas ao acompanhamento das informações organizacionais da competição.
 
@@ -1036,7 +1037,7 @@ A simplicidade visual da tela foi planejada para facilitar a identificação ime
 #### Tela de seleção de equipe
 
 
-A tela de escolha de equipe, apresentada na figura 12, é responsável por permitir que o operador do evento defina qual equipe terá seus corredores e turnos acompanhados durante o registro de dados.
+A tela de escolha de equipe, apresentada na figura 12, é responsável por permitir que o operador do evento defina qual equipe terá seus atletas e turnos acompanhados durante o registro de dados.
 
 <br>
 <div align="center">
@@ -1048,11 +1049,11 @@ A tela de escolha de equipe, apresentada na figura 12, é responsável por permi
 
 A interface apresenta dois elementos interativos em formato de botão, cada um representando uma equipe distinta. A organização visual desses elementos foi projetada para facilitar a identificação rápida das equipes e tornar a navegação mais intuitiva para o usuário.
 
-Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos corredores vinculados à equipe correspondente.
+Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos atletas vinculados à equipe correspondente.
 
 ### Tela de seleção dos atletas
 
-A interface de seleção de corredor é acessada pelo operador do evento após a escolha de uma equipe. Sua principal função é apresentar a lista de integrantes do time e permitir a rápida seleção do próximo participante que assumirá a esteira.
+A interface de seleção de atleta é acessada pelo operador do evento após a escolha de uma equipe. Sua principal função é apresentar a lista de integrantes do time e permitir a rápida seleção do próximo participante que assumirá a esteira.
 
 <br>
 <div align="center">
@@ -1062,17 +1063,17 @@ A interface de seleção de corredor é acessada pelo operador do evento após a
 </div>
 <br>
 
-Na parte superior da interface, o sistema apresenta o nome da equipe que foi selecionada e, logo abaixo, destaca o nome do corredor que está atualmente em atividade. Essa disposição contextualiza o operador, garantindo que ele tenha certeza de qual time está gerenciando e quem é o atleta responsável pela esteira naquele exato momento.
+Na parte superior da interface, o sistema apresenta o nome da equipe que foi selecionada e, logo abaixo, destaca o nome do atleta que está atualmente em atividade. Essa disposição contextualiza o operador, garantindo que ele tenha certeza de qual time está gerenciando e quem é o atleta responsável pela esteira naquele exato momento.
 
-A região central da interface é dedicada à exibição dos integrantes da equipe por meio de uma grade interativa. Cada espaço apresenta um contêiner para a fotografia do participante, acompanhado do seu respectivo nome logo abaixo. É a partir dessa listagem que o operador realiza a seleção do próximo participante. Ao clicar no perfil de um dos corredores, o operador é direcionado para a interface de gerenciamento de turnos, dando continuidade ao processo de captação de informações do revezamento.
+A região central da interface é dedicada à exibição dos integrantes da equipe por meio de uma grade interativa. Cada espaço apresenta um contêiner para a fotografia do participante, acompanhado do seu respectivo nome logo abaixo. É a partir dessa listagem que o operador realiza a seleção do próximo participante. Ao clicar no perfil de um dos atletas, o operador é direcionado para a interface de gerenciamento de turnos, dando continuidade ao processo de captação de informações do revezamento.
 
 Na parte inferior da tela, encontra-se o botão de ação “PAUSAR TURNOS”. Essa funcionalidade de controle permite que o operador interrompa temporariamente o fluxo do revezamento daquela equipe, seja por uma possível troca de equipamento ou qualquer eventualidade que exija a pausa do monitoramento antes da escolha de um novo atleta.
 
-Por fim, a interface conta com o botão “VOLTAR” posicionado no canto superior esquerdo. Este elemento de navegação permite ao operador retornar para a tela anterior de menu de seleção de equipes, descartando o fluxo de troca de corredor atual sem realizar nenhuma alteração no sistema.
+Por fim, a interface conta com o botão “VOLTAR” posicionado no canto superior esquerdo. Este elemento de navegação permite ao operador retornar para a tela anterior de menu de seleção de equipes, descartando o fluxo de troca de atleta atual sem realizar nenhuma alteração no sistema.
 
 #### Tela de gerenciamento de turnos
 
-A interface de gerenciamento de turno dos corredores é acessada pelo operador do evento após a escolha de um participante na tela de seleção de corredor. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao corredor em atividade.
+A interface de gerenciamento de turno dos atletas é acessada pelo operador do evento após a escolha de um participante na tela de seleção de atleta. Sua principal função é permitir o acompanhamento e o controle operacional do revezamento da equipe, além de centralizar o registro manual dos checkpoints utilizados para atualização dos dados capturados da esteira vinculada ao atleta em atividade.
 
 <br>
 <div align="center">
@@ -1082,21 +1083,21 @@ A interface de gerenciamento de turno dos corredores é acessada pelo operador d
 </div>
 <br>
 
-Na parte superior da interface, é exibido o nome do corredor atualmente em atividade, permitindo que o operador identifique rapidamente qual participante está utilizando a esteira naquele momento. Logo abaixo, são apresentados em destaque o nome e a fotografia do corredor selecionado na tela anterior, indicando qual integrante da equipe será associado ao próximo início de turno.
+Na parte superior da interface, é exibido o nome do atleta atualmente em atividade, permitindo que o operador identifique rapidamente qual participante está utilizando a esteira naquele momento. Logo abaixo, são apresentados em destaque o nome e a fotografia do atleta selecionado na tela anterior, indicando qual integrante da equipe será associado ao próximo início de turno.
 
-A região central da interface é composta pelos campos responsáveis por exibir as informações obtidas da esteira atualmente vinculada ao corredor em atividade. Os indicadores apresentados são: duração do turno atual, distância percorrida, pace e velocidade média. Antes do início da atividade, todos os campos permanecem zerados. Após o início da corrida, os dados passam a ser atualizados gradualmente por meio do sistema de checkpoints, responsável por substituir os valores exibidos pelas informações mais recentes capturadas da esteira.
+A região central da interface é composta pelos campos responsáveis por exibir as informações obtidas da esteira atualmente vinculada ao atleta em atividade. Os indicadores apresentados são: duração do turno atual, distância percorrida, pace e velocidade média. Antes do início da atividade, todos os campos permanecem zerados. Após o início da corrida, os dados passam a ser atualizados gradualmente por meio do sistema de checkpoints, responsável por substituir os valores exibidos pelas informações mais recentes capturadas da esteira.
 
-O botão “INICIAR TURNO”, localizado na parte inferior direita da interface, é responsável por iniciar a corrida do corredor selecionado. Caso outro participante ainda esteja em atividade, o sistema encerra automaticamente o monitoramento anterior antes de iniciar o novo registro, garantindo que apenas um corredor permaneça associado ao registro de dados naquele momento.
+O botão “INICIAR TURNO”, localizado na parte inferior direita da interface, é responsável por iniciar a corrida do atleta selecionado. Caso outro participante ainda esteja em atividade, o sistema encerra automaticamente o monitoramento anterior antes de iniciar o novo registro, garantindo que apenas um atleta permaneça associado ao registro de dados naquele momento.
 
 Após o início da corrida, o botão “INICIAR TURNO” altera seu comportamento e passa a atuar como botão de checkpoint. A partir desse momento, o operador pode utilizá-lo para registrar manualmente os dados atuais da esteira em intervalos regulares de cinco minutos. Sempre que um novo checkpoint é realizado, os dados exibidos nos campos de monitoramento são atualizados com as informações mais recentes recebidas pelo sistema.
 
-O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite que o operador finalize manualmente a corrida atualmente em andamento. Ao ser acionado, o monitoramento do corredor ativo é interrompido imediatamente, encerrando a atualização dos dados exibidos na interface.
+O botão “ENCERRAR TURNO”, localizado na parte inferior esquerda, permite que o operador finalize manualmente a corrida atualmente em andamento. Ao ser acionado, o monitoramento do atleta ativo é interrompido imediatamente, encerrando a atualização dos dados exibidos na interface.
 
-A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o operador para a interface de seleção dos corredores sem alterar os dados já associados à corrida em andamento. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a interface de definição da esteira utilizada durante o turno atual, permitindo escolher qual equipamento terá seus dados considerados pelo sistema durante o registro das informações do corredor ativo.
+A interface também apresenta dois elementos auxiliares de navegação. O botão “voltar”, posicionado no canto superior esquerdo, retorna o operador para a interface de seleção dos atletas sem alterar os dados já associados à corrida em andamento. Já o botão “esteira”, localizado no lado direito da interface, direciona o operador para a interface de definição da esteira utilizada durante o turno atual, permitindo escolher qual equipamento terá seus dados considerados pelo sistema durante o registro das informações do atleta ativo.
 
 #### Tela de seleção de esteira
 
-Esse é o wireframe da interface de definição de esteira utilizada durante o turno de um atleta. Ela é acessada pelo operador do evento a partir da interface de gerenciamento de turno e faz parte do fluxo operacional necessário para que o sistema associe corretamente os dados registrados ao corredor atualmente em atividade.
+Esse é o wireframe da interface de definição de esteira utilizada durante o turno de um atleta. Ela é acessada pelo operador do evento a partir da interface de gerenciamento de turno e faz parte do fluxo operacional necessário para que o sistema associe corretamente os dados registrados ao atleta atualmente em atividade.
 
 Sua principal função é permitir que o operador defina qual das duas esteiras disponíveis da equipe será utilizada durante o turno em andamento.
 
@@ -1843,13 +1844,13 @@ A Matriz de Rastreabilidade de Requisitos (RTM) é uma ferramenta que mapeia o c
 | Promotor de Field Marketing | RF002 | RN02, RN11 | `/api/turnos` | Início de Turno | CT02 | print, log, relatório de cobertura |
 | Promotor de Field Marketing | RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | Painel de Checkpoint | CT03 | print, log, relatório de cobertura |
 | Promotor de Field Marketing | RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | Encerramento de Turno | CT04 | print, log, relatório de cobertura |
-| Gestora de operações | RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | Lançamento de Ajuste | CT05 | print, log, relatório de cobertura |
-| Gestora / Promotor | RF006 | RN08 | `/api/placar/tempo` | Placar Geral (Modo TV) | CT06 | print, log, relatório de cobertura |
-| Gestora de operações | RF007 | RN09, RN12 | `/api/estatisticas/trocas` | Dashboard Admin | CT07 | print, log, relatório de cobertura |
-| Gestora / Promotor | RF008 | RN13, RN14 | `/api/placar/geral` | Placar Geral (Modo TV) | CT08 | print, log, relatório de cobertura |
-| Gestora / Promotor | RF009 | RN15 | `/api/placar/geral` | Placar Geral (Modo TV) | CT09 | print, log, relatório de cobertura |
-| Gestora / Promotor | RF010 | - | `/api/placar/geral` | Placar Geral (Modo TV) | CT10 | print, log, relatório de cobertura |
-| Gestora de operações | RF011 | - | `/api/relatorios/exportar` | Exportação (Admin) | CT11 | print, log, relatório de cobertura |
+| Coordenadora de operações de campo  | RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | Lançamento de Ajuste | CT05 | print, log, relatório de cobertura |
+| Coordenadora / Promotor | RF006 | RN08 | `/api/placar/tempo` | Placar Geral (Modo TV) | CT06 | print, log, relatório de cobertura |
+|Coordenadora de operações de campo  | RF007 | RN09, RN12 | `/api/estatisticas/trocas` | Dashboard Admin | CT07 | print, log, relatório de cobertura |
+| Coordenadora / Promotor | RF008 | RN13, RN14 | `/api/placar/geral` | Placar Geral (Modo TV) | CT08 | print, log, relatório de cobertura |
+| Coordenadora / Promotor | RF009 | RN15 | `/api/placar/geral` | Placar Geral (Modo TV) | CT09 | print, log, relatório de cobertura |
+| Coordenadora / Promotor | RF010 | - | `/api/placar/geral` | Placar Geral (Modo TV) | CT10 | print, log, relatório de cobertura |
+| Coordenadora de operações | RF011 | - | `/api/relatorios/exportar` | Exportação (Admin) | CT11 | print, log, relatório de cobertura |
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
