@@ -21,13 +21,19 @@
 
       <% if (tela === 'funcao') { %>
         <% /* Nota: bloco responsavel pela selecao de funcao inicial. */ %>
+        <p class="operator-description">
+          Escolha como você irá acessar o sistema.
+        </p>
+
         <div class="function-options" aria-label="Seleção de função">
           <% funcoes.forEach((funcao) => { %>
             <% /* Cada formulario envia uma funcao escolhida para o servidor. */ %>
             <form action="/selecionar-funcao" method="post" class="function-form">
               <input type="hidden" name="funcao" value="<%= funcao.valor %>">
               <button type="submit" class="function-card">
-                <%= funcao.nome %>
+                <span class="function-icon" aria-hidden="true"><%= funcao.nome.slice(0, 2) %></span>
+                <span class="function-name"><%= funcao.nome %></span>
+                <span class="operator-radio" aria-hidden="true"></span>
               </button>
             </form>
           <% }) %>
