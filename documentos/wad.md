@@ -705,7 +705,8 @@ Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisi�
 <br>
 <div align="center">
   <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
-  <img src="../assets/3.2.1-arquitetura-camadas.png" width="80%"><br>
+  <img src="../assets/3.2.1-arquitetura-camadas.png" 
+   width="80%"><br>
  <sub>Fonte: Elaborado pelos autores (2026).</sub>
 </div>
 <br>
@@ -745,6 +746,16 @@ No caso do checkpoint, depois que o Service libera, o Repository faz o `INSERT I
 O ponto principal é que essa é a única camada que toca no banco direto. Nenhuma outra parte do sistema escreve SQL ou acessa o Supabase por conta própria, e isso isola o banco do resto do código: se um dia a gente trocar o Supabase por outro banco, só o Repository muda, enquanto Controller e Service continuam iguais.
 
 Aqui também não entra regra de negócio. Se o objeto chegou até o Repository, é porque o Service já garantiu que tá tudo certo. O trabalho dele é executar a operação e devolver o que o banco respondeu, normalmente o registro já com o `id` gerado.
+
+#### Camada Model
+
+A camada Model é a base de tudo. Ela representa as entidades do domínio do BullPace, Equipe, Atleta, Turno e Checkpoint, e define a forma dos dados que circulam por todas as outras camadas.
+
+No fluxo do checkpoint, o Model aparece em todo lugar mesmo que a gente não perceba. Quando o Controller recebe o body da requisição, ele já vem no formato esperado pelo Model. Quando o Service monta o objeto pra salvar, ele segue a estrutura do Model. Quando o Repository devolve o registro do banco, vem como Model também.
+
+A diferença pras outras camadas é que o Model não executa nada. Não tem lógica, não valida, não conversa com ninguém. Ele é só o contrato: define quais campos existem, de que tipo são e como se relacionam. Esse contrato é o que mantém Controller, Service e Repository conversando a mesma língua.
+
+No BullPace, o Model bate direto com o que tá no banco. Um Checkpoint no código tem os mesmos campos do checkpoint na tabela: `id_checkpoint`, `id_turno`, `km_acumulado`, `pace_medio`, `velocidade_media`, `registrado_em`. Isso simplifica o trabalho do Repository, porque a tradução entre objeto e SQL fica direta.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
