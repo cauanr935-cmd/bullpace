@@ -35,6 +35,12 @@ const operadores = [
   { nome: 'Pedro Alves', iniciais: 'PA' }
 ];
 
+// Lista temporaria usada para montar a tela de selecao de equipe.
+const equipes = [
+  { nome: 'Equipe 1', iniciais: 'E1', atletas: 16 },
+  { nome: 'Equipe 2', iniciais: 'E2', atletas: 16 }
+];
+
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou organizador.
 app.get('/', (req: Request, res: Response): void => {
   res.render('index', {
@@ -85,6 +91,43 @@ app.post('/selecionar-operador', (req: Request, res: Response): void => {
     titulo: 'SELEÇÃO DE OPERADOR',
     operadores,
     operadorSelecionado: operador
+  });
+});
+
+app.post('/continuar-operador', (req: Request, res: Response): void => {
+  const { operador } = req.body;
+
+  res.render('index', {
+    // Mostra a etapa seguinte, mantendo o operador escolhido visivel no topo.
+    tela: 'equipe',
+    titulo: 'SELEÇÃO DE EQUIPE',
+    operadorSelecionado: operador,
+    equipes
+  });
+});
+
+app.post('/voltar-operador', (req: Request, res: Response): void => {
+  const { operador } = req.body;
+
+  res.render('index', {
+    // Volta da selecao de equipe para a etapa anterior, mantendo o operador selecionado.
+    tela: 'operador',
+    titulo: 'SELEÇÃO DE OPERADOR',
+    operadores,
+    operadorSelecionado: operador
+  });
+});
+
+app.post('/selecionar-equipe', (req: Request, res: Response): void => {
+  const { operador, equipe } = req.body;
+
+  res.render('index', {
+    // Mantem a tela de equipes e destaca a equipe escolhida futuramente.
+    tela: 'equipe',
+    titulo: 'SELEÇÃO DE EQUIPE',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    equipes
   });
 });
 

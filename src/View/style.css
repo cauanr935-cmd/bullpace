@@ -126,10 +126,14 @@ body {
   position: absolute;
   top: 72px;
   left: 72px;
+  border: 0;
+  background: transparent;
   color: #202124;
+  font: inherit;
   font-size: 18px;
   font-weight: 800;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .back-link:hover,
@@ -138,11 +142,41 @@ body {
   outline: none;
 }
 
+.back-form {
+  margin: 0;
+}
+
 /* Mensagem exibida depois que um operador e escolhido. */
 .selection-feedback {
   margin: 24px 0 0;
   font-size: 20px;
   text-align: center;
+}
+
+.selected-user {
+  position: absolute;
+  top: 64px;
+  right: 72px;
+  min-width: 180px;
+  padding: 14px 20px;
+  border-radius: 18px;
+  background: #f4f4f4;
+  color: #202124;
+  text-align: right;
+}
+
+.selected-user span {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.selected-user strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .operator-description {
@@ -242,6 +276,14 @@ body {
   font-weight: 800;
 }
 
+.operator-name small {
+  display: block;
+  margin-top: 6px;
+  color: #707070;
+  font-size: 16px;
+  font-weight: 800;
+}
+
 .selected-badge {
   padding: 16px 26px;
   border-radius: 999px;
@@ -275,23 +317,41 @@ body {
   background: #202124;
 }
 
+.continue-form {
+  width: min(100%, 620px);
+  margin: 54px auto 0;
+}
+
 .continue-button {
   width: min(100%, 620px);
   min-height: 86px;
   margin: 54px auto 0;
   border: 0;
   border-radius: 24px;
-  background: #d8d8d8;
-  color: #707070;
+  background: #202124;
+  color: #ffffff;
   font: inherit;
   font-size: 28px;
   font-weight: 800;
-  cursor: not-allowed;
+  cursor: pointer;
   display: block;
 }
 
+.continue-form .continue-button {
+  width: 100%;
+  margin-top: 0;
+}
+
+.continue-button:hover,
 .continue-button:focus-visible {
+  background: #3a3b3d;
   outline: none;
+}
+
+.continue-button:disabled {
+  background: #d8d8d8;
+  color: #707070;
+  cursor: not-allowed;
 }
 
 .operator-helper {
@@ -315,6 +375,12 @@ body {
   .back-link {
     top: 28px;
     left: 28px;
+  }
+
+  .selected-user {
+    position: static;
+    align-self: flex-end;
+    margin-bottom: 24px;
   }
 
   .function-frame h1 {
@@ -345,7 +411,7 @@ body {
   .operator-description,
   .operator-list,
   .operator-list-title,
-  .continue-button {
+  .continue-form {
     width: 100%;
   }
 

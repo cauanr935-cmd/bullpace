@@ -8,12 +8,28 @@
   <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'equipe' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
         <a href="/" class="back-link">VOLTAR</a>
+      <% } %>
+
+      <% if (tela === 'equipe') { %>
+        <% /* Volta para a etapa anterior mantendo o operador selecionado. */ %>
+        <form action="/voltar-operador" method="post" class="back-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'equipe') { %>
+        <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
+        <div class="selected-user">
+          <span>OPERADOR</span>
+          <strong><%= operadorSelecionado %></strong>
+        </div>
       <% } %>
 
       <% /* Titulo muda conforme a tela enviada pelo server.ts. */ %>
@@ -67,11 +83,52 @@
         </div>
 
         <% if (typeof operadorSelecionado !== 'undefined') { %>
-          <% /* Botao desativado ate a proxima etapa do fluxo ser definida. */ %>
-          <button type="button" class="continue-button" disabled>
-            Continuar como <%= operadorSelecionado %>
-          </button>
+          <% /* Botao avanca para a selecao de equipe mantendo o operador escolhido. */ %>
+          <form action="/continuar-operador" method="post" class="continue-form">
+            <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+            <button type="submit" class="continue-button">
+              Continuar como <%= operadorSelecionado %>
+            </button>
+          </form>
           <p class="operator-helper">Os checkpoints serão registrados em seu nome.</p>
+        <% } %>
+      <% } %>
+
+      <% if (tela === 'equipe') { %>
+        <% /* Nota: bloco responsavel pela selecao da equipe acompanhada pelo operador. */ %>
+        <p class="operator-description">
+          Escolha a equipe que será acompanhada nesta etapa.
+        </p>
+
+        <p class="operator-list-title">EQUIPES CADASTRADAS</p>
+
+        <div class="operator-list" aria-label="Seleção de equipe">
+          <% equipes.forEach((equipe) => { %>
+            <% const equipeAtual = typeof equipeSelecionada !== 'undefined' && equipeSelecionada === equipe.nome; %>
+            <form action="/selecionar-equipe" method="post" class="function-form">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipe.nome %>">
+              <button type="submit" class="operator-row <%= equipeAtual ? 'is-selected' : '' %>">
+                <span class="operator-photo" aria-hidden="true"><%= equipe.iniciais %></span>
+                <span class="operator-name">
+                  <%= equipe.nome %>
+                  <small><%= equipe.atletas %> atletas</small>
+                </span>
+                <% if (equipeAtual) { %>
+                  <span class="selected-badge">SELECIONADO</span>
+                <% } %>
+                <span class="operator-radio" aria-hidden="true"></span>
+              </button>
+            </form>
+          <% }) %>
+        </div>
+
+        <% if (typeof equipeSelecionada !== 'undefined') { %>
+          <% /* Botao desativado ate a proxima etapa do fluxo da equipe ser definida. */ %>
+          <button type="button" class="continue-button" disabled>
+            Continuar com <%= equipeSelecionada %>
+          </button>
+          <p class="operator-helper">A equipe selecionada ficará vinculada ao operador.</p>
         <% } %>
       <% } %>
     </section>
