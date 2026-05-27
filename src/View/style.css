@@ -1,3 +1,4 @@
+/* Reset simples para evitar espacamentos inesperados do navegador. */
 * {
   box-sizing: border-box;
 }
@@ -14,14 +15,17 @@ body {
   background: #ffffff;
 }
 
+/* Centraliza o conteudo principal da tela no viewport. */
 .function-page {
   min-height: 100vh;
   padding: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
+/* Container principal compartilhado pela selecao de funcao e selecao de operador. */
 .function-frame {
   width: min(100%, 1000px);
   min-height: min(68vw, 680px);
@@ -33,6 +37,7 @@ body {
   background: #ffffff;
 }
 
+/* Titulo principal da etapa atual. */
 .function-frame h1 {
   margin: 0;
   font-size: 40px;
@@ -41,6 +46,7 @@ body {
   text-align: center;
 }
 
+/* Grade dos cards da primeira tela: Operador e Organizador. */
 .function-options {
   width: 100%;
   margin-top: 64px;
@@ -50,10 +56,12 @@ body {
   justify-content: center;
 }
 
+/* Remove margem padrao dos formularios que envolvem cada card. */
 .function-form {
   margin: 0;
 }
 
+/* Card clicavel usado para escolher uma funcao. */
 .function-card {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -72,6 +80,7 @@ body {
   transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
 
+/* Feedback visual quando o usuario passa o mouse ou navega com teclado. */
 .function-card:hover,
 .function-card:focus-visible {
   background: #e9e9e9;
@@ -83,6 +92,187 @@ body {
   transform: translateY(0);
 }
 
+/* Link usado para voltar da tela de operadores para a selecao de funcao. */
+.back-link {
+  position: absolute;
+  top: 72px;
+  left: 72px;
+  color: #202124;
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Mensagem exibida depois que um operador e escolhido. */
+.selection-feedback {
+  margin: 24px 0 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.operator-description {
+  width: min(100%, 620px);
+  margin: 22px auto 0;
+  color: #202124;
+  font-size: 22px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.operator-list-title {
+  width: min(100%, 620px);
+  margin: 42px auto 0;
+  color: #202124;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* Lista com os operadores disponiveis para identificacao. */
+.operator-list {
+  width: min(100%, 620px);
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.operator-list .function-form {
+  width: 100%;
+}
+
+/* Linha clicavel usada para selecionar um operador. */
+.operator-row {
+  width: 100%;
+  min-height: 96px;
+  padding: 18px 26px;
+  border: 0;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  text-align: left;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.operator-row.is-selected {
+  background: #ffffff;
+  box-shadow: inset 6px 0 0 #202124, 0 0 0 3px #202124;
+}
+
+.operator-row:hover .operator-radio,
+.operator-row:focus-visible .operator-radio {
+  border-color: #202124;
+}
+
+.operator-row:hover,
+.operator-row:focus-visible {
+  background: #e9e9e9;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.operator-row:active {
+  transform: translateY(0);
+}
+
+.operator-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #202124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.operator-row.is-selected .operator-photo {
+  color: #202124;
+  background: #f4f4f4;
+}
+
+.operator-name {
+  flex: 1;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.selected-badge {
+  padding: 16px 26px;
+  border-radius: 999px;
+  color: #202124;
+  background: #f4f4f4;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.operator-radio {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d8d8d8;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.operator-row.is-selected .operator-radio {
+  border-color: #202124;
+}
+
+.operator-row.is-selected .operator-radio::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #202124;
+}
+
+.continue-button {
+  width: min(100%, 620px);
+  min-height: 86px;
+  margin: 54px auto 0;
+  border: 0;
+  border-radius: 24px;
+  background: #d8d8d8;
+  color: #707070;
+  font: inherit;
+  font-size: 28px;
+  font-weight: 800;
+  cursor: not-allowed;
+  display: block;
+}
+
+.continue-button:focus-visible {
+  outline: none;
+}
+
+.operator-helper {
+  margin: 28px auto 0;
+  color: #202124;
+  font-size: 22px;
+  text-align: center;
+}
+
+/* Adapta o layout para telas menores, como celular. */
 @media (max-width: 760px) {
   .function-page {
     padding: 12px;
@@ -91,6 +281,11 @@ body {
   .function-frame {
     min-height: calc(100vh - 24px);
     padding: 56px 24px;
+  }
+
+  .back-link {
+    top: 28px;
+    left: 28px;
   }
 
   .function-frame h1 {
@@ -106,5 +301,41 @@ body {
   .function-card {
     font-size: 30px;
     border-radius: 28px;
+  }
+
+  .operator-description,
+  .operator-list,
+  .operator-list-title,
+  .continue-button {
+    width: 100%;
+  }
+
+  .operator-list {
+    margin-top: 34px;
+    gap: 14px;
+  }
+
+  .operator-row {
+    min-height: 82px;
+    padding: 14px 18px;
+    gap: 16px;
+  }
+
+  .operator-photo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .operator-name {
+    font-size: 22px;
+  }
+
+  .selected-badge {
+    display: none;
+  }
+
+  .continue-button {
+    min-height: 70px;
+    font-size: 21px;
   }
 }

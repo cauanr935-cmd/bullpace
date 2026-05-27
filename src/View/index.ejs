@@ -1,26 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Configuracoes basicas da pagina e importacao do CSS. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-  <main class="function-page" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
+      <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
+      <% if (tela === 'operador') { %>
+        <% /* Link para voltar ao inicio do fluxo. */ %>
+        <a href="/" class="back-link">VOLTAR</a>
+      <% } %>
+
+      <% /* Titulo muda conforme a tela enviada pelo server.ts. */ %>
       <h1 id="page-title"><%= titulo %></h1>
 
-      <div class="function-options" aria-label="Seleção de função">
-        <% funcoes.forEach((funcao) => { %>
-          <form action="/selecionar-funcao" method="post" class="function-form">
-            <input type="hidden" name="funcao" value="<%= funcao.valor %>">
-            <button type="submit" class="function-card">
-              <%= funcao.nome %>
-            </button>
-          </form>
-        <% }) %>
-      </div>
+      <% if (tela === 'funcao') { %>
+        <% /* Nota: bloco responsavel pela selecao de funcao inicial. */ %>
+        <div class="function-options" aria-label="Seleção de função">
+          <% funcoes.forEach((funcao) => { %>
+            <% /* Cada formulario envia uma funcao escolhida para o servidor. */ %>
+            <form action="/selecionar-funcao" method="post" class="function-form">
+              <input type="hidden" name="funcao" value="<%= funcao.valor %>">
+              <button type="submit" class="function-card">
+                <%= funcao.nome %>
+              </button>
+            </form>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <% if (tela === 'operador') { %>
+        <% /* Nota: bloco responsavel pela selecao de qual operador esta usando o sistema. */ %>
+        <p class="operator-description">
+          Escolha quem está operando o sistema neste momento.
+        </p>
+
+        <p class="operator-list-title">OPERADORES CADASTRADOS</p>
+
+        <div class="operator-list" aria-label="Seleção de operador">
+          <% operadores.forEach((operador) => { %>
+            <% const selecionado = typeof operadorSelecionado !== 'undefined' && operadorSelecionado === operador.nome; %>
+            <% /* Cada formulario envia o operador escolhido para o servidor. */ %>
+            <form action="/selecionar-operador" method="post" class="function-form">
+              <input type="hidden" name="operador" value="<%= operador.nome %>">
+              <button type="submit" class="operator-row <%= selecionado ? 'is-selected' : '' %>">
+                <span class="operator-photo" aria-hidden="true"><%= operador.iniciais %></span>
+                <span class="operator-name"><%= operador.nome %></span>
+                <% if (selecionado) { %>
+                  <span class="selected-badge">SELECIONADO</span>
+                <% } %>
+                <span class="operator-radio" aria-hidden="true"></span>
+              </button>
+            </form>
+          <% }) %>
+        </div>
+
+        <% if (typeof operadorSelecionado !== 'undefined') { %>
+          <% /* Botao desativado ate a proxima etapa do fluxo ser definida. */ %>
+          <button type="button" class="continue-button" disabled>
+            Continuar como <%= operadorSelecionado %>
+          </button>
+          <p class="operator-helper">Os checkpoints serão registrados em seu nome.</p>
+        <% } %>
+      <% } %>
     </section>
   </main>
 </body>

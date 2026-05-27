@@ -5,10 +5,16 @@ import path from 'path';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const app = express();
+
+// Permite receber dados em JSON e tambem dados enviados por formularios HTML.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configura o EJS como motor de views e define onde ficam os arquivos visuais.
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'src', 'View'));
+
+// Libera arquivos estaticos, como o style.css, pela rota /static.
 app.use('/static', express.static(path.join(process.cwd(), 'src', 'View')));
 
 const supabaseUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -21,13 +27,64 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
+// Lista temporaria usada para montar a tela de selecao de operador.
+const operadores = [
+  { nome: 'Ana Martins', iniciais: 'AM' },
+  { nome: 'João Lima', iniciais: 'JL' },
+  { nome: 'Marina Souza', iniciais: 'MS' },
+  { nome: 'Pedro Alves', iniciais: 'PA' }
+];
+
+// Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou organizador.
 app.get('/', (req: Request, res: Response): void => {
   res.render('index', {
+    // A view usa "tela" para decidir qual bloco HTML mostrar.
+    tela: 'funcao',
     titulo: 'SELEÇÃO DE FUNÇÃO',
     funcoes: [
       { nome: 'OPERADOR', valor: 'operador' },
       { nome: 'ORGANIZADOR', valor: 'organizador' }
     ]
+  });
+});
+
+// Recebe a funcao escolhida na tela inicial e direciona para o proximo passo do fluxo.
+app.post('/selecionar-funcao', (req: Request, res: Response): void => {
+  const { funcao } = req.body;
+
+  if (funcao === 'operador') {
+    res.render('index', {
+      // Mostra a segunda etapa do fluxo usando o mesmo index.ejs.
+      tela: 'operador',
+      titulo: 'SELEÇÃO DE OPERADOR',
+      operadores
+    });
+    return;
+  }
+
+  res.redirect('/');
+});
+
+// Mostra diretamente a selecao de operadores caso a rota seja acessada pela URL.
+app.get('/operador', (req: Request, res: Response): void => {
+  res.render('index', {
+    // Permite acessar a selecao de operadores diretamente pela URL /operador.
+    tela: 'operador',
+    titulo: 'SELEÇÃO DE OPERADOR',
+    operadores
+  });
+});
+
+// Recebe o operador escolhido e mostra uma confirmacao simples na mesma tela.
+app.post('/selecionar-operador', (req: Request, res: Response): void => {
+  const { operador } = req.body;
+
+  res.render('index', {
+    // Mantem a tela de operadores e destaca quem foi selecionado.
+    tela: 'operador',
+    titulo: 'SELEÇÃO DE OPERADOR',
+    operadores,
+    operadorSelecionado: operador
   });
 });
 
