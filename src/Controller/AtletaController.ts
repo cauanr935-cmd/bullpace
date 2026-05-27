@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 
 // Importa o service do atleta.
-import AtletaService from '../Service/AtletaService';
+import { AtletaService } from '../Service/AtletaService';
 
 // Classe responsável por receber as requisições HTTP dos atleta, repassá-las ao service e retornar a resposta esperada.
 export class AtletaController {

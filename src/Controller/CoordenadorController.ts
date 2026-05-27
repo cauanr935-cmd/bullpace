@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {CoordenadorService} from 'src/Service/CoordenadorService';
+import {CoordenadorService} from '../Service/CoordenadorService';
 
 //Controller do coordenador.
 export class CoordenadorController {
