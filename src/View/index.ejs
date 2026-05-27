@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'equipe' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador') { %>
@@ -24,7 +24,16 @@
         </form>
       <% } %>
 
-      <% if (tela === 'equipe') { %>
+      <% if (tela === 'atleta') { %>
+        <% /* Volta para a selecao de equipe mantendo operador e equipe selecionados. */ %>
+        <form action="/voltar-equipe" method="post" class="back-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'equipe' || tela === 'atleta') { %>
         <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
         <div class="selected-user">
           <span>OPERADOR</span>
@@ -124,11 +133,71 @@
         </div>
 
         <% if (typeof equipeSelecionada !== 'undefined') { %>
-          <% /* Botao desativado ate a proxima etapa do fluxo da equipe ser definida. */ %>
-          <button type="button" class="continue-button" disabled>
-            Continuar com <%= equipeSelecionada %>
-          </button>
+          <% /* Avanca para a tela de selecao de atletas da equipe. */ %>
+          <form action="/continuar-equipe" method="post" class="continue-form">
+            <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+            <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+            <button type="submit" class="continue-button">
+              Continuar com <%= equipeSelecionada %>
+            </button>
+          </form>
           <p class="operator-helper">A equipe selecionada ficará vinculada ao operador.</p>
+        <% } %>
+      <% } %>
+
+      <% if (tela === 'atleta') { %>
+        <% /* Nota: tela operacional para escolher atleta e consultar disponibilidade das esteiras. */ %>
+        <p class="operator-description">
+          Selecione o atleta para inciar o turno.
+        </p>
+
+        <section class="team-status">
+          <span class="status-dot"></span>
+          <strong><%= equipeSelecionada %></strong>
+          <small>Próximo turno</small>
+        </section>
+
+        <p class="operator-list-title">ATLETAS DISPONÍVEIS</p>
+
+        <div class="athlete-scroll" aria-label="Lista de atletas">
+          <% atletas.forEach((atleta) => { %>
+            <% const atletaAtual = typeof atletaSelecionado !== 'undefined' && atletaSelecionado === atleta.nome; %>
+            <form action="/selecionar-atleta" method="post" class="function-form">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+              <input type="hidden" name="atleta" value="<%= atleta.nome %>">
+              <button type="submit" class="operator-row athlete-row <%= atletaAtual ? 'is-selected' : '' %>">
+                <span class="operator-photo" aria-hidden="true"><%= atleta.iniciais %></span>
+                <span class="operator-name">
+                  <%= atleta.nome %>
+                  <small><%= atleta.status %></small>
+                </span>
+                <% if (atletaAtual) { %>
+                  <span class="selected-badge">SELECIONADO</span>
+                <% } %>
+                <span class="operator-radio" aria-hidden="true"></span>
+              </button>
+            </form>
+          <% }) %>
+        </div>
+
+        <p class="operator-list-title">ESTEIRAS</p>
+
+        <div class="treadmill-grid" aria-label="Status das esteiras">
+          <% esteiras.forEach((esteira) => { %>
+            <article class="treadmill-card <%= esteira.tipo %>">
+              <span class="status-dot"></span>
+              <strong><%= esteira.nome %></strong>
+              <small><%= esteira.status %></small>
+            </article>
+          <% }) %>
+        </div>
+
+        <% if (typeof atletaSelecionado !== 'undefined') { %>
+          <button type="button" class="continue-button" disabled>
+            Continuar com <%= atletaSelecionado %>
+          </button>
+          <p class="operator-helper">A próxima etapa será a definição da esteira.</p>
         <% } %>
       <% } %>
     </section>
