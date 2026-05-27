@@ -821,7 +821,13 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 ### 3.2.3.1. Diagrama de classes arquitetural
 
-https://lucid.app/lucidchart/0029c8df-9b31-4328-be68-87ee789bac6f/edit?viewport_loc=-1113%2C852%2C4893%2C2871%2C0_0&invitationId=inv_3a6e3cbb-0e69-418f-9f14-1d77d0fb2ed6
+<div align="center">
+  <sub><b>Figura 9 - Diagrama de Classes Arquitetural</b></sub><br>
+  <img src="../assets/DiagramaClasseArquitetural.png" width="75%" alt="Diagrama de Classes Arquitetural"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetural](#diagrama-de-classes-arquitetural).
 
 # Documentação do Diagrama de Classes Arquitetural
 
@@ -1154,17 +1160,38 @@ A estruturação deste seção é fundamental pois garante a consistência e coe
 *Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
 
 ### 3.4.2 Tipografia
-A definição tipográfica da aplicação web surge da necessidade operacional de garantir a correta leitura, inserção e conferência de dados ao longo das 24 horas ininterruptas de competição. Diante de fatores limitantes como a fadiga visual da equipe de campo, especialmente durante os turnos da madrugada, e a necessidade de acompanhamento em tempo real por meio do painel de controle (Modo TV), a interface exige elementos textuais que reduzam a sobrecarga cognitiva do usuário.
+A escolha da tipografia para a aplicação web surge da necessidade de garantir uma leitura clara e facilitada em relação a inserção de dados durante a competição. Como a equipe de campo pode sofrer com o cansaço visual, a interface precisa de letras muito fáceis de ler.
 
-Nesse contexto, definiu-se a utilização da família tipográfica Inter. A adoção dessa fonte sem serifa (sans-serif) fundamenta-se na sua alta legibilidade em diferentes resoluções de tela e distâncias focais. Além disso, a fonte apresenta excelente clareza estrutural para caracteres numéricos, um fator crítico para a apuração precisa de métricas como quilometragem acumulada, pace e tempo de prova.
+Por isso, definimos o uso da fonte Inter para todo o projeto. Ela é simples e sem serifa. Além disso, apresenta os números de forma muito clara, o que ajuda na administração correta dos dados da prova, evitando erros.
 
-Para assegurar a organização da informação e a padronização visual do sistema, a hierarquia tipográfica foi estruturada da seguinte forma:
+Como utilizamos apenas a fonte Inter, a hierarquia visual do sistema foi criada variando apenas o tamanho e o peso da letra, conforme apresentado no Quadro 2.
 
-Títulos e Placar (Bold, 24px ou superior): Aplicados nas métricas consolidadas e elementos de maior relevância, como o total de quilômetros por equipe. O peso estrutural elevado visa viabilizar o contraste e a leitura imediata à distância pela equipe de coordenação.
+**Quadro 2 – Hierarquia visual da tipografia**
+| Estilo | Fonte | Especificações | Uso |
+| :--- | :--- | :--- | :--- |
+| **Título Principal (H1)** | Inter | 48px, Negrito | Títulos de destaque e páginas principais |
+| **Título de Seção (H2)** | Inter | 24px, Negrito | Divisões importantes do sistema |
+| **Texto Padrão (Body)** | Inter | 16px, Normal | Textos gerais, listas e tabelas |
+| **Texto Menor (Caption)** | Inter | 14px, Normal | Legendas e informações secundárias |
+| **Botão (Button)** | Inter | 16px, Negrito | Botões de ação do sistema |
+<div align="center">
 
-Corpo de Texto (Regular e Medium, 16px): Direcionado aos componentes de interação direta no iPad, como a grade de seleção dos 16 atletas, indicativos de status das esteiras e botões operacionais. O dimensionamento adequado previne erros de toque e facilita o uso do sistema durante as rápidas transições de turno.
+*Fonte: Elaborado pelos autores (2026).*
 
-Legendas e Textos de Apoio (Regular, 12px a 14px): Restritos a informações auxiliares, como rótulos indicativos dos campos opcionais (pace médio e velocidade média) e unidades de medida. Essa aplicação evita a poluição visual, mantendo o foco do operador nos dados essenciais para o registro do checkpoint.
+</div>
+
+A fim de proporcionar uma visualização concreta da aplicação prática desses estilos na interface, a Figura 20 demonstra a tipográfia completa, exibindo a variação do alfabeto e dos caracteres numéricos da fonte Inter.
+
+<div align="center">
+
+**Figura 20 – Espécime tipográfico e variações de estilo da fonte Inter**
+ <img src="../assets/bullpace_tipografia.png" width="100%"><br>
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter, mesmo operando sob diferentes escalas de peso e tamanho, apresenta o conforto visual necessário para a operação. Essa consistência contribui diretamente para a redução do esforço cognitivo do usuário, mitigando a ocorrência de falhas operacionais durante a inserção de dados no sistema.
+
 ### 3.4.3 Iconografia e imagens 
 
 *(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
@@ -1227,21 +1254,25 @@ O modelo relacional textual apresenta as tabelas do sistema em formato resumido,
 
 O modelo relacional descreve os esquemas em formato textual:
 
-eventos(**id_evento**, nome, cidade, estado, data_inicio, data_fim, status)
+eventos(id_evento, nome, cidade, estado, data_inicio, data_fim, status)
 
-equipes(**id_equipe**, *id_evento*, nome, status, km_total)
+equipes(id_equipe, id_evento, nome, status, km_total)
 
-atletas(**id_atleta**, *id_equipe*, nome, status)
+atletas(id_atleta, id_equipe, nome, status)
 
-esteiras(**id_esteira**, *id_equipe*, *id_evento*, marca, modelo, numero_serie, status)
+esteiras(id_esteira, id_equipe, id_evento, marca, modelo, numero_serie, status)
 
-funcoes(**id_funcao**, nome, descricao, status)
+funcoes(id_funcao, nome, descricao, status)
 
-sessoes_operacionais(**id_sessao_operacional**, *id_evento*, *id_funcao*, inicio_em, fim_em, status)
+sessoes_operacionais(id_sessao_operacional, id_evento, id_funcao, inicio_em, fim_em, status)
 
-turnos(**id_turno**, *id_atleta*, *id_esteira*, *id_sessao_operacional*, horario_inicio, horario_fim, status, km_turno)
+turnos(id_turno, id_atleta, id_esteira, id_sessao_operacional, horario_inicio, horario_fim, status, km_turno)
 
-checkpoints(**id_checkpoint**, *id_turno*, *id_sessao_operacional*, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
+checkpoints(id_checkpoint, id_turno, id_sessao_operacional, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
+
+operador(id_operador, nome, id_sessao_operacional)
+
+coordenador(id_coordenador, nome, id_sessao_operacional)
 
 
 #### 3.6.3.2 Modelo Físico
@@ -1252,18 +1283,20 @@ A implementação abaixo foi organizada em migrations para garantir a criação 
 
 ### Migrations
 
-A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` e `checkpoints`.
+A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` ,`checkpoints`, `operador` e `coordenador`.
 
 - `0001_create_eventos.sql`: sem dependências externas;
 - `0002_create_funcoes.sql`: sem dependências externas;
-- `0003_create_equipes.sql`: depende de `eventos`;
-- `0004_create_atletas.sql`: depende de `equipes`;
-- `0005_create_esteiras.sql`: depende de `eventos` e `equipes`;
-- `0006_create_sessoes_operacionais.sql`: depende de `eventos` e `funcoes`;
-- `0007_create_turnos.sql`: depende de `atletas`, `esteiras` e `sessoes_operacionais`;
-- `0008_create_checkpoints.sql`: depende de `turnos` e `sessoes_operacionais`;
-- `0009_insert_dados_iniciais.sql`: depende de `funcoes`;
-- `0010_create_views.sql`: depende das tabelas anteriores.
+- `0003_create_equipes.sql`: depende de eventos;
+- `0004_create_atletas.sql`: depende de equipes;
+- `0005_create_esteiras.sql`: depende de eventos e equipes;
+- `0006_create_sessoes_operacionais.sql`: depende de eventos e funcoes;
+- `0007_create_turnos.sql`: depende de atletas, esteiras e sessoes_operacionais;
+- `0008_create_checkpoints.sql`: depende de turnos e sessoes_operacionais;
+- `0009_insert_dados_iniciais.sql`: depende de funcoes;
+- `0010_create_views.sql`: depende das tabelas anteriores;
+- `0011_create_operador.sql`: depende de sessoes_operacionais;
+- `0012_create_coordenador.sql`: depende de sessoes_operacionais.
 
 ### Scripts das Migrations
 
@@ -1275,9 +1308,10 @@ CREATE TABLE eventos (
     nome           VARCHAR(100) NOT NULL,
     cidade         VARCHAR(100) NOT NULL,
     estado         VARCHAR(100) NOT NULL,
-    data_inicio    TIMESTAMPTZ NOT NULL,
-    data_fim       TIMESTAMPTZ NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT ck_eventos_status
         CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
@@ -1295,6 +1329,7 @@ CREATE TABLE funcoes (
     nome           VARCHAR(100) NOT NULL,
     descricao      TEXT,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT uq_funcoes_nome
         UNIQUE (nome),
@@ -1313,6 +1348,7 @@ CREATE TABLE equipes (
     nome           VARCHAR(100) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
     km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_equipes_eventos
         FOREIGN KEY (id_evento)
@@ -1341,6 +1377,7 @@ CREATE TABLE atletas (
     id_equipe      INT NOT NULL,
     nome           VARCHAR(150) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_atletas_equipes
         FOREIGN KEY (id_equipe)
@@ -1369,6 +1406,7 @@ CREATE TABLE esteiras (
     modelo         VARCHAR(100),
     numero_serie   VARCHAR(100),
     status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
 
     CONSTRAINT fk_esteiras_equipes
         FOREIGN KEY (id_equipe)
@@ -1401,9 +1439,10 @@ CREATE TABLE sessoes_operacionais (
     id_sessao_operacional SERIAL PRIMARY KEY,
     id_evento             INT NOT NULL,
     id_funcao             INT NOT NULL,
-    inicio_em             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    fim_em                TIMESTAMPTZ,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
     status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at            BOOLEAN,
 
     CONSTRAINT fk_sessoes_operacionais_eventos
         FOREIGN KEY (id_evento)
@@ -1440,8 +1479,8 @@ CREATE TABLE turnos (
     id_atleta              INT NOT NULL,
     id_esteira             INT NOT NULL,
     id_sessao_operacional  INT NOT NULL,
-    horario_inicio         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    horario_fim            TIMESTAMPTZ,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
     status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
     km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
 
@@ -1501,7 +1540,7 @@ CREATE TABLE checkpoints (
     km_acumulado           DECIMAL(10,3) NOT NULL,
     pace_medio             DECIMAL(10,3),
     velocidade_media       DECIMAL(10,3),
-    registrado_em          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
     is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_checkpoints_turnos
@@ -1643,7 +1682,38 @@ ORDER BY
     t.horario_inicio,
     cp.registrado_em;
 ```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
 
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
+```
+**0012_create_coordenador**
+```sql
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
+```
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
@@ -1911,4 +1981,4 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c9"></a>Anexos
 
-*Inclua aqui quaisquer complementos para seu projeto, como diagramas, imagens, tabelas etc. Organize em sub-tópicos utilizando headings menores (use ## ou ### para isso)*
+<a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)

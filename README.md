@@ -77,12 +77,12 @@ npm start
 
 ## 🗃 Histórico de lançamentos
 
-* 0.5.0 - XX/XX/2024
+* 0.5.0 - XX/XX/2026
     * 
-* 0.4.0 - XX/XX/2024
+* 0.4.0 - XX/XX/2026
     * 
-* 0.3.0 - XX/XX/2024
-    * 
+* 0.3.0 - 29/05/2026
+    * Lógica proposicional
 * 0.2.0 - 15/05/2026
     * Wireframe
 
