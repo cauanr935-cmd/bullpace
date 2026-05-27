@@ -21,16 +21,15 @@ export class EventoService {
     descricao: string
   ): Evento {
 
-    const evento = new Evento(
-      Date.now(),
+    const evento: Evento = {
+      id_evento: Date.now(),
       nome,
       cidade,
       estado,
       data_inicio,
       data_fim,
-      status,
-      descricao
-    );
+      status
+    };
 
     return this.eventoRepository.salvar(evento);
   }

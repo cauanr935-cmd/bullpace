@@ -13,6 +13,11 @@ export class AtletaService {
     return this.atletaRepository.listar();
   }
 
+  listarAtletas(): Atleta[] {
+
+    return this.listar();
+  }
+
   // Cria atleta.
   criar(
     nome: string,
@@ -22,15 +27,19 @@ export class AtletaService {
   ): Atleta {
 
     // Cria novo atleta.
-    const atleta = new Atleta(
-      Date.now(),
-      nome,
-      status,
+    const atleta: Atleta = {
+      id_atleta: Date.now(),
       id_equipe,
-      numero_peito
-    );
+      nome,
+      status
+    };
 
     // Salva atleta.
     return this.atletaRepository.salvar(atleta);
+  }
+
+  cadastrarAtleta(nome: string, equipe: string): Atleta {
+
+    return this.criar(nome, "ativo", Number(equipe), 0);
   }
 }

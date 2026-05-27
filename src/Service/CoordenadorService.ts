@@ -11,17 +11,20 @@ export class CoordenadorService {
     return this.coordenadorRepository.listar();
   }
 
-  criar(
-    nome: string,
-    email: string
-  ): Coordenador {
+  criar(nome: string): Coordenador {
 
-    const coordenador = new Coordenador(
-      Date.now(),
-      nome,
-      email
-    );
+    const coordenador: Coordenador = {
+      id_coordenador: Date.now(),
+      nome
+    };
 
     return this.coordenadorRepository.salvar(coordenador);
+  }
+
+  login(email: string, senha: string) {
+    return {
+      email,
+      autenticado: Boolean(email && senha)
+    };
   }
 }

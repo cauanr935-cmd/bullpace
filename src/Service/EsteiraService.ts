@@ -14,15 +14,21 @@ export class EsteiraService {
   criar(
     marca: string,
     modelo: string,
-    status: string
+    status: string,
+    id_equipe = 0,
+    id_evento = 0,
+    numero_serie = Date.now()
   ): Esteira {
 
-    const esteira = new Esteira(
-      Date.now(),
+    const esteira: Esteira = {
+      id_esteira: Date.now(),
+      id_equipe,
+      id_evento,
       marca,
       modelo,
+      numero_serie,
       status
-    );
+    };
 
     return this.esteiraRepository.salvar(esteira);
   }

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { OperadorService } from 'src/Service/OperadorService';
+import { OperadorService } from '../Service/OperadorService';
 
 // Controller do operador. 
 export class OperadorController {
@@ -19,7 +19,7 @@ export class OperadorController {
     listarPermissoes = (req: Request, res: Response) => {
 
         // Pegar o id do operador da requisição.
-        const id = req.params.id;
+        const id = String(req.params.id);
 
         // Busca as permissões do operador.
         const permissoes = this.operadorService.listarPermissoes(id);
