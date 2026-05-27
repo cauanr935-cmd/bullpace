@@ -1,10 +1,15 @@
 import 'dotenv/config';
 import express from 'express';
 import type { Request, Response } from 'express';
+import path from 'path';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), 'src', 'View'));
+app.use('/static', express.static(path.join(process.cwd(), 'src', 'View')));
 
 const supabaseUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -15,6 +20,16 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+
+app.get('/', (req: Request, res: Response): void => {
+  res.render('index', {
+    titulo: 'SELEÇÃO DE FUNÇÃO',
+    funcoes: [
+      { nome: 'OPERADOR', valor: 'operador' },
+      { nome: 'ORGANIZADOR', valor: 'organizador' }
+    ]
+  });
+});
 
 // Buscar todos os registros de uma tabela
 app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {

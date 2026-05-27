@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %></title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="function-page" aria-labelledby="page-title">
+    <section class="function-frame">
+      <h1 id="page-title"><%= titulo %></h1>
+
+      <div class="function-options" aria-label="Seleção de função">
+        <% funcoes.forEach((funcao) => { %>
+          <form action="/selecionar-funcao" method="post" class="function-form">
+            <input type="hidden" name="funcao" value="<%= funcao.valor %>">
+            <button type="submit" class="function-card">
+              <%= funcao.nome %>
+            </button>
+          </form>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
