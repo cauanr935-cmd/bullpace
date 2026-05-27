@@ -9,3 +9,4 @@ export interface Placar {
   atualizado_em: string;
   classificacao: ClassificacaoEquipe[];
 }
+

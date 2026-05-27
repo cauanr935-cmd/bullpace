@@ -13,7 +13,6 @@ export interface Turno {
   horario_inicio: string | Date;  
   horario_fim?: string | Date;    
   status: string;                 
-  km_turno: number;              
 }
 
 type IniciarTurnoInput = Omit<Turno, "id_turno" | "horario_fim" | "km_turno" | "status">;
