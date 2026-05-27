@@ -11,17 +11,25 @@ export class OperadorService {
     return this.operadorRepository.listar();
   }
 
-  criar(
-    nome: string,
-    status: string
-  ): Operador {
+  listarOperadores(): Operador[] {
 
-    const operador = new Operador(
-      Date.now(),
-      nome,
-      status
-    );
+    return this.listar();
+  }
+
+  criar(nome: string): Operador {
+
+    const operador: Operador = {
+      id_operador: Date.now(),
+      nome
+    };
 
     return this.operadorRepository.salvar(operador);
+  }
+
+  listarPermissoes(id: string) {
+    return {
+      id_operador: Number(id),
+      permissoes: []
+    };
   }
 }
