@@ -41,6 +41,51 @@ const equipes = [
   { nome: 'Equipe 2', iniciais: 'E2', atletas: 16 }
 ];
 
+// Lista temporaria de atletas por equipe para montar a tela de selecao do proximo turno.
+const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status: string }[]> = {
+  'Equipe 1': [
+    { nome: 'Rafael Luz', iniciais: 'RL', status: 'Turno anterior há 1h12' },
+    { nome: 'Bia Torres', iniciais: 'BT', status: 'Disponível para revezamento' },
+    { nome: 'Clara Nunes', iniciais: 'CN', status: 'Disponível para revezamento' },
+    { nome: 'Diego Ramos', iniciais: 'DR', status: 'Disponível para revezamento' },
+    { nome: 'Elisa Rocha', iniciais: 'ER', status: 'Disponível para revezamento' },
+    { nome: 'Felipe Dias', iniciais: 'FD', status: 'Disponível para revezamento' },
+    { nome: 'Gabriela Reis', iniciais: 'GR', status: 'Disponível para revezamento' },
+    { nome: 'Henrique Melo', iniciais: 'HM', status: 'Disponível para revezamento' },
+    { nome: 'Isabela Costa', iniciais: 'IC', status: 'Disponível para revezamento' },
+    { nome: 'Júlia Prado', iniciais: 'JP', status: 'Disponível para revezamento' },
+    { nome: 'Lucas Lima', iniciais: 'LL', status: 'Disponível para revezamento' },
+    { nome: 'Marcos Alves', iniciais: 'MA', status: 'Disponível para revezamento' },
+    { nome: 'Nina Barros', iniciais: 'NB', status: 'Disponível para revezamento' },
+    { nome: 'Otávio Silva', iniciais: 'OS', status: 'Disponível para revezamento' },
+    { nome: 'Paula Gomes', iniciais: 'PG', status: 'Disponível para revezamento' },
+    { nome: 'Victor Lopes', iniciais: 'VL', status: 'Disponível para revezamento' }
+  ],
+  'Equipe 2': [
+    { nome: 'Alice Martins', iniciais: 'AM', status: 'Disponível para revezamento' },
+    { nome: 'Bruno Faria', iniciais: 'BF', status: 'Disponível para revezamento' },
+    { nome: 'Camila Teixeira', iniciais: 'CT', status: 'Disponível para revezamento' },
+    { nome: 'Daniel Souza', iniciais: 'DS', status: 'Turno anterior há 52min' },
+    { nome: 'Eduarda Pires', iniciais: 'EP', status: 'Disponível para revezamento' },
+    { nome: 'Fernando Brito', iniciais: 'FB', status: 'Disponível para revezamento' },
+    { nome: 'Giovana Freitas', iniciais: 'GF', status: 'Disponível para revezamento' },
+    { nome: 'Hugo Moreira', iniciais: 'HM', status: 'Disponível para revezamento' },
+    { nome: 'Igor Neves', iniciais: 'IN', status: 'Disponível para revezamento' },
+    { nome: 'Laura Mendes', iniciais: 'LM', status: 'Disponível para revezamento' },
+    { nome: 'Mateus Campos', iniciais: 'MC', status: 'Disponível para revezamento' },
+    { nome: 'Natália Ribeiro', iniciais: 'NR', status: 'Disponível para revezamento' },
+    { nome: 'Renan Duarte', iniciais: 'RD', status: 'Disponível para revezamento' },
+    { nome: 'Sofia Cardoso', iniciais: 'SC', status: 'Disponível para revezamento' },
+    { nome: 'Thiago Matos', iniciais: 'TM', status: 'Disponível para revezamento' },
+    { nome: 'Yasmin Araújo', iniciais: 'YA', status: 'Disponível para revezamento' }
+  ]
+};
+
+const esteiras = [
+  { nome: 'Esteira 01', status: 'LIVRE', tipo: 'livre' },
+  { nome: 'Esteira 02', status: 'MANUTENÇÃO', tipo: 'manutencao' }
+];
+
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou organizador.
 app.get('/', (req: Request, res: Response): void => {
   res.render('index', {
@@ -128,6 +173,48 @@ app.post('/selecionar-equipe', (req: Request, res: Response): void => {
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     equipes
+  });
+});
+
+app.post('/continuar-equipe', (req: Request, res: Response): void => {
+  const { operador, equipe } = req.body;
+
+  res.render('index', {
+    // Mostra todos os atletas da equipe selecionada e o status das esteiras.
+    tela: 'atleta',
+    titulo: equipe,
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletas: atletasPorEquipe[equipe] || [],
+    esteiras
+  });
+});
+
+app.post('/voltar-equipe', (req: Request, res: Response): void => {
+  const { operador, equipe } = req.body;
+
+  res.render('index', {
+    // Volta da selecao de atleta para a tela de equipe, mantendo a equipe marcada.
+    tela: 'equipe',
+    titulo: 'SELEÇÃO DE EQUIPE',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    equipes
+  });
+});
+
+app.post('/selecionar-atleta', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta } = req.body;
+
+  res.render('index', {
+    // Mantem a tela de atletas e destaca o atleta escolhido.
+    tela: 'atleta',
+    titulo: equipe,
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    atletas: atletasPorEquipe[equipe] || [],
+    esteiras
   });
 });
 
