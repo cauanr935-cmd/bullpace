@@ -823,36 +823,12 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 <div align="center">
   <sub><b>Figura 9 - Diagrama de Classes Arquitetural</b></sub><br>
-  <img src="../assets/DiagramaClasseArquitetural.png" width="75%" alt="Diagrama de Classes Arquitetural"><br>
+  <img src="../assets/diagramaArquitetural.jpeg" width="75%" alt="Diagrama de Classes Arquitetural"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
 
 Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetural](#diagrama-de-classes-arquitetural).
 
-# Documentação do Diagrama de Classes Arquitetural
-
-## 1. Visão Geral do Diagrama
- Diferente de um diagrama de classes de domínio tradicional (focado apenas nos atributos das entidades de banco de dados), este diagrama modela a **estrutura de alto nível do software**. 
-
-Ele representa os componentes reais da arquitetura (Controllers, Services e Repositories) como classes do sistema, mapeando com precisão suas responsabilidades, injeções de dependência e o fluxo de comunicação entre as camadas. O design segue o padrão de **Arquitetura em Camadas Verticais**, garantindo a separação de responsabilidades e um fluxo de dependência estritamente unidirecional.
-
-```text
-┌────────────────────────────────────────────────────────┐
-│   CAMADA CONTROLLER (Classes de Interface/Entrada)     │ 
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│     CAMADA SERVICE (Classes de Regras de Negócio)      │ ---> DATABASE
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ ---> DATABASE
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│       CAMADA MODEL (Classes de Entidade/Domínio)       │ 
-└────────────────────────────────────────────────────────┘
-```
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
