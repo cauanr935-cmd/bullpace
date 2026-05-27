@@ -534,16 +534,23 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 
 | ID | Descrição | Prioridade | Status |
 |---|---|---|---|
-| **RF001** | **Identificação do Contexto Operacional:** o sistema deve permitir que o operador selecione a equipe e um dos 16 atletas previamente cadastrados, garantindo que os registros posteriores sejam vinculados corretamente ao grupo e ao participante correspondente. | Alta | Planejado |
-| **RF002** | **Gestão de Esteiras:** o sistema deve exibir as duas esteiras da equipe selecionada, indicar seus status como “livre” ou “em uso” e permitir que um turno seja vinculado à esteira utilizada. | Alta | Planejado |
-| **RF003** | **Gestão de Turnos:** o sistema deve permitir iniciar, encerrar e registrar múltiplos turnos para um mesmo atleta, preservando o histórico de sessões anteriores e vinculando cada turno à equipe, ao atleta e à esteira correspondente. | Alta | Planejado |
-| **RF004** | **Registro de Checkpoints:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e permitindo, de forma opcional, o preenchimento de pace médio e velocidade média. | Alta | Planejado |
-| **RF005** | **Controle Temporal dos Registros:** o sistema deve registrar automaticamente timestamps em ações críticas, como início de turno, checkpoints e encerramento de turno, além de exibir um timer regressivo para orientar a coleta periódica dos dados. | Alta | Planejado |
-| **RF006** | **Resultados do Turno:** o sistema deve exibir, ao final de cada turno, os resultados consolidados daquela sessão, mantendo os dados associados ao atleta correspondente. | Alta | Planejado |
-| **RF007** | **Finalização e Consolidação da Equipe:** o sistema deve permitir finalizar uma equipe mediante confirmação, consolidando os resultados dos atletas e impedindo alterações diretas nos dados já consolidados. | Alta | Planejado |
-| **RF008** | **Visualização de Resultados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados e demais métricas disponíveis. | Alta | Planejado |
-| **RF009** | **Comparação Final entre Equipes:** o sistema deve permitir comparar os resultados das duas equipes lado a lado, destacando a equipe vencedora com base na maior quilometragem acumulada ou indicando empate quando aplicável. | Média | Planejado |
-| **RF010** | **Exportação de Dados para Auditoria:** o sistema deve permitir a exportação dos dados consolidados em CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints e timestamps registrados. | Média | Planejado |
+| **RF001** | **Seleção de Equipe:** o sistema deve permitir que o operador selecione a equipe à qual os registros realizados naquela sessão serão vinculados. | Alta | Planejado |
+| **RF002** | **Seleção de Atleta:** o sistema deve permitir que o operador selecione um atleta dentro da equipe previamente selecionada, listando os atletas associados àquela equipe. | Alta | Planejado |
+| **RF003** | **Exibição de Esteiras com Status:** o sistema deve exibir as esteiras associadas à equipe selecionada, indicando o status de cada esteira como “livre” ou “em uso”. | Alta | Planejado |
+| **RF004** | **Associação de Turno a Esteira:** o sistema deve permitir que o operador associe um turno a uma esteira cujo status esteja marcado como “livre” no momento da associação. | Alta | Planejado |
+| **RF005** | **Início de Turno:** o sistema deve permitir que o operador inicie um turno para o atleta selecionado, em uma esteira previamente associada. | Alta | Planejado |
+| **RF006** | **Encerramento de Turno:** o sistema deve permitir que o operador encerre um turno em andamento, atualizando o status da esteira utilizada para “livre”. | Alta | Planejado |
+| **RF007** | **Registro de Checkpoint:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e aceitando preenchimento opcional de pace médio e velocidade média. | Alta | Planejado |
+| **RF008** | **Cálculo Automático de Pace:** o sistema deve calcular automaticamente o pace médio do checkpoint a partir do KM acumulado e do tempo decorrido sempre que o operador não preencher esse campo manualmente. | Alta | Planejado |
+| **RF009** | **Registro Automático de Timestamps:** o sistema deve gravar automaticamente o timestamp do servidor nas ações de início de turno, registro de checkpoint e encerramento de turno, sem permitir edição manual pelo operador. | Alta | Planejado |
+| **RF010** | **Exibição de Timer Regressivo:** o sistema deve exibir, durante um turno ativo, um timer regressivo até o próximo registro de checkpoint, sinalizando visualmente quando o tempo restante chega a zero. | Alta | Planejado |
+| **RF011** | **Exibição de Resultados do Turno:** o sistema deve exibir, ao encerramento de um turno, os resultados daquela sessão contendo KM total, pace médio, velocidade média e duração. | Alta | Planejado |
+| **RF012** | **Finalização de Equipe:** o sistema deve permitir que o operador finalize uma equipe mediante confirmação explícita. | Alta | Planejado |
+| **RF013** | **Bloqueio de Edição após Finalização:** o sistema deve bloquear a edição dos dados de uma equipe após sua finalização, mantendo os registros disponíveis apenas para leitura. | Alta | Planejado |
+| **RF014** | **Visualização de Resultados Consolidados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados pela equipe, KM acumulado por atleta e duração total. | Alta | Planejado |
+| **RF015** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | Alta | Planejado |
+| **RF016** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | Média | Planejado |
+| **RF017** | **Exportação de Dados em CSV:** o sistema deve permitir a exportação dos dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints e timestamps registrados. | Média | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
