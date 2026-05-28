@@ -1,15 +1,9 @@
 image: node:20
 
-pages:
+deploy:
   stage: deploy
   script:
     - npm ci
-    - mkdir -p public
-    - npx --yes ejs-cli --base-dir ./ '**/*.ejs' --out public/
-    - cp -r css js images public/ 2>/dev/null || true 
-  artifacts:
-    paths:
-      - public
+    - npx railway up   # ou: curl para Render deploy hook
   only:
-    - developer
     - main
