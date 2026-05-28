@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=2">
+  <link rel="stylesheet" href="/static/style.css?v=3">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador') { %>
@@ -50,6 +50,21 @@
           <strong><%= operadorSelecionado %></strong>
         </div>
       <% } %>
+
+      <%
+        const etapas = {
+          funcao: 'ETAPA 00 · ACESSO',
+          operador: 'ETAPA 01 · OPERADOR',
+          equipe: 'ETAPA 02 · EQUIPE',
+          atleta: 'ETAPA 03 · ATLETA',
+          esteira: 'ETAPA 04 · TURNO',
+          checkpoint: 'ETAPA 05 · CHECKPOINT',
+          encerramento: 'ETAPA 06 · ENCERRAMENTO'
+        };
+      %>
+
+      <% /* Etiqueta da etapa atual, centralizada em todas as telas. */ %>
+      <p class="step-label"><%= etapas[tela] || 'ETAPA' %></p>
 
       <% /* Titulo muda conforme a tela enviada pelo server.ts. */ %>
       <h1 id="page-title"><%= titulo %></h1>
@@ -282,7 +297,6 @@
       <% if (tela === 'checkpoint') { %>
         <% /* Nota: tela usada para registrar checkpoints durante o turno ativo. */ %>
         <p class="flow-context">Turno em andamento</p>
-        <p class="step-label">ETAPA 05 · CHECKPOINT</p>
 
         <section class="active-turn-card">
           <span class="operator-photo active-athlete-photo" aria-hidden="true">
@@ -336,7 +350,16 @@
           </button>
         </form>
 
-        <button type="button" class="finish-button" disabled>Finalizar turno</button>
+        <% /* Abre a etapa de encerramento com o resumo do turno atual. */ %>
+        <form id="finishTurnForm" action="/finalizar-turno" method="post" class="finish-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+          <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
+          <input id="finishKmFinal" type="hidden" name="kmFinal" value="">
+          <input id="finishDuracaoTurno" type="hidden" name="duracaoTurno" value="00:00:00">
+          <button type="submit" class="finish-button">Finalizar turno</button>
+        </form>
 
         <div id="checkpointModal" class="modal-overlay" hidden>
           <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -356,6 +379,9 @@
             const modal = document.getElementById('checkpointModal');
             const closeModal = document.getElementById('closeCheckpointModal');
             const turnTimer = document.getElementById('turnTimer');
+            const finishForm = document.getElementById('finishTurnForm');
+            const finishKmFinal = document.getElementById('finishKmFinal');
+            const finishDuracaoTurno = document.getElementById('finishDuracaoTurno');
             const cooldownMilliseconds = 5 * 60 * 1000;
             let cooldownInterval;
             let turnSeconds = 0;
@@ -414,6 +440,7 @@
               });
 
               lastCheckpointText.textContent = `${km} · ${now}`;
+              finishKmFinal.value = km;
               checkpointStatus.textContent = 'SALVO';
               showMessage('Checkpoint registrado com sucesso.', 'success');
               modal.hidden = false;
@@ -423,8 +450,80 @@
             closeModal.addEventListener('click', () => {
               modal.hidden = true;
             });
+
+            finishForm.addEventListener('submit', (event) => {
+              const km = document.getElementById('kmAcumulado').value.trim();
+
+              if (!km) {
+                event.preventDefault();
+                document.getElementById('kmAcumulado').focus();
+                showMessage('Informe a quilometragem final antes de encerrar o turno.', 'error');
+                return;
+              }
+
+              finishKmFinal.value = km;
+              finishDuracaoTurno.value = turnTimer.textContent;
+            });
           })();
         </script>
+      <% } %>
+
+      <% if (tela === 'encerramento') { %>
+        <% /* Nota: tela de conferencia antes de encerrar o turno e voltar para os atletas. */ %>
+        <p class="operator-description">
+          Confira o atleta e os dados antes de encerrar.
+        </p>
+
+        <p class="turn-note end-warning">Confirme a quilometragem final registrada.</p>
+
+        <section class="turn-summary end-athlete-summary">
+          <span class="operator-photo summary-photo" aria-hidden="true">
+            <%= atletaSelecionado.split(' ').map((parte) => parte[0]).join('').slice(0, 2) %>
+          </span>
+          <div class="summary-content">
+            <strong><%= atletaSelecionado %></strong>
+            <span><%= esteiraSelecionada %> · <%= equipeSelecionada %></span>
+          </div>
+          <small>ATLETA</small>
+        </section>
+
+        <section class="end-metrics" aria-label="Resumo do turno">
+          <article>
+            <strong>INÍCIO</strong>
+            <span><%= inicioTurno %></span>
+          </article>
+          <article>
+            <strong>DURAÇÃO</strong>
+            <span><%= duracaoTurno %></span>
+          </article>
+          <article>
+            <strong>KM FINAL</strong>
+            <span><%= kmFinal %> km</span>
+          </article>
+        </section>
+
+        <section class="after-confirm">
+          <strong>APÓS CONFIRMAR</strong>
+          <span>Checkpoint final salvo</span>
+          <span>Esteira liberada para o próximo atleta</span>
+          <span>Histórico preservado</span>
+        </section>
+
+        <form action="/confirmar-encerramento" method="post" class="continue-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <button type="submit" class="continue-button">
+            Confirmar encerramento
+          </button>
+        </form>
+
+        <form action="/voltar-checkpoint" method="post" class="continue-form secondary-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+          <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
+          <button type="submit" class="finish-button secondary-action">Voltar ao checkpoint</button>
+        </form>
       <% } %>
     </section>
   </main>

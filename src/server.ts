@@ -276,6 +276,54 @@ app.post('/iniciar-turno', (req: Request, res: Response): void => {
   });
 });
 
+app.post('/finalizar-turno', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta, esteira, kmFinal, duracaoTurno } = req.body;
+
+  res.render('index', {
+    // Mostra uma conferencia antes de encerrar o turno e reiniciar o ciclo.
+    tela: 'encerramento',
+    titulo: 'FINALIZAR TURNO',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    esteiraSelecionada: esteira,
+    kmFinal: kmFinal || '0',
+    duracaoTurno: duracaoTurno || '00:00:00',
+    inicioTurno: new Date().toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  });
+});
+
+app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta, esteira } = req.body;
+
+  res.render('index', {
+    // Retorna para o turno em andamento caso o operador queira revisar os checkpoints.
+    tela: 'checkpoint',
+    titulo: 'TURNO ATIVO',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    esteiraSelecionada: esteira
+  });
+});
+
+app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
+  const { operador, equipe } = req.body;
+
+  res.render('index', {
+    // Encerramento confirmado: volta para a selecao de atletas da mesma equipe.
+    tela: 'atleta',
+    titulo: equipe,
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletas: atletasPorEquipe[equipe] || [],
+    esteiras
+  });
+});
+
 // Buscar todos os registros de uma tabela
 app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
   try {
