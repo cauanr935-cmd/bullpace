@@ -37,18 +37,72 @@ const operadores = [
 
 // Lista temporaria usada para montar a tela de selecao de equipe.
 const equipes = [
-  { nome: 'Equipe 1', iniciais: 'E1', atletas: 16 },
-  { nome: 'Equipe 2', iniciais: 'E2', atletas: 16 }
+  { nome: 'Equipe Vermelha', iniciais: 'EV', atletas: 16 },
+  { nome: 'Equipe Azul', iniciais: 'EA', atletas: 16 }
 ];
 
 const equipesPainel = [
-  { nome: 'Equipe 1', km: '124,480 km', atleta: 'Rafael Luz em turno', detalhes: 'Disponível' },
-  { nome: 'Equipe 2', km: '121,930 km', atleta: 'Beatriz em turno', detalhes: 'Disponível' }
+  { nome: 'Equipe Vermelha', km: '124,480 km', atleta: 'Rafael Luz em turno', atletas: 16 },
+  { nome: 'Equipe Azul', km: '121,930 km', atleta: 'Beatriz em turno', atletas: 16 }
 ];
+
+const checkpointsPorEquipe: Record<string, { horario: string, atleta: string, km: string, operador: string, selecionado?: boolean }[]> = {
+  'Equipe Vermelha': [
+    { horario: '15:24:48', atleta: 'Rafael Luz', km: '12,760 km', operador: 'Ana Martins' },
+    { horario: '15:04:51', atleta: 'Bia Torres', km: '12,480 km', operador: 'Ana Martins', selecionado: true },
+    { horario: '14:22:31', atleta: 'Clara Nunes', km: '11,940 km', operador: 'João Lima' },
+    { horario: '13:58:06', atleta: 'Enzo Reis', km: '11,600 km', operador: 'João Lima' },
+    { horario: '13:21:44', atleta: 'Marina Costa', km: '11,240 km', operador: 'Ana Martins' },
+    { horario: '12:48:19', atleta: 'Diego Ramos', km: '10,980 km', operador: 'Pedro Alves' },
+    { horario: '12:12:57', atleta: 'Elisa Rocha', km: '10,610 km', operador: 'Marina Souza' },
+    { horario: '11:37:22', atleta: 'Felipe Dias', km: '10,220 km', operador: 'João Lima' }
+  ],
+  'Equipe Azul': [
+    { horario: '15:18:20', atleta: 'Beatriz', km: '12,240 km', operador: 'Marina Souza', selecionado: true },
+    { horario: '14:50:15', atleta: 'Lucas Lima', km: '11,980 km', operador: 'Pedro Alves' },
+    { horario: '14:12:03', atleta: 'Sofia Cardoso', km: '11,620 km', operador: 'Marina Souza' },
+    { horario: '13:44:42', atleta: 'Mateus Campos', km: '11,300 km', operador: 'Pedro Alves' },
+    { horario: '13:08:34', atleta: 'Alice Martins', km: '10,940 km', operador: 'Ana Martins' },
+    { horario: '12:32:08', atleta: 'Bruno Faria', km: '10,570 km', operador: 'João Lima' },
+    { horario: '11:59:46', atleta: 'Camila Teixeira', km: '10,190 km', operador: 'Marina Souza' },
+    { horario: '11:21:30', atleta: 'Daniel Souza', km: '9,880 km', operador: 'Pedro Alves' }
+  ]
+};
+
+const atletasFiltroPorEquipe: Record<string, { nome: string, iniciais: string, status: string, selecionado?: boolean }[]> = {
+  'Equipe Vermelha': [
+    { nome: 'Rafael Luz', iniciais: 'RL', status: 'Turno ativo · 3 checkpoints', selecionado: true },
+    { nome: 'Bia Torres', iniciais: 'BT', status: 'Último turno há 34 min' },
+    { nome: 'Clara Nunes', iniciais: 'CN', status: 'Último turno há 1h12' },
+    { nome: 'Enzo Reis', iniciais: 'ER', status: 'Sem turno registrado' },
+    { nome: 'Marina Costa', iniciais: 'MC', status: 'Último turno há 1h48' },
+    { nome: 'Diego Ramos', iniciais: 'DR', status: 'Último turno há 2h10' },
+    { nome: 'Elisa Rocha', iniciais: 'ER', status: 'Disponível para investigação' },
+    { nome: 'Felipe Dias', iniciais: 'FD', status: 'Disponível para investigação' },
+    { nome: 'Gabriela Reis', iniciais: 'GR', status: 'Disponível para investigação' },
+    { nome: 'Henrique Melo', iniciais: 'HM', status: 'Disponível para investigação' },
+    { nome: 'Isabela Costa', iniciais: 'IC', status: 'Disponível para investigação' },
+    { nome: 'Júlia Prado', iniciais: 'JP', status: 'Disponível para investigação' }
+  ],
+  'Equipe Azul': [
+    { nome: 'Beatriz', iniciais: 'BZ', status: 'Turno ativo · 4 checkpoints', selecionado: true },
+    { nome: 'Lucas Lima', iniciais: 'LL', status: 'Último turno há 28 min' },
+    { nome: 'Sofia Cardoso', iniciais: 'SC', status: 'Último turno há 1h04' },
+    { nome: 'Mateus Campos', iniciais: 'MC', status: 'Sem turno registrado' },
+    { nome: 'Alice Martins', iniciais: 'AM', status: 'Último turno há 1h35' },
+    { nome: 'Bruno Faria', iniciais: 'BF', status: 'Último turno há 2h02' },
+    { nome: 'Camila Teixeira', iniciais: 'CT', status: 'Disponível para investigação' },
+    { nome: 'Daniel Souza', iniciais: 'DS', status: 'Disponível para investigação' },
+    { nome: 'Eduarda Pires', iniciais: 'EP', status: 'Disponível para investigação' },
+    { nome: 'Fernando Brito', iniciais: 'FB', status: 'Disponível para investigação' },
+    { nome: 'Giovana Freitas', iniciais: 'GF', status: 'Disponível para investigação' },
+    { nome: 'Hugo Moreira', iniciais: 'HM', status: 'Disponível para investigação' }
+  ]
+};
 
 // Lista temporaria de atletas por equipe para montar a tela de selecao do proximo turno.
 const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status: string }[]> = {
-  'Equipe 1': [
+  'Equipe Vermelha': [
     { nome: 'Rafael Luz', iniciais: 'RL', status: 'Turno anterior há 1h12' },
     { nome: 'Bia Torres', iniciais: 'BT', status: 'Disponível para revezamento' },
     { nome: 'Clara Nunes', iniciais: 'CN', status: 'Disponível para revezamento' },
@@ -66,7 +120,7 @@ const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status:
     { nome: 'Paula Gomes', iniciais: 'PG', status: 'Disponível para revezamento' },
     { nome: 'Victor Lopes', iniciais: 'VL', status: 'Disponível para revezamento' }
   ],
-  'Equipe 2': [
+  'Equipe Azul': [
     { nome: 'Alice Martins', iniciais: 'AM', status: 'Disponível para revezamento' },
     { nome: 'Bruno Faria', iniciais: 'BF', status: 'Disponível para revezamento' },
     { nome: 'Camila Teixeira', iniciais: 'CT', status: 'Disponível para revezamento' },
@@ -165,6 +219,49 @@ app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
   });
 });
 
+app.post('/voltar-painel-coordenador', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Retorna dos detalhes para a visao geral da coordenacao.
+    tela: 'painelCoordenador',
+    titulo: 'PAINEL DA PROVA',
+    coordenadorSelecionado: coordenador,
+    equipesPainel
+  });
+});
+
+app.post('/detalhes-equipe', (req: Request, res: Response): void => {
+  const { coordenador, equipe } = req.body;
+  const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
+
+  res.render('index', {
+    // Abre os registros gerais da equipe para auditoria.
+    tela: 'detalheEquipe',
+    titulo: equipePainel.nome,
+    coordenadorSelecionado: coordenador,
+    equipePainel,
+    checkpoints: checkpointsPorEquipe[equipePainel.nome] || []
+  });
+});
+
+app.post('/filtro-atletas-equipe', (req: Request, res: Response): void => {
+  const { coordenador, equipe, atleta } = req.body;
+  const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
+  const atletas = atletasFiltroPorEquipe[equipePainel.nome] || [];
+  const atletaSelecionado = atleta || atletas.find((item) => item.selecionado)?.nome;
+
+  res.render('index', {
+    // Mostra o filtro por atleta dentro dos detalhes da equipe.
+    tela: 'filtroAtletasEquipe',
+    titulo: 'ATLETAS DA EQUIPE',
+    coordenadorSelecionado: coordenador,
+    equipePainel,
+    atletasFiltro: atletas,
+    atletaSelecionado
+  });
+});
+
 // Mostra diretamente a selecao de operadores caso a rota seja acessada pela URL.
 app.get('/operador', (req: Request, res: Response): void => {
   res.render('index', {
@@ -253,7 +350,21 @@ app.post('/voltar-equipe', (req: Request, res: Response): void => {
 });
 
 app.post('/selecionar-atleta', (req: Request, res: Response): void => {
-  const { operador, equipe, atleta } = req.body;
+  const { operador, equipe, atleta, ultimoAtleta } = req.body;
+
+  if (ultimoAtleta && atleta === ultimoAtleta) {
+    res.render('index', {
+      // Impede o mesmo atleta de correr dois turnos seguidos.
+      tela: 'atleta',
+      titulo: equipe,
+      operadorSelecionado: operador,
+      equipeSelecionada: equipe,
+      ultimoAtleta,
+      atletas: atletasPorEquipe[equipe] || [],
+      esteiras
+    });
+    return;
+  }
 
   res.render('index', {
     // Mantem a tela de atletas e destaca o atleta escolhido.
@@ -262,13 +373,28 @@ app.post('/selecionar-atleta', (req: Request, res: Response): void => {
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
+    ultimoAtleta,
     atletas: atletasPorEquipe[equipe] || [],
     esteiras
   });
 });
 
 app.post('/continuar-atleta', (req: Request, res: Response): void => {
-  const { operador, equipe, atleta } = req.body;
+  const { operador, equipe, atleta, ultimoAtleta } = req.body;
+
+  if (ultimoAtleta && atleta === ultimoAtleta) {
+    res.render('index', {
+      // Segunda validacao para evitar avanço manual com atleta bloqueado.
+      tela: 'atleta',
+      titulo: equipe,
+      operadorSelecionado: operador,
+      equipeSelecionada: equipe,
+      ultimoAtleta,
+      atletas: atletasPorEquipe[equipe] || [],
+      esteiras
+    });
+    return;
+  }
 
   res.render('index', {
     // Confirma atleta e permite escolher a esteira para iniciar o turno.
@@ -360,7 +486,7 @@ app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
 });
 
 app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
-  const { operador, equipe } = req.body;
+  const { operador, equipe, atleta } = req.body;
 
   res.render('index', {
     // Encerramento confirmado: volta para a selecao de atletas da mesma equipe.
@@ -368,6 +494,7 @@ app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
     titulo: equipe,
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
+    ultimoAtleta: atleta,
     atletas: atletasPorEquipe[equipe] || [],
     esteiras
   });

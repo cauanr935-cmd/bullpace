@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=5">
+  <link rel="stylesheet" href="/static/style.css?v=6">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
@@ -20,6 +20,23 @@
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'detalheEquipe') { %>
+        <% /* Volta para a visao geral da coordenacao. */ %>
+        <form action="/voltar-painel-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'filtroAtletasEquipe') { %>
+        <% /* Volta para os detalhes gerais da equipe. */ %>
+        <form action="/detalhes-equipe" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -65,6 +82,8 @@
           operador: 'ETAPA 01 · OPERADOR(A)',
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
+          detalheEquipe: 'ETAPA 03 · EQUIPE',
+          filtroAtletasEquipe: 'ETAPA 03.1 · FILTRO',
           equipe: 'ETAPA 02 · EQUIPE',
           atleta: 'ETAPA 03 · ATLETA',
           esteira: 'ETAPA 04 · TURNO',
@@ -229,7 +248,11 @@
                 <strong><%= equipe.nome %></strong>
                 <small><%= equipe.km %> · <%= equipe.atleta %></small>
               </div>
-              <button type="button">DETALHES</button>
+              <form action="/detalhes-equipe" method="post" class="details-form">
+                <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+                <input type="hidden" name="equipe" value="<%= equipe.nome %>">
+                <button type="submit">DETALHES</button>
+              </form>
             </article>
           <% }) %>
         </div>
@@ -241,6 +264,107 @@
           <button type="button">Modo TV</button>
           <button type="button">Fechamento</button>
         </section>
+      <% } %>
+
+      <% if (tela === 'detalheEquipe') { %>
+        <% /* Nota: detalhes de checkpoints da equipe selecionada. */ %>
+        <p class="operator-description">
+          Consulte registros gerais ou filtre por atleta.
+        </p>
+
+        <section class="team-detail-summary">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <strong><%= equipePainel.nome %></strong>
+            <small><%= equipePainel.km %> acumulados</small>
+          </div>
+          <span>TURNO ATIVO</span>
+        </section>
+
+        <section class="detail-tabs">
+          <button type="button" class="is-active">Todos os checkpoints</button>
+          <form action="/filtro-atletas-equipe" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
+            <button type="submit">Por atleta</button>
+          </form>
+        </section>
+
+        <p class="operator-list-title">CHECKPOINTS DA EQUIPE</p>
+        <p class="detail-subtitle">REGISTROS RECENTES · TODOS OS ATLETAS</p>
+
+        <div class="checkpoint-record checkpoint-record-header" aria-hidden="true">
+          <span>HORÁRIO</span>
+          <span>ATLETA</span>
+          <span>KM</span>
+          <span>OPERADOR(A)</span>
+        </div>
+
+        <div class="checkpoint-record-list" aria-label="Checkpoints da equipe">
+          <% checkpoints.forEach((checkpoint) => { %>
+            <article class="checkpoint-record">
+              <span><%= checkpoint.horario %></span>
+              <strong><%= checkpoint.atleta %></strong>
+              <strong><%= checkpoint.km %></strong>
+              <span><%= checkpoint.operador %></span>
+            </article>
+          <% }) %>
+        </div>
+
+        <button type="button" class="continue-button audit-button">
+          Auditar registro selecionado
+        </button>
+      <% } %>
+
+      <% if (tela === 'filtroAtletasEquipe') { %>
+        <% /* Nota: filtro de atletas dentro dos detalhes da equipe. */ %>
+        <p class="operator-description">
+          Selecione quem deseja investigar.
+        </p>
+
+        <section class="team-filter-summary">
+          <span class="status-dot" aria-hidden="true"></span>
+          <strong><%= equipePainel.nome %></strong>
+          <span><%= equipePainel.atletas %> atletas cadastrados</span>
+        </section>
+
+        <section class="detail-tabs">
+          <form action="/detalhes-equipe" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
+            <button type="submit">Todos os checkpoints</button>
+          </form>
+          <button type="button" class="is-active">Por atleta</button>
+        </section>
+
+        <p class="operator-list-title">ATLETAS</p>
+
+        <div class="filter-athlete-list" aria-label="Atletas da equipe">
+          <% atletasFiltro.forEach((atleta) => { %>
+            <% const atletaAtual = atletaSelecionado === atleta.nome; %>
+            <form action="/filtro-atletas-equipe" method="post" class="function-form">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
+              <input type="hidden" name="atleta" value="<%= atleta.nome %>">
+              <button type="submit" class="operator-row filter-athlete-row <%= atletaAtual ? 'is-selected' : '' %>">
+                <span class="operator-photo" aria-hidden="true"><%= atleta.iniciais %></span>
+                <span class="operator-name">
+                  <%= atleta.nome %>
+                  <small><%= atleta.status %></small>
+                </span>
+                <% if (atletaAtual) { %>
+                  <span class="selected-badge">ABRIR</span>
+                <% } %>
+              </button>
+            </form>
+          <% }) %>
+        </div>
+
+        <% if (typeof atletaSelecionado !== 'undefined') { %>
+          <button type="button" class="continue-button audit-button">
+            Ver histórico de <%= atletaSelecionado %>
+          </button>
+        <% } %>
       <% } %>
 
       <% if (tela === 'equipe') { %>
@@ -299,21 +423,33 @@
 
         <p class="operator-list-title">ATLETAS DISPONÍVEIS</p>
 
+        <% if (typeof ultimoAtleta !== 'undefined') { %>
+          <p class="rotation-warning">
+            <strong><%= ultimoAtleta %></strong> correu no último turno e não pode ser selecionado agora.
+          </p>
+        <% } %>
+
         <div class="athlete-scroll" aria-label="Lista de atletas">
           <% atletas.forEach((atleta) => { %>
             <% const atletaAtual = typeof atletaSelecionado !== 'undefined' && atletaSelecionado === atleta.nome; %>
+            <% const atletaBloqueado = typeof ultimoAtleta !== 'undefined' && ultimoAtleta === atleta.nome; %>
             <form action="/selecionar-atleta" method="post" class="function-form">
               <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
               <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
               <input type="hidden" name="atleta" value="<%= atleta.nome %>">
-              <button type="submit" class="operator-row athlete-row <%= atletaAtual ? 'is-selected' : '' %>">
+              <% if (typeof ultimoAtleta !== 'undefined') { %>
+                <input type="hidden" name="ultimoAtleta" value="<%= ultimoAtleta %>">
+              <% } %>
+              <button type="submit" class="operator-row athlete-row <%= atletaAtual ? 'is-selected' : '' %> <%= atletaBloqueado ? 'is-disabled' : '' %>" <%= atletaBloqueado ? 'disabled' : '' %>>
                 <span class="operator-photo" aria-hidden="true"><%= atleta.iniciais %></span>
                 <span class="operator-name">
                   <%= atleta.nome %>
-                  <small><%= atleta.status %></small>
+                  <small><%= atletaBloqueado ? 'Indisponível: correu no último turno' : atleta.status %></small>
                 </span>
                 <% if (atletaAtual) { %>
                   <span class="selected-badge">SELECIONADO</span>
+                <% } else if (atletaBloqueado) { %>
+                  <span class="selected-badge">BLOQUEADO</span>
                 <% } %>
                 <span class="operator-radio" aria-hidden="true"></span>
               </button>
@@ -327,6 +463,9 @@
             <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
             <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
             <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+            <% if (typeof ultimoAtleta !== 'undefined') { %>
+              <input type="hidden" name="ultimoAtleta" value="<%= ultimoAtleta %>">
+            <% } %>
             <button type="submit" class="continue-button">
               Continuar com <%= atletaSelecionado %>
             </button>
@@ -627,6 +766,7 @@
         <form action="/confirmar-encerramento" method="post" class="continue-form">
           <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
           <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
           <button type="submit" class="continue-button">
             Confirmar encerramento
           </button>

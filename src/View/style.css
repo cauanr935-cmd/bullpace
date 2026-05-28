@@ -365,6 +365,22 @@ body {
   text-align: center;
 }
 
+.rotation-warning {
+  width: min(100%, 620px);
+  margin: 12px auto 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.rotation-warning strong {
+  font-weight: 800;
+}
+
 .login-badge {
   margin: 30px auto 0;
   padding: 12px 24px;
@@ -514,7 +530,12 @@ body {
   font-size: 17px;
 }
 
-.panel-team-card button {
+.details-form {
+  margin: 0;
+}
+
+.panel-team-card button,
+.details-form button {
   min-width: 150px;
   min-height: 48px;
   border: 0;
@@ -528,7 +549,9 @@ body {
 }
 
 .panel-team-card button:hover,
-.panel-team-card button:focus-visible {
+.panel-team-card button:focus-visible,
+.details-form button:hover,
+.details-form button:focus-visible {
   box-shadow: inset 0 0 0 2px #202124;
   outline: none;
 }
@@ -568,6 +591,154 @@ body {
 .panel-actions button.is-active:hover,
 .panel-actions button.is-active:focus-visible {
   background: #3a3b3d;
+}
+
+.team-detail-summary,
+.team-filter-summary {
+  width: min(100%, 760px);
+  min-height: 88px;
+  margin: 28px auto 0;
+  padding: 20px 28px;
+  border-radius: 16px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.team-detail-summary div {
+  flex: 1;
+}
+
+.team-detail-summary strong,
+.team-detail-summary small {
+  display: block;
+}
+
+.team-detail-summary strong,
+.team-filter-summary strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.team-detail-summary small {
+  margin-top: 8px;
+  font-size: 17px;
+}
+
+.team-detail-summary > span:last-child {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.team-filter-summary strong {
+  flex: 1;
+}
+
+.team-filter-summary > span:last-child {
+  font-size: 18px;
+}
+
+.detail-tabs {
+  width: min(100%, 760px);
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.detail-tabs form {
+  margin: 0;
+}
+
+.detail-tabs button {
+  width: 100%;
+  min-height: 64px;
+  border: 2px solid #d8d8d8;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.detail-tabs button.is-active {
+  border-color: #202124;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 1px #202124;
+}
+
+.detail-subtitle {
+  width: min(100%, 760px);
+  margin: 12px auto 0;
+  color: #707070;
+  font-size: 14px;
+}
+
+.checkpoint-record-list,
+.filter-athlete-list {
+  width: min(100%, 760px);
+  max-height: 292px;
+  margin-top: 14px;
+  padding: 2px 8px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.checkpoint-record-header {
+  width: min(100%, 760px);
+  min-height: auto;
+  margin: 14px auto 0;
+  padding: 0 24px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.checkpoint-record-header span {
+  color: #707070;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.checkpoint-record {
+  min-height: 62px;
+  padding: 16px 24px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1.25fr 1.35fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.checkpoint-record span {
+  color: #202124;
+  font-size: 16px;
+}
+
+.checkpoint-record strong {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.audit-button {
+  width: min(100%, 760px);
+}
+
+.filter-athlete-list .function-form {
+  width: 100%;
+}
+
+.filter-athlete-row {
+  min-height: 78px;
 }
 
 .team-status {
@@ -698,6 +869,7 @@ body {
   cursor: not-allowed;
   color: #707070;
   background: #f4f4f4;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
 }
 
 .operator-row.is-disabled:hover {
@@ -1220,10 +1392,18 @@ body {
   .continue-form,
   .login-form,
   .login-helper,
+  .rotation-warning,
   .panel-progress,
   .panel-metrics,
   .panel-team-list,
   .panel-actions,
+  .team-detail-summary,
+  .team-filter-summary,
+  .detail-tabs,
+  .detail-subtitle,
+  .checkpoint-record-list,
+  .filter-athlete-list,
+  .audit-button,
   .team-status,
   .athlete-scroll,
   .turn-summary,
@@ -1306,13 +1486,20 @@ body {
   }
 
   .panel-progress,
-  .panel-team-card {
+  .panel-team-card,
+  .team-detail-summary,
+  .team-filter-summary {
     align-items: flex-start;
     flex-direction: column;
   }
 
   .panel-metrics,
-  .panel-actions {
+  .panel-actions,
+  .detail-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .checkpoint-record {
     grid-template-columns: 1fr;
   }
 }
