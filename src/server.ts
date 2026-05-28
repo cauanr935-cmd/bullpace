@@ -295,10 +295,59 @@ app.post('/finalizar-prova', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
 
   res.render('index', {
+    // Confirmacao obrigatoria antes de bloquear novos registros e oficializar o resultado.
+    tela: 'confirmacaoFechamento',
+    titulo: 'Confirmar encerramento',
+    coordenadorSelecionado: coordenador,
+    resultadoOficial,
+    rankingFechamento
+  });
+});
+
+app.post('/confirmar-finalizacao', (req: Request, res: Response): void => {
+  const { coordenador, confirmaBloqueio } = req.body;
+
+  if (confirmaBloqueio !== 'sim') {
+    res.render('index', {
+      // Mantem a confirmacao bloqueada se o responsavel ainda nao concordou.
+      tela: 'confirmacaoFechamento',
+      titulo: 'Confirmar encerramento',
+      coordenadorSelecionado: coordenador,
+      resultadoOficial,
+      rankingFechamento,
+      confirmacaoMensagem: 'Marque a confirmação para continuar.'
+    });
+    return;
+  }
+
+  res.render('index', {
     // Resultado oficial apos a confirmacao do fechamento da prova.
     tela: 'resultadoOficial',
     titulo: 'Resultado oficial',
     coordenadorSelecionado: coordenador,
+    resultadoOficial,
+    rankingFechamento
+  });
+});
+
+app.post('/publicar-resultado', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Confirmacao explicita antes de mostrar o resultado final no placar publico.
+    tela: 'publicarResultado',
+    titulo: 'Publicar resultado',
+    coordenadorSelecionado: coordenador,
+    resultadoOficial,
+    rankingFechamento
+  });
+});
+
+app.post('/confirmar-publicacao', (req: Request, res: Response): void => {
+  res.render('index', {
+    // Tela publica final, liberada apos a confirmacao da coordenacao.
+    tela: 'tvResultado',
+    titulo: 'RESULTADO OFICIAL',
     resultadoOficial,
     rankingFechamento
   });
@@ -312,6 +361,19 @@ app.post('/voltar-fechamento', (req: Request, res: Response): void => {
     tela: 'fechamento',
     titulo: 'Fechamento',
     coordenadorSelecionado: coordenador,
+    rankingFechamento
+  });
+});
+
+app.post('/voltar-resultado-oficial', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Retorna da publicacao para o resultado oficial privado.
+    tela: 'resultadoOficial',
+    titulo: 'Resultado oficial',
+    coordenadorSelecionado: coordenador,
+    resultadoOficial,
     rankingFechamento
   });
 });

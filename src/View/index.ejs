@@ -9,7 +9,7 @@
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
-  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'resultadoOficial' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'confirmacaoFechamento' || tela === 'resultadoOficial' || tela === 'publicarResultado' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <% /* O frame tambem muda quando o conteudo deve ocupar a tela inteira da TV. */ %>
     <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
@@ -42,9 +42,25 @@
         </form>
       <% } %>
 
+      <% if (tela === 'confirmacaoFechamento') { %>
+        <% /* Volta da confirmacao para a revisao de fechamento. */ %>
+        <form action="/voltar-fechamento" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
       <% if (tela === 'resultadoOficial') { %>
         <% /* Volta do resultado oficial para a revisao de fechamento. */ %>
         <form action="/voltar-fechamento" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'publicarResultado') { %>
+        <% /* Volta da publicacao para o resultado oficial privado. */ %>
+        <form action="/voltar-resultado-oficial" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
@@ -111,7 +127,9 @@
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
           modoTv: 'RAMO A · EXIBIÇÃO',
           fechamento: 'RAMO B · FECHAMENTO',
+          confirmacaoFechamento: 'RAMO B · CONFIRMAÇÃO',
           resultadoOficial: 'RAMO B · RESULTADO',
+          publicarResultado: 'RAMO B · RESULTADO',
           detalheEquipe: 'ETAPA 03 · EQUIPE',
           filtroAtletasEquipe: 'ETAPA 03.1 · FILTRO',
           equipe: 'ETAPA 02 · EQUIPE',
@@ -432,12 +450,12 @@
 
           <section class="tv-ranking">
             <article>
-              <span>1º LUGAR</span>
+              <span>EQUIPE</span>
               <strong>Equipe Vermelha</strong>
               <p>124,480 <small>km</small></p>
             </article>
             <article>
-              <span>2º LUGAR</span>
+              <span>EQUIPE</span>
               <strong>Equipe Azul</strong>
               <p>121,930 <small>km</small></p>
             </article>
@@ -557,6 +575,66 @@
         </form>
       <% } %>
 
+      <% if (tela === 'confirmacaoFechamento') { %>
+        <% /* Nota: confirmacao obrigatoria antes de tornar o resultado oficial. */ %>
+        <p class="operator-description">
+          Revise o bloqueio antes de concluir.
+        </p>
+
+        <span class="sensitive-status">AÇÃO SENSÍVEL</span>
+
+        <section class="closure-warning confirmation-warning">
+          <strong>Ao finalizar a prova:</strong>
+          <span>Novos checkpoints serão bloqueados e o resultado passará a ser oficial.</span>
+        </section>
+
+        <p class="closure-section-title">CONFIRMAÇÃO OBRIGATÓRIA</p>
+
+        <form action="/confirmar-finalizacao" method="post" class="confirmation-form" id="finishConfirmationForm">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+
+          <label class="confirmation-check-card" for="finishConfirmationCheck">
+            <input id="finishConfirmationCheck" name="confirmaBloqueio" value="sim" type="checkbox">
+            <span>Estou ciente de que novos registros serão bloqueados.</span>
+          </label>
+
+          <section class="responsible-card">
+            <strong>Responsável pela validação:</strong>
+            <span><%= coordenadorSelecionado || resultadoOficial.validadoPor %></span>
+          </section>
+
+          <% if (typeof confirmacaoMensagem !== 'undefined') { %>
+            <p class="checkpoint-message success closure-message"><%= confirmacaoMensagem %></p>
+          <% } %>
+
+          <button type="submit" class="continue-button" id="finishConfirmationButton" disabled>
+            Marque a confirmação para continuar
+          </button>
+        </form>
+
+        <form action="/voltar-fechamento" method="post" class="continue-form secondary-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="finish-button">
+            Cancelar
+          </button>
+        </form>
+
+        <script>
+          (() => {
+            const check = document.getElementById('finishConfirmationCheck');
+            const button = document.getElementById('finishConfirmationButton');
+
+            const updateButton = () => {
+              button.disabled = !check.checked;
+              button.textContent = check.checked ? 'Confirmar encerramento' : 'Marque a confirmação para continuar';
+            };
+
+            check.addEventListener('change', updateButton);
+            updateButton();
+          })();
+        </script>
+      <% } %>
+
       <% if (tela === 'resultadoOficial') { %>
         <% /* Nota: resultado oficial pronto para exportacao e publicacao na TV. */ %>
         <p class="operator-description">
@@ -596,9 +674,47 @@
           Exportar CSV
         </button>
 
-        <a href="/tv-resultado" target="_blank" rel="noopener" class="finish-button result-tv-link">
-          Publicar no Modo TV
-        </a>
+        <form action="/publicar-resultado" method="post" class="continue-form secondary-form result-publish-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="finish-button result-tv-link">
+            Publicar no Modo TV
+          </button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'publicarResultado') { %>
+        <% /* Nota: confirmacao antes de liberar o placar final para o publico. */ %>
+        <p class="operator-description">
+          Confirme a exibição no placar público.
+        </p>
+
+        <section class="publish-result-card">
+          <strong>RESULTADO OFICIAL</strong>
+          <span><%= resultadoOficial.vencedor.nome %> · <%= resultadoOficial.vencedor.km %></span>
+        </section>
+
+        <section class="responsible-card publication-info-card">
+          <strong>A publicação exibirá:</strong>
+          <span>Ranking final, distância oficial e equipe vencedora. A tela pública continuará somente leitura.</span>
+        </section>
+
+        <section class="closure-warning publication-warning">
+          <strong>Publicação visível ao público do evento.</strong>
+        </section>
+
+        <form action="/confirmar-publicacao" method="post" class="continue-form closure-action-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="continue-button">
+            Confirmar publicação
+          </button>
+        </form>
+
+        <form action="/voltar-resultado-oficial" method="post" class="continue-form secondary-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="finish-button">
+            Cancelar
+          </button>
+        </form>
       <% } %>
 
       <% if (tela === 'detalheEquipe') { %>
