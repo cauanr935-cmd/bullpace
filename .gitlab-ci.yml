@@ -12,4 +12,5 @@ pages:
       - public
 
   only:
+    - developer
     - main
