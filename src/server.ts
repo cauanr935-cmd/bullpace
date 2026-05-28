@@ -46,6 +46,11 @@ const equipesPainel = [
   { nome: 'Equipe Azul', km: '121,930 km', atleta: 'Beatriz em turno', atletas: 16 }
 ];
 
+const rankingFechamento = [
+  { posicao: 1, nome: 'Equipe Vermelha', km: '348,920 km', checkpoints: 412, correcoes: 3 },
+  { posicao: 2, nome: 'Equipe Azul', km: '344,180 km', checkpoints: 407, correcoes: 1 }
+];
+
 const checkpointsPorEquipe: Record<string, { horario: string, atleta: string, km: string, operador: string, selecionado?: boolean }[]> = {
   'Equipe Vermelha': [
     { horario: '15:24:48', atleta: 'Rafael Luz', km: '12,760 km', operador: 'Ana Martins' },
@@ -240,6 +245,31 @@ app.post('/modo-tv', (req: Request, res: Response): void => {
     titulo: 'MODO TV',
     coordenadorSelecionado: coordenador,
     equipesPainel
+  });
+});
+
+app.post('/fechamento', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Tela de revisao final antes de encerrar a prova.
+    tela: 'fechamento',
+    titulo: 'FECHAMENTO',
+    coordenadorSelecionado: coordenador,
+    rankingFechamento
+  });
+});
+
+app.post('/finalizar-prova', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Confirmacao visual temporaria do fechamento da prova.
+    tela: 'fechamento',
+    titulo: 'FECHAMENTO',
+    coordenadorSelecionado: coordenador,
+    rankingFechamento,
+    fechamentoMensagem: 'Prova finalizada. Novos registros ficam bloqueados.'
   });
 });
 

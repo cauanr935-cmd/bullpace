@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/static/style.css?v=9">
 </head>
 <body>
-  <main class="function-page <%= tela === 'tvPublica' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'tvPublica' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame <%= tela === 'tvPublica' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
@@ -26,6 +26,14 @@
 
       <% if (tela === 'modoTv') { %>
         <% /* Volta para a visao geral da coordenacao. */ %>
+        <form action="/voltar-painel-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'fechamento') { %>
+        <% /* Volta do fechamento para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <button type="submit" class="back-link">VOLTAR</button>
@@ -91,6 +99,7 @@
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
           modoTv: 'RAMO A · EXIBIÇÃO',
+          fechamento: 'RAMO B · FECHAMENTO',
           detalheEquipe: 'ETAPA 03 · EQUIPE',
           filtroAtletasEquipe: 'ETAPA 03.1 · FILTRO',
           equipe: 'ETAPA 02 · EQUIPE',
@@ -276,7 +285,10 @@
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
             <button type="submit">Modo TV</button>
           </form>
-          <button type="button">Fechamento</button>
+          <form action="/fechamento" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <button type="submit">Fechamento</button>
+          </form>
         </section>
       <% } %>
 
@@ -416,6 +428,52 @@
             applyTvState();
           })();
         </script>
+      <% } %>
+
+      <% if (tela === 'fechamento') { %>
+        <% /* Nota: revisao consolidada antes de encerrar oficialmente a prova. */ %>
+        <p class="operator-description">
+          Valide os dados antes de finalizar a prova.
+        </p>
+
+        <span class="closure-status">PRONTO PARA REVISÃO</span>
+
+        <% if (typeof fechamentoMensagem !== 'undefined') { %>
+          <p class="checkpoint-message success closure-message"><%= fechamentoMensagem %></p>
+        <% } %>
+
+        <p class="operator-list-title">RANKING CONSOLIDADO</p>
+
+        <section class="closure-ranking" aria-label="Ranking consolidado">
+          <% rankingFechamento.forEach((equipe) => { %>
+            <article class="closure-team-card">
+              <div>
+                <strong><%= equipe.posicao %> <%= equipe.nome %></strong>
+                <small><%= equipe.checkpoints %> checkpoints · <%= equipe.correcoes %> <%= equipe.correcoes === 1 ? 'correção' : 'correções' %></small>
+              </div>
+              <span><%= equipe.km %></span>
+            </article>
+          <% }) %>
+        </section>
+
+        <section class="closure-warning">
+          <strong>A finalização bloqueia novos registros.</strong>
+          <span>Revise antes de confirmar.</span>
+        </section>
+
+        <form action="/finalizar-prova" method="post" class="continue-form closure-action-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="continue-button">
+            Finalizar prova
+          </button>
+        </form>
+
+        <form action="/voltar-painel-coordenador" method="post" class="continue-form secondary-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="finish-button">
+            Voltar ao painel
+          </button>
+        </form>
       <% } %>
 
       <% if (tela === 'detalheEquipe') { %>
