@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="/static/style.css?v=10">
 </head>
 <body>
+  <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
   <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'resultadoOficial' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+    <% /* O frame tambem muda quando o conteudo deve ocupar a tela inteira da TV. */ %>
     <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
@@ -101,6 +103,7 @@
       <% } %>
 
       <%
+        /* Mapa central que liga cada tela ao texto da etapa exibida no topo. */
         const etapas = {
           funcao: 'ETAPA 00 · ACESSO',
           operador: 'ETAPA 01 · OPERADOR(A)',
@@ -184,20 +187,29 @@
 
         <script>
           (() => {
+            // Busca o formulario de login no HTML.
             const form = document.getElementById('coordinatorLoginForm');
+            // Busca o botao de login que sera ativado/desativado.
             const button = document.getElementById('coordinatorLoginButton');
+            // Pega todos os campos obrigatorios dentro do formulario.
             const fields = Array.from(form.querySelectorAll('[required]'));
 
+            // Atualiza o estado do botao conforme os campos forem preenchidos.
             const updateButton = () => {
+              // Verifica se todos os campos obrigatorios possuem algum texto.
               const ready = fields.every((field) => field.value.trim());
+              // Desativa o botao quando ainda falta algum campo.
               button.disabled = !ready;
+              // Troca o texto do botao para orientar o usuario.
               button.textContent = ready ? 'Entrar como coordenador(a)' : 'Preencha os campos para entrar';
             };
 
+            // Escuta digitacao em cada campo obrigatorio.
             fields.forEach((field) => {
               field.addEventListener('input', updateButton);
             });
 
+            // Roda uma primeira vez para deixar o botao correto ao carregar a tela.
             updateButton();
           })();
         </script>
@@ -347,34 +359,51 @@
 
         <script>
           (() => {
+            // Card principal do controle do Modo TV.
             const card = document.getElementById('tvControlCard');
+            // Botao estilo chave liga/desliga.
             const toggle = document.getElementById('tvToggle');
+            // Texto que mostra ATIVO ou INATIVO.
             const label = document.getElementById('tvStateLabel');
+            // Link que abre a tela externa da TV.
             const externalButton = document.getElementById('externalScreenButton');
+            // Recupera do navegador se o Modo TV estava ativo na ultima interacao.
             let enabled = localStorage.getItem('bullpace-tv-active') !== 'false';
 
+            // Aplica visualmente o estado atual do Modo TV.
             const updateState = () => {
+              // Marca o card como ativo quando o placar deve aparecer.
               card.classList.toggle('is-active', enabled);
+              // Marca o card como inativo quando o placar deve ficar pausado.
               card.classList.toggle('is-inactive', !enabled);
+              // Atualiza atributo de acessibilidade do botao.
               toggle.setAttribute('aria-pressed', String(enabled));
+              // Atualiza o texto do selo.
               label.textContent = enabled ? 'ATIVO' : 'INATIVO';
+              // Mostra o link como indisponivel quando o modo esta inativo.
               externalButton.classList.toggle('is-disabled', !enabled);
+              // Informa leitores de tela sobre o estado do link.
               externalButton.setAttribute('aria-disabled', String(!enabled));
+              // Troca a chamada principal conforme o estado.
               externalButton.textContent = enabled ? 'Abrir tela externa' : 'Ative o Modo TV para abrir';
+              // Salva o estado no navegador para a tela /tv conseguir ler.
               localStorage.setItem('bullpace-tv-active', enabled ? 'true' : 'false');
             };
 
+            // Ao clicar na chave, inverte ativo/inativo.
             toggle.addEventListener('click', () => {
               enabled = !enabled;
               updateState();
             });
 
+            // Impede abrir a TV externa quando o modo esta inativo.
             externalButton.addEventListener('click', (event) => {
               if (!enabled) {
                 event.preventDefault();
               }
             });
 
+            // Inicializa a tela com o estado salvo.
             updateState();
           })();
         </script>
@@ -424,16 +453,24 @@
 
         <script>
           (() => {
+            // Busca o placar publico renderizado na pagina /tv.
             const scoreboard = document.querySelector('.tv-scoreboard');
+            // Busca o selo de status do cabecalho da TV.
             const statusLabel = scoreboard.querySelector('.tv-header em');
 
+            // Aplica na TV o estado salvo pelo controle do Modo TV.
             const applyTvState = () => {
+              // Quando o valor salvo for "false", a TV deve ocultar os dados.
               const active = localStorage.getItem('bullpace-tv-active') !== 'false';
+              // Classe usada no CSS para mostrar ou esconder o placar.
               scoreboard.classList.toggle('is-paused', !active);
+              // Atualiza o texto do selo da TV.
               statusLabel.textContent = active ? 'AO VIVO' : 'PAUSADO';
             };
 
+            // Escuta mudancas vindas de outra aba/janela do mesmo navegador.
             window.addEventListener('storage', applyTvState);
+            // Aplica o estado assim que a TV abre.
             applyTvState();
           })();
         </script>
@@ -923,21 +960,36 @@
 
         <script>
           (() => {
+            // Busca o formulario de checkpoint.
             const form = document.getElementById('checkpointForm');
+            // Busca o botao principal de registrar checkpoint.
             const button = document.getElementById('registerCheckpointButton');
+            // Busca a area onde aparecem mensagens de erro ou sucesso.
             const message = document.getElementById('checkpointMessage');
+            // Busca o texto que mostra o ultimo checkpoint salvo.
             const lastCheckpointText = document.getElementById('lastCheckpointText');
+            // Busca o selo de status do ultimo checkpoint.
             const checkpointStatus = document.getElementById('checkpointStatus');
+            // Busca o modal exibido depois de registrar.
             const modal = document.getElementById('checkpointModal');
+            // Busca o botao que fecha o modal.
             const closeModal = document.getElementById('closeCheckpointModal');
+            // Busca o relogio do turno ativo.
             const turnTimer = document.getElementById('turnTimer');
+            // Busca o formulario que finaliza o turno.
             const finishForm = document.getElementById('finishTurnForm');
+            // Campo escondido que leva o km final para o servidor.
             const finishKmFinal = document.getElementById('finishKmFinal');
+            // Campo escondido que leva a duracao do turno para o servidor.
             const finishDuracaoTurno = document.getElementById('finishDuracaoTurno');
+            // Define o intervalo de 5 minutos entre checkpoints.
             const cooldownMilliseconds = 5 * 60 * 1000;
+            // Guarda o id do intervalo que atualiza o contador do botao.
             let cooldownInterval;
+            // Guarda quantos segundos o turno esta ativo.
             let turnSeconds = 0;
 
+            // Formata segundos no padrao HH:MM:SS.
             const formatTime = (seconds) => {
               const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
               const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
@@ -945,27 +997,33 @@
               return `${hours}:${minutes}:${remainingSeconds}`;
             };
 
+            // Atualiza o relogio do turno a cada segundo.
             setInterval(() => {
               turnSeconds += 1;
               turnTimer.textContent = formatTime(turnSeconds);
             }, 1000);
 
+            // Mostra uma mensagem padronizada abaixo do ultimo checkpoint.
             const showMessage = (text, type) => {
               message.textContent = text;
               message.className = `checkpoint-message ${type}`;
               message.hidden = false;
             };
 
+            // Bloqueia o botao por 5 minutos depois de um checkpoint.
             const startCooldown = () => {
+              // Calcula o horario em que o botao sera liberado novamente.
               const availableAt = Date.now() + cooldownMilliseconds;
               button.disabled = true;
 
+              // Atualiza o texto do botao varias vezes por segundo.
               cooldownInterval = setInterval(() => {
                 const remaining = Math.max(0, availableAt - Date.now());
                 const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
                 const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
                 button.textContent = remaining > 0 ? `Novo checkpoint em ${minutes}:${seconds}` : 'Registrar novo checkpoint';
 
+                // Quando o tempo acaba, libera o botao e para o intervalo.
                 if (remaining <= 0) {
                   clearInterval(cooldownInterval);
                   button.disabled = false;
@@ -973,39 +1031,56 @@
               }, 250);
             };
 
+            // Intercepta o envio do formulario para validar e simular o registro.
             form.addEventListener('submit', (event) => {
+              // Evita recarregar a pagina ao registrar checkpoint.
               event.preventDefault();
+              // Busca todos os campos obrigatorios do formulario.
               const requiredFields = Array.from(form.querySelectorAll('[required]'));
+              // Filtra campos obrigatorios que ainda estao vazios.
               const missingFields = requiredFields.filter((field) => !field.value.trim());
 
+              // Se houver campo vazio, foca no primeiro e mostra erro.
               if (missingFields.length > 0) {
                 missingFields[0].focus();
                 showMessage('Preencha todos os campos obrigatórios antes de registrar.', 'error');
                 return;
               }
 
+              // Le a quilometragem informada.
               const km = document.getElementById('kmAcumulado').value;
+              // Captura o horario atual no formato brasileiro.
               const now = new Date().toLocaleTimeString('pt-BR', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
               });
 
+              // Atualiza o resumo do ultimo checkpoint na tela.
               lastCheckpointText.textContent = `${km} · ${now}`;
+              // Salva o km no campo escondido usado ao finalizar o turno.
               finishKmFinal.value = km;
+              // Troca o status visual para SALVO.
               checkpointStatus.textContent = 'SALVO';
+              // Exibe mensagem de sucesso.
               showMessage('Checkpoint registrado com sucesso.', 'success');
+              // Abre o modal de confirmacao.
               modal.hidden = false;
+              // Inicia a contagem de 5 minutos.
               startCooldown();
             });
 
+            // Fecha o modal quando o operador clica em OK.
             closeModal.addEventListener('click', () => {
               modal.hidden = true;
             });
 
+            // Antes de encerrar o turno, garante que existe km final informado.
             finishForm.addEventListener('submit', (event) => {
+              // Le a quilometragem final do campo visivel.
               const km = document.getElementById('kmAcumulado').value.trim();
 
+              // Bloqueia encerramento sem quilometragem.
               if (!km) {
                 event.preventDefault();
                 document.getElementById('kmAcumulado').focus();
@@ -1013,7 +1088,9 @@
                 return;
               }
 
+              // Envia o km final pelo campo escondido.
               finishKmFinal.value = km;
+              // Envia a duracao atual do turno pelo campo escondido.
               finishDuracaoTurno.value = turnTimer.textContent;
             });
           })();

@@ -217,20 +217,35 @@ body {
 
 /* Linha clicavel usada para selecionar um operador. */
 .operator-row {
+  /* Ocupa toda a largura disponivel da lista. */
   width: 100%;
+  /* Garante altura minima para toque em tablet. */
   min-height: 78px;
+  /* Cria respiro interno da linha. */
   padding: 12px 20px;
+  /* Remove a borda padrao do botao. */
   border: 0;
+  /* Arredonda a linha clicavel. */
   border-radius: 24px;
+  /* Mantem fundo neutro. */
   background: #ffffff;
+  /* Define a cor principal do texto. */
   color: #202124;
+  /* Herda a fonte configurada no body. */
   font: inherit;
+  /* Mostra que a linha pode ser clicada. */
   cursor: pointer;
+  /* Organiza foto, nome, selo e radio em linha. */
   display: flex;
+  /* Centraliza verticalmente os itens. */
   align-items: center;
+  /* Define espacamento entre os itens internos. */
   gap: 24px;
+  /* Alinha o texto a esquerda dentro do botao. */
   text-align: left;
+  /* Simula borda interna sem mudar o tamanho do elemento. */
   box-shadow: inset 0 0 0 3px #d8d8d8;
+  /* Suaviza hover e movimento. */
   transition: background-color 160ms ease, transform 160ms ease;
 }
 
@@ -557,10 +572,15 @@ body {
 }
 
 .panel-actions {
+  /* Area dos botoes administrativos do painel. */
   width: min(100%, 760px);
+  /* Separa as acoes do bloco anterior. */
   margin: 20px auto 0;
+  /* Distribui Auditoria, Modo TV e Fechamento em colunas. */
   display: grid;
+  /* Cria tres colunas com largura igual. */
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Define espaco entre os botoes. */
   gap: 22px;
 }
 
@@ -599,6 +619,7 @@ body {
 }
 
 .tv-control-card {
+  /* Card que controla se o placar publico esta ativo ou pausado. */
   width: min(100%, 760px);
   min-height: 128px;
   margin: 18px auto 0;
@@ -654,6 +675,7 @@ body {
 }
 
 .toggle-switch {
+  /* Botao visual de liga/desliga do Modo TV. */
   width: 86px;
   height: 52px;
   border: 0;
@@ -743,11 +765,14 @@ body {
 }
 
 .tv-public-page {
+  /* Remove margem do layout normal quando a tela e uma TV. */
   padding: 0;
+  /* Fundo neutro da tela publica. */
   background: #f2f2ef;
 }
 
 .tv-frame {
+  /* Faz o container da TV ocupar a tela inteira. */
   width: 100%;
   height: 100vh;
   padding: 0;
@@ -755,6 +780,7 @@ body {
 }
 
 .tv-scoreboard {
+  /* Layout principal do placar publico. */
   width: 100%;
   height: 100vh;
   margin: 0;
@@ -768,6 +794,7 @@ body {
 }
 
 .tv-header {
+  /* Cabecalho do placar com nome do evento e status. */
   min-height: 106px;
   padding: 26px 34px;
   border-radius: 28px;
@@ -810,9 +837,14 @@ body {
 .tv-event {
   width: min(100%, 1160px);
   margin: 44px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .tv-event h1 {
+  width: 100%;
   margin: 0;
   color: #202124;
   font-size: 68px;
@@ -827,6 +859,7 @@ body {
 }
 
 .tv-paused-message {
+  /* Mensagem exibida quando a coordenacao desativa o Modo TV. */
   width: min(100%, 980px);
   min-height: 360px;
   margin: 80px auto 0;
@@ -858,6 +891,7 @@ body {
 }
 
 .tv-ranking {
+  /* Grade com as duas equipes no placar publico. */
   width: min(100%, 1160px);
   margin: 48px auto 0;
   display: grid;
@@ -964,10 +998,12 @@ body {
 .tv-scoreboard.is-paused .tv-event,
 .tv-scoreboard.is-paused .tv-ranking,
 .tv-scoreboard.is-paused .tv-difference {
+  /* Esconde os dados quando o placar esta pausado. */
   display: none;
 }
 
 .tv-scoreboard.is-paused .tv-paused-message {
+  /* Mostra apenas o aviso de placar pausado. */
   display: flex;
 }
 
@@ -987,6 +1023,7 @@ body {
 }
 
 .closure-status {
+  /* Selo da etapa de fechamento antes da finalizacao. */
   width: min(100%, 320px);
   margin: 30px auto 0;
   padding: 14px 24px;
@@ -1014,6 +1051,7 @@ body {
 }
 
 .closure-ranking {
+  /* Lista com o ranking consolidado antes de finalizar a prova. */
   width: min(100%, 760px);
   margin: 18px auto 0;
   display: flex;
@@ -1022,6 +1060,7 @@ body {
 }
 
 .closure-team-card {
+  /* Card de cada equipe dentro do fechamento. */
   min-height: 126px;
   padding: 28px 34px;
   border-radius: 18px;
@@ -1074,6 +1113,7 @@ body {
 }
 
 .closure-warning {
+  /* Aviso de impacto: depois de finalizar, novos registros ficam bloqueados. */
   width: min(100%, 760px);
   margin: 34px auto 0;
   padding: 28px 30px;
@@ -1121,6 +1161,7 @@ body {
 }
 
 .result-winner-card {
+  /* Card principal da equipe vencedora no resultado oficial. */
   width: min(100%, 760px);
   min-height: 162px;
   margin: 18px auto 0;
@@ -1165,6 +1206,7 @@ body {
 }
 
 .result-summary-list {
+  /* Lista dos dados consolidados apos finalizar a prova. */
   width: min(100%, 760px);
   margin: 18px auto 0;
   display: flex;
@@ -1389,6 +1431,7 @@ body {
 }
 
 .athlete-scroll {
+  /* Lista interna com scroll para os atletas, sem rolar a tela inteira. */
   width: min(100%, 620px);
   max-height: 258px;
   margin-top: 14px;
@@ -1592,6 +1635,7 @@ body {
 }
 
 .checkpoint-form {
+  /* Formulario que recebe os dados de cada checkpoint. */
   width: min(100%, 620px);
   margin: 26px auto 0;
 }
