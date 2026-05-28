@@ -41,6 +41,11 @@ const equipes = [
   { nome: 'Equipe 2', iniciais: 'E2', atletas: 16 }
 ];
 
+const equipesPainel = [
+  { nome: 'Equipe 1', km: '124,480 km', atleta: 'Rafael Luz em turno', detalhes: 'Disponível' },
+  { nome: 'Equipe 2', km: '121,930 km', atleta: 'Beatriz em turno', detalhes: 'Disponível' }
+];
+
 // Lista temporaria de atletas por equipe para montar a tela de selecao do proximo turno.
 const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status: string }[]> = {
   'Equipe 1': [
@@ -128,6 +133,17 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
 app.post('/login-coordenador', (req: Request, res: Response): void => {
   const { coordenador, senha } = req.body;
 
+  if (coordenador && senha) {
+    res.render('index', {
+      // Depois da autenticacao visual, abre o painel geral da prova.
+      tela: 'painelCoordenador',
+      titulo: 'PAINEL DA PROVA',
+      coordenadorSelecionado: coordenador,
+      equipesPainel
+    });
+    return;
+  }
+
   res.render('index', {
     // Login visual temporario ate a tela administrativa ser criada.
     tela: 'loginCoordenador',
@@ -135,6 +151,17 @@ app.post('/login-coordenador', (req: Request, res: Response): void => {
     loginMensagem: coordenador && senha
       ? `Acesso recebido para ${coordenador}.`
       : 'Preencha o nome do coordenador(a) e a senha para entrar.'
+  });
+});
+
+app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Retorna do painel para a autenticacao do coordenador(a).
+    tela: 'loginCoordenador',
+    titulo: 'ACESSO RESTRITO',
+    coordenadorSelecionado: coordenador
   });
 });
 

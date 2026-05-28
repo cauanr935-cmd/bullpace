@@ -5,15 +5,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=4">
+  <link rel="stylesheet" href="/static/style.css?v=5">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
         <a href="/" class="back-link">VOLTAR</a>
+      <% } %>
+
+      <% if (tela === 'painelCoordenador') { %>
+        <% /* Volta para a autenticacao do coordenador(a). */ %>
+        <form action="/voltar-login-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
       <% } %>
 
       <% if (tela === 'equipe') { %>
@@ -56,6 +64,7 @@
           funcao: 'ETAPA 00 · ACESSO',
           operador: 'ETAPA 01 · OPERADOR(A)',
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
+          painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
           equipe: 'ETAPA 02 · EQUIPE',
           atleta: 'ETAPA 03 · ATLETA',
           esteira: 'ETAPA 04 · TURNO',
@@ -182,6 +191,56 @@
           </form>
           <p class="operator-helper">Os checkpoints serão registrados em seu nome.</p>
         <% } %>
+      <% } %>
+
+      <% if (tela === 'painelCoordenador') { %>
+        <% /* Nota: visao geral administrativa depois do login do coordenador(a). */ %>
+        <p class="operator-description">
+          Acompanhe a operação em tempo real.
+        </p>
+
+        <section class="panel-progress">
+          <strong>08h 42min de 24h</strong>
+          <span>EM ANDAMENTO</span>
+        </section>
+
+        <section class="panel-metrics" aria-label="Resumo da prova">
+          <article>
+            <strong>TURNOS ATIVOS</strong>
+            <span>2</span>
+          </article>
+          <article>
+            <strong>CHECKPOINTS</strong>
+            <span>186</span>
+          </article>
+          <article>
+            <strong>ALERTAS</strong>
+            <span>2</span>
+          </article>
+        </section>
+
+        <p class="operator-list-title">EQUIPES</p>
+
+        <div class="panel-team-list" aria-label="Equipes monitoradas">
+          <% equipesPainel.forEach((equipe) => { %>
+            <article class="panel-team-card">
+              <span class="status-dot" aria-hidden="true"></span>
+              <div>
+                <strong><%= equipe.nome %></strong>
+                <small><%= equipe.km %> · <%= equipe.atleta %></small>
+              </div>
+              <button type="button">DETALHES</button>
+            </article>
+          <% }) %>
+        </div>
+
+        <p class="operator-list-title">AÇÕES DA COORDENAÇÃO</p>
+
+        <section class="panel-actions">
+          <button type="button" class="is-active">Auditoria</button>
+          <button type="button">Modo TV</button>
+          <button type="button">Fechamento</button>
+        </section>
       <% } %>
 
       <% if (tela === 'equipe') { %>
