@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador') { %>
@@ -33,7 +33,17 @@
         </form>
       <% } %>
 
-      <% if (tela === 'equipe' || tela === 'atleta') { %>
+      <% if (tela === 'esteira') { %>
+        <% /* Volta para a selecao de atleta mantendo operador, equipe e atleta selecionados. */ %>
+        <form action="/voltar-atleta" method="post" class="back-form">
+          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'equipe' || tela === 'atleta' || tela === 'esteira') { %>
         <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
         <div class="selected-user">
           <span>OPERADOR</span>
@@ -146,9 +156,9 @@
       <% } %>
 
       <% if (tela === 'atleta') { %>
-        <% /* Nota: tela operacional para escolher atleta e consultar disponibilidade das esteiras. */ %>
+        <% /* Nota: tela operacional para escolher o atleta do proximo turno. */ %>
         <p class="operator-description">
-          Selecione o atleta para inciar o turno.
+          Selecione o atleta para iniciar o turno.
         </p>
 
         <section class="team-status">
@@ -181,23 +191,84 @@
           <% }) %>
         </div>
 
-        <p class="operator-list-title">ESTEIRAS</p>
+        <% if (typeof atletaSelecionado !== 'undefined') { %>
+          <% /* Avanca para a tela onde a esteira do turno sera definida. */ %>
+          <form action="/continuar-atleta" method="post" class="continue-form">
+            <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+            <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+            <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+            <button type="submit" class="continue-button">
+              Continuar com <%= atletaSelecionado %>
+            </button>
+          </form>
+          <p class="operator-helper">A próxima etapa será a definição da esteira.</p>
+        <% } %>
+      <% } %>
 
-        <div class="treadmill-grid" aria-label="Status das esteiras">
+      <% if (tela === 'esteira') { %>
+        <% /* Nota: tela responsavel por confirmar o atleta e selecionar a esteira do turno. */ %>
+        <p class="operator-description">
+          Confirme atleta e esteira antes de registrar o início.
+        </p>
+
+        <p class="operator-list-title">RESUMO DO TURNO</p>
+
+        <section class="turn-summary">
+          <span class="operator-photo summary-photo" aria-hidden="true">
+            <%= atletaSelecionado.split(' ').map((parte) => parte[0]).join('').slice(0, 2) %>
+          </span>
+          <div class="summary-content">
+            <strong><%= atletaSelecionado %></strong>
+            <span><%= equipeSelecionada %></span>
+          </div>
+          <small>
+            <%= typeof esteiraSelecionada !== 'undefined' ? esteiraSelecionada : 'Esteira a confirmar' %>
+          </small>
+        </section>
+
+        <p class="operator-list-title">SELECIONE A ESTEIRA</p>
+
+        <div class="operator-list treadmill-list" aria-label="Seleção de esteira">
           <% esteiras.forEach((esteira) => { %>
-            <article class="treadmill-card <%= esteira.tipo %>">
-              <span class="status-dot"></span>
-              <strong><%= esteira.nome %></strong>
-              <small><%= esteira.status %></small>
-            </article>
+            <% const esteiraAtual = typeof esteiraSelecionada !== 'undefined' && esteiraSelecionada === esteira.nome; %>
+            <% const bloqueada = esteira.tipo !== 'livre'; %>
+            <% if (bloqueada) { %>
+              <article class="operator-row treadmill-row is-disabled">
+                <span class="status-dot muted-dot" aria-hidden="true"></span>
+                <span class="operator-name">
+                  <%= esteira.nome %>
+                  <small><%= esteira.status %></small>
+                </span>
+                <span class="operator-radio" aria-hidden="true"></span>
+              </article>
+            <% } else { %>
+              <form action="/selecionar-esteira" method="post" class="function-form">
+                <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+                <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+                <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+                <input type="hidden" name="esteira" value="<%= esteira.nome %>">
+                <button type="submit" class="operator-row treadmill-row <%= esteiraAtual ? 'is-selected' : '' %>">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  <span class="operator-name">
+                    <%= esteira.nome %>
+                    <small><%= esteira.status %></small>
+                  </span>
+                  <% if (esteiraAtual) { %>
+                    <span class="selected-badge">SELECIONADO</span>
+                  <% } %>
+                  <span class="operator-radio" aria-hidden="true"></span>
+                </button>
+              </form>
+            <% } %>
           <% }) %>
         </div>
 
-        <% if (typeof atletaSelecionado !== 'undefined') { %>
+        <p class="turn-note">O horário de início será salvo automaticamente.</p>
+
+        <% if (typeof esteiraSelecionada !== 'undefined') { %>
           <button type="button" class="continue-button" disabled>
-            Continuar com <%= atletaSelecionado %>
+            Iniciar turno na <%= esteiraSelecionada %>
           </button>
-          <p class="operator-helper">A próxima etapa será a definição da esteira.</p>
         <% } %>
       <% } %>
     </section>

@@ -414,6 +414,111 @@ body {
   min-height: 72px;
 }
 
+.turn-summary {
+  width: min(100%, 620px);
+  min-height: 92px;
+  margin-top: 14px;
+  padding: 18px 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.summary-photo {
+  width: 64px;
+  height: 64px;
+  background: #f4f4f4;
+}
+
+.summary-content {
+  flex: 1;
+}
+
+.summary-content strong,
+.summary-content span {
+  display: block;
+}
+
+.summary-content strong {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.summary-content span {
+  width: fit-content;
+  min-width: 190px;
+  margin-top: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.turn-summary small {
+  color: #707070;
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.treadmill-list {
+  gap: 14px;
+}
+
+.treadmill-row {
+  min-height: 74px;
+}
+
+.treadmill-row .status-dot {
+  margin-left: 4px;
+}
+
+.treadmill-row .operator-name {
+  font-size: 20px;
+}
+
+.treadmill-row .operator-name small {
+  color: #202124;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.operator-row.is-disabled {
+  cursor: not-allowed;
+  color: #707070;
+  background: #f4f4f4;
+}
+
+.operator-row.is-disabled:hover {
+  background: #f4f4f4;
+  transform: none;
+}
+
+.operator-row.is-disabled .operator-name small {
+  color: #707070;
+}
+
+.muted-dot {
+  background: #cfcfcf;
+}
+
+.turn-note {
+  width: min(100%, 620px);
+  margin: 20px auto 0;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: #f7f7f7;
+  color: #202124;
+  font-size: 17px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
 .treadmill-grid {
   width: min(100%, 620px);
   margin-top: 14px;
@@ -518,6 +623,8 @@ body {
   .continue-form,
   .team-status,
   .athlete-scroll,
+  .turn-summary,
+  .turn-note,
   .treadmill-grid {
     width: 100%;
   }
@@ -562,5 +669,14 @@ body {
 
   .treadmill-grid {
     grid-template-columns: 1fr;
+  }
+
+  .turn-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .turn-summary small {
+    white-space: normal;
   }
 }

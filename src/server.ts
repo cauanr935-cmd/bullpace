@@ -82,8 +82,8 @@ const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status:
 };
 
 const esteiras = [
-  { nome: 'Esteira 01', status: 'LIVRE', tipo: 'livre' },
-  { nome: 'Esteira 02', status: 'MANUTENÇÃO', tipo: 'manutencao' }
+  { nome: 'Esteira 01', status: 'Livre para iniciar turno', tipo: 'livre' },
+  { nome: 'Esteira 02', status: 'Em manutenção', tipo: 'manutencao' }
 ];
 
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou organizador.
@@ -208,6 +208,50 @@ app.post('/selecionar-atleta', (req: Request, res: Response): void => {
 
   res.render('index', {
     // Mantem a tela de atletas e destaca o atleta escolhido.
+    tela: 'atleta',
+    titulo: equipe,
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    atletas: atletasPorEquipe[equipe] || [],
+    esteiras
+  });
+});
+
+app.post('/continuar-atleta', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta } = req.body;
+
+  res.render('index', {
+    // Confirma atleta e permite escolher a esteira para iniciar o turno.
+    tela: 'esteira',
+    titulo: 'INICIAR TURNO',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    esteiras
+  });
+});
+
+app.post('/selecionar-esteira', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta, esteira } = req.body;
+
+  res.render('index', {
+    // Mantem a tela de esteiras e destaca a esteira escolhida.
+    tela: 'esteira',
+    titulo: 'INICIAR TURNO',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    esteiraSelecionada: esteira,
+    esteiras
+  });
+});
+
+app.post('/voltar-atleta', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta } = req.body;
+
+  res.render('index', {
+    // Volta da selecao de esteira para a tela de atletas.
     tela: 'atleta',
     titulo: equipe,
     operadorSelecionado: operador,
