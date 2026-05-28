@@ -1305,7 +1305,7 @@ O Diagrama de Classes Arquitetural do BullPace modela a estrutura de alto nível
  
 ---
  
-## Controllers
+#### Controllers
  
 Porta de entrada da aplicação. Recebem as requisições HTTP dos dispositivos utilizados no evento (iPads dos operadores e tela de TV do organizador) e delegam o processamento à camada de Service, sem conter lógica de negócio. O `TurnoController` e o `CheckpointController` são os de maior criticidade, por serem acionados a cada troca de atleta e a cada registro de quilometragem.
  
@@ -1323,7 +1323,7 @@ Porta de entrada da aplicação. Recebem as requisições HTTP dos dispositivos 
  
 ---
  
-## Services
+#### Services
  
 Camada onde vivem todas as regras de negócio do BullPace. É aqui que são aplicadas as regras definidas anteriormente, como a obrigatoriedade do `km_acumulado` (RN18), progressão crescente de quilometragem (RN06), vínculo de checkpoint a turno ativo (RN19) e timestamp automático (RN12). O `TurnoService` e o `CheckpointService` são o núcleo da operação: garantem a integridade dos dados de revezamento e quilometragem ao longo das 24 horas da prova.
  
@@ -1341,7 +1341,7 @@ Camada onde vivem todas as regras de negócio do BullPace. É aqui que são apli
  
 ---
  
-## Repositories
+#### Repositories
  
 Responsáveis exclusivamente pela comunicação com o banco de dados (Supabase). Recebem objetos já validados pelo Service e os traduzem em operações SQL. Não há regra de negócio nesta camada — sua existência isola o banco do restante da aplicação, de forma que uma eventual troca de provedor afete somente este nível. O `PlacarRepository` tem papel especial ao controlar o estado do Modo TV na arena.
  
@@ -1359,7 +1359,7 @@ Responsáveis exclusivamente pela comunicação com o banco de dados (Supabase).
  
 ---
  
-## Models
+#### Models
  
 Representam as entidades centrais do domínio da competição. São objetos simples de dados que trafegam entre as camadas e são mapeados diretamente para as tabelas do Supabase.
  
@@ -1382,119 +1382,164 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
-#### Mapeamento das camadas
+### Módulo: Coordenador
 
-Esse documento traduz o fluxo de registro de checkpoint em quem-faz-o-quê dentro da arquitetura MVC do projeto. É o que vou usar como base pra desenhar o diagrama.
 
-<br>
+#### Fluxo 1: Listar Coordenadores (Leitura)
+
 <div align="center">
-  <b>Figura 9 — Diagrama de sequência</b><br>
-  <img src="../assets/DiagramaDeSequência.png" width="100%"><br>
-  <sub>Fonte: Elaborado pelos autores (2026).</sub>
+  <sub>Figura 7 - Fluxo listar coordenadores</sub><br>
+  <img src="../assets/fluxo1.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
 </div>
-<br>
 
-## Controller
+O cliente faz uma requisição HTTP GET para coletar todos os coordenadores registrados. O CoordenadorController aciona o método listar() do CoordenadorService, que por sua vez consulta a coleção de dados exposta pelo CoordenadorRepository para retornar o array com os objetos ao usuário final.
 
-Porta de entrada. Recebe o `POST /api/checkpoints` que sai do iPad, com `turno_id` e `km_acumulado` no body (e opcionalmente `pace_medio` e `velocidade_media`).
 
-A função dele é bem limitada: confere se os campos obrigatórios chegaram, se os tipos batem, e passa pra frente. Quem decide se o dado é válido em termos de regra de negócio é o Service, não ele.
 
-Quando o Service termina, o Controller pega o resultado e devolve pro front com o status code certo: 201 quando salva, 400 ou 422 se algum campo veio errado, 500 se algo quebrou no caminho.
+#### Fluxo 2: Login do Coordenador (Autenticação)
 
-## Service
+<div align="center">
+  <sub>Figura 7 - Fluxo de login do coordenador</sub><br>
+  <img src="../assets/fluxo2.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-É a camada onde fica a lógica do BullPace. Antes de qualquer coisa ser salva, o Service confere três coisas:
+O usuário submete suas credenciais (email e senha) via corpo da requisição (POST). O CoordenadorController delega os parâmetros ao CoordenadorService, que realiza uma validação booleana em memória para certificar que ambos os campos foram preenchidos, retornando o status de autenticado e o e-mail do usuário.
 
-- Existe um turno ativo com esse `turno_id`? (RN19)
-- O `km_acumulado` veio preenchido? (RN18)
-- O novo KM é maior ou igual ao último checkpoint do mesmo turno? (RN06)
+---
 
-Se qualquer uma dessas falhar, para tudo e devolve erro. Não chega no Repository.
+### Módulo: Esteiras
 
-Se passou, monta o objeto checkpoint final com o timestamp do servidor (RN12 não deixa o operador editar horário manualmente) e chama o Repository pra salvar.
+#### Fluxo 3: Listar Esteiras Disponíveis (Leitura)
 
-## Repository
+<div align="center">
+  <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
+  <img src="../assets/fluxo3.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-Camada que conversa com o banco. O Service entrega um objeto pronto pra salvar, e o Repository traduz isso em SQL — `INSERT INTO checkpoints (...) VALUES (...)` em cima do Supabase.
+Requisição voltada para coletar as informações técnicas dos equipamentos do evento. O estímulo trafega do EsteiraController para o EsteiraService, que consome o método de listagem do EsteiraRepository, retornando a lista contendo as marcas, modelos, números de série e status de conectividade das esteiras registradas no banco.
 
-Não tem regra de negócio aqui. Se o objeto chegou, é porque o Service já validou tudo. A função do Repository é executar a operação e devolver o registro com o `id` que o banco gerou.
+---
 
-Essa separação serve pra isolar o banco do resto. Se um dia a gente trocar de Supabase pra outra coisa, só o Repository muda.
+### Módulo: Eventos
 
-## Banco
+#### Fluxo 4: Listar Eventos (Leitura)
 
-Supabase com PostgreSQL. Recebe o INSERT, salva na tabela `checkpoints` com as foreign keys pra `turnos`, `atletas`, `equipes` e `esteiras`, e devolve a linha completa com `id` e `created_at` preenchidos.
+<div align="center">
+  <sub>Figura 7 - Fluxo listar eventos</sub><br>
+  <img src="../assets/fluxo4.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-## A volta
+Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
 
-A resposta percorre o caminho inverso: Banco → Repository → Service → Controller → Front. O Repository devolve a linha crua do banco, o Service pode acrescentar algum campo calculado se precisar, e o Controller serializa em JSON antes de mandar pro iPad.
+#### Fluxo 5: Cadastrar Novo Evento (Escrita/Criação)
 
-## RNs e RFs envolvidos
+<div align="center">
+  <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
+  <img src="../assets/fluxo5.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-- RF004 — Registro de Checkpoints
-- RF005 — Controle Temporal dos Registros
-- RN06 — Progressão de Quilometragem
-- RN12 — Registro de Tempo Automático
-- RN18 — Obrigatoriedade do Campo KM Acumulado
-- RN19 — Checkpoint Vinculado a Turno Ativo
+Trata o fluxo de criação de uma nova competição/evento no ecossistema. O EventoController desestrutura o payload recebido e aciona o EventoService; a camada de serviço atribui um identificador único temporal ao objeto e invoca o método salvar() do EventoRepository, inserindo os dados estruturados de localidade, nome e período direto no banco de dados.
 
-#### Mensagens, validações e retornos
+---
 
-## Tipo de mensagem
+### Módulo: Operador
 
-Como o sistema é uma API web, todas as mensagens entre as camadas são síncronas. Não tem assíncrono nesse fluxo. No diagrama, síncrona é seta de ponta cheia, retorno é linha tracejada.
+#### Fluxo 6: Listar Operadores (Leitura)
 
-## Mensagens do fluxo principal
+<div align="center">
+  <sub>Figura 7 - Fluxo listar Operadores</sub><br>
+  <img src="../assets/fluxo6.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-**iPad → Controller**
-`POST /api/checkpoints` com `turno_id`, `km_acumulado` e opcionalmente `pace_medio` e `velocidade_media` no body.
+Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
 
-**Controller → Service**
-`salvarCheckpoint(dados)`.
+#### Fluxo 7: Listar Permissões do Operador (Consulta)
 
-**Service → Repository (consulta)**
-`buscarUltimoCheckpoint(turno_id)`. O Service precisa do último KM pra validar a RN06.
+<div align="center">
+  <sub>Figura 7 - Fluxo Permissões do operador</sub><br>
+  <img src="../assets/fluxo7.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-**Repository → Banco (consulta)**
-`SELECT * FROM checkpoints WHERE turno_id = ? ORDER BY created_at DESC LIMIT 1`.
+Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
 
-**Service → Repository (inserção)**
-`inserirCheckpoint(objeto)`. Só rola se as três validações passaram.
+---
 
-**Repository → Banco (inserção)**
-`INSERT INTO checkpoints (...) VALUES (...)`.
+### Módulo: Placar
 
-## Retornos
+#### Fluxo 8: Obter Placar Geral do Evento (Com Regra de Ocultação/Suspense)
 
-Cada retorno é uma seta tracejada de volta. O Banco devolve o registro inserido com `id` e `created_at` pro Repository, que devolve o objeto checkpoint pro Service, que devolve pro Controller, que serializa em JSON e responde `HTTP 201 Created` pro iPad.
+<div align="center">
+  <sub>Figura 7 - Fluxo obter placar</sub><br>
+  <img src="../assets/fluxo8.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-## Validações no Service
+Fluxo crítico do painel visual (Modo TV). O PlacarService aciona a função de leitura que executa uma query no cliente do Supabase para extrair a flag de segurança (modo_tv_bloqueado). Caso esteja ativa, o fluxo intercepta o processamento e retorna uma classificação vazia; caso esteja livre, o sistema busca os turnos associados, calcula as somas de quilometragens em memória e devolve a classificação ranqueada do líder ao lanterna.
 
-As três checagens acontecem dentro do Service, em ordem. No diagrama elas não viram setas ficam dentro do bloco de ativação dele.
+#### Fluxo 9: Alternar Bloqueio do Modo TV (Ação de Controle do Coordenador)
 
-| Validação | Regra | Erro |
-|---|---|---|
-| Turno ativo existe? | RN19 | 422  "Turno não está ativo" |
-| KM acumulado preenchido? | RN18 | 400  "KM acumulado é obrigatório" |
-| Novo KM ≥ último KM do turno? | RN06 | 422  "KM não pode ser menor que o anterior" |
+<div align="center">
+  <sub>Figura 7 - Fluxo Alternar bloqueio do modo tv</sub><br>
+  <img src="../assets/fluxo9.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-## Fluxo alternativo - erro de validação
+Fluxo administrativo em que o coordenador altera a experiência do público. A função no controlador dispara uma instrução direta de atualização (UPDATE) no cliente de configuração global do Supabase, modificando o estado lógico da coluna de suspense na tabela de eventos para o evento corrente.
 
-Quando uma validação falha, o Service para antes de chamar o Repository pra inserir. O INSERT não acontece e o banco fica intacto.
+---
 
-Pega o exemplo da RN06: o iPad manda um KM menor que o último. O fluxo segue normal até o Service consultar o Repository pelo último checkpoint do turno. Quando o Service compara e detecta o KM regressivo, ele devolve erro pro Controller, que responde `HTTP 422` pro iPad. A inserção nem é chamada.
+### Módulo: Sessões Operacionais
 
-Mesma coisa nas outras duas: se a RN19 falhar (turno encerrado), o Service nem precisa consultar o Repository devolve erro direto. Se a RN18 falhar (KM em branco), também devolve antes.
+#### Fluxo 10: Iniciar Nova Sessão de Trabalho (Auditoria/Abertura)
 
-## RNs e RFs envolvidos
+<div align="center">
+  <sub>Figura 7 - Fluxo Iniciar nova sessão</sub><br>
+  <img src="../assets/fluxo10.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
-- RF004 — Registro de Checkpoints
-- RF005 — Controle Temporal dos Registros
-- RN06 — Progressão de Quilometragem
-- RN12 — Registro de Tempo Automático
-- RN18 — Obrigatoriedade do Campo KM Acumulado
-- RN19 — Checkpoint Vinculado a Turno Ativo
+Inicia o período de trabalho do operador registrando sua função e o evento associado para fins de auditoria. O SessaoService aciona o mecanismo que submete os dados à validação estrutural do controlador, e após a verificação de consistência, grava o registro no Supabase com o timestamp inicial e a marcação de status igual a 'ativa'.
+
+#### Fluxo 11: Encerrar Sessão Existente (Auditoria/Fechamento)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo sessão existente</sub><br>
+  <img src="../assets/fluxo11.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+Registra a saída do operador do painel de controle. O SessaoService aciona o encerramento fornecendo o identificador da sessão; o sistema injeta o timestamp corrente do servidor (fim_em) e atualiza o estado do registro para 'encerrada', salvando e blindando o histórico de auditoria.
+
+---
+
+### Módulo: Turnos
+
+#### Fluxo 12: Iniciar Novo Turno de Revezamento (Entrada do Atleta)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo Iniciar novo turno</sub><br>
+  <img src="../assets/fluxo12.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+Mapeia o momento exato em que um atleta assume uma determinada esteira dentro da sessão operacional. O TurnoService encaminha a requisição de inserção de turno, que valida os dados obrigatórios e insere o registro com status definido em 'em_andamento' e a quilometragem inicializada estritamente em 0.
+
+#### Fluxo 13: Finalizar Turno Existente (Saída do Atleta com Gravação de KM)
+
+<div align="center">
+  <sub>Figura 7 - fluxo finalizar turno</sub><br>
+  <img src="../assets/fluxo13.png" width="100%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+Conclui o ciclo de corrida de um participante. O TurnoService repassa o identificador do turno e a marcação do odômetro final coletada; a camada controladora processa a requisição e realiza uma operação de atualização no banco de dados, imputando o horário final do revezamento, computando a quilometragem total acumulada e chaveando o status para 'encerrado'.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
