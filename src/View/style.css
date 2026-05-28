@@ -1251,6 +1251,140 @@ body {
   justify-content: center;
 }
 
+.sensitive-status {
+  width: min(100%, 240px);
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.confirmation-warning,
+.publication-warning {
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #202124;
+}
+
+.confirmation-form {
+  width: min(100%, 760px);
+  margin: 18px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.confirmation-check-card {
+  min-height: 112px;
+  padding: 28px 30px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: center;
+  gap: 24px;
+  cursor: pointer;
+}
+
+.confirmation-check-card input {
+  width: 30px;
+  height: 30px;
+  accent-color: #202124;
+}
+
+.confirmation-check-card span {
+  color: #202124;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.responsible-card,
+.publish-result-card {
+  width: min(100%, 760px);
+  margin: 28px auto 0;
+  padding: 28px 30px;
+  border-radius: 16px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.responsible-card strong,
+.responsible-card span,
+.publish-result-card strong,
+.publish-result-card span {
+  display: block;
+}
+
+.responsible-card strong {
+  color: #202124;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.responsible-card span {
+  margin-top: 10px;
+  color: #202124;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.confirmation-form .responsible-card {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.confirmation-form .continue-button {
+  width: 100%;
+}
+
+.confirmation-form .continue-button:disabled {
+  background: #e4e5e7;
+  color: #6f7378;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.result-publish-form {
+  width: min(100%, 760px);
+}
+
+.result-publish-form .result-tv-link {
+  width: 100%;
+}
+
+.publish-result-card {
+  margin-top: 48px;
+  background: #f7f7f7;
+}
+
+.publish-result-card strong {
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.publish-result-card span {
+  margin-top: 18px;
+  color: #202124;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.publication-info-card {
+  margin-top: 48px;
+}
+
+.publication-warning {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+}
+
 .team-detail-summary,
 .team-filter-summary {
   width: min(100%, 760px);
