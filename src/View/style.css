@@ -365,6 +365,58 @@ body {
   text-align: center;
 }
 
+.login-badge {
+  margin: 30px auto 0;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.login-helper {
+  width: min(100%, 620px);
+  margin: 26px auto 0;
+  color: #707070;
+  font-size: 18px;
+  text-align: center;
+}
+
+.login-form {
+  width: min(100%, 620px);
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.permission-card {
+  margin-top: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.permission-card strong,
+.permission-card span {
+  display: block;
+}
+
+.permission-card strong {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.permission-card span {
+  margin-top: 12px;
+  color: #202124;
+  font-size: 18px;
+}
+
 .team-status {
   width: min(100%, 620px);
   min-height: 54px;
@@ -1013,6 +1065,8 @@ body {
   .operator-list,
   .operator-list-title,
   .continue-form,
+  .login-form,
+  .login-helper,
   .team-status,
   .athlete-scroll,
   .turn-summary,

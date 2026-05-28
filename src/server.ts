@@ -93,8 +93,8 @@ app.get('/', (req: Request, res: Response): void => {
     tela: 'funcao',
     titulo: 'SELEÇÃO DE FUNÇÃO',
     funcoes: [
-      { nome: 'OPERADOR', valor: 'operador' },
-      { nome: 'ORGANIZADOR', valor: 'organizador' }
+      { nome: 'OPERADOR(A)', valor: 'operador' },
+      { nome: 'ORGANIZADOR(A)', valor: 'organizador' }
     ]
   });
 });
@@ -107,8 +107,17 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
     res.render('index', {
       // Mostra a segunda etapa do fluxo usando o mesmo index.ejs.
       tela: 'operador',
-      titulo: 'SELEÇÃO DE OPERADOR',
+      titulo: 'SELEÇÃO DE OPERADOR(A)',
       operadores
+    });
+    return;
+  }
+
+  if (funcao === 'organizador') {
+    res.render('index', {
+      // Mostra a tela de autenticacao restrita do coordenador/organizador.
+      tela: 'loginCoordenador',
+      titulo: 'ACESSO RESTRITO'
     });
     return;
   }
@@ -116,12 +125,25 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
   res.redirect('/');
 });
 
+app.post('/login-coordenador', (req: Request, res: Response): void => {
+  const { coordenador, senha } = req.body;
+
+  res.render('index', {
+    // Login visual temporario ate a tela administrativa ser criada.
+    tela: 'loginCoordenador',
+    titulo: 'ACESSO RESTRITO',
+    loginMensagem: coordenador && senha
+      ? `Acesso recebido para ${coordenador}.`
+      : 'Preencha o nome do coordenador(a) e a senha para entrar.'
+  });
+});
+
 // Mostra diretamente a selecao de operadores caso a rota seja acessada pela URL.
 app.get('/operador', (req: Request, res: Response): void => {
   res.render('index', {
     // Permite acessar a selecao de operadores diretamente pela URL /operador.
     tela: 'operador',
-    titulo: 'SELEÇÃO DE OPERADOR',
+    titulo: 'SELEÇÃO DE OPERADOR(A)',
     operadores
   });
 });
@@ -133,7 +155,7 @@ app.post('/selecionar-operador', (req: Request, res: Response): void => {
   res.render('index', {
     // Mantem a tela de operadores e destaca quem foi selecionado.
     tela: 'operador',
-    titulo: 'SELEÇÃO DE OPERADOR',
+    titulo: 'SELEÇÃO DE OPERADOR(A)',
     operadores,
     operadorSelecionado: operador
   });
@@ -157,7 +179,7 @@ app.post('/voltar-operador', (req: Request, res: Response): void => {
   res.render('index', {
     // Volta da selecao de equipe para a etapa anterior, mantendo o operador selecionado.
     tela: 'operador',
-    titulo: 'SELEÇÃO DE OPERADOR',
+    titulo: 'SELEÇÃO DE OPERADOR(A)',
     operadores,
     operadorSelecionado: operador
   });

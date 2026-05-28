@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=3">
+  <link rel="stylesheet" href="/static/style.css?v=4">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
-      <% if (tela === 'operador') { %>
+      <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
         <a href="/" class="back-link">VOLTAR</a>
       <% } %>
@@ -46,7 +46,7 @@
       <% if (tela === 'equipe' || tela === 'atleta' || tela === 'esteira') { %>
         <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
         <div class="selected-user">
-          <span>OPERADOR</span>
+          <span>OPERADOR(A)</span>
           <strong><%= operadorSelecionado %></strong>
         </div>
       <% } %>
@@ -54,7 +54,8 @@
       <%
         const etapas = {
           funcao: 'ETAPA 00 · ACESSO',
-          operador: 'ETAPA 01 · OPERADOR',
+          operador: 'ETAPA 01 · OPERADOR(A)',
+          loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           equipe: 'ETAPA 02 · EQUIPE',
           atleta: 'ETAPA 03 · ATLETA',
           esteira: 'ETAPA 04 · TURNO',
@@ -90,13 +91,68 @@
         </div>
       <% } %>
 
+      <% if (tela === 'loginCoordenador') { %>
+        <% /* Nota: autenticacao visual do coordenador(a) antes das telas administrativas. */ %>
+        <p class="operator-description">
+          Entre para administrar a operação.
+        </p>
+
+        <span class="login-badge">COORDENADOR(A)</span>
+        <p class="login-helper">Ações administrativas ficam registradas.</p>
+
+        <form action="/login-coordenador" method="post" class="login-form" id="coordinatorLoginForm">
+          <label class="field-group" for="coordenadorNome">
+            <span class="field-label">NOME DO(A) COORDENADOR(A) *</span>
+            <input id="coordenadorNome" name="coordenador" class="checkpoint-input" type="text" placeholder="Digite o nome" required>
+          </label>
+
+          <label class="field-group" for="coordenadorSenha">
+            <span class="field-label">SENHA *</span>
+            <input id="coordenadorSenha" name="senha" class="checkpoint-input" type="password" placeholder="Digite sua senha" required>
+          </label>
+
+          <section class="permission-card">
+            <strong>PERMISSÕES</strong>
+            <span>Auditoria, correção, TV e encerramento</span>
+          </section>
+
+          <% if (typeof loginMensagem !== 'undefined') { %>
+            <p class="checkpoint-message success"><%= loginMensagem %></p>
+          <% } %>
+
+          <button type="submit" class="continue-button" id="coordinatorLoginButton" disabled>
+            Preencha os campos para entrar
+          </button>
+        </form>
+
+        <script>
+          (() => {
+            const form = document.getElementById('coordinatorLoginForm');
+            const button = document.getElementById('coordinatorLoginButton');
+            const fields = Array.from(form.querySelectorAll('[required]'));
+
+            const updateButton = () => {
+              const ready = fields.every((field) => field.value.trim());
+              button.disabled = !ready;
+              button.textContent = ready ? 'Entrar como coordenador(a)' : 'Preencha os campos para entrar';
+            };
+
+            fields.forEach((field) => {
+              field.addEventListener('input', updateButton);
+            });
+
+            updateButton();
+          })();
+        </script>
+      <% } %>
+
       <% if (tela === 'operador') { %>
         <% /* Nota: bloco responsavel pela selecao de qual operador esta usando o sistema. */ %>
         <p class="operator-description">
           Escolha quem está operando o sistema neste momento.
         </p>
 
-        <p class="operator-list-title">OPERADORES CADASTRADOS</p>
+        <p class="operator-list-title">OPERADORES(AS) CADASTRADOS(AS)</p>
 
         <div class="operator-list" aria-label="Seleção de operador">
           <% operadores.forEach((operador) => { %>
