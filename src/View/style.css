@@ -914,6 +914,22 @@ body {
   text-transform: uppercase;
 }
 
+.tv-final-scoreboard .tv-header em {
+  background: #202124;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+
+.tv-final-scoreboard .tv-ranking article.is-winner {
+  background: #f7f7f7;
+}
+
+.tv-final-scoreboard .tv-ranking article.is-winner span {
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
 .tv-difference {
   width: min(100%, 1160px);
   min-height: 116px;
@@ -983,6 +999,14 @@ body {
   box-shadow: inset 0 0 0 2px #d8d8d8;
 }
 
+.closure-section-title {
+  width: min(100%, 760px);
+  margin: 36px auto 0;
+  color: #202124;
+  font-size: 20px;
+  font-weight: 800;
+}
+
 .closure-message {
   width: min(100%, 760px);
   margin: 22px auto 0;
@@ -998,8 +1022,8 @@ body {
 }
 
 .closure-team-card {
-  min-height: 112px;
-  padding: 26px 34px;
+  min-height: 126px;
+  padding: 28px 34px;
   border-radius: 18px;
   background: #ffffff;
   box-shadow: inset 0 0 0 2px #d8d8d8;
@@ -1007,6 +1031,15 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 28px;
+}
+
+.closure-team-card.is-first {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
+.closure-team-card.is-second {
+  background: #f7f7f7;
 }
 
 .closure-team-card strong,
@@ -1032,10 +1065,18 @@ body {
   white-space: nowrap;
 }
 
+.closure-team-card.is-first span {
+  color: #202124;
+}
+
+.closure-team-card.is-second span {
+  color: #202124;
+}
+
 .closure-warning {
   width: min(100%, 760px);
-  margin: 28px auto 0;
-  padding: 22px 28px;
+  margin: 34px auto 0;
+  padding: 28px 30px;
   border-radius: 18px;
   background: #f7f7f7;
   box-shadow: inset 0 0 0 2px #202124;
@@ -1064,6 +1105,108 @@ body {
 .closure-action-form .continue-button,
 .secondary-form .finish-button {
   width: 100%;
+}
+
+.result-status {
+  width: min(100%, 220px);
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.result-winner-card {
+  width: min(100%, 760px);
+  min-height: 162px;
+  margin: 18px auto 0;
+  padding: 34px 40px;
+  border-radius: 20px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 3px #202124;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.result-winner-card strong,
+.result-winner-card span {
+  display: block;
+}
+
+.result-winner-card strong {
+  font-size: 25px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.result-winner-card span {
+  margin-top: 26px;
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.result-winner-card small {
+  min-width: 190px;
+  padding: 16px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.result-summary-list {
+  width: min(100%, 760px);
+  margin: 18px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-summary-list article {
+  min-height: 62px;
+  padding: 16px 28px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  align-items: center;
+  gap: 22px;
+}
+
+.result-summary-list span {
+  color: #707070;
+  font-size: 18px;
+}
+
+.result-summary-list strong {
+  color: #202124;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.result-action-button {
+  width: min(100%, 760px);
+  margin-top: 28px;
+}
+
+.result-tv-link {
+  width: min(100%, 760px);
+  margin: 16px auto 0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .team-detail-summary,
@@ -1879,6 +2022,11 @@ body {
   .closure-ranking,
   .closure-warning,
   .closure-action-form,
+  .result-status,
+  .result-winner-card,
+  .result-summary-list,
+  .result-action-button,
+  .result-tv-link,
   .team-detail-summary,
   .team-filter-summary,
   .detail-tabs,
@@ -1971,6 +2119,7 @@ body {
   .panel-team-card,
   .tv-control-card,
   .closure-team-card,
+  .result-winner-card,
   .team-detail-summary,
   .team-filter-summary {
     align-items: flex-start;
@@ -1984,6 +2133,10 @@ body {
   }
 
   .checkpoint-record {
+    grid-template-columns: 1fr;
+  }
+
+  .result-summary-list article {
     grid-template-columns: 1fr;
   }
 

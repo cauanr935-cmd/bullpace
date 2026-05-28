@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=9">
+  <link rel="stylesheet" href="/static/style.css?v=10">
 </head>
 <body>
-  <main class="function-page <%= tela === 'tvPublica' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
-    <section class="function-frame <%= tela === 'tvPublica' ? 'tv-frame' : '' %>">
+  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'resultadoOficial' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+    <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
@@ -35,6 +35,14 @@
       <% if (tela === 'fechamento') { %>
         <% /* Volta do fechamento para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'resultadoOficial') { %>
+        <% /* Volta do resultado oficial para a revisao de fechamento. */ %>
+        <form action="/voltar-fechamento" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
@@ -100,6 +108,7 @@
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
           modoTv: 'RAMO A · EXIBIÇÃO',
           fechamento: 'RAMO B · FECHAMENTO',
+          resultadoOficial: 'RAMO B · RESULTADO',
           detalheEquipe: 'ETAPA 03 · EQUIPE',
           filtroAtletasEquipe: 'ETAPA 03.1 · FILTRO',
           equipe: 'ETAPA 02 · EQUIPE',
@@ -110,7 +119,7 @@
         };
       %>
 
-      <% if (tela !== 'tvPublica') { %>
+      <% if (tela !== 'tvPublica' && tela !== 'tvResultado') { %>
         <% /* Etiqueta da etapa atual, centralizada em todas as telas. */ %>
         <p class="step-label"><%= etapas[tela] || 'ETAPA' %></p>
 
@@ -430,6 +439,41 @@
         </script>
       <% } %>
 
+      <% if (tela === 'tvResultado') { %>
+        <% /* Nota: placar publico final para divulgar a equipe vencedora. */ %>
+        <section class="tv-scoreboard tv-final-scoreboard">
+          <header class="tv-header">
+            <div>
+              <strong>BULLPACE</strong>
+              <span>RESULTADO OFICIAL</span>
+            </div>
+            <em>FINALIZADO</em>
+          </header>
+
+          <section class="tv-event">
+            <h1>24 HORAS</h1>
+            <p>Prova encerrada · resultado oficial</p>
+          </section>
+
+          <section class="tv-ranking">
+            <% rankingFechamento.forEach((equipe) => { %>
+              <article class="<%= equipe.posicao === 1 ? 'is-winner' : '' %>">
+                <span><%= equipe.posicao %>º LUGAR</span>
+                <strong><%= equipe.nome %></strong>
+                <p><%= equipe.km.replace(' km', '') %> <small>km</small></p>
+              </article>
+            <% }) %>
+          </section>
+
+          <section class="tv-difference">
+            <strong>DIFERENÇA</strong>
+            <span><%= resultadoOficial.diferenca %></span>
+          </section>
+
+          <footer>Resultado publicado · somente leitura</footer>
+        </section>
+      <% } %>
+
       <% if (tela === 'fechamento') { %>
         <% /* Nota: revisao consolidada antes de encerrar oficialmente a prova. */ %>
         <p class="operator-description">
@@ -442,11 +486,11 @@
           <p class="checkpoint-message success closure-message"><%= fechamentoMensagem %></p>
         <% } %>
 
-        <p class="operator-list-title">RANKING CONSOLIDADO</p>
+        <p class="closure-section-title">Ranking consolidado</p>
 
         <section class="closure-ranking" aria-label="Ranking consolidado">
           <% rankingFechamento.forEach((equipe) => { %>
-            <article class="closure-team-card">
+            <article class="closure-team-card <%= equipe.posicao === 1 ? 'is-first' : 'is-second' %>">
               <div>
                 <strong><%= equipe.posicao %> <%= equipe.nome %></strong>
                 <small><%= equipe.checkpoints %> checkpoints · <%= equipe.correcoes %> <%= equipe.correcoes === 1 ? 'correção' : 'correções' %></small>
@@ -474,6 +518,50 @@
             Voltar ao painel
           </button>
         </form>
+      <% } %>
+
+      <% if (tela === 'resultadoOficial') { %>
+        <% /* Nota: resultado oficial pronto para exportacao e publicacao na TV. */ %>
+        <p class="operator-description">
+          Dados encerrados e disponíveis para divulgação.
+        </p>
+
+        <span class="result-status">FINALIZADO</span>
+
+        <p class="operator-list-title">EQUIPE VENCEDORA</p>
+
+        <section class="result-winner-card">
+          <div>
+            <strong><%= resultadoOficial.vencedor.nome %></strong>
+            <span><%= resultadoOficial.vencedor.km %></span>
+          </div>
+          <small>VENCEDORA</small>
+        </section>
+
+        <p class="operator-list-title">CONSOLIDADO</p>
+
+        <section class="result-summary-list" aria-label="Dados consolidados">
+          <article>
+            <span>Total de checkpoints</span>
+            <strong><%= resultadoOficial.totalCheckpoints %></strong>
+          </article>
+          <article>
+            <span>Correções auditadas</span>
+            <strong><%= resultadoOficial.correcoesAuditadas %></strong>
+          </article>
+          <article>
+            <span>Resultado validado por</span>
+            <strong><%= resultadoOficial.validadoPor %></strong>
+          </article>
+        </section>
+
+        <button type="button" class="continue-button result-action-button">
+          Exportar CSV
+        </button>
+
+        <a href="/tv-resultado" target="_blank" rel="noopener" class="finish-button result-tv-link">
+          Publicar no Modo TV
+        </a>
       <% } %>
 
       <% if (tela === 'detalheEquipe') { %>

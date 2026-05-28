@@ -51,6 +51,15 @@ const rankingFechamento = [
   { posicao: 2, nome: 'Equipe Azul', km: '344,180 km', checkpoints: 407, correcoes: 1 }
 ];
 
+const resultadoOficial = {
+  vencedor: rankingFechamento[0],
+  segundoLugar: rankingFechamento[1],
+  totalCheckpoints: 819,
+  correcoesAuditadas: 4,
+  validadoPor: 'Camila Rocha',
+  diferenca: '+ 4,740 km'
+};
+
 const checkpointsPorEquipe: Record<string, { horario: string, atleta: string, km: string, operador: string, selecionado?: boolean }[]> = {
   'Equipe Vermelha': [
     { horario: '15:24:48', atleta: 'Rafael Luz', km: '12,760 km', operador: 'Ana Martins' },
@@ -254,7 +263,7 @@ app.post('/fechamento', (req: Request, res: Response): void => {
   res.render('index', {
     // Tela de revisao final antes de encerrar a prova.
     tela: 'fechamento',
-    titulo: 'FECHAMENTO',
+    titulo: 'Fechamento',
     coordenadorSelecionado: coordenador,
     rankingFechamento
   });
@@ -264,12 +273,24 @@ app.post('/finalizar-prova', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
 
   res.render('index', {
-    // Confirmacao visual temporaria do fechamento da prova.
-    tela: 'fechamento',
-    titulo: 'FECHAMENTO',
+    // Resultado oficial apos a confirmacao do fechamento da prova.
+    tela: 'resultadoOficial',
+    titulo: 'Resultado oficial',
     coordenadorSelecionado: coordenador,
-    rankingFechamento,
-    fechamentoMensagem: 'Prova finalizada. Novos registros ficam bloqueados.'
+    resultadoOficial,
+    rankingFechamento
+  });
+});
+
+app.post('/voltar-fechamento', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Volta do resultado oficial para a revisao de fechamento.
+    tela: 'fechamento',
+    titulo: 'Fechamento',
+    coordenadorSelecionado: coordenador,
+    rankingFechamento
   });
 });
 
@@ -279,6 +300,16 @@ app.get('/tv', (req: Request, res: Response): void => {
     tela: 'tvPublica',
     titulo: 'PLACAR AO VIVO',
     equipesPainel
+  });
+});
+
+app.get('/tv-resultado', (req: Request, res: Response): void => {
+  res.render('index', {
+    // Tela publica final, pensada para divulgar o resultado oficial na TV.
+    tela: 'tvResultado',
+    titulo: 'RESULTADO OFICIAL',
+    resultadoOficial,
+    rankingFechamento
   });
 });
 
