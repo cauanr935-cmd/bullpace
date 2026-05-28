@@ -1,9 +1,11 @@
+image: node:20
+
 pages:
   stage: deploy
 
   script:
-    - mkdir public
-    - cp -r src/View/* public/
+    - npm ci
+    - npm run pages:build
 
   artifacts:
     paths:
