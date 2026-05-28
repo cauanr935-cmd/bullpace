@@ -14,7 +14,6 @@ export class AtletaService {
   }
 
   listarAtletas(): Atleta[] {
-
     return this.listar();
   }
 
