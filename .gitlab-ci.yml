@@ -2,15 +2,14 @@ image: node:20
 
 pages:
   stage: deploy
-
   script:
     - npm ci
-    - npm run pages:build
-
+    - mkdir -p public
+    - npx --yes ejs-cli --base-dir ./ '**/*.ejs' --out public/
+    - cp -r css js images public/ 2>/dev/null || true 
   artifacts:
     paths:
       - public
-
   only:
     - developer
     - main
