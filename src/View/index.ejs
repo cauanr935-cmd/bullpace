@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=6">
+  <link rel="stylesheet" href="/static/style.css?v=9">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
-    <section class="function-frame">
+  <main class="function-page <%= tela === 'tvPublica' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+    <section class="function-frame <%= tela === 'tvPublica' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
@@ -19,6 +19,14 @@
       <% if (tela === 'painelCoordenador') { %>
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'modoTv') { %>
+        <% /* Volta para a visao geral da coordenacao. */ %>
+        <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
@@ -82,6 +90,7 @@
           operador: 'ETAPA 01 · OPERADOR(A)',
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
+          modoTv: 'RAMO A · EXIBIÇÃO',
           detalheEquipe: 'ETAPA 03 · EQUIPE',
           filtroAtletasEquipe: 'ETAPA 03.1 · FILTRO',
           equipe: 'ETAPA 02 · EQUIPE',
@@ -92,11 +101,13 @@
         };
       %>
 
-      <% /* Etiqueta da etapa atual, centralizada em todas as telas. */ %>
-      <p class="step-label"><%= etapas[tela] || 'ETAPA' %></p>
+      <% if (tela !== 'tvPublica') { %>
+        <% /* Etiqueta da etapa atual, centralizada em todas as telas. */ %>
+        <p class="step-label"><%= etapas[tela] || 'ETAPA' %></p>
 
-      <% /* Titulo muda conforme a tela enviada pelo server.ts. */ %>
-      <h1 id="page-title"><%= titulo %></h1>
+        <% /* Titulo muda conforme a tela enviada pelo server.ts. */ %>
+        <h1 id="page-title"><%= titulo %></h1>
+      <% } %>
 
       <% if (tela === 'funcao') { %>
         <% /* Nota: bloco responsavel pela selecao de funcao inicial. */ %>
@@ -261,9 +272,150 @@
 
         <section class="panel-actions">
           <button type="button" class="is-active">Auditoria</button>
-          <button type="button">Modo TV</button>
+          <form action="/modo-tv" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <button type="submit">Modo TV</button>
+          </form>
           <button type="button">Fechamento</button>
         </section>
+      <% } %>
+
+      <% if (tela === 'modoTv') { %>
+        <% /* Nota: controle do placar externo. A tela publica fica em /tv. */ %>
+        <p class="operator-description">
+          Controle o placar público somente leitura.
+        </p>
+
+        <p class="operator-list-title">ESTADO ATUAL</p>
+
+        <section class="tv-control-card is-active" id="tvControlCard">
+          <div>
+            <strong>PLACAR EXTERNO</strong>
+            <span>Atualização automática dos dados válidos</span>
+          </div>
+          <span class="tv-active-pill" id="tvStateLabel">ATIVO</span>
+          <button type="button" class="toggle-switch" id="tvToggle" aria-pressed="true" aria-label="Ativar ou desativar Modo TV"></button>
+        </section>
+
+        <p class="operator-list-title">INFORMAÇÕES VISÍVEIS</p>
+
+        <section class="visible-info-list" aria-label="Informações visíveis no placar">
+          <label class="check-option">
+            <input type="checkbox" checked>
+            <span>Distância total por equipe</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox" checked>
+            <span>Diferença entre equipes</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox" checked>
+            <span>Tempo restante da prova</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox">
+            <span>Nome do atleta atual</span>
+          </label>
+        </section>
+
+        <p class="public-note">A tela pública não permite edição.</p>
+
+        <a href="/tv" target="_blank" rel="noopener" class="continue-button external-screen-button" id="externalScreenButton">
+          Abrir tela externa
+        </a>
+
+        <script>
+          (() => {
+            const card = document.getElementById('tvControlCard');
+            const toggle = document.getElementById('tvToggle');
+            const label = document.getElementById('tvStateLabel');
+            const externalButton = document.getElementById('externalScreenButton');
+            let enabled = localStorage.getItem('bullpace-tv-active') !== 'false';
+
+            const updateState = () => {
+              card.classList.toggle('is-active', enabled);
+              card.classList.toggle('is-inactive', !enabled);
+              toggle.setAttribute('aria-pressed', String(enabled));
+              label.textContent = enabled ? 'ATIVO' : 'INATIVO';
+              externalButton.classList.toggle('is-disabled', !enabled);
+              externalButton.setAttribute('aria-disabled', String(!enabled));
+              externalButton.textContent = enabled ? 'Abrir tela externa' : 'Ative o Modo TV para abrir';
+              localStorage.setItem('bullpace-tv-active', enabled ? 'true' : 'false');
+            };
+
+            toggle.addEventListener('click', () => {
+              enabled = !enabled;
+              updateState();
+            });
+
+            externalButton.addEventListener('click', (event) => {
+              if (!enabled) {
+                event.preventDefault();
+              }
+            });
+
+            updateState();
+          })();
+        </script>
+      <% } %>
+
+      <% if (tela === 'tvPublica') { %>
+        <% /* Nota: placar publico para TV/projetor. */ %>
+        <section class="tv-scoreboard">
+          <header class="tv-header">
+            <div>
+              <strong>BULLPACE</strong>
+              <span>PLACAR AO VIVO</span>
+            </div>
+            <em>AO VIVO</em>
+          </header>
+
+          <section class="tv-event">
+            <h1>24 HORAS</h1>
+            <p>08h 42min de prova · 15h 18min restantes</p>
+          </section>
+
+          <section class="tv-paused-message">
+            <strong>PLACAR PAUSADO</strong>
+            <span>Os dados públicos foram ocultados pela coordenação.</span>
+          </section>
+
+          <section class="tv-ranking">
+            <article>
+              <span>1º LUGAR</span>
+              <strong>Equipe Vermelha</strong>
+              <p>124,480 <small>km</small></p>
+            </article>
+            <article>
+              <span>2º LUGAR</span>
+              <strong>Equipe Azul</strong>
+              <p>121,930 <small>km</small></p>
+            </article>
+          </section>
+
+          <section class="tv-difference">
+            <strong>DIFERENÇA</strong>
+            <span>+ 2,550 km</span>
+          </section>
+
+          <footer>Visualização pública · sem comandos operacionais</footer>
+        </section>
+
+        <script>
+          (() => {
+            const scoreboard = document.querySelector('.tv-scoreboard');
+            const statusLabel = scoreboard.querySelector('.tv-header em');
+
+            const applyTvState = () => {
+              const active = localStorage.getItem('bullpace-tv-active') !== 'false';
+              scoreboard.classList.toggle('is-paused', !active);
+              statusLabel.textContent = active ? 'AO VIVO' : 'PAUSADO';
+            };
+
+            window.addEventListener('storage', applyTvState);
+            applyTvState();
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'detalheEquipe') { %>

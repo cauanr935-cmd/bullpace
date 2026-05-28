@@ -231,6 +231,27 @@ app.post('/voltar-painel-coordenador', (req: Request, res: Response): void => {
   });
 });
 
+app.post('/modo-tv', (req: Request, res: Response): void => {
+  const { coordenador } = req.body;
+
+  res.render('index', {
+    // Tela de controle do placar publico, usada no tablet da coordenacao.
+    tela: 'modoTv',
+    titulo: 'MODO TV',
+    coordenadorSelecionado: coordenador,
+    equipesPainel
+  });
+});
+
+app.get('/tv', (req: Request, res: Response): void => {
+  res.render('index', {
+    // Tela publica somente leitura, pensada para abrir na TV ou projetor.
+    tela: 'tvPublica',
+    titulo: 'PLACAR AO VIVO',
+    equipesPainel
+  });
+});
+
 app.post('/detalhes-equipe', (req: Request, res: Response): void => {
   const { coordenador, equipe } = req.body;
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
