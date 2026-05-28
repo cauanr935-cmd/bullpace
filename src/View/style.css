@@ -1,0 +1,2221 @@
+/* Reset simples para evitar espacamentos inesperados do navegador. */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #202124;
+  background: #ffffff;
+}
+
+/* Centraliza o conteudo principal da tela no viewport. */
+.function-page {
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Container principal compartilhado pela selecao de funcao e selecao de operador. */
+.function-frame {
+  width: min(100%, 1000px);
+  height: calc(100vh - 24px);
+  min-height: 0;
+  padding: 52px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #ffffff;
+}
+
+/* Titulo principal da etapa atual. */
+.function-frame h1 {
+  width: min(100%, 760px);
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.15;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Lista da primeira tela: Operador e Organizador. */
+.function-options {
+  width: min(100%, 620px);
+  margin-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+/* Remove margem padrao dos formularios que envolvem cada card. */
+.function-form {
+  margin: 0;
+}
+
+.function-options .function-form {
+  width: 100%;
+}
+
+/* Linha clicavel usada para escolher uma funcao. */
+.function-card {
+  width: 100%;
+  min-height: 88px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  text-align: left;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+/* Feedback visual quando o usuario passa o mouse ou navega com teclado. */
+.function-card:hover,
+.function-card:focus-visible {
+  background: #f4f4f4;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.function-card:active {
+  transform: translateY(0);
+}
+
+.function-card:hover .operator-radio,
+.function-card:focus-visible .operator-radio {
+  border-color: #202124;
+}
+
+.function-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #f4f4f4;
+  color: #202124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.function-name {
+  flex: 1;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+/* Link usado para voltar da tela de operadores para a selecao de funcao. */
+.back-link {
+  position: absolute;
+  top: 32px;
+  left: 36px;
+  border: 0;
+  background: transparent;
+  color: #202124;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.back-form {
+  margin: 0;
+}
+
+/* Mensagem exibida depois que um operador e escolhido. */
+.selection-feedback {
+  margin: 24px 0 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.selected-user {
+  position: absolute;
+  top: 26px;
+  right: 36px;
+  min-width: 180px;
+  padding: 14px 20px;
+  border-radius: 18px;
+  background: #f4f4f4;
+  color: #202124;
+  text-align: right;
+}
+
+.selected-user span {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.selected-user strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.operator-description {
+  width: min(100%, 620px);
+  margin: 14px auto 0;
+  color: #202124;
+  font-size: 19px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.operator-list-title {
+  width: min(100%, 620px);
+  margin: 28px auto 0;
+  color: #202124;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* Lista com os operadores disponiveis para identificacao. */
+.operator-list {
+  width: min(100%, 620px);
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.operator-list .function-form {
+  width: 100%;
+}
+
+/* Linha clicavel usada para selecionar um operador. */
+.operator-row {
+  /* Ocupa toda a largura disponivel da lista. */
+  width: 100%;
+  /* Garante altura minima para toque em tablet. */
+  min-height: 78px;
+  /* Cria respiro interno da linha. */
+  padding: 12px 20px;
+  /* Remove a borda padrao do botao. */
+  border: 0;
+  /* Arredonda a linha clicavel. */
+  border-radius: 24px;
+  /* Mantem fundo neutro. */
+  background: #ffffff;
+  /* Define a cor principal do texto. */
+  color: #202124;
+  /* Herda a fonte configurada no body. */
+  font: inherit;
+  /* Mostra que a linha pode ser clicada. */
+  cursor: pointer;
+  /* Organiza foto, nome, selo e radio em linha. */
+  display: flex;
+  /* Centraliza verticalmente os itens. */
+  align-items: center;
+  /* Define espacamento entre os itens internos. */
+  gap: 24px;
+  /* Alinha o texto a esquerda dentro do botao. */
+  text-align: left;
+  /* Simula borda interna sem mudar o tamanho do elemento. */
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  /* Suaviza hover e movimento. */
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.operator-row.is-selected {
+  background: #ffffff;
+  box-shadow: inset 5px 0 0 #202124, inset 0 0 0 3px #202124;
+}
+
+.operator-row:hover .operator-radio,
+.operator-row:focus-visible .operator-radio {
+  border-color: #202124;
+}
+
+.operator-row:hover,
+.operator-row:focus-visible {
+  background: #e9e9e9;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.operator-row:active {
+  transform: translateY(0);
+}
+
+.operator-photo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #202124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.operator-row.is-selected .operator-photo {
+  color: #202124;
+  background: #f4f4f4;
+}
+
+.operator-name {
+  flex: 1;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.operator-name small {
+  display: block;
+  margin-top: 6px;
+  color: #707070;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.selected-badge {
+  padding: 12px 20px;
+  border-radius: 999px;
+  color: #202124;
+  background: #f4f4f4;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.operator-radio {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d8d8d8;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.operator-row.is-selected .operator-radio {
+  border-color: #202124;
+}
+
+.operator-row.is-selected .operator-radio::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #202124;
+}
+
+.continue-form {
+  width: min(100%, 620px);
+  margin: 28px auto 0;
+}
+
+.continue-button {
+  width: min(100%, 620px);
+  min-height: 64px;
+  margin: 28px auto 0;
+  border: 0;
+  border-radius: 24px;
+  background: #202124;
+  color: #ffffff;
+  font: inherit;
+  font-size: 23px;
+  font-weight: 800;
+  cursor: pointer;
+  display: block;
+}
+
+.continue-form .continue-button {
+  width: 100%;
+  margin-top: 0;
+}
+
+.continue-button:hover,
+.continue-button:focus-visible {
+  background: #3a3b3d;
+  outline: none;
+}
+
+.continue-button:disabled {
+  background: #d8d8d8;
+  color: #707070;
+  cursor: not-allowed;
+}
+
+.operator-helper {
+  margin: 16px auto 0;
+  color: #202124;
+  font-size: 18px;
+  text-align: center;
+}
+
+.rotation-warning {
+  width: min(100%, 620px);
+  margin: 12px auto 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.rotation-warning strong {
+  font-weight: 800;
+}
+
+.login-badge {
+  margin: 30px auto 0;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.login-helper {
+  width: min(100%, 620px);
+  margin: 26px auto 0;
+  color: #707070;
+  font-size: 18px;
+  text-align: center;
+}
+
+.login-form {
+  width: min(100%, 620px);
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.permission-card {
+  margin-top: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.permission-card strong,
+.permission-card span {
+  display: block;
+}
+
+.permission-card strong {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.permission-card span {
+  margin-top: 12px;
+  color: #202124;
+  font-size: 18px;
+}
+
+.panel-progress {
+  width: min(100%, 760px);
+  margin: 28px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.panel-progress strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.panel-progress span {
+  min-width: 190px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.panel-metrics {
+  width: min(100%, 760px);
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.panel-metrics article {
+  min-height: 106px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+}
+
+.panel-metrics strong,
+.panel-metrics span {
+  display: block;
+}
+
+.panel-metrics strong {
+  color: #707070;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.panel-metrics span {
+  margin-top: 26px;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.panel-team-list {
+  width: min(100%, 760px);
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-team-card {
+  min-height: 112px;
+  padding: 22px 28px;
+  border-radius: 18px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.panel-team-card div {
+  flex: 1;
+}
+
+.panel-team-card strong,
+.panel-team-card small {
+  display: block;
+}
+
+.panel-team-card strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.panel-team-card small {
+  margin-top: 10px;
+  color: #202124;
+  font-size: 17px;
+}
+
+.details-form {
+  margin: 0;
+}
+
+.panel-team-card button,
+.details-form button {
+  min-width: 150px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.panel-team-card button:hover,
+.panel-team-card button:focus-visible,
+.details-form button:hover,
+.details-form button:focus-visible {
+  box-shadow: inset 0 0 0 2px #202124;
+  outline: none;
+}
+
+.panel-actions {
+  /* Area dos botoes administrativos do painel. */
+  width: min(100%, 760px);
+  /* Separa as acoes do bloco anterior. */
+  margin: 20px auto 0;
+  /* Distribui Auditoria, Modo TV e Fechamento em colunas. */
+  display: grid;
+  /* Cria tres colunas com largura igual. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Define espaco entre os botoes. */
+  gap: 22px;
+}
+
+.panel-actions form {
+  margin: 0;
+}
+
+.panel-actions button {
+  width: 100%;
+  min-height: 64px;
+  border: 2px solid #d8d8d8;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.panel-actions button:hover,
+.panel-actions button:focus-visible {
+  border-color: #202124;
+  outline: none;
+}
+
+.panel-actions button.is-active {
+  border-color: #202124;
+  background: #202124;
+  color: #ffffff;
+}
+
+.panel-actions button.is-active:hover,
+.panel-actions button.is-active:focus-visible {
+  background: #3a3b3d;
+}
+
+.tv-control-card {
+  /* Card que controla se o placar publico esta ativo ou pausado. */
+  width: min(100%, 760px);
+  min-height: 128px;
+  margin: 18px auto 0;
+  padding: 30px 40px;
+  border-radius: 22px;
+  background: #202124;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.tv-control-card.is-inactive {
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
+.tv-control-card div {
+  flex: 1;
+}
+
+.tv-control-card strong,
+.tv-control-card span {
+  display: block;
+}
+
+.tv-control-card strong {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.tv-control-card div span {
+  margin-top: 12px;
+  font-size: 22px;
+}
+
+.tv-active-pill {
+  min-width: 132px;
+  padding: 16px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 19px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.tv-control-card.is-inactive .tv-active-pill {
+  background: #202124;
+  color: #ffffff;
+}
+
+.toggle-switch {
+  /* Botao visual de liga/desliga do Modo TV. */
+  width: 86px;
+  height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: #202124;
+  box-shadow: inset 0 0 0 3px #ffffff;
+  position: relative;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.tv-control-card.is-inactive .toggle-switch {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
+.tv-control-card.is-inactive .toggle-switch::after {
+  background: #202124;
+  transform: translateX(-34px);
+}
+
+.visible-info-list {
+  width: min(100%, 760px);
+  margin: 16px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.check-option {
+  min-height: 62px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 20px;
+}
+
+.check-option input {
+  width: 28px;
+  height: 28px;
+  accent-color: #202124;
+}
+
+.public-note {
+  width: min(100%, 760px);
+  margin: 26px auto 0;
+  padding: 22px 28px;
+  border-radius: 16px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.external-screen-button {
+  width: min(100%, 760px);
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.external-screen-button.is-disabled {
+  background: #d8d8d8;
+  color: #707070;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.tv-public-page {
+  /* Remove margem do layout normal quando a tela e uma TV. */
+  padding: 0;
+  /* Fundo neutro da tela publica. */
+  background: #f2f2ef;
+}
+
+.tv-frame {
+  /* Faz o container da TV ocupar a tela inteira. */
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  background: #f2f2ef;
+}
+
+.tv-scoreboard {
+  /* Layout principal do placar publico. */
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 48px 72px 44px;
+  border-radius: 0;
+  background: #f2f2ef;
+  color: #202124;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tv-header {
+  /* Cabecalho do placar com nome do evento e status. */
+  min-height: 106px;
+  padding: 26px 34px;
+  border-radius: 28px;
+  background: #202124;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tv-header strong,
+.tv-header span,
+.tv-header em {
+  display: block;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.tv-header strong {
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+
+.tv-header span {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+
+.tv-header em {
+  min-width: 160px;
+  padding: 15px 28px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  text-align: center;
+}
+
+.tv-event {
+  width: min(100%, 1160px);
+  margin: 44px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tv-event h1 {
+  width: 100%;
+  margin: 0;
+  color: #202124;
+  font-size: 68px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.tv-event p {
+  margin: 20px 0 0;
+  font-size: 28px;
+  text-align: center;
+}
+
+.tv-paused-message {
+  /* Mensagem exibida quando a coordenacao desativa o Modo TV. */
+  width: min(100%, 980px);
+  min-height: 360px;
+  margin: 80px auto 0;
+  padding: 56px;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 4px #202124;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.tv-paused-message strong {
+  font-size: clamp(52px, 6vw, 86px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.tv-paused-message span {
+  max-width: 720px;
+  margin-top: 28px;
+  color: #707070;
+  font-size: 30px;
+  line-height: 1.35;
+}
+
+.tv-ranking {
+  /* Grade com as duas equipes no placar publico. */
+  width: min(100%, 1160px);
+  margin: 48px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px;
+}
+
+.tv-ranking article {
+  min-height: 340px;
+  padding: 42px;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 4px #202124;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tv-ranking article span,
+.tv-ranking article strong,
+.tv-ranking article p {
+  display: block;
+}
+
+.tv-ranking article span {
+  width: fit-content;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: #202124;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.tv-ranking article strong {
+  margin-top: 32px;
+  font-size: 34px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tv-ranking article p {
+  margin: 44px 0 0;
+  font-size: clamp(72px, 8vw, 116px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.tv-ranking article small {
+  margin-left: 18px;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+.tv-final-scoreboard .tv-header em {
+  background: #202124;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+
+.tv-final-scoreboard .tv-ranking article.is-winner {
+  background: #f7f7f7;
+}
+
+.tv-final-scoreboard .tv-ranking article.is-winner span {
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
+.tv-difference {
+  width: min(100%, 1160px);
+  min-height: 116px;
+  margin: 48px auto 0;
+  padding: 32px 46px;
+  border-radius: 28px;
+  background: #202124;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tv-difference strong {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.tv-difference span {
+  font-size: 46px;
+  font-weight: 800;
+}
+
+.tv-scoreboard footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 22px;
+  color: #707070;
+}
+
+.tv-scoreboard.is-paused .tv-event,
+.tv-scoreboard.is-paused .tv-ranking,
+.tv-scoreboard.is-paused .tv-difference {
+  /* Esconde os dados quando o placar esta pausado. */
+  display: none;
+}
+
+.tv-scoreboard.is-paused .tv-paused-message {
+  /* Mostra apenas o aviso de placar pausado. */
+  display: flex;
+}
+
+.tv-scoreboard.is-paused .tv-header {
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 4px #202124;
+}
+
+.tv-scoreboard.is-paused .tv-header span {
+  color: #707070;
+}
+
+.tv-scoreboard.is-paused .tv-header em {
+  background: #202124;
+  color: #ffffff;
+}
+
+.closure-status {
+  /* Selo da etapa de fechamento antes da finalizacao. */
+  width: min(100%, 320px);
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.closure-section-title {
+  width: min(100%, 760px);
+  margin: 36px auto 0;
+  color: #202124;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.closure-message {
+  width: min(100%, 760px);
+  margin: 22px auto 0;
+  border-radius: 16px;
+}
+
+.closure-ranking {
+  /* Lista com o ranking consolidado antes de finalizar a prova. */
+  width: min(100%, 760px);
+  margin: 18px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.closure-team-card {
+  /* Card de cada equipe dentro do fechamento. */
+  min-height: 126px;
+  padding: 28px 34px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.closure-team-card.is-first {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #202124;
+}
+
+.closure-team-card.is-second {
+  background: #f7f7f7;
+}
+
+.closure-team-card strong,
+.closure-team-card small {
+  display: block;
+}
+
+.closure-team-card strong {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.closure-team-card small {
+  margin-top: 18px;
+  color: #202124;
+  font-size: 18px;
+}
+
+.closure-team-card span {
+  color: #202124;
+  font-size: 30px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.closure-team-card.is-first span {
+  color: #202124;
+}
+
+.closure-team-card.is-second span {
+  color: #202124;
+}
+
+.closure-warning {
+  /* Aviso de impacto: depois de finalizar, novos registros ficam bloqueados. */
+  width: min(100%, 760px);
+  margin: 34px auto 0;
+  padding: 28px 30px;
+  border-radius: 18px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #202124;
+}
+
+.closure-warning strong,
+.closure-warning span {
+  display: block;
+}
+
+.closure-warning strong {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.closure-warning span {
+  margin-top: 12px;
+  color: #707070;
+  font-size: 18px;
+}
+
+.closure-action-form {
+  width: min(100%, 760px);
+}
+
+.closure-action-form .continue-button,
+.secondary-form .finish-button {
+  width: 100%;
+}
+
+.result-status {
+  width: min(100%, 220px);
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.result-winner-card {
+  /* Card principal da equipe vencedora no resultado oficial. */
+  width: min(100%, 760px);
+  min-height: 162px;
+  margin: 18px auto 0;
+  padding: 34px 40px;
+  border-radius: 20px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 3px #202124;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.result-winner-card strong,
+.result-winner-card span {
+  display: block;
+}
+
+.result-winner-card strong {
+  font-size: 25px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.result-winner-card span {
+  margin-top: 26px;
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.result-winner-card small {
+  min-width: 190px;
+  padding: 16px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.result-summary-list {
+  /* Lista dos dados consolidados apos finalizar a prova. */
+  width: min(100%, 760px);
+  margin: 18px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-summary-list article {
+  min-height: 62px;
+  padding: 16px 28px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  align-items: center;
+  gap: 22px;
+}
+
+.result-summary-list span {
+  color: #707070;
+  font-size: 18px;
+}
+
+.result-summary-list strong {
+  color: #202124;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.result-action-button {
+  width: min(100%, 760px);
+  margin-top: 28px;
+}
+
+.result-tv-link {
+  width: min(100%, 760px);
+  margin: 16px auto 0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-detail-summary,
+.team-filter-summary {
+  width: min(100%, 760px);
+  min-height: 88px;
+  margin: 28px auto 0;
+  padding: 20px 28px;
+  border-radius: 16px;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.team-detail-summary div {
+  flex: 1;
+}
+
+.team-detail-summary strong,
+.team-detail-summary small {
+  display: block;
+}
+
+.team-detail-summary strong,
+.team-filter-summary strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.team-detail-summary small {
+  margin-top: 8px;
+  font-size: 17px;
+}
+
+.team-detail-summary > span:last-child {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.team-filter-summary strong {
+  flex: 1;
+}
+
+.team-filter-summary > span:last-child {
+  font-size: 18px;
+}
+
+.detail-tabs {
+  width: min(100%, 760px);
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.detail-tabs form {
+  margin: 0;
+}
+
+.detail-tabs button {
+  width: 100%;
+  min-height: 64px;
+  border: 2px solid #d8d8d8;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.detail-tabs button.is-active {
+  border-color: #202124;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 1px #202124;
+}
+
+.detail-subtitle {
+  width: min(100%, 760px);
+  margin: 12px auto 0;
+  color: #707070;
+  font-size: 14px;
+}
+
+.checkpoint-record-list,
+.filter-athlete-list {
+  width: min(100%, 760px);
+  max-height: 292px;
+  margin-top: 14px;
+  padding: 2px 8px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.checkpoint-record-header {
+  width: min(100%, 760px);
+  min-height: auto;
+  margin: 14px auto 0;
+  padding: 0 24px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.checkpoint-record-header span {
+  color: #707070;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.checkpoint-record {
+  min-height: 62px;
+  padding: 16px 24px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1.25fr 1.35fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.checkpoint-record span {
+  color: #202124;
+  font-size: 16px;
+}
+
+.checkpoint-record strong {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.audit-button {
+  width: min(100%, 760px);
+}
+
+.filter-athlete-list .function-form {
+  width: 100%;
+}
+
+.filter-athlete-row {
+  min-height: 78px;
+}
+
+.team-status {
+  width: min(100%, 620px);
+  min-height: 54px;
+  margin: 18px auto 0;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.team-status strong {
+  flex: 1;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.team-status small {
+  color: #707070;
+  font-size: 16px;
+}
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #202124;
+  flex: 0 0 auto;
+}
+
+.athlete-scroll {
+  /* Lista interna com scroll para os atletas, sem rolar a tela inteira. */
+  width: min(100%, 620px);
+  max-height: 258px;
+  margin-top: 14px;
+  padding: 4px 8px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.athlete-scroll .function-form {
+  width: 100%;
+}
+
+.athlete-row {
+  min-height: 72px;
+}
+
+.turn-summary {
+  width: min(100%, 620px);
+  min-height: 92px;
+  margin-top: 14px;
+  padding: 18px 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.summary-photo {
+  width: 64px;
+  height: 64px;
+  background: #f4f4f4;
+}
+
+.summary-content {
+  flex: 1;
+}
+
+.summary-content strong,
+.summary-content span {
+  display: block;
+}
+
+.summary-content strong {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.summary-content span {
+  width: fit-content;
+  min-width: 190px;
+  margin-top: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.turn-summary small {
+  color: #707070;
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.treadmill-list {
+  gap: 14px;
+}
+
+.treadmill-row {
+  min-height: 74px;
+}
+
+.treadmill-row .status-dot {
+  margin-left: 4px;
+}
+
+.treadmill-row .operator-name {
+  font-size: 20px;
+}
+
+.treadmill-row .operator-name small {
+  color: #202124;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.operator-row.is-disabled {
+  cursor: not-allowed;
+  color: #707070;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+}
+
+.operator-row.is-disabled:hover {
+  background: #f4f4f4;
+  transform: none;
+}
+
+.operator-row.is-disabled .operator-name small {
+  color: #707070;
+}
+
+.muted-dot {
+  background: #cfcfcf;
+}
+
+.turn-note {
+  width: min(100%, 620px);
+  margin: 20px auto 0;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: #f7f7f7;
+  color: #202124;
+  font-size: 17px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.flow-context {
+  width: min(100%, 620px);
+  margin: 0 auto 18px;
+  color: #707070;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.step-label {
+  width: min(100%, 760px);
+  margin: 0 auto 12px;
+  color: #202124;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.active-turn-card {
+  width: min(100%, 620px);
+  min-height: 116px;
+  margin: 24px auto 0;
+  padding: 22px 28px;
+  border-radius: 22px;
+  background: #202124;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.active-athlete-photo {
+  width: 66px;
+  height: 66px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 17px;
+  line-height: 1;
+  text-align: center;
+}
+
+.active-turn-card div {
+  flex: 1;
+}
+
+.active-turn-card strong,
+.active-turn-card span,
+.active-turn-card time {
+  display: block;
+}
+
+.active-turn-card strong {
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.active-turn-card span {
+  margin-top: 6px;
+  font-size: 17px;
+}
+
+.active-turn-card time {
+  margin-top: 8px;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.active-turn-card small {
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.checkpoint-form {
+  /* Formulario que recebe os dados de cada checkpoint. */
+  width: min(100%, 620px);
+  margin: 26px auto 0;
+}
+
+.field-label {
+  display: block;
+  margin: 0 0 10px;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.checkpoint-input {
+  width: 100%;
+  min-height: 58px;
+  padding: 14px 18px;
+  border: 2px solid #d8d8d8;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 20px;
+}
+
+.input-with-unit {
+  min-height: 58px;
+  border: 2px solid #d8d8d8;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.input-with-unit:focus-within {
+  border-color: #202124;
+}
+
+.input-with-unit .checkpoint-input {
+  min-height: 54px;
+  border: 0;
+  border-radius: 0;
+}
+
+.input-with-unit span {
+  padding: 0 18px;
+  color: #707070;
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.checkpoint-input:focus {
+  border-color: #202124;
+  outline: none;
+}
+
+.checkpoint-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.last-checkpoint {
+  min-height: 76px;
+  margin-top: 22px;
+  padding: 18px 24px;
+  border-radius: 16px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.last-checkpoint strong,
+.last-checkpoint span {
+  display: block;
+}
+
+.last-checkpoint strong {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.last-checkpoint span {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.last-checkpoint small {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.checkpoint-message {
+  margin: -2px 0 0;
+  padding: 18px 22px;
+  border-radius: 0 0 16px 16px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.checkpoint-message.success {
+  color: #202124;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #202124;
+}
+
+.checkpoint-message.error {
+  color: #202124;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #202124;
+}
+
+.checkpoint-button {
+  margin-top: 24px;
+}
+
+.finish-button {
+  width: min(100%, 620px);
+  min-height: 58px;
+  margin: 16px auto 0;
+  border: 2px solid #d8d8d8;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.finish-button:hover,
+.finish-button:focus-visible {
+  border-color: #202124;
+  outline: none;
+}
+
+.finish-form {
+  width: min(100%, 620px);
+  margin: 16px auto 0;
+}
+
+.finish-form .finish-button,
+.secondary-form .finish-button {
+  width: 100%;
+  margin-top: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  padding: 24px;
+  background: rgba(32, 33, 36, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-box {
+  width: min(100%, 420px);
+  padding: 28px;
+  border-radius: 22px;
+  background: #ffffff;
+  color: #202124;
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(32, 33, 36, 0.22);
+}
+
+.modal-box h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.modal-box p {
+  margin: 16px 0 22px;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.modal-box button {
+  min-width: 120px;
+  min-height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: #202124;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.end-warning {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.end-athlete-summary {
+  margin-top: 22px;
+}
+
+.end-athlete-summary .summary-content span {
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.end-athlete-summary small {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #202124;
+}
+
+.end-metrics {
+  width: min(100%, 620px);
+  margin: 22px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.end-metrics article {
+  min-height: 92px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+}
+
+.end-metrics strong,
+.end-metrics span {
+  display: block;
+}
+
+.end-metrics strong {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.end-metrics span {
+  margin-top: 14px;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.after-confirm {
+  width: min(100%, 620px);
+  margin: 24px auto 0;
+  padding: 22px 26px;
+  border-radius: 18px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.after-confirm strong,
+.after-confirm span {
+  display: block;
+}
+
+.after-confirm strong {
+  margin-bottom: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.after-confirm span {
+  position: relative;
+  margin-top: 10px;
+  padding-left: 28px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.after-confirm span::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #202124;
+}
+
+.secondary-form {
+  margin-top: 14px;
+}
+
+.secondary-action {
+  background: #ffffff;
+}
+
+.treadmill-grid {
+  width: min(100%, 620px);
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.treadmill-card {
+  min-height: 76px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  column-gap: 14px;
+  align-items: center;
+}
+
+.treadmill-card strong,
+.treadmill-card small {
+  grid-column: 2;
+}
+
+.treadmill-card strong {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.treadmill-card small {
+  margin-top: 6px;
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.treadmill-card.livre {
+  background: #f7f7f7;
+}
+
+.treadmill-card.manutencao {
+  color: #707070;
+  background: #f4f4f4;
+}
+
+.treadmill-card.manutencao .status-dot {
+  background: #cfcfcf;
+}
+
+/* Adapta o layout para telas menores, como celular. */
+@media (max-width: 760px) {
+  .function-page {
+    padding: 12px;
+  }
+
+  .function-frame {
+    min-height: calc(100vh - 24px);
+    padding: 56px 24px;
+  }
+
+  .back-link {
+    top: 28px;
+    left: 28px;
+  }
+
+  .selected-user {
+    position: static;
+    align-self: flex-end;
+    margin-bottom: 24px;
+  }
+
+  .function-frame h1 {
+    font-size: 30px;
+  }
+
+  .function-options {
+    width: 100%;
+    margin-top: 34px;
+    gap: 14px;
+  }
+
+  .function-card {
+    min-height: 82px;
+    padding: 14px 18px;
+    gap: 16px;
+  }
+
+  .function-icon {
+    width: 54px;
+    height: 54px;
+  }
+
+  .function-name {
+    font-size: 22px;
+  }
+
+  .operator-description,
+  .operator-list,
+  .operator-list-title,
+  .continue-form,
+  .login-form,
+  .login-helper,
+  .rotation-warning,
+  .panel-progress,
+  .panel-metrics,
+  .panel-team-list,
+  .panel-actions,
+  .tv-control-card,
+  .visible-info-list,
+  .public-note,
+  .external-screen-button,
+  .closure-status,
+  .closure-message,
+  .closure-ranking,
+  .closure-warning,
+  .closure-action-form,
+  .result-status,
+  .result-winner-card,
+  .result-summary-list,
+  .result-action-button,
+  .result-tv-link,
+  .team-detail-summary,
+  .team-filter-summary,
+  .detail-tabs,
+  .detail-subtitle,
+  .checkpoint-record-list,
+  .filter-athlete-list,
+  .audit-button,
+  .team-status,
+  .athlete-scroll,
+  .turn-summary,
+  .turn-note,
+  .flow-context,
+  .step-label,
+  .active-turn-card,
+  .checkpoint-form,
+  .finish-form,
+  .finish-button,
+  .end-metrics,
+  .after-confirm,
+  .treadmill-grid {
+    width: 100%;
+  }
+
+  .operator-list {
+    margin-top: 34px;
+    gap: 14px;
+  }
+
+  .operator-row {
+    min-height: 82px;
+    padding: 14px 18px;
+    gap: 16px;
+  }
+
+  .operator-photo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .operator-name {
+    font-size: 22px;
+  }
+
+  .selected-badge {
+    display: none;
+  }
+
+  .continue-button {
+    min-height: 70px;
+    font-size: 21px;
+  }
+
+  .team-status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .athlete-scroll {
+    max-height: 330px;
+  }
+
+  .treadmill-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .turn-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .turn-summary small {
+    white-space: normal;
+  }
+
+  .active-turn-card,
+  .last-checkpoint {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .checkpoint-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .end-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-progress,
+  .panel-team-card,
+  .tv-control-card,
+  .closure-team-card,
+  .result-winner-card,
+  .team-detail-summary,
+  .team-filter-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .panel-metrics,
+  .panel-actions,
+  .detail-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .checkpoint-record {
+    grid-template-columns: 1fr;
+  }
+
+  .result-summary-list article {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-scoreboard {
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .tv-header,
+  .tv-event,
+  .tv-ranking,
+  .tv-difference {
+    width: calc(100% - 48px);
+  }
+
+  .tv-header {
+    padding: 32px 24px;
+  }
+
+  .tv-event {
+    margin-top: 42px;
+  }
+
+  .tv-ranking {
+    margin-top: 42px;
+    gap: 24px;
+  }
+
+  .tv-ranking article {
+    min-height: 190px;
+    padding: 28px;
+  }
+
+  .tv-ranking article p {
+    font-size: 54px;
+  }
+}
