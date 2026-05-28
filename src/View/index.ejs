@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'operador' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <section class="function-frame">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
       <% if (tela === 'operador') { %>
@@ -266,10 +266,165 @@
         <p class="turn-note">O horário de início será salvo automaticamente.</p>
 
         <% if (typeof esteiraSelecionada !== 'undefined') { %>
-          <button type="button" class="continue-button" disabled>
-            Iniciar turno na <%= esteiraSelecionada %>
-          </button>
+          <% /* Inicia o turno e abre a tela de checkpoint. */ %>
+          <form action="/iniciar-turno" method="post" class="continue-form">
+            <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+            <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+            <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+            <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
+            <button type="submit" class="continue-button">
+              Iniciar turno na <%= esteiraSelecionada %>
+            </button>
+          </form>
         <% } %>
+      <% } %>
+
+      <% if (tela === 'checkpoint') { %>
+        <% /* Nota: tela usada para registrar checkpoints durante o turno ativo. */ %>
+        <p class="flow-context">Turno em andamento</p>
+        <p class="step-label">ETAPA 05 · CHECKPOINT</p>
+
+        <section class="active-turn-card">
+          <span class="operator-photo active-athlete-photo" aria-hidden="true">
+            <%= atletaSelecionado.split(' ').map((parte) => parte[0]).join('').slice(0, 2) %>
+          </span>
+          <div>
+            <strong><%= atletaSelecionado %></strong>
+            <span><%= esteiraSelecionada %> · <%= equipeSelecionada %></span>
+            <time id="turnTimer">00:00:00</time>
+          </div>
+          <small>EM CORRIDA</small>
+        </section>
+
+        <form id="checkpointForm" class="checkpoint-form" novalidate>
+          <label class="field-label" for="kmAcumulado">KM ACUMULADO *</label>
+          <div class="input-with-unit">
+            <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="12,480" required>
+            <span>km</span>
+          </div>
+
+          <div class="checkpoint-grid">
+            <label class="field-group" for="paceMedio">
+              <span class="field-label">PACE MÉDIO *</span>
+              <div class="input-with-unit">
+                <input id="paceMedio" name="paceMedio" class="checkpoint-input" type="text" inputmode="numeric" placeholder="05:12" required>
+                <span>/ km</span>
+              </div>
+            </label>
+
+            <label class="field-group" for="velocidadeMedia">
+              <span class="field-label">VELOCIDADE MÉDIA *</span>
+              <div class="input-with-unit">
+                <input id="velocidadeMedia" name="velocidadeMedia" class="checkpoint-input" type="text" inputmode="decimal" placeholder="11,5" required>
+                <span>km/h</span>
+              </div>
+            </label>
+          </div>
+
+          <section class="last-checkpoint">
+            <div>
+              <strong>ÚLTIMO CHECKPOINT</strong>
+              <span id="lastCheckpointText">Nenhum checkpoint registrado</span>
+            </div>
+            <small id="checkpointStatus">AGUARDANDO</small>
+          </section>
+
+          <p id="checkpointMessage" class="checkpoint-message" hidden></p>
+
+          <button id="registerCheckpointButton" type="submit" class="continue-button checkpoint-button">
+            Registrar checkpoint
+          </button>
+        </form>
+
+        <button type="button" class="finish-button" disabled>Finalizar turno</button>
+
+        <div id="checkpointModal" class="modal-overlay" hidden>
+          <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <h2 id="modalTitle">Checkpoint registrado</h2>
+            <p>O registro foi salvo. O próximo checkpoint será liberado em 5 minutos.</p>
+            <button id="closeCheckpointModal" type="button">OK</button>
+          </section>
+        </div>
+
+        <script>
+          (() => {
+            const form = document.getElementById('checkpointForm');
+            const button = document.getElementById('registerCheckpointButton');
+            const message = document.getElementById('checkpointMessage');
+            const lastCheckpointText = document.getElementById('lastCheckpointText');
+            const checkpointStatus = document.getElementById('checkpointStatus');
+            const modal = document.getElementById('checkpointModal');
+            const closeModal = document.getElementById('closeCheckpointModal');
+            const turnTimer = document.getElementById('turnTimer');
+            const cooldownMilliseconds = 5 * 60 * 1000;
+            let cooldownInterval;
+            let turnSeconds = 0;
+
+            const formatTime = (seconds) => {
+              const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+              const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+              const remainingSeconds = String(seconds % 60).padStart(2, '0');
+              return `${hours}:${minutes}:${remainingSeconds}`;
+            };
+
+            setInterval(() => {
+              turnSeconds += 1;
+              turnTimer.textContent = formatTime(turnSeconds);
+            }, 1000);
+
+            const showMessage = (text, type) => {
+              message.textContent = text;
+              message.className = `checkpoint-message ${type}`;
+              message.hidden = false;
+            };
+
+            const startCooldown = () => {
+              const availableAt = Date.now() + cooldownMilliseconds;
+              button.disabled = true;
+
+              cooldownInterval = setInterval(() => {
+                const remaining = Math.max(0, availableAt - Date.now());
+                const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
+                const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+                button.textContent = remaining > 0 ? `Novo checkpoint em ${minutes}:${seconds}` : 'Registrar novo checkpoint';
+
+                if (remaining <= 0) {
+                  clearInterval(cooldownInterval);
+                  button.disabled = false;
+                }
+              }, 250);
+            };
+
+            form.addEventListener('submit', (event) => {
+              event.preventDefault();
+              const requiredFields = Array.from(form.querySelectorAll('[required]'));
+              const missingFields = requiredFields.filter((field) => !field.value.trim());
+
+              if (missingFields.length > 0) {
+                missingFields[0].focus();
+                showMessage('Preencha todos os campos obrigatórios antes de registrar.', 'error');
+                return;
+              }
+
+              const km = document.getElementById('kmAcumulado').value;
+              const now = new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              });
+
+              lastCheckpointText.textContent = `${km} · ${now}`;
+              checkpointStatus.textContent = 'SALVO';
+              showMessage('Checkpoint registrado com sucesso.', 'success');
+              modal.hidden = false;
+              startCooldown();
+            });
+
+            closeModal.addEventListener('click', () => {
+              modal.hidden = true;
+            });
+          })();
+        </script>
       <% } %>
     </section>
   </main>

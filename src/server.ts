@@ -262,6 +262,20 @@ app.post('/voltar-atleta', (req: Request, res: Response): void => {
   });
 });
 
+app.post('/iniciar-turno', (req: Request, res: Response): void => {
+  const { operador, equipe, atleta, esteira } = req.body;
+
+  res.render('index', {
+    // Abre a tela de checkpoint com o turno em andamento.
+    tela: 'checkpoint',
+    titulo: 'TURNO ATIVO',
+    operadorSelecionado: operador,
+    equipeSelecionada: equipe,
+    atletaSelecionado: atleta,
+    esteiraSelecionada: esteira
+  });
+});
+
 // Buscar todos os registros de uma tabela
 app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
   try {
