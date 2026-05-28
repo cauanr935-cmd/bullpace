@@ -1297,36 +1297,87 @@ A classe **SessaoOperacional** representa o contexto operacional em que ações 
 
 <div align="center">
   <sub><b>Figura 9 - Diagrama de Classes Arquitetural</b></sub><br>
-  <img src="../assets/DiagramaClasseArquitetural.png" width="75%" alt="Diagrama de Classes Arquitetural"><br>
+  <img src="../assets/diagramaArquitetural.jpeg" width="75%" alt="Diagrama de Classes Arquitetural"><br>
   <sup>Fonte: Elaborado pelos autores (2026)</sup>
 </div>
 
+O Diagrama de Classes Arquitetural do BullPace modela a estrutura de alto nível do software em quatro camadas com responsabilidades bem delimitadas sendo elas,Controllers, Services, Repositories e Models , seguindo o padrão de Arquitetura em Camadas Verticais com fluxo de dependência estritamente unidirecional.
+ 
+---
+ 
+## Controllers
+ 
+Porta de entrada da aplicação. Recebem as requisições HTTP dos dispositivos utilizados no evento (iPads dos operadores e tela de TV do organizador) e delegam o processamento à camada de Service, sem conter lógica de negócio. O `TurnoController` e o `CheckpointController` são os de maior criticidade, por serem acionados a cada troca de atleta e a cada registro de quilometragem.
+ 
+| Classe | Responsabilidades principais |
+|---|---|
+| `EventoController` | `listarEventos()`, `cadastrarEvento()` |
+| `TurnoController` | `validarDadosInicioTurno()`, `iniciarTurno()`, `finalizarTurno()` |
+| `CheckpointController` | `validarCheckpoint()`, `buscarCheckpointsPorTurno()` |
+| `PlacarController` | `alternarBloqueioModoTV()`, `obterDadosPlacar()` |
+| `SessaoController` | `IniciarSessao()`, `encerrarSessao()` |
+| `AtletaController` | `listarAtletas()`, `cadastrarAtleta()` |
+| `EsteiraController` | `listarEsteiras()` |
+| `OperadorController` | `listarOperadores()`, `listarPermissoes()` |
+| `CoodenadorController` | `listarCoordenadores()`, `login()` |
+ 
+---
+ 
+## Services
+ 
+Camada onde vivem todas as regras de negócio do BullPace. É aqui que são aplicadas as regras definidas anteriormente, como a obrigatoriedade do `km_acumulado` (RN18), progressão crescente de quilometragem (RN06), vínculo de checkpoint a turno ativo (RN19) e timestamp automático (RN12). O `TurnoService` e o `CheckpointService` são o núcleo da operação: garantem a integridade dos dados de revezamento e quilometragem ao longo das 24 horas da prova.
+ 
+| Classe | Responsabilidades principais |
+|---|---|
+| `EventoService` | `listar()`, `criar()` |
+| `TurnoService` | `iniciarNovoTurno()`, `finalizarTurnoExistente()` |
+| `CheckpointService` | `registrarNovoCheckpoint()`, `listarCheckpointsPorTurno()` |
+| `placarService` | `obterPlacarGeralDoEvento()` |
+| `sessaoService` | `iniciarNovaSessao()`, `encerrarSessaoExistente()` |
+| `atletaService` | `listar()`, `criar()`, `cadastrarAtleta()` |
+| `operadorService` | `listar()`, `criar()`, `listarPermissoes()` |
+| `EsteiraService` | `listar()`, `criar()` |
+| `CoordenadorService` | `listar()`, `criar()`, `login()` |
+ 
+---
+ 
+## Repositories
+ 
+Responsáveis exclusivamente pela comunicação com o banco de dados (Supabase). Recebem objetos já validados pelo Service e os traduzem em operações SQL. Não há regra de negócio nesta camada — sua existência isola o banco do restante da aplicação, de forma que uma eventual troca de provedor afete somente este nível. O `PlacarRepository` tem papel especial ao controlar o estado do Modo TV na arena.
+ 
+| Classe | Operações principais |
+|---|---|
+| `EventoRepository` | `listar()`, `salvar()` |
+| `TurnoRepository` | `insert()`, `updateParaEncerrado()`, `buscarTurnosPorSessao()` |
+| `CheckpointRepository` | `save()`, `findByTurnold()` |
+| `SessaoRepository` | `insert()`, `updateParaEncerrada()` |
+| `PlacarRepository` | `buscarStatusModoTv()`, `atualizarModoTv()` |
+| `atletaRepository` | `insert()`, `findByTurno()` |
+| `EsteiraRepositoy` | `listar()`, `salvar()` |
+| `OperadorRepositoy` | `listar()`, `salvar()` |
+| `CoordenadorRepositoy` | `listar()`, `salvar()` |
+ 
+---
+ 
+## Models
+ 
+Representam as entidades centrais do domínio da competição. São objetos simples de dados que trafegam entre as camadas e são mapeados diretamente para as tabelas do Supabase.
+ 
+| Classe | Atributos principais |
+|---|---|
+| `Evento` | `id_evento`, `nome`, `cidade`, `estado`, `data_inicio`, `data_fim`, `status` |
+| `Turno` | `id_turno`, `horario_inicio`, `horario_fim`, `status`, `km_turno` |
+| `Checkpoint` | `id_checkpoint`, `km_acumulado`, `pace_medio`, `velocidade_media`, `registrado_em`, `is_ajuste` |
+| `Equipe` | `id_equipe`, `nome`, `status`, `km_total` |
+| `atleta` | `id_atleta`, `nome`, `status` |
+| `Esteira` | `id_esteira`, `marca`, `modelo`, `numero_serie`, `status` |
+| `Operador` | `id_operador`, `nome` |
+| `Coodenador` | `id_coordenador`, `nome` |
+ 
+---
+
 Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetural](#diagrama-de-classes-arquitetural).
 
-# Documentação do Diagrama de Classes Arquitetural
-
-## 1. Visão Geral do Diagrama
- Diferente de um diagrama de classes de domínio tradicional (focado apenas nos atributos das entidades de banco de dados), este diagrama modela a **estrutura de alto nível do software**. 
-
-Ele representa os componentes reais da arquitetura (Controllers, Services e Repositories) como classes do sistema, mapeando com precisão suas responsabilidades, injeções de dependência e o fluxo de comunicação entre as camadas. O design segue o padrão de **Arquitetura em Camadas Verticais**, garantindo a separação de responsabilidades e um fluxo de dependência estritamente unidirecional.
-
-```text
-┌────────────────────────────────────────────────────────┐
-│   CAMADA CONTROLLER (Classes de Interface/Entrada)     │ 
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│     CAMADA SERVICE (Classes de Regras de Negócio)      │ ---> DATABASE
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│  CAMADA REPOSITORY (Classes de Acesso a Dados/DAO)     │ ---> DATABASE
-└──────────────────────────┬─────────────────────────────┘
-                           ▼ - - - > (Dependência)
-┌────────────────────────────────────────────────────────┐
-│       CAMADA MODEL (Classes de Entidade/Domínio)       │ 
-└────────────────────────────────────────────────────────┘
-```
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
