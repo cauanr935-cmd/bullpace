@@ -1179,9 +1179,68 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
-### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
+### 3.2.1. Arquitetura em Camadas (sprint 3)
 
-*Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
+A aplicação BullPace foi organizada seguindo o padrão de Arquitetura em Camadas, na variante Controller-Service-Repository, que é a forma mais comum de estruturar aplicações web em Node.js com Express. Esse padrão separa o código em quatro camadas com responsabilidades bem definidas, o que ajuda no trabalho em grupo e facilita a manutenção do projeto ao longo das sprints.
+
+A ideia central é que cada camada cuida de uma etapa do processamento da requisição. A comunicação entre elas é unidirecional: a requisição entra pela camada mais externa (Controller) e desce até a mais interna (Model), enquanto a resposta percorre o caminho inverso. Essa separação evita que regras de negócio fiquem misturadas com acesso ao banco ou com formatação da resposta HTTP.
+
+Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisição percorrendo as quatro camadas já foi documentado na seção 3.2.4 (Diagrama de Sequência), que mostra como o registro de checkpoint passa pelo Controller, Service, Repository e Banco no caso prático do BullPace.
+
+<br>
+<div align="center">
+  <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
+  <img src="../assets/3.2.1-arquitetura-camadas.png" 
+   width="80%"><br>
+ <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
+
+#### Camada Controller
+
+A camada Controller é a porta de entrada da aplicação. Ela recebe as requisições HTTP que chegam à API (vindas do iPad usado pelo operador no evento) e devolve as respostas para o cliente. No BullPace, essa camada faz três coisas principais.
+
+Primeiro, ela confere se o formato da requisição está correto, verificando se os campos obrigatórios chegaram, se os tipos batem com o esperado e se o body foi enviado no padrão certo. Se algo está fora, ela já devolve erro 400 ou 422 antes mesmo de chamar as outras camadas.
+
+Segundo, ela traduz a requisição HTTP em uma chamada de função para o Service. Quem decide se o dado é válido em termos de regra de negócio é o Service, não o Controller. Essa separação é importante porque mantém o Controller leve e focado só no contrato HTTP.
+
+Terceiro, ela formata a resposta. Pega o que o Service retornou, monta o JSON de resposta e devolve com o status code apropriado: 201 quando criou um recurso, 200 quando consultou, 404 quando não encontrou, 500 se algo quebrou no caminho.
+
+O Controller não conhece regras de negócio, não acessa o banco diretamente e não faz validações que dependem do estado da aplicação. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
+
+#### Camada Service
+
+A camada Service é onde mora a lógica de negócio do BullPace. Quando o Controller recebe uma requisição e repassa pra cá, é o Service que decide se aquele dado pode mesmo ser salvo. Ele aplica as regras de negócio do projeto antes de deixar qualquer coisa seguir pro banco.
+
+Pega o registro de checkpoint como exemplo. Antes de gravar, o Service checa três regras em sequência:
+
+- O turno ainda está ativo? Não dá pra registrar checkpoint num turno já encerrado (RN19).
+- O KM acumulado veio preenchido? É o dado central da apuração, então é obrigatório (RN18).
+- O novo KM é maior ou igual ao último do mesmo turno? A quilometragem só cresce dentro de um turno, nunca regride (RN06).
+
+Se qualquer uma falhar, o Service barra ali mesmo e devolve o erro pro Controller. O Repository nem chega a ser chamado e o banco continua intacto. Só quando as três passam é que ele monta o objeto final, já com o timestamp do servidor, que a RN12 não deixa o operador editar na mão, e aí sim manda pro Repository salvar.
+
+Duas coisas o Service não faz: não conversa direto com o banco e não mexe em detalhes de HTTP, como status code ou formato de resposta. Ele fica no meio do caminho: recebe o que o Controller validou no nível do contrato, aplica as regras de negócio, e entrega pro Repository um objeto pronto pra persistir.
+
+#### Camada Repository
+
+A camada Repository é a que conversa com o banco de dados. Quando o Service termina de validar tudo e monta o objeto pronto pra salvar, o Repository recebe esse objeto e transforma em comando SQL, rodando em cima do Supabase.
+
+No caso do checkpoint, depois que o Service libera, o Repository faz o `INSERT INTO checkpoints (...)` com os dados certos. Quando o Service precisa consultar algo antes, como buscar o último checkpoint do turno pra comparar o KM, o Repository monta o `SELECT` e devolve o resultado.
+
+O ponto principal é que essa é a única camada que toca no banco direto. Nenhuma outra parte do sistema escreve SQL ou acessa o Supabase por conta própria, e isso isola o banco do resto do código: se um dia a gente trocar o Supabase por outro banco, só o Repository muda, enquanto Controller e Service continuam iguais.
+
+Aqui também não entra regra de negócio. Se o objeto chegou até o Repository, é porque o Service já garantiu que tá tudo certo. O trabalho dele é executar a operação e devolver o que o banco respondeu, normalmente o registro já com o `id` gerado.
+
+#### Camada Model
+
+A camada Model é a base de tudo. Ela representa as entidades do domínio do BullPace, Equipe, Atleta, Turno e Checkpoint, e define a forma dos dados que circulam por todas as outras camadas.
+
+No fluxo do checkpoint, o Model aparece em todo lugar mesmo que a gente não perceba. Quando o Controller recebe o body da requisição, ele já vem no formato esperado pelo Model. Quando o Service monta o objeto pra salvar, ele segue a estrutura do Model. Quando o Repository devolve o registro do banco, vem como Model também.
+
+A diferença pras outras camadas é que o Model não executa nada. Não tem lógica, não valida, não conversa com ninguém. Ele é só o contrato: define quais campos existem, de que tipo são e como se relacionam. Esse contrato é o que mantém Controller, Service e Repository conversando a mesma língua.
+
+No BullPace, o Model bate direto com o que tá no banco. Um Checkpoint no código tem os mesmos campos do checkpoint na tabela: `id_checkpoint`, `id_turno`, `km_acumulado`, `pace_medio`, `velocidade_media`, `registrado_em`. Isso simplifica o trabalho do Repository, porque a tradução entre objeto e SQL fica direta.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
