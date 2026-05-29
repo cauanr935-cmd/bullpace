@@ -1800,9 +1800,12 @@ A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter,
 
 ### 3.4.3 Iconografia e imagens 
 
-*(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
 
-*posicione aqui imagens e textos contendo exemplos padronizados de ícones e imagens, com seus respectivos atributos de aplicação, utilizadas na solução*
+**Figura 21 – Espécime tipográfico e variações de estilo da fonte Inter**
+ <img src="../assets/bullpace_iconografia.png" width="100%"><br>
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
