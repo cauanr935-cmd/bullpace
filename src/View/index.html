@@ -1063,7 +1063,7 @@
           <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
           <input id="finishKmFinal" type="hidden" name="kmFinal" value="">
           <input id="finishDuracaoTurno" type="hidden" name="duracaoTurno" value="00:00:00">
-          <input type="hidden" name="inicioTurnoTimestamp" value="<%= inicioTurnoTimestamp %>">
+          <input id="finishInicioTurnoTimestamp" type="hidden" name="inicioTurnoTimestamp" value="<%= inicioTurnoTimestamp %>">
           <button type="submit" class="finish-button">Finalizar turno</button>
         </form>
 
@@ -1099,12 +1099,16 @@
             const finishKmFinal = document.getElementById('finishKmFinal');
             // Campo escondido que leva a duracao do turno para o servidor.
             const finishDuracaoTurno = document.getElementById('finishDuracaoTurno');
+            // Campo escondido que preserva o horario de inicio entre telas.
+            const finishInicioTurnoTimestamp = document.getElementById('finishInicioTurnoTimestamp');
             // Define o intervalo de 5 minutos entre checkpoints.
             const cooldownMilliseconds = 5 * 60 * 1000;
             // Guarda o id do intervalo que atualiza o contador do botao.
             let cooldownInterval;
             // Guarda o horario real em que o turno comecou.
-            const turnStartedAt = Number('<%= inicioTurnoTimestamp %>') || Date.now();
+            const pageParams = new URLSearchParams(window.location.search);
+            const turnStartedAt = Number(pageParams.get('inicioTurnoTimestamp') || '<%= inicioTurnoTimestamp %>') || Date.now();
+            finishInicioTurnoTimestamp.value = String(turnStartedAt);
 
             // Formata segundos no padrao HH:MM:SS.
             const formatTime = (seconds) => {
