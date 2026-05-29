@@ -1025,6 +1025,7 @@ Neste projeto, os RFs foram definidos a partir do fluxo principal da operação:
 | **RF023** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | Alta | Planejado |
 | **RF024** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | Média | Planejado |
 | **RF025** | **Exportação de Dados em CSV:** o sistema deve permitir à Gestora de Operações exportar os dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados e histórico de correções com justificativas. | Média | Planejado |
+| **RF026** | **Resiliência a Indisponibilidade de Rede:** o sistema deve persistir localmente os registros de checkpoint criados durante períodos de indisponibilidade de rede e sincronizá-los automaticamente com o servidor quando a conexão for restabelecida, sem ação manual do Promotor de Field Marketing. | Alta | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
