@@ -18,7 +18,7 @@ const initialPageData = {
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(path.join(outDir, 'static'), { recursive: true });
 
-const templatePath = path.join(viewDir, 'index.ejs');
+const templatePath = path.join(viewDir, 'index.html');
 const html = ejs.render(fs.readFileSync(templatePath, 'utf8'), initialPageData, {
   filename: templatePath
 }).replace(/href="\/static\//g, 'href="static/');
