@@ -1799,11 +1799,17 @@ A fim de proporcionar uma visualização concreta da aplicação prática desses
 A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter, mesmo operando sob diferentes escalas de peso e tamanho, apresenta o conforto visual necessário para a operação. Essa consistência contribui diretamente para a redução do esforço cognitivo do usuário, mitigando a ocorrência de falhas operacionais durante a inserção de dados no sistema.
 
 ### 3.4.3 Iconografia e imagens 
+A definição do conjunto de ícones da aplicação cumpre uma função essencial na comunicação rápida e precisa das ações disponíveis ao usuário. Em um contexto operacional como o da competição Red Bull 24 horas, onde os operadores precisam realizar interações ágeis sob condições de fadiga e pressão, a iconografia atua como um sistema de sinalização visual que reduz a dependência de leitura textual e agiliza a tomada de decisão.
+Para garantir consistência e reconhecibilidade, os ícones foram organizados em quatro categorias funcionais: Navegação, Usuário e Perfil, Operação e Dados e Localização e Checkpoint. Essa categorização orienta a distribuição dos elementos na interface e facilita a localização intuitiva das funcionalidades pelo usuário. Todos os ícones seguem um padrão visual unificado, com traço consistente e fundo arredondado, alinhado à identidade visual do projeto. Os ícones de estado, como Confirmado, Erro, Alerta, Ativo e Inativo, utilizam as cores definidas na paleta do sistema para reforçar o significado semântico de cada ação ou condição operacional.
+A Figura 21 apresenta o conjunto completo de ícones utilizados na interface, organizados por categoria funcional.
 
+<div align="center">
 
 **Figura 21 – Espécime tipográfico e variações de estilo da fonte Inter**
  <img src="../assets/bullpace_iconografia.png" width="100%"><br>
 *Fonte: Elaborado pelos autores (2026).*
+
+</div>
 
 A organização apresentada mostra que a padronização do conjunto de ícones contribui diretamente para a coerência visual da interface. A uniformidade no estilo gráfico dos ícones, junto ao uso das cores para estados operacionais, assegura que o usuário entenda o significado de cada elemento de uma forma muito simples, sem a necessidade de nenhum texto adicional. Dessa forma, a iconografia definida reforça a usabilidade e a acessibilidade do sistema, além de colaborar com a redução de erros operacionais ao longo das 24 horas de competição.
 
