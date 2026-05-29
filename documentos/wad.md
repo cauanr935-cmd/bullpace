@@ -2514,21 +2514,43 @@ ORDER BY cp.registrado_em DESC;
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
 
-A Matriz de Rastreabilidade de Requisitos (RTM) é uma ferramenta que mapeia o ciclo de vida completo de cada funcionalidade, ligando os requisitos pedidos às regras de negócio, desenvolvimento (telas e código) e testes correspondentes. Ela serve para garantir que tudo o que foi planejado foi efetivamente construído e testado, evitando pontas soltas ou entregas incompletas no projeto.
+A Matriz de Rastreabilidade de Requisitos (RTM) mapeia o ciclo de vida completo de cada funcionalidade, ligando os requisitos pedidos às regras de negócio, requisitos não funcionais, desenvolvimento (endpoints e telas) e testes correspondentes. Ela garante que tudo o que foi planejado foi efetivamente construído e testado, evitando pontas soltas ou entregas incompletas.
 
-| Persona | RF    | RN   | Endpoint    | Tela     | Teste | Evidência        |
-|---------|-------|------|-------------|----------|-------|------------------|
-| Promotor de Field Marketing | RF001 | RN01 | `/api/equipes` | Seleção de Equipe | CT01 | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF002 | RN02, RN11 | `/api/turnos` | Início de Turno | CT02 | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | Painel de Checkpoint | CT03 | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | Encerramento de Turno | CT04 | print, log, relatório de cobertura |
-| Coordenadora de operações de campo  | RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | Lançamento de Ajuste | CT05 | print, log, relatório de cobertura |
-| Coordenadora / Promotor | RF006 | RN08 | `/api/placar/tempo` | Placar Geral (Modo TV) | CT06 | print, log, relatório de cobertura |
-|Coordenadora de operações de campo  | RF007 | RN09, RN12 | `/api/estatisticas/trocas` | Dashboard Admin | CT07 | print, log, relatório de cobertura |
-| Coordenadora / Promotor | RF008 | RN13, RN14 | `/api/placar/geral` | Placar Geral (Modo TV) | CT08 | print, log, relatório de cobertura |
-| Coordenadora / Promotor | RF009 | RN15 | `/api/placar/geral` | Placar Geral (Modo TV) | CT09 | print, log, relatório de cobertura |
-| Coordenadora / Promotor | RF010 | - | `/api/placar/geral` | Placar Geral (Modo TV) | CT10 | print, log, relatório de cobertura |
-| Coordenadora de operações | RF011 | - | `/api/relatorios/exportar` | Exportação (Admin) | CT11 | print, log, relatório de cobertura |
+A coluna **Status** indica o estado de implementação de cada RF na sprint atual: 
+
+- **Implementado** - RF com endpoint funcional acessível pela API e cobertura mínima de testes automatizados. Reflete entrega técnica utilizável pelo front-end, mesmo que a validação completa das regras de negócio associadas esteja prevista para sprints seguintes.
+- **Em desenvolvimento** - RF planejado e documentado, com endpoint e testes ainda a definir. A funcionalidade está prevista para entrega em sprints seguintes, conforme planejamento descrito na seção de evolução do projeto.
+
+Os RNFs **USAB02** (área de toque 44pt), **PORT** (acesso via URL sem instalação), **COMP** (compatibilidade Safari/Chrome iOS/Android/Desktop) e **MANUT01** (arquitetura MVC) são transversais a todos os RFs com interface e camada de aplicação, e não são repetidos linha a linha para evitar redundância.
+
+| Persona | RF | RN | RNFs Relacionados | Endpoint | Tela | Teste | Status | Evidência |
+|---|---|---|---|---|---|---|---|---|
+| Promotor / Gestora | RF001 | — | USAB01 | (em desenvolvimento) | Seleção de Perfil | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor / Gestora | RF002 | RN04, RN05, RN06 | USAB01, SEG01 | (em desenvolvimento) | Login | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor / Gestora | RF003 | RN07 | — | (em desenvolvimento) | Cabeçalho / Menu | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF004 | RN01, RN08 | USAB01 | `GET /api/equipes` | Seleção de Equipe | CT01 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF005 | RN02, RN08, RN11 | USAB01 | `GET /api/atletas` | Seleção de Atleta | CT02 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF006 | RN03 | USAB01 | `GET /api/esteiras` | Status de Esteiras | CT03 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF007 | RN08, RN12, RN13 | USAB01 | `POST /api/turnos` | Associação de Esteira | CT04 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF008 | RN08, RN14, RN15, RN23 | USAB01, DES01, SEG01, CAP, MANUT02 | `POST /api/turnos` | Início de Turno | CT05 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF009 | RN08, RN14, RN18, RN19, RN20 | USAB01, DES01, SEG01, MANUT02 | `PATCH /api/turnos/{id}/encerrar` | Encerramento de Turno | CT06 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF010 | RN08, RN16, RN20, RN22, RN23, RN24 | USAB01, USAB03, DES01, CONF01, SEG01, CAP, MANUT02, REST | `POST /api/checkpoints` | Painel de Checkpoint | CT07 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF011 | RN25 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF012 | RN21 | SEG01 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF013 | RN17 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF014 | — | USAB01 | (em desenvolvimento) | Resultado do Turno | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF015 | RN26 | — | (em desenvolvimento) | Consulta de Histórico | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF016 | RN09, RN20, RN26, RN27 | USAB03, SEG02, MANUT02 | `PUT /api/checkpoints/{id}` | Correção de Registro | CT08 | Implementado | print, log, relatório de cobertura |
+| Gestora de Operações | RF017 | RN28, RN29 | SEG02 | (em desenvolvimento) | Correção de Registro | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF018 | RN10 | — | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF019 | RN09, RN29 | SEG02 | (em desenvolvimento) | Histórico de Alterações | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF020 | RN09, RN30 | — | (em desenvolvimento) | Finalização de Equipe | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF021 | RN27 | SEG02 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF022 | RN32, RN33 | — | `GET /api/placar/geral` | Resultados Consolidados | CT09 | Implementado | print, log, relatório de cobertura |
+| Promotor / Gestora | RF023 | RN31 | DES02 | `GET /api/placar/geral` | Modo TV | CT10 | Implementado | print, log, relatório de cobertura |
+| Gestora de Operações | RF024 | RN33, RN34, RN35 | DES02 | (em desenvolvimento) | Comparação Final | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF025 | RN36 | — | `GET /api/relatorios/exportar` | Exportação | CT11 | Implementado | print, log, arquivo CSV |
+| Promotor de Field Marketing | RF026 | RN37, RN38 | CONF01, CAP | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
