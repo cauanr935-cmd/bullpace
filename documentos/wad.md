@@ -1093,17 +1093,17 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 | RF    | RN associadas | Endpoint    | Método |
 |-------|---------------|-------------|--------|
-| RF001 | RN01 | `/api/equipes` | GET |
-| RF002 | RN02, RN11 | `/api/turnos` | POST |
-| RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | POST |
-| RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | PATCH |
-| RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | PUT |
-| RF006 | RN08 | `/api/placar/tempo` | GET |
-| RF007 | RN09, RN12 | `/api/estatisticas/trocas` | GET |
-| RF008 | RN13, RN14 | `/api/placar/geral` | GET |
-| RF009 | RN15 | `/api/placar/geral` | GET |
-| RF010 | - | `/api/placar/geral` | GET |
-| RF011 | - | `/api/relatorios/exportar` | GET |
+| RF004 | RN01, RN08 | `/api/equipes` | GET |
+| RF005 | RN02, RN08, RN11 | `/api/atletas` | GET |
+| RF006 | RN03 | `/api/esteiras` | GET |
+| RF008 | RN08, RN14, RN15, RN23 | `/api/turnos` | POST |
+| RF009 | RN08, RN14, RN18, RN19, RN20 | `/api/turnos/{id}/encerrar` | PATCH |
+| RF010 | RN08, RN16, RN20, RN22, RN23, RN24 | `/api/checkpoints` | POST |
+| RF016 | RN09, RN20, RN26, RN27 | `/api/checkpoints/{id}` | PUT |
+| RF022 | RN32, RN33 | `/api/placar/geral` | GET |
+| RF023 | RN31 | `/api/placar/geral` | GET |
+| RF024 | RN33, RN34, RN35 | `/api/placar/geral` | GET |
+| RF025 | RN36 | `/api/relatorios/exportar` | GET |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
