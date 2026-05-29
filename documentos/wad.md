@@ -1491,7 +1491,6 @@ Fluxo crítico do painel visual (Modo TV). O PlacarService aciona a função de 
 
 Fluxo administrativo em que o coordenador altera a experiência do público. A função no controlador dispara uma instrução direta de atualização (UPDATE) no cliente de configuração global do Supabase, modificando o estado lógico da coluna de suspense na tabela de eventos para o evento corrente.
 
----
 
 ### Módulo: Sessões Operacionais
 
@@ -1515,7 +1514,6 @@ Inicia o período de trabalho do operador registrando sua função e o evento as
 
 Registra a saída do operador do painel de controle. O SessaoService aciona o encerramento fornecendo o identificador da sessão; o sistema injeta o timestamp corrente do servidor (fim_em) e atualiza o estado do registro para 'encerrada', salvando e blindando o histórico de auditoria.
 
----
 
 ### Módulo: Turnos
 
@@ -1549,7 +1547,65 @@ Conclui o ciclo de corrida de um participante. O TurnoService repassa o identifi
 
 ### 3.2.7. Padrões de Projeto Aplicados (sprints 3 a 5)
 
-*Documente os design patterns utilizados (Repository, Strategy, Factory, DTO etc.) e quais princípios SOLID se aplicam. Justifique a adoção de cada padrão com base em uma necessidade real do projeto.*
+Essa seção documenta os padrões de projeto adotados, apresentando a justificativa de cada escolha com base nas necessidades reais identificadas. Os padrões foram selecionados para resolver problemas de organização do código, separação de responsabilidades da solução ao longo das 24 horas de operação do evento.
+
+#### Repository
+
+O padrão Repository foi aplicado para isolar o acesso ao banco de dados do restante da aplicação. Cada entidade do possui seu próprio repositório, como `TurnoRepository`, `CheckpointRepository` e `EsteiraRepository`, concentrando todos os comandos SQL executados.
+
+A justificativa está diretamente ligada ao contexto. O BullPace precisa garantir que alterações nas regras de negócio, não impactem a camada de persistência. Com o Repository, qualquer mudança de query ou de estrutura de tabela fica restrita a um único ponto do código, sem necessidade de ajuste nos Services ou Controllers.
+
+Além disso, o padrão facilita a criação de testes automatizados. Os Services podem ser testados isolados, utilizando repositórios simulados, o que é essencial para validar as regras de negócio críticas do sistema, como a progressão obrigatória do KM acumulado (RN16) e vinculação de checkpoint a turno ativo (RN23), sem depender de uma conexão real com o banco durante os testes.
+
+No contexto do projeto, o isolamento oferecido pelo Repository também reduz o risco operacional. Como o evento dura 24 horas, qualquer instabilidade que exija manutenção emergencial no banco precisa ser resolvida no menor número de arquivos possível. O padrão garante que esse escopo seja previsível e delimitado.
+
+#### Service Layer
+
+O padrão Service Layer foi adotado para centralizar a lógica de negócio em uma camada específica, mantendo os Controllers focados exclusivamente no contrato HTTP e os Repositories restritos ao acesso ao banco.
+
+A necessidade desse padrão ficou clara ao longo do desenvolvimento das regras de negócio (seção 3.1.2). A obrigatoriedade do KM acumulado no registro de checkpoint (RN22), o bloqueio de turnos em esteiras já ocupadas (RN13 e RN14) e o cálculo automático de pace médio quando o campo não é preenchido manualmente (RN25) precisavam de um local específico para residir, sem contaminar a apresentação e a persistência.
+
+Na prática, o `CheckpointService` é responsável por executar três validações antes de qualquer inserção no banco: verificar se o turno está ativo, confirmar que o KM acumulado foi informado e garantir que o novo valor não é inferior ao último checkpoint registrado. Após essas verificações o objeto é encaminhado ao `CheckpointRepository` para persistência (Diagrama de Sequência da seção 3.2.4).
+
+O padrão também cumpre o requisito não funcional MANUT01, que exige separação estrita entre as camadas de modo que as alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência.
+
+#### Data Transfer Object (DTO)
+
+O padrão DTO foi utilizado para estruturar os dados que estão entre as camadas da aplicação, evitando que objetos do banco de dados sejam expostos diretamente nas respostas da API ou que dados desnecessários circulem entre as camadas internas.
+
+Esse padrão se torna relevante principalmente no contexto dos checkpoints/turnos. Quando o `CheckpointService` monta o objeto antes de enviá-lo ao `CheckpointRepository`, ele constrói uma estrutura com campos muito bem definidos, incluindo o timestamp automatico gerado pelo servidor conforme a RN21, e exclui campos que não devem ser manipulados, como o campo `is_ajuste`, que identifica correções feitas pela Gestora de Operações.
+
+A adoção do DTO também contribui para a segurança da aplicação. Como dito  no requisito SEG01, o timestamp registrado não pode ser enviado pelo cliente nem editado manualmente. O DTO garante que esse campo seja sempre descartado antes de chegar ao banco.
+
+#### Singleton
+
+O padrão foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
+
+A justificativa para esse padrão está nos requisitos de desempenho e confiabilidade. O requisito DES01 exige que as ações do fluxo principal respondam em menos de 1.000 ms no percentil 95. Criar e destruir conexões com o banco a cada requisição introduziria latência desnecessária, especialmente em momentos de maior volume de registros, como os picos de checkpoints simultâneos das duas equipes operando ao mesmo tempo.
+
+Além disso também reduz o risco de esgotamento do pool de conexões durante as 24 horas do evento, cenário esse que poderia comprometer o requisito de disponibilidade CONF02, que exige um tempo de funcionamento mínimo de aproximadamente 98% durante o evento.
+
+#### Middleware de Autenticação
+
+O padrão foi adotado para separar a lógica de verificação de autenticação e autorização do código de negócio dos Controllers. Em vez de cada rota verificar individualmente se o usuário está autenticado e qual é o seu perfil, essa responsabilidade foi extraída para um middleware que é reutilizável e que intercepta as requisições antes de chegarem ao Controller correspondente.
+
+Esse padrão responde diretamente às regras de negócio RN08 e RN09, que limitam ações operacionais para o Promotor de Field Marketing e ações administrativas à Gestora de Operações. Como o middleware é aplicado nas rotas antes do processamento, o Controller nunca chega a executar sua lógica caso o usuário não possua o perfil adequado, diminuindo a superfície de erros relacionados a autorização.
+
+A separação também facilita a manutenção. Caso as regras de autorização precisem ser ajustadas, a alteração ocorre em um único ponto sem precisar revisar cada Controller de forma individual.
+
+#### Princípios SOLID Aplicados
+
+Os padrões descritos acima foram adotados em conjunto com os princípios SOLID, que orientam a estrutura da aplicação de forma mais aberta.
+
+O **Princípio da Responsabilidade Única** é o que sustenta toda a arquitetura em camadas. Controller, Service, Repository e Model têm responsabilidades bem definidas e que não se sobrepõem. O `TurnoController`, por exemplo, nunca contém validações de KM, e o `TurnoRepository` nunca toma decisões de negócio sobre quando um turno pode ser encerrado.
+
+O **Princípio Aberto-Fechado** foi considerado na modelagem das funções de usuário. A entidade `Funcao` foi projetada para permitir que novos perfis sejam adicionados sem modificar o código existente dos Services que verificam permissões. Um novo perfil de acesso pode ser implementado na tabela de funções e tratado pelo middleware sem que os Controllers precisem ser alterados.
+
+O **Princípio da Inversão de Dependências** se manifesta na relação entre Services e Repositories. Os Services dependem de abstrações dos Repositories e não de implementações concretas, o que permite substituir o Supabase por outro provedor sem impacto na camada de negócio. 
+
+#### Justificativa Geral
+
+Portanto, conclui-se que a combinação dos padrões Repository, Service Layer, DTO, Singleton e Middleware de Autenticação foi escolhida pois cada um resolve um problema específicoe: isolamento do banco, concentração de regras de negócio, controle de dados expostos pela API, eficiência na gestão de conexões e separação da lógica de autorização.
 
 ## 3.3. Wireframes (sprint 2)
 
