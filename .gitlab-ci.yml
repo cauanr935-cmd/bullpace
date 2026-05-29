@@ -1,9 +1,13 @@
 image: node:20
 
-deploy:
+pages:
   stage: deploy
   script:
     - npm ci
-    - npx railway up   # ou: curl para Render deploy hook
+    - npm run pages:build
+  artifacts:
+    paths:
+      - public
   only:
     - main
+    - developer

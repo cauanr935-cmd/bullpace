@@ -9,6 +9,9 @@ import path from 'path';
 // Importa o client do Supabase para ler e escrever dados no banco.
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
+// Importa o EJS para renderizar o arquivo HTML que ainda usa variaveis dinamicas.
+const ejs = require('ejs');
+
 // Cria a aplicacao Express que vai receber as requisicoes do navegador.
 const app = express();
 
@@ -16,8 +19,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configura o EJS como motor de views e define onde ficam os arquivos visuais.
-app.set('view engine', 'ejs');
+// Configura arquivos .html para serem renderizados pelo EJS e define onde ficam os arquivos visuais.
+app.engine('html', ejs.renderFile);
+app.set('view engine', 'html');
 app.set('views', path.join(process.cwd(), 'src', 'View'));
 
 // Libera arquivos estaticos, como o style.css, pela rota /static.
@@ -175,6 +179,29 @@ const esteiras = [
   { nome: 'Esteira 02', status: 'Em manutenção', tipo: 'manutencao' }
 ];
 
+const obterInicioTurno = (valor: unknown): number => {
+  const timestamp = Number(valor);
+  return Number.isFinite(timestamp) && timestamp > 0 ? timestamp : Date.now();
+};
+
+const formatarDuracao = (inicioTurnoTimestamp: number, duracaoFallback = '00:00:00'): string => {
+  if (!Number.isFinite(inicioTurnoTimestamp) || inicioTurnoTimestamp <= 0) {
+    return duracaoFallback;
+  }
+
+  const segundos = Math.max(0, Math.floor((Date.now() - inicioTurnoTimestamp) / 1000));
+  const horas = String(Math.floor(segundos / 3600)).padStart(2, '0');
+  const minutos = String(Math.floor((segundos % 3600) / 60)).padStart(2, '0');
+  const segundosRestantes = String(segundos % 60).padStart(2, '0');
+
+  return `${horas}:${minutos}:${segundosRestantes}`;
+};
+
+const formatarHorario = (timestamp: number): string => new Date(timestamp).toLocaleTimeString('pt-BR', {
+  hour: '2-digit',
+  minute: '2-digit'
+});
+
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou coordenador.
 app.get('/', (req: Request, res: Response): void => {
   res.render('index', {
@@ -196,7 +223,7 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
   // Se escolheu operador, renderiza a tela de operadores.
   if (funcao === 'operador') {
     res.render('index', {
-      // Mostra a segunda etapa do fluxo usando o mesmo index.ejs.
+      // Mostra a segunda etapa do fluxo usando o mesmo index.html.
       tela: 'operador',
       titulo: 'SELEÇÃO DE OPERADOR(A)',
       operadores
@@ -615,6 +642,7 @@ app.post('/voltar-atleta', (req: Request, res: Response): void => {
 
 app.post('/iniciar-turno', (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira } = req.body;
+  const inicioTurnoTimestamp = Date.now();
 
   res.render('index', {
     // Abre a tela de checkpoint com o turno em andamento.
@@ -623,12 +651,14 @@ app.post('/iniciar-turno', (req: Request, res: Response): void => {
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
-    esteiraSelecionada: esteira
+    esteiraSelecionada: esteira,
+    inicioTurnoTimestamp
   });
 });
 
 app.post('/finalizar-turno', (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira, kmFinal, duracaoTurno } = req.body;
+  const inicioTurnoTimestamp = obterInicioTurno(req.body.inicioTurnoTimestamp);
 
   res.render('index', {
     // Mostra uma conferencia antes de encerrar o turno e reiniciar o ciclo.
@@ -639,16 +669,15 @@ app.post('/finalizar-turno', (req: Request, res: Response): void => {
     atletaSelecionado: atleta,
     esteiraSelecionada: esteira,
     kmFinal: kmFinal || '0',
-    duracaoTurno: duracaoTurno || '00:00:00',
-    inicioTurno: new Date().toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+    duracaoTurno: formatarDuracao(inicioTurnoTimestamp, duracaoTurno || '00:00:00'),
+    inicioTurno: formatarHorario(inicioTurnoTimestamp),
+    inicioTurnoTimestamp
   });
 });
 
 app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira } = req.body;
+  const inicioTurnoTimestamp = obterInicioTurno(req.body.inicioTurnoTimestamp);
 
   res.render('index', {
     // Retorna para o turno em andamento caso o operador queira revisar os checkpoints.
@@ -657,7 +686,8 @@ app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
-    esteiraSelecionada: esteira
+    esteiraSelecionada: esteira,
+    inicioTurnoTimestamp
   });
 });
 
