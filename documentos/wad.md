@@ -1805,7 +1805,7 @@ A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter,
  <img src="../assets/bullpace_iconografia.png" width="100%"><br>
 *Fonte: Elaborado pelos autores (2026).*
 
-</div>
+A organização apresentada mostra que a padronização do conjunto de ícones contribui diretamente para a coerência visual da interface. A uniformidade no estilo gráfico dos ícones, junto ao uso das cores para estados operacionais, assegura que o usuário entenda o significado de cada elemento de uma forma muito simples, sem a necessidade de nenhum texto adicional. Dessa forma, a iconografia definida reforça a usabilidade e a acessibilidade do sistema, além de colaborar com a redução de erros operacionais ao longo das 24 horas de competição.
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
