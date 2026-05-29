@@ -1061,6 +1061,8 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 | **RN34** | **Critério de Vitória** | A equipe vencedora será aquela que possuir a maior quilometragem total consolidada ao final da competição. | RF024 |
 | **RN35** | **Tratamento de Empate** | Caso as duas equipes tenham a mesma quilometragem total consolidada, o sistema deve exibir o resultado como empate, sem destacar uma equipe vencedora. | RF024 |
 | **RN36** | **Escopo da Exportação CSV** | A exportação em CSV deve incluir todos os dados consolidados da competição: equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados, autoria das ações e histórico de correções com justificativas. | RF025 |
+| **RN37** | **Escopo do Cache Offline** | A persistência local durante indisponibilidade de rede é restrita a registros de checkpoint criados durante turno ativo; demais operações (início de turno, encerramento de turno, finalização de equipe, correções) exigem conexão ativa para execução. | RF026 |
+| **RN38** | **Timestamp em Cache Offline** | Registros de checkpoint criados em modo offline armazenam o timestamp do cliente como referência provisória, substituído pelo timestamp do servidor (RN21) no momento da sincronização efetiva com o backend. | RF026 |
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
