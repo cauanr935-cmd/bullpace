@@ -2135,11 +2135,24 @@ body {
 
 /* Adapta o layout para telas menores, como celular. */
 @media (max-width: 760px) {
-  .function-page {
-    padding: 12px;
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
-  .function-frame {
+  .function-page:not(.tv-public-page) {
+    min-height: 100vh;
+    max-height: none;
+    padding: 12px;
+    align-items: flex-start;
+    overflow: visible;
+  }
+
+  .function-frame:not(.tv-frame) {
+    height: auto;
     min-height: calc(100vh - 24px);
     padding: 56px 24px;
   }
