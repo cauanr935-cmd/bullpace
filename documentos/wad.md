@@ -2468,9 +2468,13 @@ ORDER BY cp.registrado_em DESC;
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.* 
+A documentação completa e navegável da WebAPI está disponível na página HTML [`documentos/webapi.html`](./webapi.html).
 
-*Cada endpoint deve conter endereço, método (GET, POST, PUT, PATCH, DELETE), header, body, formatos de response e os status codes possíveis (200, 201, 204, 400, 401, 403, 404, 409, 422, 500).*
+Quando o backend estiver em execução, a mesma documentação pode ser acessada pela rota:
+
+`GET /docs/webapi`
+
+A página documenta os endpoints implementados no servidor, incluindo endereço, método HTTP, headers relevantes, parâmetros de entrada, body, formato de response, status codes possíveis e vinculação explícita aos requisitos funcionais correspondentes.
 
 ## 3.8. Autenticação, Autorização e Resiliência (sprint 5)
 

@@ -27,6 +27,11 @@ app.set('views', path.join(process.cwd(), 'src', 'View'));
 // Libera arquivos estaticos, como o style.css, pela rota /static.
 app.use('/static', express.static(path.join(process.cwd(), 'src', 'View')));
 
+// Serve a documentacao navegavel da WebAPI solicitada na secao 3.7 do WAD.
+app.get('/docs/webapi', (req: Request, res: Response): void => {
+  res.sendFile(path.join(process.cwd(), 'documentos', 'webapi.html'));
+});
+
 // Busca no .env a URL do projeto Supabase.
 const supabaseUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_URL;
 // Busca no .env a chave anonima usada para autenticar as chamadas ao Supabase.
