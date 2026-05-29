@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentacao da WebAPI - Bull Pace</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --text: #1f2328;
+      --muted: #5f6672;
+      --line: #d8dee6;
+      --accent: #f59f00;
+      --accent-dark: #8a4f00;
+      --code: #f1f4f8;
+      --get: #0f766e;
+      --post: #1d4ed8;
+      --patch: #9333ea;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 32px max(24px, calc((100vw - 1180px) / 2));
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 56px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 34px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    a {
+      color: #0b5cad;
+    }
+
+    code,
+    pre {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    code {
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin: 8px 0 0;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 920px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .summary div,
+    .endpoint,
+    .note {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .summary div {
+      padding: 14px;
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .note {
+      padding: 16px;
+      border-left: 5px solid var(--accent);
+    }
+
+    .scope-grid,
+    .architecture-flow {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .scope-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .scope-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tag.implemented {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .tag.planned {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .architecture-flow {
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      align-items: stretch;
+    }
+
+    .architecture-step {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 92px;
+    }
+
+    .architecture-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 36px;
+      right: -13px;
+      color: var(--muted);
+      font-weight: 700;
+      background: var(--bg);
+      padding: 0 4px;
+    }
+
+    .architecture-step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .toc {
+      columns: 2;
+      padding-left: 20px;
+    }
+
+    .toc li {
+      break-inside: avoid;
+      margin-bottom: 5px;
+    }
+
+    .endpoint {
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    .endpoint-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .method {
+      color: #fff;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    .method.get {
+      background: var(--get);
+    }
+
+    .method.post {
+      background: var(--post);
+    }
+
+    .method.patch {
+      background: var(--patch);
+    }
+
+    .path {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .rf {
+      margin-left: auto;
+      color: var(--accent-dark);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .endpoint-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .field {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .field:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+      border-right: 0;
+    }
+
+    .field strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .status-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .status-list span {
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.86rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #fbfcfe;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 760px) {
+      .endpoint-body {
+        grid-template-columns: 1fr;
+      }
+
+      .field:nth-child(odd) {
+        border-right: 0;
+      }
+
+      .rf {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .toc {
+        columns: 1;
+      }
+
+      .architecture-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture-step:not(:last-child)::after {
+        content: "↓";
+        top: auto;
+        right: 50%;
+        bottom: -18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>3.7. WebAPI e endpoints</h1>
+    <p class="lead">
+      Documentacao navegavel da WebAPI do Bull Pace. Esta pagina descreve os endpoints implementados no backend atual,
+      seus contratos de entrada e saida, status codes possiveis e a vinculacao com os Requisitos Funcionais do sistema.
+    </p>
+    <div class="summary" aria-label="Resumo tecnico">
+      <div>
+        <strong>Base local</strong>
+        <code>http://localhost:3000</code>
+      </div>
+      <div>
+        <strong>Stack</strong>
+        Node.js, Express, TypeScript, EJS e Supabase
+      </div>
+      <div>
+        <strong>Formatos aceitos</strong>
+        JSON e formulario HTML
+      </div>
+      <div>
+        <strong>Autenticacao</strong>
+        Login visual; sem token JWT validado pelo backend atual
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="note" aria-label="Observacao de escopo">
+      <h2 style="margin-top:0">Escopo da documentacao</h2>
+      <p>
+        O servidor atual possui rotas de interface que renderizam HTML e uma API generica em <code>/api/:tabela</code>
+        para consulta e criacao de registros no Supabase. Os arquivos de controller, service, repository e model tambem
+        documentam contratos internos planejados, mas apenas as rotas registradas em <code>src/server.ts</code> estao
+        expostas via HTTP neste momento.
+      </p>
+      <p>
+        Nesta pagina, o termo <strong>Promotor</strong> representa o usuario operacional que registra turnos e
+        checkpoints. O termo <strong>Coordenadora</strong> representa o perfil administrativo que acompanha,
+        audita e finaliza a prova. Alguns nomes de rotas e campos ainda usam <code>operador</code> e
+        <code>coordenador</code> porque esses sao os identificadores implementados no codigo atual.
+      </p>
+      <p>
+        Status codes como <code>204</code>, <code>401</code>, <code>403</code>, <code>409</code> e <code>422</code>
+        sao listados como <strong>previstos para versoes futuras</strong> quando dependem de autenticacao, autorizacao
+        ou validacoes ainda nao implementadas explicitamente no backend atual.
+      </p>
+    </section>
+
+    <section aria-label="Escopo implementado e planejado">
+      <h2>Implementado x Planejado</h2>
+      <div class="scope-grid">
+        <div class="scope-card">
+          <span class="tag implemented">IMPLEMENTADO</span>
+          <strong>API REST generica</strong>
+          <p><code>GET /api/:tabela</code> e <code>POST /api/:tabela</code>, ambos registrados em <code>src/server.ts</code> e conectados ao Supabase.</p>
+        </div>
+        <div class="scope-card">
+          <span class="tag implemented">IMPLEMENTADO</span>
+          <strong>Rotas web HTML</strong>
+          <p>Fluxos de selecao de funcao, Promotor, equipe, atleta, esteira, turno, checkpoints visuais, painel da Coordenadora e Modo TV.</p>
+        </div>
+        <div class="scope-card">
+          <span class="tag planned">PLANEJADO</span>
+          <strong>Endpoints REST especificos</strong>
+          <p>Contratos como <code>/api/turnos/:id/finalizar</code>, <code>/api/checkpoints/turno/:idTurno</code> e <code>/api/placar/:idEvento</code>.</p>
+        </div>
+        <div class="scope-card">
+          <span class="tag planned">PLANEJADO</span>
+          <strong>Autenticacao e autorizacao</strong>
+          <p>Uso real de <code>Authorization</code>, retorno de <code>401</code> e retorno de <code>403</code> por permissao de perfil.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Arquitetura simples da WebAPI">
+      <h2>Arquitetura da WebAPI</h2>
+      <div class="architecture-flow">
+        <div class="architecture-step">
+          <strong>Frontend</strong>
+          <span>iPad, navegador e telas HTML/EJS.</span>
+        </div>
+        <div class="architecture-step">
+          <strong>Controller</strong>
+          <span>Recebe req/res e devolve status HTTP.</span>
+        </div>
+        <div class="architecture-step">
+          <strong>Service</strong>
+          <span>Aplica regras de negocio e validacoes.</span>
+        </div>
+        <div class="architecture-step">
+          <strong>Repository</strong>
+          <span>Isola consultas e persistencia.</span>
+        </div>
+        <div class="architecture-step">
+          <strong>Supabase</strong>
+          <span>Banco PostgreSQL usado pela aplicacao.</span>
+        </div>
+      </div>
+      <p class="lead">
+        A API generica atual acessa o Supabase diretamente em <code>src/server.ts</code>. Os contratos planejados
+        indicam a evolucao esperada para o fluxo completo <code>Frontend → Controller → Service → Repository → Supabase</code>.
+      </p>
+    </section>
+
+    <h2>Indice</h2>
+    <ol class="toc">
+      <li><a href="#api-get-tabela">GET /api/:tabela</a></li>
+      <li><a href="#api-post-tabela">POST /api/:tabela</a></li>
+      <li><a href="#web-fluxo-acesso">Rotas web de acesso</a></li>
+      <li><a href="#web-operacao">Rotas web de operacao</a></li>
+      <li><a href="#web-coordenacao">Rotas web da Coordenadora</a></li>
+      <li><a href="#web-tv">Rotas web de Modo TV</a></li>
+      <li><a href="#contratos-planejados">Endpoints REST planejados</a></li>
+    </ol>
+
+    <h2>Headers Gerais</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Header</th>
+          <th>Quando usar</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Content-Type</code></td>
+          <td>Requisicoes com JSON</td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>Content-Type</code></td>
+          <td>Requisicoes feitas por formularios HTML</td>
+          <td><code>application/x-www-form-urlencoded</code></td>
+        </tr>
+        <tr>
+          <td><code>Accept</code></td>
+          <td>Endpoints de API</td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>Authorization</code></td>
+          <td>Reservado para autenticacao futura</td>
+          <td><code>Bearer &lt;token&gt;</code> ainda nao validado pelo backend atual</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>API REST Implementada</h2>
+
+    <article id="api-get-tabela" class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/api/:tabela</span>
+        <span class="rf">RF001, RF002, RF003, RF007, RF011, RF014, RF015, RF016, RF017</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field">
+          <strong>Descricao</strong>
+          Consulta todos os registros de uma tabela do Supabase informada na URL.
+        </div>
+        <div class="field">
+          <strong>Parametros de entrada</strong>
+          <code>tabela</code> no path. Exemplos: <code>atletas</code>, <code>eventos</code>, <code>esteiras</code>,
+          <code>turnos</code>, <code>checkpoints</code>, <code>sessoes_operacionais</code>.
+        </div>
+        <div class="field">
+          <strong>Headers relevantes</strong>
+          <code>Accept: application/json</code>
+        </div>
+        <div class="field">
+          <strong>Body</strong>
+          Nao possui body.
+        </div>
+        <div class="field full">
+          <strong>Formato de resposta 200</strong>
+          <pre><code>[
+  {
+    "id_atleta": 1,
+    "id_equipe": 1,
+    "nome": "Rafael Luz",
+    "status": "ativo"
+  }
+]</code></pre>
+        </div>
+        <div class="field">
+          <strong>Status codes possiveis</strong>
+          <div class="status-list">
+            <span>200 consulta realizada</span>
+            <span>400 tabela invalida, se validacao for adicionada</span>
+            <span>401 futuro: autenticacao ausente</span>
+            <span>403 futuro: permissao insuficiente</span>
+            <span>404 rota inexistente ou tabela nao encontrada</span>
+            <span>500 erro interno/Supabase</span>
+          </div>
+        </div>
+        <div class="field">
+          <strong>Vinculacao ao RF</strong>
+          Apoia consultas de entidades usadas em selecao de equipe, atleta, esteira, checkpoints, placar, resultado e exportacao.
+        </div>
+      </div>
+    </article>
+
+    <article id="api-post-tabela" class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="path">/api/:tabela</span>
+        <span class="rf">RF005, RF006, RF007, RF009</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field">
+          <strong>Descricao</strong>
+          Insere um novo registro na tabela do Supabase informada na URL.
+        </div>
+        <div class="field">
+          <strong>Parametros de entrada</strong>
+          <code>tabela</code> no path. O corpo deve seguir as colunas da tabela escolhida.
+        </div>
+        <div class="field">
+          <strong>Headers relevantes</strong>
+          <code>Content-Type: application/json</code> e <code>Accept: application/json</code>.
+        </div>
+        <div class="field">
+          <strong>Body exemplo</strong>
+          <pre><code>{
+  "id_equipe": 1,
+  "nome": "Rafael Luz",
+  "status": "ativo"
+}</code></pre>
+        </div>
+        <div class="field full">
+          <strong>Formato de resposta 201</strong>
+          <pre><code>[
+  {
+    "id_atleta": 1,
+    "id_equipe": 1,
+    "nome": "Rafael Luz",
+    "status": "ativo"
+  }
+]</code></pre>
+        </div>
+        <div class="field">
+          <strong>Status codes possiveis</strong>
+          <div class="status-list">
+            <span>201 criado</span>
+            <span>400 body malformado</span>
+            <span>401 futuro: autenticacao ausente</span>
+            <span>403 futuro: permissao insuficiente</span>
+            <span>404 tabela nao encontrada</span>
+            <span>409 conflito de regra de negocio</span>
+            <span>422 dados invalidos para constraints</span>
+            <span>500 erro interno/Supabase</span>
+          </div>
+        </div>
+        <div class="field">
+          <strong>Vinculacao ao RF</strong>
+          Apoia criacao de registros operacionais como turnos, checkpoints e timestamps automaticos.
+        </div>
+      </div>
+    </article>
+
+    <h2 id="web-fluxo-acesso">Rotas Web de Acesso</h2>
+
+    <article class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/</span>
+        <span class="rf">RF relacionado: acesso inicial/US01</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field"><strong>Descricao</strong>Tela inicial para escolha entre Promotor e Coordenadora.</div>
+        <div class="field"><strong>Entrada</strong>Sem parametros e sem body.</div>
+        <div class="field"><strong>Headers</strong><code>Accept: text/html</code></div>
+        <div class="field"><strong>Response</strong>HTML renderizado com <code>tela: funcao</code>.</div>
+        <div class="field full"><strong>Status codes</strong><div class="status-list"><span>200</span><span>500 falha de renderizacao</span></div></div>
+      </div>
+    </article>
+
+    <article class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="path">/selecionar-funcao</span>
+        <span class="rf">RF relacionado: acesso inicial/US01</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field"><strong>Descricao</strong>Define o fluxo inicial: Promotor ou Coordenadora.</div>
+        <div class="field"><strong>Body</strong><pre><code>{ "funcao": "operador" }</code></pre> ou <pre><code>{ "funcao": "coordenador" }</code></pre></div>
+        <div class="field"><strong>Headers</strong><code>Content-Type: application/x-www-form-urlencoded</code> ou <code>application/json</code>.</div>
+        <div class="field"><strong>Response</strong>HTML da selecao do Promotor, HTML de login da Coordenadora ou redirect para <code>/</code>.</div>
+        <div class="field full"><strong>Status codes</strong><div class="status-list"><span>200</span><span>302 funcao invalida</span><span>400 body invalido, se validado futuramente</span><span>500</span></div></div>
+      </div>
+    </article>
+
+    <article class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="path">/login-coordenador</span>
+        <span class="rf">RF relacionado: US04</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field"><strong>Descricao</strong>Login visual da Coordenadora. Atualmente valida apenas se nome e senha foram preenchidos.</div>
+        <div class="field"><strong>Body</strong><pre><code>{
+  "coordenador": "Camila Rocha",
+  "senha": "senha"
+}</code></pre></div>
+        <div class="field"><strong>Headers</strong><code>Content-Type: application/x-www-form-urlencoded</code> ou <code>application/json</code>.</div>
+        <div class="field"><strong>Response</strong>HTML do painel da prova ou HTML do login com mensagem de preenchimento.</div>
+        <div class="field full"><strong>Status codes</strong><div class="status-list"><span>200</span><span>400 campos ausentes, se validado futuramente</span><span>401 futuro: credenciais invalidas, se autenticacao real for adicionada</span><span>500</span></div></div>
+      </div>
+    </article>
+
+    <h2 id="web-operacao">Rotas Web de Operacao do Promotor</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Metodo</th>
+          <th>Endpoint</th>
+          <th>RF vinculado</th>
+          <th>Body/parametros</th>
+          <th>Response</th>
+          <th>Status codes possiveis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td><code>/operador</code></td>
+          <td>US02</td>
+          <td>Nenhum</td>
+          <td>HTML de selecao do Promotor</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/selecionar-operador</code></td>
+          <td>US02</td>
+          <td><code>operador</code></td>
+          <td>HTML com Promotor selecionado</td>
+          <td>200, 400, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/continuar-operador</code></td>
+          <td>RF001</td>
+          <td><code>operador</code></td>
+          <td>HTML de selecao de equipe</td>
+          <td>200, 400, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-operador</code></td>
+          <td>US02</td>
+          <td><code>operador</code></td>
+          <td>HTML de selecao do Promotor</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/selecionar-equipe</code></td>
+          <td>RF001</td>
+          <td><code>operador</code>, <code>equipe</code></td>
+          <td>HTML com equipe selecionada</td>
+          <td>200, 400, 404, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/continuar-equipe</code></td>
+          <td>RF002, RF003</td>
+          <td><code>operador</code>, <code>equipe</code></td>
+          <td>HTML de selecao de atleta e status das esteiras</td>
+          <td>200, 400, 404, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-equipe</code></td>
+          <td>RF001</td>
+          <td><code>operador</code>, <code>equipe</code></td>
+          <td>HTML de selecao de equipe</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/selecionar-atleta</code></td>
+          <td>RF002</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>ultimoAtleta</code></td>
+          <td>HTML com atleta selecionado ou bloqueio visual de repeticao</td>
+          <td>200, 400, 409, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/continuar-atleta</code></td>
+          <td>RF002, RF004</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>ultimoAtleta</code></td>
+          <td>HTML de selecao de esteira</td>
+          <td>200, 400, 409, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/selecionar-esteira</code></td>
+          <td>RF003, RF004</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>esteira</code></td>
+          <td>HTML com esteira selecionada</td>
+          <td>200, 400, 404, 409, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-atleta</code></td>
+          <td>RF002</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code></td>
+          <td>HTML de selecao de atleta</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/iniciar-turno</code></td>
+          <td>RF005, RF009</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>esteira</code></td>
+          <td>HTML do turno ativo com timestamp local de inicio</td>
+          <td>200, 400, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/finalizar-turno</code></td>
+          <td>RF006, RF011</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>esteira</code>, <code>kmFinal</code>, <code>duracaoTurno</code>, <code>inicioTurnoTimestamp</code></td>
+          <td>HTML de conferencia do encerramento</td>
+          <td>200, 400, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-checkpoint</code></td>
+          <td>RF007, RF010</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code>, <code>esteira</code>, <code>inicioTurnoTimestamp</code></td>
+          <td>HTML do turno ativo</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/confirmar-encerramento</code></td>
+          <td>RF006</td>
+          <td><code>operador</code>, <code>equipe</code>, <code>atleta</code></td>
+          <td>HTML de selecao de atletas da mesma equipe, com ultimo atleta bloqueado</td>
+          <td>200, 400, 409, 500</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="web-coordenacao">Rotas Web da Coordenadora</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Metodo</th>
+          <th>Endpoint</th>
+          <th>RF vinculado</th>
+          <th>Body/parametros</th>
+          <th>Response</th>
+          <th>Status codes possiveis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-login-coordenador</code></td>
+          <td>US04</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de login</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-painel-coordenador</code></td>
+          <td>RF014, RF015</td>
+          <td><code>coordenador</code></td>
+          <td>HTML do painel geral</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/modo-tv</code></td>
+          <td>RF015</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de controle do placar publico</td>
+          <td>200, 401 futuro, 403 futuro, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/fechamento</code></td>
+          <td>RF012, RF014, RF016</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de fechamento</td>
+          <td>200, 401 futuro, 403 futuro, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/finalizar-prova</code></td>
+          <td>RF012, RF013, RF016</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de confirmacao de encerramento</td>
+          <td>200, 401 futuro, 403 futuro, 409, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/confirmar-finalizacao</code></td>
+          <td>RF012, RF013, RF016</td>
+          <td><code>coordenador</code>, <code>confirmaBloqueio</code></td>
+          <td>HTML de resultado oficial ou mensagem solicitando confirmacao</td>
+          <td>200, 400, 401 futuro, 403 futuro, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/publicar-resultado</code></td>
+          <td>RF016</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de confirmacao de publicacao</td>
+          <td>200, 401 futuro, 403 futuro, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/confirmar-publicacao</code></td>
+          <td>RF016</td>
+          <td>Nenhum obrigatorio</td>
+          <td>HTML publico do resultado oficial</td>
+          <td>200, 401 futuro, 403 futuro, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-fechamento</code></td>
+          <td>RF012, RF014</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de fechamento</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/voltar-resultado-oficial</code></td>
+          <td>RF016</td>
+          <td><code>coordenador</code></td>
+          <td>HTML de resultado oficial privado</td>
+          <td>200, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/detalhes-equipe</code></td>
+          <td>RF014, RF015</td>
+          <td><code>coordenador</code>, <code>equipe</code></td>
+          <td>HTML com checkpoints mockados da equipe</td>
+          <td>200, 400, 401 futuro, 403 futuro, 404, 500</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td><code>/filtro-atletas-equipe</code></td>
+          <td>RF014, RF015</td>
+          <td><code>coordenador</code>, <code>equipe</code>, <code>atleta</code> opcional</td>
+          <td>HTML com filtro de atletas da equipe</td>
+          <td>200, 400, 401 futuro, 403 futuro, 404, 500</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="web-tv">Rotas Web de Modo TV</h2>
+
+    <article class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/tv</span>
+        <span class="rf">RF015</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field"><strong>Descricao</strong>Tela publica somente leitura com placar ao vivo mockado.</div>
+        <div class="field"><strong>Entrada</strong>Sem parametros e sem body.</div>
+        <div class="field"><strong>Headers</strong><code>Accept: text/html</code></div>
+        <div class="field"><strong>Response</strong>HTML com <code>equipesPainel</code>.</div>
+        <div class="field full"><strong>Status codes</strong><div class="status-list"><span>200</span><span>500</span></div></div>
+      </div>
+    </article>
+
+    <article class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="path">/tv-resultado</span>
+        <span class="rf">RF016</span>
+      </div>
+      <div class="endpoint-body">
+        <div class="field"><strong>Descricao</strong>Tela publica final com resultado oficial mockado.</div>
+        <div class="field"><strong>Entrada</strong>Sem parametros e sem body.</div>
+        <div class="field"><strong>Headers</strong><code>Accept: text/html</code></div>
+        <div class="field"><strong>Response</strong>HTML com <code>resultadoOficial</code> e <code>rankingFechamento</code>.</div>
+        <div class="field full"><strong>Status codes</strong><div class="status-list"><span>200</span><span>500</span></div></div>
+      </div>
+    </article>
+
+    <h2 id="contratos-planejados">Endpoints REST Planejados</h2>
+    <p>
+      Os contratos abaixo aparecem como funcoes, controllers ou services internos, mas ainda nao foram registrados
+      como endpoints HTTP no Express. Eles servem como base para evoluir a WebAPI REST nas proximas sprints.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Contrato sugerido</th>
+          <th>Metodo</th>
+          <th>Body/parametros</th>
+          <th>Response esperado</th>
+          <th>RF</th>
+          <th>Status codes recomendados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/api/atletas</code></td>
+          <td>GET</td>
+          <td>Nenhum</td>
+          <td>Lista de atletas: <code>id_atleta</code>, <code>id_equipe</code>, <code>nome</code>, <code>status</code></td>
+          <td>RF002</td>
+          <td>200, 401 futuro, 403 futuro, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/atletas</code></td>
+          <td>POST</td>
+          <td><code>nome</code>, <code>equipe</code></td>
+          <td>Atleta criado</td>
+          <td>RF002</td>
+          <td>201, 400, 401 futuro, 403 futuro, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/sessoes</code></td>
+          <td>POST</td>
+          <td><code>id_evento</code>, <code>id_funcao</code>, <code>inicio_em</code></td>
+          <td>Sessao com <code>status: ativa</code></td>
+          <td>RF009</td>
+          <td>201, 400, 401 futuro, 403 futuro, 422, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/sessoes/:id/encerrar</code></td>
+          <td>PATCH</td>
+          <td><code>id</code> no path</td>
+          <td>Sessao com <code>status: encerrada</code></td>
+          <td>RF009</td>
+          <td>200, 204, 400, 401 futuro, 403 futuro, 404, 409, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/turnos</code></td>
+          <td>POST</td>
+          <td><code>id_atleta</code>, <code>id_esteira</code>, <code>id_sessao_operacional</code>, <code>horario_inicio</code></td>
+          <td>Turno com <code>status: em_andamento</code></td>
+          <td>RF005, RF009</td>
+          <td>201, 400, 401 futuro, 403 futuro, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/turnos/:id/finalizar</code></td>
+          <td>PATCH</td>
+          <td><code>id</code> no path, <code>kmFinal</code> no body</td>
+          <td>Turno com <code>status: encerrado</code></td>
+          <td>RF006, RF011</td>
+          <td>200, 204, 400, 401 futuro, 403 futuro, 404, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/checkpoints</code></td>
+          <td>POST</td>
+          <td><code>id_turno</code>, <code>id_sessao_operacional</code>, <code>km_acumulado</code>, <code>pace_medio</code>, <code>velocidade_media</code>, <code>registrado_em</code>, <code>is_ajuste</code></td>
+          <td>Checkpoint criado</td>
+          <td>RF007, RF008, RF009, RF010</td>
+          <td>201, 400, 401 futuro, 403 futuro, 409, 422, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/checkpoints/turno/:idTurno</code></td>
+          <td>GET</td>
+          <td><code>idTurno</code> no path</td>
+          <td>Lista de checkpoints do turno</td>
+          <td>RF007, RF014</td>
+          <td>200, 401 futuro, 403 futuro, 404, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/placar/:idEvento</code></td>
+          <td>GET</td>
+          <td><code>idEvento</code> no path</td>
+          <td><code>id_evento</code>, <code>modo_tv_bloqueado</code>, <code>atualizado_em</code>, <code>classificacao</code></td>
+          <td>RF015, RF016</td>
+          <td>200, 401 futuro, 403 futuro, 404, 500</td>
+        </tr>
+        <tr>
+          <td><code>/api/placar/:idEvento/bloqueio-tv</code></td>
+          <td>PATCH</td>
+          <td><code>idEvento</code> no path, <code>bloquear</code> booleano no body</td>
+          <td>Sem conteudo ou status atualizado</td>
+          <td>RF015</td>
+          <td>200, 204, 400, 401 futuro, 403 futuro, 404, 500</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Formato Padrao de Erro</h2>
+    <p>API generica atual:</p>
+    <pre><code>{
+  "error": "mensagem retornada pelo Supabase"
+}</code></pre>
+    <p>Controllers internos:</p>
+    <pre><code>{
+  "message": "mensagem de validacao ou erro interno"
+}</code></pre>
+  </main>
+</body>
+</html>
