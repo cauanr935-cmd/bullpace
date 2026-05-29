@@ -1732,14 +1732,39 @@ Para a geração dos arquivos, o formato PDF cria um documento em formato de "te
 
 ## 3.4. Guia de estilos (sprint 3)
 
-O Guia de Estilos é o documento central que define a identidade visual e regras de interface da nossa solução. Serve principalmente para padronizar todos os elementos visuais do projeto, incluindo paleta de cores, tipografia, iconografia, espaçamentos e o comportamento dos componentes interativos.
-
-A estruturação deste seção é fundamental pois garante a consistência e coeeão visual e funcional em toda a aplicação. Um padrão bem definido acelera o processo de desenvolvimento, facilita a manutenção do código e, principalmente, proporciona uma experiência de usuário (UX) mais fluida, intuitiva e profissional, evitando divergências entre diferentes telas.
+O Guia de Estilos é o documento que define a identidade visual e regras de interface da solução. Serve principalmente para padronizar todos os elementos visuais do projeto, como por exemplo a paleta de cores, tipografia, iconografia, espaçamentos e o comportamento dos componentes interativos, a fim de garantir coesão visual e funcional em toda a aplicação desenvolvida.
+A estruturação desta seção é fundamental pois um padrão bem definido acelera o processo de desenvolvimento, além de facilitar a manutenção do código e proporcionar uma experiência de usuário mais fluida e intuitiva, evitando divergências significativas entre as telas. As escolhas visuais foram também orientadas pela identidade do evento Red Bull 24 horas, procurando passar uma imagem ousada, dinâmica e reconhecível.
 
 ### 3.4.1 Cores
 
-*Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
+A definição da paleta de cores da aplicação tem um papel funcional e, principalmente, ergonômico na comunicação de estados do sistema e na orientação da equipe. Considerando o cenário de uma competição de 24 horas consecutivas, em que os operadores interagem com os dispositivos sob diferentes condições de iluminação ambiental, da intensa luz diurna à baixa luz da madrugada, o uso padronizado das cores é essencial para minimizar o esforço cognitivo e prevenir erros operacionais causados pela exaustão.
 
+Nesse contexto, as escolhas cromáticas foram fundamentadas em princípios de acessibilidade e alto contraste, com referência direta à paleta oficial do evento Red Bull 24. O objetivo principal é garantir que a hierarquia da informação seja percebida intuitivamente, permitindo que os usuários identifiquem rapidamente os indicadores essenciais, sem a necessidade de processar textos extensos. As cores atuam, portanto, como os primeiros sinalizadores de ação e estado da interface, garantindo uma navegação segura e mais eficiente em momentos de alta pressão.
+
+O Quadro 1 apresenta a paleta de cores utilizadas, organizadas por função na interface.
+
+**Quadro 1 – Paleta de cores e funções na interface**
+| Nome da Cor | Código HEX | Função na Interface |
+| :--- | :--- | :--- |
+| **Red Bull Red** | `#DB0840` | Usada em botões de ação principal, CTAs, destakes e elementos de urgência. |
+| **Deep Navy** | `#001E3C` | Cor de fundo. Aplicada em cabeçalhos escuros e seções de destaque. |
+| **Bright Green** | `#7ED32C` | Usada em indicadores de vitória ou vantagem das equipes, e elementos de confirmação. |
+| **Vibrant Pink** | `#F30B47` | Reservada para alertas importantes, chamadas urgentes, locais de atenção em geral e elementos de alta ênfase visual. |
+<div align="center"> Fonte: Elaborado pelos autores (2026).
+</div>
+Para ilustrar a harmonia visual prática da combinação de cores escolhida, a Figura 19 apresenta a paleta do sistema, exibindo as amostras visuais correspondentes aos códigos de identificação citados.
+
+<div align="center">
+
+**Figura 19 – Amostras cromáticas e distribuição da paleta de cores**
+
+  <img src="../assets/bullpace_cores.png" width="100%"><br>
+
+*Fonte: Elaborado pelos autores (2026).*
+
+</div>
+
+A combinação e contraste gerados por essa seleção de cores cumprem os requisitos de acessibilidade estipulados para o projeto, viabilizando uma navegação mais fluida mesmo em ambientes com iluminação oscilante. Desse modo, a identidade visual estabelecida atua diretamente na redução da fadiga visual e aprimoramento da usabilidade da interface ao longo de todo o período da competição.
 ### 3.4.2 Tipografia
 A escolha da tipografia para a aplicação web surge da necessidade de garantir uma leitura clara e facilitada em relação a inserção de dados durante a competição. Como a equipe de campo pode sofrer com o cansaço visual, a interface precisa de letras muito fáceis de ler.
 
