@@ -2417,8 +2417,175 @@ A Matriz de Rastreabilidade de Requisitos (RTM) é uma ferramenta que mapeia o c
 
 ## 4.1. Primeira versão da aplicação web (sprint 3)
 
-*Descreva e ilustre aqui o desenvolvimento da primeira versão do sistema web. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi implementado, (b) o que não foi concluído, (c) dificuldades técnicas enfrentadas e próximos passos.*
+### 1. O que foi implementado
+ 
+Foi implementada a camada de back-end completa da aplicação, incluindo:
+ 
+- **Controllers:** gerenciam as requisições HTTP para cada entidade do sistema — `AtletaController`, `CheckpointController`, `CoordenadorController`, `EsteiraController`, `EventoController`, `OperadorController`, `PlacarController`, `SessaoController` e `TurnoController`.
+- **Models:** definem as estruturas de dados para todas as entidades do domínio — Atleta, Checkpoint, Coordenador, Equipe, Esteira, Evento, Operador, Placar, Sessão e Turno.
+- **Repositories:** responsáveis pelo acesso ao banco de dados para cada entidade.
+- **Services:** contêm a lógica de negócio da aplicação.
+- **Testes globais:** implementados para cobrir todos os fluxos principais da aplicação, buscando identificar erros de integração e lógica.
+- **Frontend básico (demonstração):** interface desenvolvida apenas para demonstração do fluxo, ainda **não integrada** ao back-end.
+- **Integração com banco de dados:** o back-end está conectado ao banco de dados hospedado no **Supabase**.
+- **Servidor TypeScript:** rodando localmente na porta 3000 via `ts-node-dev`.
+---
+ 
+### 2. O que não foi implementado
+ 
+- Integração entre o frontend e o back-end.
+- Input de dados via foto (leitura visual automatizada da esteira).
+---
+ 
+### 3. Dificuldades técnicas enfrentadas
+ 
+- **Curva de aprendizado acelerada:** a equipe precisou assimilar diversas tecnologias em pouco tempo, especialmente para a escrita e execução de testes automatizados.
+- **Deploy no GitLab Pages:** o GitLab Pages não suporta aplicações dinâmicas geradas com EJS — aceita apenas HTML e CSS estáticos. Isso exigiu refatoração do código e causou atraso na entrega.
+---
+ 
+### 4. Próximos passos
+ 
+- Entregar o sistema com o design alinhado ao **guia de estilos** e ao **protótipo de alta fidelidade** desenvolvido.
+- Realizar a **integração entre frontend e back-end**.
+- Implementar o **input via foto** para leitura da quilometragem diretamente da esteira.
+---
+ 
+### 5. Telas do sistema
+ 
+As telas a seguir fazem parte do frontend desenvolvido para demonstração do fluxo da aplicação. A navegação segue uma sequência de etapas numeradas (Etapa 00 a Etapa 06), cobrindo desde o acesso até o encerramento de um turno de corrida.
+ 
+---
+ 
+#### Etapa 00 · Acesso — Seleção de Função
 
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de função</b></sub><br>
+  <img src="../assets/tela1.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+A tela inicial do sistema solicita que o usuário escolha com qual função irá acessar: **Operador(a)** ou **Coordenador(a)**. Cada opção é apresentada como um card selecionável com rádio button. Esta etapa define o nível de acesso e o fluxo seguinte.
+ 
+---
+ 
+#### Etapa 01 · Operador(a) — Seleção de Operador(a)
+
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de operador</b></sub><br>
+  <img src="../assets/tela2.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+Após escolher a função de Operador(a), o usuário seleciona quem está operando o sistema naquele momento. A lista exibe todos os operadores cadastrados (Ana Martins, João Lima, Marina Souza, Pedro Alves). Ao selecionar um nome, um botão de confirmação aparece com a ação contextual, e o nome do operador passa a aparecer no canto superior direito em todas as etapas seguintes.
+ 
+---
+ 
+#### Etapa 01 · Coordenador(a) — Acesso Restrito
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de atutenticação do coordenador</b></sub><br>
+  <img src="../assets/tela3.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Se a função selecionada na Etapa 00 for **Coordenador(a)**, o sistema redireciona para uma tela de autenticação com nome e senha. O campo de permissões exibe as ações disponíveis para o coordenador: auditoria, correção, TV e encerramento. O botão de acesso só é habilitado após o preenchimento de ambos os campos.
+ 
+---
+ 
+#### Etapa 02 · Equipe — Seleção de Equipe
+
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de equipe</b></sub><br>
+  <img src="../assets/tela4.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+O operador escolhe qual equipe será acompanhada na operação da etapa atual. São exibidas as equipes cadastradas — **Equipe Vermelha** e **Equipe Azul** — com a quantidade de atletas em cada uma (16 atletas). Ao selecionar, o botão de confirmação exibe o nome da equipe escolhida, e a tela informa que ela ficará vinculada ao operador.
+ 
+---
+ 
+#### Etapa 03 · Atleta — Seleção de Atleta (lista sem seleção)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de atleta</b></sub><br>
+  <img src="../assets/tela6.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com a equipe definida, o operador seleciona o atleta que irá correr no próximo turno. A tela exibe os atletas disponíveis para revezamento. Atletas que correram no turno imediatamente anterior aparecem como **bloqueados**, com indicação visual e o rótulo "BLOQUEADO", impedindo seleção indevida. A tela também exibe uma mensagem de aviso contextual sobre o bloqueio.
+ 
+---
+ 
+#### Etapa 03 · Atleta — Seleção de Atleta (com atleta selecionado)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de atleta selecionado</b></sub><br>
+  <img src="../assets/tela5.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Após o usuário selecionar um atleta disponível (ex.: Rafael Luz), o card do atleta recebe destaque com borda, o rádio button é preenchido e o rótulo "SELECIONADO" aparece. Um botão preto de confirmação é exibido na parte inferior com o nome do atleta escolhido, e uma instrução informa que a próxima etapa será a definição da esteira.
+ 
+---
+ 
+#### Etapa 04 · Turno — Iniciar Turno (sem esteira selecionada)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de iniciar turno</b></sub><br>
+  <img src="../assets/tela7.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com atleta e equipe confirmados, o operador deve selecionar a esteira onde o turno ocorrerá. A tela exibe um resumo do turno com o nome e a equipe do atleta. As esteiras disponíveis são listadas com seu status: **Livre para iniciar turno** ou **Em manutenção** (indisponível para seleção). O horário de início é salvo automaticamente pelo sistema.
+ 
+---
+ 
+#### Etapa 04 · Turno — Iniciar Turno (com esteira selecionada)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de iniciar com esteira selecionada</b></sub><br>
+  <img src="../assets/tela8.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Ao selecionar a Esteira 01 (livre), o card recebe destaque visual, o rótulo "SELECIONADO" aparece e o resumo do turno é atualizado com o nome da esteira. O botão de confirmação é habilitado com a ação "Iniciar turno na Esteira 01".
+ 
+---
+ 
+#### Etapa 05 · Checkpoint — Turno Ativo (aguardando primeiro checkpoint)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de turno ativo</b></sub><br>
+  <img src="../assets/tela9.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com o turno em andamento, a tela exibe o card do atleta em corrida com cronômetro em tempo real (ex.: `00:01:41`), status **EM CORRIDA** e os campos para inserção de dados: KM acumulado, pace médio e velocidade média. O último checkpoint indica "Nenhum checkpoint registrado" com status **AGUARDANDO**. O botão **Registrar checkpoint** está ativo, e o botão **Finalizar turno** aparece como opção secundária.
+ 
+---
+ 
+#### Etapa 05 · Checkpoint — Turno Ativo (após checkpoint registrado)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de turno ativo com checkpoint registrado</b></sub><br>
+  <img src="../assets/tela10.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Após o primeiro registro, o sistema exibe um **modal de confirmação** informando que o próximo checkpoint estará disponível em 5 minutos. Ao fechar o modal, a tela atualiza o status do último checkpoint para **SALVO** com o horário e quilometragem registrados, e o botão de novo checkpoint passa a exibir o tempo restante para o próximo registro (ex.: `Novo checkpoint em 04:51`), ficando desabilitado durante a espera.
+ 
+---
+ 
+#### Etapa 06 · Encerramento — Finalizar Turno
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de finalizar turno</b></sub><br>
+  <img src="../assets/tela11.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+A tela de encerramento apresenta um resumo completo do turno antes da confirmação final: nome do atleta, esteira, equipe, horário de início, duração total e quilometragem final acumulada. Uma caixa informativa lista o que ocorre ao confirmar: checkpoint final salvo, esteira liberada para o próximo atleta e histórico preservado. O operador pode confirmar o encerramento ou retornar à tela de checkpoint.
+ 
 ## 4.2. Segunda versão da aplicação web (sprint 4)
 
 *Descreva e ilustre aqui o desenvolvimento da segunda versão do sistema web, com foco no que foi consolidado entre a primeira versão funcional e o sistema operacional integrado. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi implementado, (b) o que não foi concluído, (c) dificuldades técnicas enfrentadas e próximos passos.*
