@@ -1951,7 +1951,31 @@ A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter,
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
-*posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização)*
+O protótipo de alta fidelidade do BullPace foi desenvolvido no Figma para representar a experiência final esperada da aplicação web. Ele apresenta os principais fluxos de navegação do sistema, contemplando tanto o uso operacional do promotor quanto o acompanhamento administrativo da coordenadora durante a prova.
+
+O protótipo navegável completo está disponível no link abaixo:
+
+[Protótipo navegável BullPace no Figma](https://www.figma.com/proto/PcgrQX9uFsYl5BrW1WKM3y/prototipo-bullpace?node-id=89-89&p=f&t=r4UGCO89YUV6yPny-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=89%3A89&show-proto-sidebar=1)
+
+<br>
+<div align="center">
+  <b>Figura 21 — Fluxo do promotor no protótipo de alta fidelidade</b><br>
+  <img src="../assets/prototipo.png" width="100%" alt="Fluxo do promotor no protótipo de alta fidelidade do BullPace"><br>
+  <sub>Fonte: Elaborado pelos autores no Figma (2026).</sub>
+</div>
+<br>
+
+O fluxo do promotor contempla a seleção de perfil, identificação do responsável pela operação, escolha da equipe, seleção do atleta, vínculo com a esteira, início do turno, registro de checkpoints e encerramento da corrida.
+
+<br>
+<div align="center">
+  <b>Figura 22 — Fluxo da coordenadora no protótipo de alta fidelidade</b><br>
+  <img src="../assets/prototipo gestora.png" width="100%" alt="Fluxo da coordenadora no protótipo de alta fidelidade do BullPace"><br>
+  <sub>Fonte: Elaborado pelos autores no Figma (2026).</sub>
+</div>
+<br>
+
+O fluxo da coordenadora foi estruturado para apoiar o acompanhamento geral da competição, a auditoria dos registros, o Modo TV, o fechamento da prova e a validação dos resultados oficiais.
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
 
