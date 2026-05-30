@@ -2572,6 +2572,13 @@ WHERE t.status = 'em_andamento'
 ORDER BY t.horario_inicio ASC;
 ```
 
+#4 | ---
+--- | ---
+**Proposições lógicas** | $A$: O turno está em andamento (t.status = 'em_andamento') <br> $B$: A sessão operacional está ativa (so.status = 'ativa') <br> $C$: A equipe está ativa (eq.status = 'ativa') <br> $D$: O atleta está ativo (a.status = 'ativo')
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land C \land D$
+
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
 A documentação completa e navegável da WebAPI está disponível na página HTML [`documentos/webapi.html`](./webapi.html).
