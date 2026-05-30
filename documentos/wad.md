@@ -2541,6 +2541,37 @@ ORDER BY cp.registrado_em DESC;
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
+## Consulta 4
+
+Essa consulta lista os turnos em andamento, vinculando atleta, equipe, esteira e sessão operacional ativa. Ela ajuda o sistema a identificar quais atletas estão correndo no momento e quais esteiras estão ocupadas.
+
+**Expressão SQL** |
+
+``` sql
+SELECT
+  t.id_turno,
+  a.nome AS atleta_nome,
+  eq.nome AS equipe_nome,
+  est.id_esteira,
+  est.status AS status_esteira,
+  t.horario_inicio,
+  t.status AS status_turno
+FROM turnos t
+INNER JOIN atletas a
+  ON a.id_atleta = t.id_atleta
+INNER JOIN equipes eq
+  ON eq.id_equipe = a.id_equipe
+INNER JOIN esteiras est
+  ON est.id_esteira = t.id_esteira
+INNER JOIN sessoes_operacionais so
+  ON so.id_sessao_operacional = t.id_sessao_operacional
+WHERE t.status = 'em_andamento'
+  AND so.status = 'ativa'
+  AND eq.status = 'ativa'
+  AND a.status = 'ativo'
+ORDER BY t.horario_inicio ASC;
+```
+
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
 A documentação completa e navegável da WebAPI está disponível na página HTML [`documentos/webapi.html`](./webapi.html).
