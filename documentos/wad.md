@@ -98,9 +98,9 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 </div>
 <br>
 
-### Interno
+#### Interno
 
-### Forças
+#### Forças
 
 - Marca globalmente reconhecida e associada a esporte, energia, performance e experiências de alto impacto.
 - Estrutura interna de Field Marketing experiente na execução de eventos proprietários.
@@ -117,7 +117,7 @@ Outro ponto forte é o próprio formato do Red Bull 24 Horas. Por ter uma dinâm
 
 Em relação aos concorrentes, a força da Red Bull está na dificuldade de replicar integralmente sua combinação de marca, público, experiência e operação proprietária. Outras marcas podem promover eventos esportivos, mas a Red Bull possui um posicionamento consolidado nesse tipo de ativação, o que favorece a diferenciação do evento.
 
-### Fraquezas
+#### Fraquezas
 
 - Processo atual de apuração dependente de registros manuais em prancheta.
 - Maior risco de erro humano, ilegibilidade, perda de dados ou inconsistência entre registros.
@@ -136,9 +136,9 @@ A duração de 24 horas também intensifica essas fraquezas. Com o passar do eve
 
 Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
 
-### Externo
+#### Externo
 
-### Oportunidades
+#### Oportunidades
 
 - Crescimento do interesse por corrida, fitness e desafios esportivos de resistência.
 - Possibilidade de digitalizar e profissionalizar a apuração do Red Bull 24 Horas.
@@ -159,7 +159,7 @@ A solução proposta pode ainda gerar valor além da edição atual. Ao estrutur
 
 Em relação ao posicionamento competitivo, essa oportunidade é relevante porque a Red Bull pode diferenciar sua operação não apenas pela força da marca, mas também pela qualidade da gestão dos dados do evento. A confiabilidade da apuração passa a ser parte da experiência entregue.
 
-### Ameaças
+#### Ameaças
 
 - Concorrência com outros eventos esportivos e experiências de marca voltadas ao mesmo público.
 - Existência de substitutos simples, como pranchetas, planilhas colaborativas e aplicativos genéricos.
@@ -180,7 +180,7 @@ Além disso, a natureza do Red Bull 24 Horas cria riscos operacionais próprios.
 
 A aceitação do time operacional também é uma ameaça importante. Se os operadores perceberem o sistema como difícil, lento ou pouco confiável, a tendência será recorrer ao método manual. Portanto, o sucesso do projeto depende de a solução proposta ser claramente melhor do que a prancheta, sem exigir complexidade adicional na operação.
 
-### Visão geral da SWOT
+#### Visão geral da SWOT
 
 A análise SWOT mostra que a Red Bull parte de uma posição institucional forte para desenvolver o projeto. A marca possui reconhecimento global, associação consolidada com esporte e performance e experiência na criação de eventos proprietários de alto engajamento. Esses fatores favorecem o Red Bull 24 Horas e criam um ambiente positivo para a adoção de melhorias operacionais.
 
@@ -371,10 +371,6 @@ As User Stories são descrições objetivas das necessidades do usuário em rela
 Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
 
 Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
-
-## 2.3. User Stories
-
-As User Stories descrevem as funcionalidades do sistema a partir das necessidades dos usuários. No contexto do BullPace, elas foram organizadas considerando o novo fluxo da aplicação: seleção de perfil, identificação do promotor, autenticação da gestora, operação da prova, registro de turnos e checkpoints, correções auditáveis, acompanhamento dos resultados e exportação dos dados.
 
 ---
 
@@ -1731,7 +1727,7 @@ Para todo o desenvolvimento gráfico do wireframe, foi utilizado o Figma, um sof
 
 ### 3.3.1 Descrição detalhada das telas do wireframe e seus fluxos de navegação
 
-### Tela de seleção de função
+#### Tela de seleção de função
 
 A tela de seleção de função do sistema é responsável por definir qual tipo de acesso será utilizado pelo usuário. Sua principal função é direcionar o usuário para o conjunto de funcionalidades correspondente às suas responsabilidades dentro da operação do evento.
 
@@ -1768,7 +1764,7 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos atletas vinculados à equipe correspondente.
 
-### Tela de seleção dos atletas
+#### Tela de seleção dos atletas
 
 A interface de seleção de atleta é acessada pelo operador do evento após a escolha de uma equipe. Sua principal função é apresentar a lista de integrantes do time e permitir a rápida seleção do próximo participante que assumirá a esteira.
 
@@ -1846,7 +1842,7 @@ O Modo TV é uma interface destinada especialmente para a exibição da competi�
 
 Este layout representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
-### Tela de placar final
+#### Tela de placar final
 
 A Figura 17 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
@@ -1860,7 +1856,7 @@ A Figura 17 ilustra o wireframe da tela de placar final. Atendendo à necessidad
 
 O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados mais completos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
 
-### Tela de exportação de dados
+#### Tela de exportação de dados
 
 A interface de exportação de dados é acessada a partir da tela de placar final após a conclusão do evento. Sua principal finalidade é viabilizar a extração e o download de relatórios detalhados referentes às métricas e aos resultados consolidados da competição, conferindo ao usuário flexibilidade na parametrização dos dados que comporão o documento gerado.
 
