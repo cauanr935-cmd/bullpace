@@ -98,9 +98,9 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 </div>
 <br>
 
-### Interno
+#### Interno
 
-### Forças
+#### Forças
 
 - Marca globalmente reconhecida e associada a esporte, energia, performance e experiências de alto impacto.
 - Estrutura interna de Field Marketing experiente na execução de eventos proprietários.
@@ -117,7 +117,7 @@ Outro ponto forte é o próprio formato do Red Bull 24 Horas. Por ter uma dinâm
 
 Em relação aos concorrentes, a força da Red Bull está na dificuldade de replicar integralmente sua combinação de marca, público, experiência e operação proprietária. Outras marcas podem promover eventos esportivos, mas a Red Bull possui um posicionamento consolidado nesse tipo de ativação, o que favorece a diferenciação do evento.
 
-### Fraquezas
+#### Fraquezas
 
 - Processo atual de apuração dependente de registros manuais em prancheta.
 - Maior risco de erro humano, ilegibilidade, perda de dados ou inconsistência entre registros.
@@ -136,9 +136,9 @@ A duração de 24 horas também intensifica essas fraquezas. Com o passar do eve
 
 Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
 
-### Externo
+#### Externo
 
-### Oportunidades
+#### Oportunidades
 
 - Crescimento do interesse por corrida, fitness e desafios esportivos de resistência.
 - Possibilidade de digitalizar e profissionalizar a apuração do Red Bull 24 Horas.
@@ -159,7 +159,7 @@ A solução proposta pode ainda gerar valor além da edição atual. Ao estrutur
 
 Em relação ao posicionamento competitivo, essa oportunidade é relevante porque a Red Bull pode diferenciar sua operação não apenas pela força da marca, mas também pela qualidade da gestão dos dados do evento. A confiabilidade da apuração passa a ser parte da experiência entregue.
 
-### Ameaças
+#### Ameaças
 
 - Concorrência com outros eventos esportivos e experiências de marca voltadas ao mesmo público.
 - Existência de substitutos simples, como pranchetas, planilhas colaborativas e aplicativos genéricos.
@@ -180,7 +180,7 @@ Além disso, a natureza do Red Bull 24 Horas cria riscos operacionais próprios.
 
 A aceitação do time operacional também é uma ameaça importante. Se os operadores perceberem o sistema como difícil, lento ou pouco confiável, a tendência será recorrer ao método manual. Portanto, o sucesso do projeto depende de a solução proposta ser claramente melhor do que a prancheta, sem exigir complexidade adicional na operação.
 
-### Visão geral da SWOT
+#### Visão geral da SWOT
 
 A análise SWOT mostra que a Red Bull parte de uma posição institucional forte para desenvolver o projeto. A marca possui reconhecimento global, associação consolidada com esporte e performance e experiência na criação de eventos proprietários de alto engajamento. Esses fatores favorecem o Red Bull 24 Horas e criam um ambiente positivo para a adoção de melhorias operacionais.
 
