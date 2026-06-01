@@ -8,7 +8,7 @@
 
 ## Grupo 03
 
-## :student: Integrantes: 
+## :Student: Integrantes: 
 - <a href="https://www.linkedin.com/in/andre-lmelo?utm_source=share_via&utm_content=profile&utm_medium=member_android">André Lopes de Melo</a>
 - <a href="https://www.linkedin.com/in/augusto-de-castro-cadena-259555401/">Augusto de Castro Cadena</a>
 - <a href="https://www.linkedin.com/in/candido-luiz-cidrao-95b723380?utm_source=share_via&utm_content=profile&utm_medium=member_android">Cândido Luiz Vieira Quinderé Cidrão</a> 
@@ -17,7 +17,7 @@
 - <a href="https://www.linkedin.com/in/fernando-ohara-300870405">Fernando Takeshi Ohara</a> 
 - <a href="https://www.linkedin.com/in/luckas-milfont-859a073b6/">Luckas Milfont</a>
 
-## :teacher: Professores:
+## :Teacher: Professores:
 ### Orientador(a) 
 - <a href="https://www.linkedin.com/in/profclaudioandre/">Cláudio André</a>
 ### Instrutores
