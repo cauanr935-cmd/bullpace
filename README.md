@@ -85,34 +85,33 @@ npm start
     * Lógica proposicional
 * 0.2.0 - 15/05/2026
     * Wireframe
+        * Seção 3.3 do WAD: imagens e descrição do wireframe
 
-        * Seção 3.3 com imagens do wireframe
     * Modelagem do Banco de Dados
-
-        * Seção 3.2.3: Diagrama de Classes do Domínio (notação UML com multiplicidades, associação, agregação, composição e herança)
-        * Seção 3.2.4: Diagrama de Sequência UML (fluxo Controller → Service → Repository → Banco, com mensagens síncronas e assíncronas e retornos tracejados)
-        * Seção 3.6.1: Modelo Entidade-Relacionamento (ER) conceitual (notação Chen ou Crow's Foot, consistente)
-        * Seção 3.6.2: Diagrama Entidade-Relacionamento (DER) (cardinalidades explícitas em ambos os lados, PK e FK identificadas, coerente com o diagrama de classes)
-        * Seção 3.6.3: Modelo Relacional e Modelo Físico (arquivo migration.sql com DDL executável, constraints NOT NULL, UNIQUE, FOREIGN KEY, CHECK, CREATE INDEX, e ordem correta de dependências entre tabelas)
-    * 
+        * Seção 3.2.3: Diagrama de Classes do Domínio (notação UML com multiplicidades, associação, agregação, composição e herança);
+        * Seção 3.2.4: Diagrama de Sequência UML (fluxo *Controller → Service → Repository → Banco*, com mensagens síncronas e assíncronas e retornos tracejados);
+        * Seção 3.6.1: Modelo Entidade-Relacionamento (ER) conceitual (notação Chen ou Crow's Foot, consistente);
+        * Seção 3.6.2: Diagrama Entidade-Relacionamento (DER) (cardinalidades explícitas em ambos os lados, Chaves Primárias (PK) e Chaves Estrangiras (FK) identificadas, coerente com o diagrama de classes);
+        * Seção 3.6.3: Modelo Relacional e Modelo Físico (arquivo *migration.sql* com Linguagem de Definição de Dados (DDL) executável, constraints NOT NULL, UNIQUE, FOREIGN KEY, CHECK, CREATE INDEX, e ordem correta de dependências entre tabelas).
+    
 * 0.1.0 - 30/04/2024
     * Entendimento do negócio
         * Seção 1 do WAD: Introdução;
-        * Seção 2.1 do WAD: Escopo do projeto (Modelo de 5 Forças de Porter, análise SWOT, solução, Canvas Proposta de Valor e matriz de riscos).
+        * Seção 2.1 do WAD: Escopo do projeto (Modelo de 5 Forças de Porter, análise SWOT, solução, Canvas Proposta de Valor e Matriz de Riscos).
 
     * Entendimento do usuário
-        * Seção 2.2 do WAD: Personas;
-        * Seção 2.3 do WAD: User stories.
+        * Seção 2.2: Personas;
+        * Seção 2.3: User stories.
 
     * Projeto técnico e Requisitos
-        * Seção 3.1 do WAD: Requisitos do sistema (Minimundo do sistema, Requisitos Funcionais, Regras de Negócio, Requisitos Não Funcionais e Fundamentação dos Eixos);
-        * Seção 3.1.4 do WAD: Matriz RF → RN → Endpoint (iniciada).
+        * Seção 3.1: Requisitos do sistema (Minimundo do sistema, Requisitos Funcionais, Regras de Negócio, Requisitos Não Funcionais e Fundamentação dos Eixos);
+        * Seção 3.1.4: Matriz *RF → RN → Endpoint* iniciada.
 
     * Arquitetura do sistema
-        * Seção 3.2.2 do WAD: Diagrama de Casos de Uso.
+        * Seção 3.2.2: Diagrama de Casos de Uso.
 
     * Rastreabilidade
-        * Seção 3.9 do WAD: Matriz de Rastreabilidade (RTM) (iniciada).
+        * Seção 3.9: Matriz de Rastreabilidade (RTM) iniciada.
 
 ## 📋 Licença/License
 ```
