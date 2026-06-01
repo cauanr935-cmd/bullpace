@@ -372,10 +372,6 @@ Esse formato ajuda a equipe a transformar necessidades reais em entregas planej�
 
 Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
 
-## 2.3. User Stories
-
-As User Stories descrevem as funcionalidades do sistema a partir das necessidades dos usuários. No contexto do BullPace, elas foram organizadas considerando o novo fluxo da aplicação: seleção de perfil, identificação do promotor, autenticação da gestora, operação da prova, registro de turnos e checkpoints, correções auditáveis, acompanhamento dos resultados e exportação dos dados.
-
 ---
 
 ### US01 — Selecionar perfil de acesso
