@@ -1186,118 +1186,17 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
-### 3.2.1. Arquitetura em Camadas (sprint 3)
+### 3.2.1. Diagrama de Arquitetura (sprint 3 e 4)
 
 O sistema Bull Pace segue o padrão de Arquitetura em Camadas, organizado no fluxo `Routes → Controller → Service → Repository → Banco de Dados`, com apoio da camada `Models` para tipagem das entidades e contratos trafegados entre as camadas.
 
 Essa organização separa responsabilidades e evita que regras de negócio, acesso ao banco de dados e respostas HTTP fiquem misturados no mesmo arquivo. Dessa forma, cada parte do sistema pode evoluir com menor acoplamento e maior clareza.
 
-```mermaid
-flowchart TD
-
-    Client[Cliente HTTP]
-
-    subgraph ROUTES
-        R[server.ts]
-    end
-
-    subgraph CONTROLLERS
-        AC[AtletaController]
-        EvC[EventoController]
-        OpC[OperadorController]
-        CoC[CoordenadorController]
-        EsC[EsteiraController]
-        SeC[SessaoController]
-        TC[TurnoController]
-        ChC[CheckpointController]
-        PC[PlacarController]
-    end
-
-    subgraph SERVICES
-        AS[AtletaService]
-        EvS[EventoService]
-        OpS[OperadorService]
-        CoS[CoordenadorService]
-        EsS[EsteiraService]
-        SeS[SessaoService]
-        TS[TurnoService]
-        ChS[CheckpointService]
-        PS[PlacarService]
-    end
-
-    subgraph REPOSITORIES
-        AR[AtletaRepository]
-        EvR[EventoRepository]
-        OpR[OperadorRepository]
-        CoR[CoordenadorRepository]
-        EsR[EsteiraRepository]
-        SeR[SessaoRepository]
-        TR[TurnoRepository]
-        ChR[CheckpointRepository]
-        SupabaseClient[supabase.ts]
-    end
-
-    subgraph MODELS
-        AM[AtletaModels]
-        EvM[EventoModels]
-        OpM[OperadorModels]
-        CoM[CoordenadorModels]
-        EsM[EsteiraModels]
-        SeM[SessaoModels]
-        TM[TurnoModels]
-        ChM[CheckpointModels]
-        PM[PlacarModels]
-    end
-
-    DB[(Supabase / PostgreSQL)]
-
-    Client --> R
-
-    R --> AC
-    R --> EvC
-    R --> OpC
-    R --> CoC
-    R --> EsC
-    R --> SeC
-    R --> TC
-    R --> ChC
-    R --> PC
-
-    AC --> AS
-    EvC --> EvS
-    OpC --> OpS
-    CoC --> CoS
-    EsC --> EsS
-    SeC --> SeS
-    TC --> TS
-    ChC --> ChS
-    PC --> PS
-
-    AS --> AR
-    EvS --> EvR
-    OpS --> OpR
-    CoS --> CoR
-    EsS --> EsR
-    SeS --> SeR
-    TS --> TR
-    ChS --> ChR
-    PS --> SupabaseClient
-
-    AR --> AM
-    EvR --> EvM
-    OpR --> OpM
-    CoR --> CoM
-    EsR --> EsM
-    SeR --> SeM
-    TR --> TM
-    ChR --> ChM
-    PS --> PM
-
-    SeR --> SupabaseClient
-    TR --> SupabaseClient
-    ChR --> SupabaseClient
-    SupabaseClient --> DB
-```
+<div align="center">
+  <sub><b>Figura x - Diagrama de Arquitetura</b></sub><br>
+  <img src="../assets/Diagrama de Arquitetura.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
 #### Responsabilidades das camadas
 
