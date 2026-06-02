@@ -82,7 +82,26 @@ npm start
 * 0.4.0 - XX/XX/2026
     * 
 * 0.3.0 - 29/05/2026
-    * Lógica proposicional
+    *  Lógica Proposicional das consultas SQL
+        * Seção 3.6.4: Consultas SQL do banco de dados e sua lógica proposional
+    
+    * Protótipo de Alta Fidelidade e Guia de Estilos
+        * Seção 3.4: Guia de estilos
+        * Seção 3.5: Protótipo de alta fidelidade
+
+    * 1ª Versão do Sistema Web
+        * Seção 4.1: Primeira versão funcional do backend com WebAPI operante
+
+    * Arquitetura da solução
+        * Atualização da seção 3.1.3: Requisitos Não Funcionais (RNF)
+        * Seção 3.2.1: Arquitetura em Camadas
+        * Seção 3.2.3.1: Diagrama de Classes Arquitetural
+        * Seção 3.2.4: Diagrama de Sequência UML
+        * Atualização da seção 3.6: Modelagem de Dados
+        * Seção 3.7: Documentação da WebAPI
+        * Atualização da seção 3.1.4 e 3.9: Matriz de Rastreabilidade
+        * Seção 4.1: Relatório de Desenvolvimento
+        
 * 0.2.0 - 15/05/2026
     * Wireframe
         * Seção 3.3 do WAD: imagens e descrição do wireframe
