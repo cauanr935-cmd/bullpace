@@ -1554,7 +1554,12 @@ Conclui o ciclo de corrida de um participante. O TurnoService repassa o identifi
 
 ### 3.2.6. Diagrama de Implantação (sprints 4 e 5)
 
-*Diagrama UML de deployment mostrando nós físicos, artefatos e canais de comunicação. Representa a visão Engineering + Technology do RM-ODP.*
+<div align="center">
+  <sub><b>Figura 7 - fluxo finalizar turno</b></sub><br>
+  <img src="../assets/DiagramaImplantacao.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
 
 ### 3.2.7. Padrões de Projeto Aplicados (sprints 3 a 5)
 
