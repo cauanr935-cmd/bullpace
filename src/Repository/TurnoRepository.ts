@@ -1,4 +1,4 @@
-import { supabase } from '../supabase';
+import { supabase } from '../database/supabase';
 import { Turno, IniciarTurnoInput } from '../Models/TurnoModels';
 
 export class TurnoRepository {

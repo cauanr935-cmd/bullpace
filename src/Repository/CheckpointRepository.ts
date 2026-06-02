@@ -1,4 +1,4 @@
-import { supabase } from '../supabase';
+import { supabase } from '../database/supabase';
 import { Checkpoint, CriarCheckpointInput } from '../Models/CheckpointModels';
 
 export class CheckpointRepository {
