@@ -6,8 +6,8 @@ import express from 'express';
 import type { Request, Response } from 'express';
 // Importa o path para montar caminhos de pasta sem depender do sistema operacional.
 import path from 'path';
-// Importa o client do Supabase para ler e escrever dados no banco.
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+// Importa o client centralizado do Supabase para ler e escrever dados no banco.
+import { supabase } from './database/supabase';
 
 // Importa o EJS para renderizar o arquivo HTML que ainda usa variaveis dinamicas.
 const ejs = require('ejs');
@@ -31,20 +31,6 @@ app.use('/static', express.static(path.join(process.cwd(), 'src', 'View')));
 app.get('/docs/webapi', (req: Request, res: Response): void => {
   res.sendFile(path.join(process.cwd(), 'documentos', 'webapi.html'));
 });
-
-// Busca no .env a URL do projeto Supabase.
-const supabaseUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// Busca no .env a chave anonima usada para autenticar as chamadas ao Supabase.
-const supabaseKey: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-// Interrompe o servidor caso falte alguma configuracao obrigatoria do Supabase.
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Erro: Variáveis de ambiente NEXT_PUBLIC_SUPABASE_URL ou NEXT_PUBLIC_SUPABASE_ANON_KEY não foram definidas.');
-  process.exit(1);
-}
-
-// Cria uma conexao reutilizavel com o Supabase.
-const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
 // Lista temporaria usada para montar a tela de selecao de operador.
 const operadores = [
@@ -206,6 +192,41 @@ const formatarHorario = (timestamp: number): string => new Date(timestamp).toLoc
   hour: '2-digit',
   minute: '2-digit'
 });
+
+const tabelasPermitidas = new Set([
+  'atletas',
+  'checkpoints',
+  'coordenadores',
+  'equipes',
+  'esteiras',
+  'eventos',
+  'operadores',
+  'sessoes_operacionais',
+  'turnos'
+]);
+
+const camposPermitidosPorTabela: Record<string, Set<string>> = {
+  atletas: new Set(['id_equipe', 'nome', 'status']),
+  checkpoints: new Set(['id_turno', 'id_sessao_operacional', 'km_acumulado', 'pace_medio', 'velocidade_media', 'registrado_em', 'is_ajuste']),
+  coordenadores: new Set(['nome']),
+  equipes: new Set(['id_evento', 'nome', 'status']),
+  esteiras: new Set(['id_equipe', 'id_evento', 'marca', 'modelo', 'numero_serie', 'status']),
+  eventos: new Set(['nome', 'cidade', 'estado', 'data_inicio', 'data_fim', 'status']),
+  operadores: new Set(['nome']),
+  sessoes_operacionais: new Set(['id_evento', 'id_funcao', 'inicio_em']),
+  turnos: new Set(['id_atleta', 'id_esteira', 'id_sessao_operacional', 'horario_inicio'])
+};
+
+const obterTabelaPermitida = (tabela: string): string | null => {
+  return tabelasPermitidas.has(tabela) ? tabela : null;
+};
+
+const filtrarRegistroPermitido = (tabela: string, registro: Record<string, unknown>): Record<string, unknown> => {
+  const camposPermitidos = camposPermitidosPorTabela[tabela];
+  return Object.fromEntries(
+    Object.entries(registro).filter(([campo]) => camposPermitidos.has(campo))
+  );
+};
 
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou coordenador.
 app.get('/', (req: Request, res: Response): void => {
@@ -715,7 +736,12 @@ app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
 app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
   try {
     // Le o nome da tabela vindo da URL, por exemplo /api/atletas.
-    const tabela = req.params.tabela as string;
+    const tabela = obterTabelaPermitida(req.params.tabela as string);
+
+    if (!tabela) {
+      return res.status(403).json({ error: 'Tabela não permitida para acesso pela API.' });
+    }
+
     // Busca todos os registros da tabela no Supabase.
     const { data, error } = await supabase.from(tabela).select('*');
 
@@ -733,9 +759,18 @@ app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> =
 app.post('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
   try {
     // Le o nome da tabela que recebera o novo registro.
-    const tabela = req.params.tabela as string;
+    const tabela = obterTabelaPermitida(req.params.tabela as string);
+
+    if (!tabela) {
+      return res.status(403).json({ error: 'Tabela não permitida para escrita pela API.' });
+    }
+
     // Pega o corpo enviado na requisicao.
-    const registro = req.body;
+    const registro = filtrarRegistroPermitido(tabela, req.body);
+
+    if (Object.keys(registro).length === 0) {
+      return res.status(400).json({ error: 'Nenhum campo permitido foi enviado.' });
+    }
     
     // Insere o registro no Supabase e devolve o item criado.
     const { data, error } = await supabase.from(tabela).insert([registro]).select();
