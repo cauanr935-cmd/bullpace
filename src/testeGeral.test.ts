@@ -1,5 +1,6 @@
 import { describe, expect, jest, test } from '@jest/globals';
-import { abrirSessao, encerrarSessao, supabase } from './Controller/SessaoController';
+import { supabase } from './database/supabase';
+import { abrirSessao, encerrarSessao } from './Controller/SessaoController';
 import { iniciarTurno, finalizarTurno } from './Controller/TurnoController';
 import { registrarCheckpoint } from './Controller/CheckpointController';
 

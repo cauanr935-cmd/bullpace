@@ -98,9 +98,9 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 </div>
 <br>
 
-### Interno
+#### Interno
 
-### Forças
+#### Forças
 
 - Marca globalmente reconhecida e associada a esporte, energia, performance e experiências de alto impacto.
 - Estrutura interna de Field Marketing experiente na execução de eventos proprietários.
@@ -117,7 +117,7 @@ Outro ponto forte é o próprio formato do Red Bull 24 Horas. Por ter uma dinâm
 
 Em relação aos concorrentes, a força da Red Bull está na dificuldade de replicar integralmente sua combinação de marca, público, experiência e operação proprietária. Outras marcas podem promover eventos esportivos, mas a Red Bull possui um posicionamento consolidado nesse tipo de ativação, o que favorece a diferenciação do evento.
 
-### Fraquezas
+#### Fraquezas
 
 - Processo atual de apuração dependente de registros manuais em prancheta.
 - Maior risco de erro humano, ilegibilidade, perda de dados ou inconsistência entre registros.
@@ -136,9 +136,9 @@ A duração de 24 horas também intensifica essas fraquezas. Com o passar do eve
 
 Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contradição: a marca promove uma experiência associada à performance e à alta energia, mas a apuração ainda depende de um método manual vulnerável. A solução proposta surge justamente para reduzir essa distância entre a experiência de marca e o processo operacional de registro.
 
-### Externo
+#### Externo
 
-### Oportunidades
+#### Oportunidades
 
 - Crescimento do interesse por corrida, fitness e desafios esportivos de resistência.
 - Possibilidade de digitalizar e profissionalizar a apuração do Red Bull 24 Horas.
@@ -159,7 +159,7 @@ A solução proposta pode ainda gerar valor além da edição atual. Ao estrutur
 
 Em relação ao posicionamento competitivo, essa oportunidade é relevante porque a Red Bull pode diferenciar sua operação não apenas pela força da marca, mas também pela qualidade da gestão dos dados do evento. A confiabilidade da apuração passa a ser parte da experiência entregue.
 
-### Ameaças
+#### Ameaças
 
 - Concorrência com outros eventos esportivos e experiências de marca voltadas ao mesmo público.
 - Existência de substitutos simples, como pranchetas, planilhas colaborativas e aplicativos genéricos.
@@ -180,7 +180,7 @@ Além disso, a natureza do Red Bull 24 Horas cria riscos operacionais próprios.
 
 A aceitação do time operacional também é uma ameaça importante. Se os operadores perceberem o sistema como difícil, lento ou pouco confiável, a tendência será recorrer ao método manual. Portanto, o sucesso do projeto depende de a solução proposta ser claramente melhor do que a prancheta, sem exigir complexidade adicional na operação.
 
-### Visão geral da SWOT
+#### Visão geral da SWOT
 
 A análise SWOT mostra que a Red Bull parte de uma posição institucional forte para desenvolver o projeto. A marca possui reconhecimento global, associação consolidada com esporte e performance e experiência na criação de eventos proprietários de alto engajamento. Esses fatores favorecem o Red Bull 24 Horas e criam um ambiente positivo para a adoção de melhorias operacionais.
 
@@ -371,10 +371,6 @@ As User Stories são descrições objetivas das necessidades do usuário em rela
 Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
 
 Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
-
-## 2.3. User Stories
-
-As User Stories descrevem as funcionalidades do sistema a partir das necessidades dos usuários. No contexto do BullPace, elas foram organizadas considerando o novo fluxo da aplicação: seleção de perfil, identificação do promotor, autenticação da gestora, operação da prova, registro de turnos e checkpoints, correções auditáveis, acompanhamento dos resultados e exportação dos dados.
 
 ---
 
@@ -1075,100 +1071,28 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
-| Eixo | Requisito | Métrica / Critério | Como atendido |
+Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 25010:2011, que estrutura a qualidade de software em características como usabilidade, confiabilidade, eficiência de desempenho, segurança, compatibilidade, portabilidade e manutenibilidade. A tabela a seguir apresenta cada requisito, sua métrica verificável e a forma como o sistema o atende.
+
+| ID | Requisito | Métrica / Critério | Como atendido |
 | :--- | :--- | :--- | :--- |
-| **USAB — Usabilidade** | Facilidade de aprendizado e operação sob pressão operacional. | Taxa de sucesso de 100% na realização do primeiro registro sem auxílio de manual externo. | Design de interface intuitivo com elementos visuais de alta affordance e botões de dimensões ampliadas para evitar erros de toque. |
-| **CONF — Confiabilidade** | Tolerância a falhas e preservação da integridade dos dados coletados. | Frequência de salvamento automático de dados a cada inserção de checkpoint (intervalo de 5 min). | Implementação de persistência de dados em tempo real e redundância de registros via checkpoints periódicos para evitar perdas por falhas de hardware. |
-| **DES — Desempenho** | Rapidez no processamento de informações e cálculos de performance. | Tempo de resposta para atualização de métricas no dashboard (p95) < 1000 ms. | Otimização de scripts de cálculo no front-end e consultas eficientes ao banco de dados para garantir fluidez no modo placar. |
-| **SUP — Suportabilidade** | Compatibilidade com o ecossistema tecnológico do ambiente do evento. | 100% de conformidade com os navegadores Safari e Chrome em ambiente mobile. | Desenvolvimento baseado em padrões web responsivos, garantindo a execução estável em tablets (iPads) sem necessidade de instalação local. |
-| **SEG — Segurança** | Rastreabilidade e proteção contra exclusão acidental de dados. | Garantia de 0% de registros deletados permanentemente do banco de dados durante o evento. | Aplicação de lógica de Soft Delete em todos os registros e manutenção de logs de edição para auditoria pela organização. |
-| **CAP — Capacidade** | Suporte à concorrência de múltiplos usuários operando o sistema. | Suporte para no mínimo 2 operadores simultâneos (um por equipe) realizando inputs constantes. | Arquitetura de software preparada para gerenciar requisições paralelas sem conflitos de escrita ou travamento da sessão. |
-| **REST — Restrições Design** | Independência tecnológica frente às limitações de hardware externo. | 0% de dependência de integração via pulseiras ou captura automática das esteiras Technogym. | Interface focada em entrada manual de dados padronizada, contornando a inviabilidade de pareamento com equipamentos de terceiros. |
-| **ORG — Organizacionais** | Alinhamento com os processos de desenvolvimento e padrões do grupo. | Adoção de arquitetura MVC (Model-View-Controller) conforme os padrões pedagógicos do projeto. | Desenvolvimento estruturado em sprints com documentação técnica rigorosa e uso de repositório Git para controle de versão acadêmico. |
+| **USAB01** | Um Promotor de Field Marketing sem treinamento prévio deve conseguir completar o fluxo principal (selecionar equipe, atleta, iniciar turno, registrar checkpoint e encerrar turno) sem auxílio externo. | Taxa de conclusão ≥ 90% em teste de primeiro uso com no mínimo 3 participantes; fluxo completo concluído em até 3 minutos sem erros críticos nem abandono de tela. | A interface foi projetada com hierarquia visual clara, affordance explícita nos elementos interativos e progressão linear de telas, reduzindo a carga cognitiva do operador. A lógica de fluxo espelha o processo já conhecido da prancheta para facilitar a curva de aprendizado. |
+| **USAB02** | Todos os elementos interativos, como botões e campos de formulário, devem possuir área de toque mínima de 44×44pt, compatível com uso em iPad sob condições de fadiga ou movimento. | 100% dos elementos interativos com dimensão ≥ 44×44pt conforme Apple Human Interface Guidelines e WCAG 2.1 target size guideline; verificado por inspeção de CSS em todas as telas operacionais. | Os componentes de interface foram dimensionados com unidades relativas e restrições mínimas aplicadas globalmente via CSS, garantindo conformidade independentemente do tamanho de viewport. |
+| **USAB03** | O sistema deve bloquear ativamente entradas inválidas antes do envio ao banco, notificando o erro específico por campo sem necessidade de recarregamento de página. | 0 registros inválidos persistidos decorrentes de erro de digitação; o sistema deve notificar visualmente o erro após submissão inválida; testado com entradas intencionalmente incorretas, como KM regressivo, campo obrigatório vazio e turno inexistente. | As validações foram implementadas na camada Service (RN16, RN22, RN23) e replicadas como validação client-side no formulário de checkpoint, garantindo bloqueio duplo: no front-end para resposta imediata e no back-end como camada de segurança. |
+| **CONF01** | O sistema deve preservar checkpoints registrados em caso de queda momentânea de conectividade, sem perda de dados e sem intervenção do Promotor de Field Marketing. | 0% de perda de checkpoints em simulação de queda de rede durante turno ativo; dados sincronizados automaticamente após reconexão. | Foi implementado cache local no cliente para enfileirar registros durante indisponibilidade de rede, com reenvio automático ao restabelecer conexão. Alinhado ao RF026 e às RN37 e RN38, e ao plano de contingência do R01 (Matriz de Riscos). |
+| **CONF02** | O sistema deve manter operação contínua durante as 24 horas do evento, tolerando uma janela de indisponibilidade máxima acumulada de 30 minutos. | Uptime ≥ 97,9% durante a janela do evento, equivalente a ≤ 30 minutos de downtime acumulado em 24h; monitorado via Supabase e logs de aplicação. | O ambiente de produção foi configurado no Supabase com backups automáticos e monitoramento ativo. O plano de contingência documentado para R02 (indisponibilidade do banco) inclui fallback para registro local temporário. |
+| **CONF03** | Após qualquer falha técnica, como crash de browser ou queda de energia no dispositivo, o sistema deve retomar a operação com todos os dados confirmados previamente intactos. | 100% dos registros confirmados antes da falha recuperados após reinicialização, sem ação manual além de reabrir o browser; verificado em teste de kill de processo durante turno ativo. | A persistência de dados é garantida pelo Supabase (PostgreSQL) com confirmação transacional. O estado da sessão operacional é recuperável via consulta ao banco sem dependência de estado local volátil. |
+| **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | As consultas SQL foram otimizadas com índices definidos nas migrations para os campos de busca frequente (id_turno, id_atleta, status). As validações de negócio na camada Service evitam round-trips desnecessários ao banco antes da confirmação de dados válidos. |
+| **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado pela view vw_placar_parcial conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
+| **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo Promotor de Field Marketing ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado à RN21. |
+| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções realizadas pela Gestora de Operações devem preservar o histórico do valor anterior em log paralelo, com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; toda correção em registro histórico gera entrada na tabela paralela de log contendo valor anterior, valor novo, autora, timestamp e justificativa; verificado por query de auditoria após simulação de correção via interface. | A imutabilidade direta dos registros é garantida pela RN27. As correções pela Gestora seguem o modelo de "sobrescreve no registro principal + log paralelo de alterações", implementado via tabela dedicada de histórico de alterações. Alinhado às RN27, RN28 e RN29. |
+| **CAP** | O sistema deve suportar dois Promotores de Field Marketing realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
+| **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RF025 e à RN36. |
+| **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A compatibilidade com modo PWA está disponível como opção, sem obrigatoriedade. |
+| **MANUT01** | A arquitetura deve seguir o padrão MVC com separação estrita entre Controller, Service e Repository, de modo que alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência. | Cada camada possui responsabilidade única verificada em code review; nenhuma regra de negócio (RN16, RN22, RN23) implementada nas camadas Controller ou Repository; alteração de limiar de validação exige modificação apenas na camada Service. | A arquitetura em camadas verticais está documentada no Diagrama de Classes Arquitetural (Seção 3.2.3.1). As validações de domínio estão concentradas exclusivamente no Service, conforme padrão definido no Diagrama de Sequência (Seção 3.2.4). |
+| **MANUT02** | O código de back-end deve atingir cobertura mínima de testes automatizados que garanta rastreabilidade dos fluxos críticos da operação. | Cobertura ≥ 70% reportada pelo Jest (--coverage); cobertura de 100% nos testes dos fluxos de registro de checkpoint (RF010) e encerramento de turno (RF009), que concentram as validações de negócio mais sensíveis. | A suite de testes Jest foi estruturada com abordagem white-box nos Services (validações RN16, RN22, RN23) e black-box nos endpoints via Supertest (contratos HTTP). O relatório de cobertura é gerado automaticamente e está documentado na Seção 5.1. |
+| **REST** | O sistema não deve possuir dependência de integração automática com as esteiras Technogym, pulseiras ou qualquer hardware de terceiros para seu funcionamento completo. | 0% de dependência de integração via pulseiras, Bluetooth, API das esteiras ou captura automática de dados; sistema operável integralmente com apenas um browser e conexão à internet. | A interface foi projetada exclusivamente para entrada manual assistida, sem chamadas a APIs externas de hardware. Toda a operação depende apenas da leitura visual da esteira pelo Promotor de Field Marketing e da inserção manual no formulário. Alinhado à RN24. |
 
----
-
-#### 3.1.3.1 Fundamentação dos Eixos
-
-A seguir, são detalhadas as justificativas dos requisitos não funcionais a partir do contexto operacional do projeto.
-
-#### USAB — Usabilidade
-
-O requisito de usabilidade foi derivado do contexto operacional do evento Red Bull 24 Horas, em que os promotores precisam registrar informações rapidamente durante trocas constantes de atletas. Como o sistema substitui uma prancheta manual, a interface precisa ser simples, direta e utilizável sob pressão. [12](#ref-12).
-
-Esse RNF é mensurável pela taxa de sucesso no primeiro registro sem auxílio externo. Ele se conecta aos RFs de seleção de equipe, seleção de atleta, início de turno, registro de checkpoint e encerramento de turno.
-
-**Critério de aceite:** o operador deve conseguir realizar o primeiro fluxo completo de registro sem consultar manual externo.
-
----
-
-#### CONF — Confiabilidade
-
-O requisito de confiabilidade foi derivado da principal dor do parceiro: reduzir erros, perdas e inconsistências causadas pelo registro manual em prancheta. Como os dados registrados servem para apuração final da competição, o sistema precisa preservar a integridade das informações coletadas. [13](#ref-13).
-
-Esse RNF é mensurável pela frequência de salvamento automático dos dados a cada checkpoint. Ele se conecta aos RFs de registro de turno, registro de checkpoint e consolidação dos resultados.
-
-**Critério de aceite:** cada checkpoint registrado deve ser salvo e permanecer associado ao turno, atleta e equipe correspondentes.
-
----
-
-#### DES — Desempenho
-
-O requisito de desempenho foi derivado da necessidade de uso contínuo durante o evento, em um ambiente com trocas rápidas de atletas. O sistema não pode atrasar o operador no momento de iniciar turnos, registrar checkpoints ou consultar resultados.
-
-Esse RNF é mensurável pelo tempo de resposta do sistema, especialmente nas ações principais. Ele se conecta aos RFs de iniciar turno, salvar checkpoint, encerrar turno e visualizar resultados.
-
-**Critério de aceite:** as principais ações do sistema devem responder em até 1 segundo no cenário esperado de uso.
-
----
-
-#### SUP — Suportabilidade
-
-O requisito de suportabilidade foi derivado do contexto de uso em ambiente de evento, especialmente em dispositivos móveis ou tablets, como iPads. Como a operação pode ocorrer fora de um ambiente tradicional de escritório, o sistema precisa funcionar em navegadores modernos sem instalação local.
-
-Esse RNF é mensurável pela compatibilidade com Safari e Chrome em ambiente mobile. Ele se conecta à restrição organizacional de uso simples e rápido pela equipe operacional.
-
-**Critério de aceite:** o sistema deve funcionar corretamente em iPad e navegadores modernos sem quebra visual ou funcional.
-
----
-
-#### SEG — Segurança
-
-O requisito de segurança foi derivado da necessidade de proteger os registros contra exclusões acidentais. Mesmo sem login, o sistema precisa preservar a rastreabilidade dos dados para auditoria e conferência pós-evento.
-
-Esse RNF é mensurável pela garantia de que nenhum registro seja apagado permanentemente do banco de dados. Ele se conecta aos RFs de registro de turno, checkpoint, encerramento de turno e exportação CSV.
-
-**Critério de aceite:** registros removidos pelo operador não devem ser deletados permanentemente, mas marcados por soft delete.
-
----
-
-#### CAP — Capacidade
-
-O requisito de capacidade foi derivado da operação simultânea das duas equipes durante o evento. Como cada equipe pode ter um operador registrando dados ao mesmo tempo, o sistema precisa suportar múltiplos usuários operando em paralelo.
-
-Esse RNF é mensurável pelo suporte a pelo menos 2 operadores simultâneos, um por equipe. Ele se conecta aos RFs de seleção de equipe, registro de turno e registro de checkpoints.
-
-**Critério de aceite:** dois operadores devem conseguir registrar dados simultaneamente, em equipes diferentes, sem conflito ou sobrescrita de informações.
-
----
-
-#### REST — Restrições Design
-
-O requisito de restrição de design foi derivado das limitações definidas pelo parceiro: não haverá integração direta com as esteiras Technogym, não haverá uso de pulseiras, não haverá login e não haverá dependência de APIs externas no MVP.
-
-Esse RNF é mensurável pela ausência de dependências externas obrigatórias para o funcionamento do sistema. Ele se conecta diretamente às restrições do projeto e aos RFs baseados em input manual assistido.
-
-**Critério de aceite:** o sistema deve permitir o registro completo dos dados sem autenticação, sem integração com esteiras e sem APIs externas.
-
----
-
-#### ORG — Organizacionais
-
-O requisito organizacional foi derivado da necessidade de alinhar o desenvolvimento ao processo acadêmico do projeto e garantir documentação, versionamento e rastreabilidade das decisões técnicas.
-
-Esse RNF é mensurável pela adoção da arquitetura MVC, documentação do projeto e uso de repositório Git. Ele se conecta às exigências organizacionais da disciplina e à necessidade de manutenção do sistema ao longo das sprints.
-
-**Critério de aceite:** o projeto deve manter estrutura documentada, versionada e organizada conforme o padrão definido pelo grupo.
+A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com Promotores de Field Marketing em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
@@ -1176,157 +1100,84 @@ A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistem
 
 | RF    | RN associadas | Endpoint    | Método |
 |-------|---------------|-------------|--------|
-| RF004 | RN01, RN08 | `/api/equipes` | GET |
-| RF005 | RN02, RN08, RN11 | `/api/atletas` | GET |
-| RF006 | RN03 | `/api/esteiras` | GET |
-| RF008 | RN08, RN14, RN15, RN23 | `/api/turnos` | POST |
-| RF009 | RN08, RN14, RN18, RN19, RN20 | `/api/turnos/{id}/encerrar` | PATCH |
-| RF010 | RN08, RN16, RN20, RN22, RN23, RN24 | `/api/checkpoints` | POST |
-| RF016 | RN09, RN20, RN26, RN27 | `/api/checkpoints/{id}` | PUT |
-| RF022 | RN32, RN33 | `/api/placar/geral` | GET |
-| RF023 | RN31 | `/api/placar/geral` | GET |
-| RF024 | RN33, RN34, RN35 | `/api/placar/geral` | GET |
-| RF025 | RN36 | `/api/relatorios/exportar` | GET |
+| RF001 | RN01 | `/api/equipes` | GET |
+| RF002 | RN02, RN11 | `/api/turnos` | POST |
+| RF003 | RN03, RN06, RN10, RN11, RN16, RN17 | `/api/checkpoints` | POST |
+| RF004 | RN04, RN06, RN07, RN10, RN16 | `/api/turnos/{id}/encerrar` | PATCH |
+| RF005 | RN04, RN05, RN07, RN09, RN10, RN16, RN17, RN18 | `/api/checkpoints/{id}` | PUT |
+| RF006 | RN08 | `/api/placar/tempo` | GET |
+| RF007 | RN09, RN12 | `/api/estatisticas/trocas` | GET |
+| RF008 | RN13, RN14 | `/api/placar/geral` | GET |
+| RF009 | RN15 | `/api/placar/geral` | GET |
+| RF010 | - | `/api/placar/geral` | GET |
+| RF011 | - | `/api/relatorios/exportar` | GET |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
-### 3.2.1. Arquitetura em Camadas (sprint 3)
+### 3.2.1. Arquitetura em Camadas (sprint 3) 
 
-O sistema Bull Pace segue o padrão de Arquitetura em Camadas, organizado no fluxo `Routes → Controller → Service → Repository → Banco de Dados`, com apoio da camada `Models` para tipagem das entidades e contratos trafegados entre as camadas.
+A aplicação BullPace foi organizada seguindo o padrão de Arquitetura em Camadas, na variante Controller-Service-Repository, que é a forma mais comum de estruturar aplicações web em Node.js com Express. Esse padrão separa o código em quatro camadas com responsabilidades bem definidas, o que ajuda no trabalho em grupo e facilita a manutenção do projeto ao longo das sprints.
 
-Essa organização separa responsabilidades e evita que regras de negócio, acesso ao banco de dados e respostas HTTP fiquem misturados no mesmo arquivo. Dessa forma, cada parte do sistema pode evoluir com menor acoplamento e maior clareza.
+A ideia central é que cada camada cuida de uma etapa do processamento da requisição. A comunicação entre elas é unidirecional: a requisição entra pela camada mais externa (Controller) e desce até a mais interna (Model), enquanto a resposta percorre o caminho inverso. Essa separação evita que regras de negócio fiquem misturadas com acesso ao banco ou com formatação da resposta HTTP.
 
-```mermaid
-flowchart TD
+Cada camada é apresentada em detalhe a seguir. O fluxo completo de uma requisição percorrendo as quatro camadas já foi documentado na seção 3.2.4 (Diagrama de Sequência), que mostra como o registro de checkpoint passa pelo Controller, Service, Repository e Banco no caso prático do BullPace.
 
-    Client[Cliente HTTP]
+<br>
+<div align="center">
+  <b>Figura 21 — Arquitetura em Camadas do BullPace</b><br>
+  <img src="../assets/3.2.1-arquitetura-camadas.png" 
+   width="80%"><br>
+ <sub>Fonte: Elaborado pelos autores (2026).</sub>
+</div>
+<br>
 
-    subgraph ROUTES
-        R[server.ts]
-    end
+#### Camada Controller
 
-    subgraph CONTROLLERS
-        AC[AtletaController]
-        EvC[EventoController]
-        OpC[OperadorController]
-        CoC[CoordenadorController]
-        EsC[EsteiraController]
-        SeC[SessaoController]
-        TC[TurnoController]
-        ChC[CheckpointController]
-        PC[PlacarController]
-    end
+A camada Controller é a porta de entrada da aplicação. Ela recebe as requisições HTTP que chegam à API (vindas do iPad usado pelo operador no evento) e devolve as respostas para o cliente. No BullPace, essa camada faz três coisas principais.
 
-    subgraph SERVICES
-        AS[AtletaService]
-        EvS[EventoService]
-        OpS[OperadorService]
-        CoS[CoordenadorService]
-        EsS[EsteiraService]
-        SeS[SessaoService]
-        TS[TurnoService]
-        ChS[CheckpointService]
-        PS[PlacarService]
-    end
+Primeiro, ela confere se o formato da requisição está correto, verificando se os campos obrigatórios chegaram, se os tipos batem com o esperado e se o body foi enviado no padrão certo. Se algo está fora, ela já devolve erro 400 ou 422 antes mesmo de chamar as outras camadas.
 
-    subgraph REPOSITORIES
-        AR[AtletaRepository]
-        EvR[EventoRepository]
-        OpR[OperadorRepository]
-        CoR[CoordenadorRepository]
-        EsR[EsteiraRepository]
-        SeR[SessaoRepository]
-        TR[TurnoRepository]
-        ChR[CheckpointRepository]
-        SupabaseClient[supabase.ts]
-    end
+Segundo, ela traduz a requisição HTTP em uma chamada de função para o Service. Quem decide se o dado é válido em termos de regra de negócio é o Service, não o Controller. Essa separação é importante porque mantém o Controller leve e focado só no contrato HTTP.
 
-    subgraph MODELS
-        AM[AtletaModels]
-        EvM[EventoModels]
-        OpM[OperadorModels]
-        CoM[CoordenadorModels]
-        EsM[EsteiraModels]
-        SeM[SessaoModels]
-        TM[TurnoModels]
-        ChM[CheckpointModels]
-        PM[PlacarModels]
-    end
+Terceiro, ela formata a resposta. Pega o que o Service retornou, monta o JSON de resposta e devolve com o status code apropriado: 201 quando criou um recurso, 200 quando consultou, 404 quando não encontrou, 500 se algo quebrou no caminho.
 
-    DB[(Supabase / PostgreSQL)]
+O Controller não conhece regras de negócio, não acessa o banco diretamente e não faz validações que dependem do estado da aplicação. Sua função é estritamente traduzir a comunicação HTTP em algo que o Service entenda, e vice-versa.
 
-    Client --> R
 
-    R --> AC
-    R --> EvC
-    R --> OpC
-    R --> CoC
-    R --> EsC
-    R --> SeC
-    R --> TC
-    R --> ChC
-    R --> PC
+#### Camada Service
 
-    AC --> AS
-    EvC --> EvS
-    OpC --> OpS
-    CoC --> CoS
-    EsC --> EsS
-    SeC --> SeS
-    TC --> TS
-    ChC --> ChS
-    PC --> PS
+A camada Service é onde mora a lógica de negócio do BullPace. Quando o Controller recebe uma requisição e repassa pra cá, é o Service que decide se aquele dado pode mesmo ser salvo. Ele aplica as regras de negócio do projeto antes de deixar qualquer coisa seguir pro banco.
 
-    AS --> AR
-    EvS --> EvR
-    OpS --> OpR
-    CoS --> CoR
-    EsS --> EsR
-    SeS --> SeR
-    TS --> TR
-    ChS --> ChR
-    PS --> SupabaseClient
+Pega o registro de checkpoint como exemplo. Antes de gravar, o Service checa três regras em sequência:
 
-    AR --> AM
-    EvR --> EvM
-    OpR --> OpM
-    CoR --> CoM
-    EsR --> EsM
-    SeR --> SeM
-    TR --> TM
-    ChR --> ChM
-    PS --> PM
+- O turno ainda está ativo? Não dá pra registrar checkpoint num turno já encerrado (RN19).
+- O KM acumulado veio preenchido? É o dado central da apuração, então é obrigatório (RN18).
+- O novo KM é maior ou igual ao último do mesmo turno? A quilometragem só cresce dentro de um turno, nunca regride (RN06).
 
-    SeR --> SupabaseClient
-    TR --> SupabaseClient
-    ChR --> SupabaseClient
-    SupabaseClient --> DB
-```
+Se qualquer uma falhar, o Service barra ali mesmo e devolve o erro pro Controller. O Repository nem chega a ser chamado e o banco continua intacto. Só quando as três passam é que ele monta o objeto final, já com o timestamp do servidor, que a RN12 não deixa o operador editar na mão, e aí sim manda pro Repository salvar.
 
-#### Responsabilidades das camadas
+Duas coisas o Service não faz: não conversa direto com o banco e não mexe em detalhes de HTTP, como status code ou formato de resposta. Ele fica no meio do caminho: recebe o que o Controller validou no nível do contrato, aplica as regras de negócio, e entrega pro Repository um objeto pronto pra persistir.
 
-| Camada | Responsabilidade | Pasta/arquivo no projeto | Pode chamar | Não deve fazer |
-|---|---|---|---|---|
-| Routes | Define URLs, métodos HTTP e encaminha a requisição para o controller ou handler correto. | `src/server.ts` | Controller | Conter regra de negócio, validação complexa ou acesso direto ao banco. |
-| Controller | Recebe `req` e `res`, extrai os dados da requisição, chama o service e devolve a resposta HTTP. | `src/Controller/*.ts` | Service | Fazer query, acessar Supabase diretamente ou concentrar regras de negócio. |
-| Service | Centraliza regras de negócio, validações e coordenação do fluxo da aplicação. | `src/Service/*.ts` | Repository | Usar `req`/`res` ou montar resposta HTTP. |
-| Repository | Isola o acesso aos dados, realizando consultas, inserções e atualizações. | `src/Repository/*.ts` e `src/supabase.ts` | Banco de dados / Supabase | Conter regras de negócio do domínio ou depender de objetos HTTP. |
-| Models | Define interfaces TypeScript, entidades e formatos de dados trafegados entre as camadas. | `src/Models/*.ts` | Usado pelas demais camadas | Executar regras, acessar banco ou responder requisições. |
-| Banco de Dados | Armazena os dados persistentes do sistema, como eventos, atletas, esteiras, turnos, checkpoints e sessões operacionais. | Supabase / PostgreSQL | Não se aplica | Conter lógica de aplicação fora das constraints e regras de persistência. |
+#### Camada Repository
 
-#### Regra de comunicação
+A camada Repository é a que conversa com o banco de dados. Quando o Service termina de validar tudo e monta o objeto pronto pra salvar, o Repository recebe esse objeto e transforma em comando SQL, rodando em cima do Supabase.
 
-O fluxo esperado da arquitetura é:
+No caso do checkpoint, depois que o Service libera, o Repository faz o `INSERT INTO checkpoints (...)` com os dados certos. Quando o Service precisa consultar algo antes, como buscar o último checkpoint do turno pra comparar o KM, o Repository monta o `SELECT` e devolve o resultado.
 
-```text
-Routes → Controller → Service → Repository → Banco de Dados
-```
+O ponto principal é que essa é a única camada que toca no banco direto. Nenhuma outra parte do sistema escreve SQL ou acessa o Supabase por conta própria, e isso isola o banco do resto do código: se um dia a gente trocar o Supabase por outro banco, só o Repository muda, enquanto Controller e Service continuam iguais.
 
-Nenhuma camada deve pular a camada imediatamente abaixo. Assim, um `Controller` não deve chamar diretamente um `Repository`, um `Service` não deve depender de `req` ou `res`, e um `Repository` não deve conter regras de negócio. Essa separação facilita testes, manutenção e evolução da aplicação.
+Aqui também não entra regra de negócio. Se o objeto chegou até o Repository, é porque o Service já garantiu que tá tudo certo. O trabalho dele é executar a operação e devolver o que o banco respondeu, normalmente o registro já com o `id` gerado.
 
-#### Observação sobre o estado atual do projeto
+#### Camada Model
 
-No código atual, parte das rotas está registrada diretamente em `src/server.ts`, incluindo rotas HTML e a API genérica `/api/:tabela`. Isso ainda é compatível com a existência da camada `Routes`, pois o arquivo principal do servidor exerce essa responsabilidade. Para as próximas evoluções, a arquitetura pode ser refinada separando essas rotas em arquivos específicos e conectando todos os endpoints REST ao fluxo `Controller → Service → Repository`.
+A camada Model é a base de tudo. Ela representa as entidades do domínio do BullPace, Equipe, Atleta, Turno e Checkpoint, e define a forma dos dados que circulam por todas as outras camadas.
+
+No fluxo do checkpoint, o Model aparece em todo lugar mesmo que a gente não perceba. Quando o Controller recebe o body da requisição, ele já vem no formato esperado pelo Model. Quando o Service monta o objeto pra salvar, ele segue a estrutura do Model. Quando o Repository devolve o registro do banco, vem como Model também.
+
+
+A diferença pras outras camadas é que o Model não executa nada. Não tem lógica, não valida, não conversa com ninguém. Ele é só o contrato: define quais campos existem, de que tipo são e como se relacionam. Esse contrato é o que mantém Controller, Service e Repository conversando a mesma língua.
+
+No BullPace, o Model bate direto com o que tá no banco. Um Checkpoint no código tem os mesmos campos do checkpoint na tabela: `id_checkpoint`, `id_turno`, `km_acumulado`, `pace_medio`, `velocidade_media`, `registrado_em`. Isso simplifica o trabalho do Repository, porque a tradução entre objeto e SQL fica direta.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
@@ -1707,7 +1558,65 @@ Conclui o ciclo de corrida de um participante. O TurnoService repassa o identifi
 
 ### 3.2.7. Padrões de Projeto Aplicados (sprints 3 a 5)
 
-*Documente os design patterns utilizados (Repository, Strategy, Factory, DTO etc.) e quais princípios SOLID se aplicam. Justifique a adoção de cada padrão com base em uma necessidade real do projeto.*
+Essa seção documenta os padrões de projeto adotados, apresentando a justificativa de cada escolha com base nas necessidades reais identificadas. Os padrões foram selecionados para resolver problemas de organização do código, separação de responsabilidades da solução ao longo das 24 horas de operação do evento.
+
+#### Repository
+
+O padrão Repository foi aplicado para isolar o acesso ao banco de dados do restante da aplicação. Cada entidade do possui seu próprio repositório, como `TurnoRepository`, `CheckpointRepository` e `EsteiraRepository`, concentrando todos os comandos SQL executados.
+
+A justificativa está diretamente ligada ao contexto. O BullPace precisa garantir que alterações nas regras de negócio, não impactem a camada de persistência. Com o Repository, qualquer mudança de query ou de estrutura de tabela fica restrita a um único ponto do código, sem necessidade de ajuste nos Services ou Controllers.
+
+Além disso, o padrão facilita a criação de testes automatizados. Os Services podem ser testados isolados, utilizando repositórios simulados, o que é essencial para validar as regras de negócio críticas do sistema, como a progressão obrigatória do KM acumulado (RN16) e vinculação de checkpoint a turno ativo (RN23), sem depender de uma conexão real com o banco durante os testes.
+
+No contexto do projeto, o isolamento oferecido pelo Repository também reduz o risco operacional. Como o evento dura 24 horas, qualquer instabilidade que exija manutenção emergencial no banco precisa ser resolvida no menor número de arquivos possível. O padrão garante que esse escopo seja previsível e delimitado.
+
+#### Service Layer
+
+O padrão Service Layer foi adotado para centralizar a lógica de negócio em uma camada específica, mantendo os Controllers focados exclusivamente no contrato HTTP e os Repositories restritos ao acesso ao banco.
+
+A necessidade desse padrão ficou clara ao longo do desenvolvimento das regras de negócio (seção 3.1.2). A obrigatoriedade do KM acumulado no registro de checkpoint (RN22), o bloqueio de turnos em esteiras já ocupadas (RN13 e RN14) e o cálculo automático de pace médio quando o campo não é preenchido manualmente (RN25) precisavam de um local específico para residir, sem contaminar a apresentação e a persistência.
+
+Na prática, o `CheckpointService` é responsável por executar três validações antes de qualquer inserção no banco: verificar se o turno está ativo, confirmar que o KM acumulado foi informado e garantir que o novo valor não é inferior ao último checkpoint registrado. Após essas verificações o objeto é encaminhado ao `CheckpointRepository` para persistência (Diagrama de Sequência da seção 3.2.4).
+
+O padrão também cumpre o requisito não funcional MANUT01, que exige separação estrita entre as camadas de modo que as alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência.
+
+#### Data Transfer Object (DTO)
+
+O padrão DTO foi utilizado para estruturar os dados que estão entre as camadas da aplicação, evitando que objetos do banco de dados sejam expostos diretamente nas respostas da API ou que dados desnecessários circulem entre as camadas internas.
+
+Esse padrão se torna relevante principalmente no contexto dos checkpoints/turnos. Quando o `CheckpointService` monta o objeto antes de enviá-lo ao `CheckpointRepository`, ele constrói uma estrutura com campos muito bem definidos, incluindo o timestamp automatico gerado pelo servidor conforme a RN21, e exclui campos que não devem ser manipulados, como o campo `is_ajuste`, que identifica correções feitas pela Gestora de Operações.
+
+A adoção do DTO também contribui para a segurança da aplicação. Como dito  no requisito SEG01, o timestamp registrado não pode ser enviado pelo cliente nem editado manualmente. O DTO garante que esse campo seja sempre descartado antes de chegar ao banco.
+
+#### Singleton
+
+O padrão foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
+
+A justificativa para esse padrão está nos requisitos de desempenho e confiabilidade. O requisito DES01 exige que as ações do fluxo principal respondam em menos de 1.000 ms no percentil 95. Criar e destruir conexões com o banco a cada requisição introduziria latência desnecessária, especialmente em momentos de maior volume de registros, como os picos de checkpoints simultâneos das duas equipes operando ao mesmo tempo.
+
+Além disso também reduz o risco de esgotamento do pool de conexões durante as 24 horas do evento, cenário esse que poderia comprometer o requisito de disponibilidade CONF02, que exige um tempo de funcionamento mínimo de aproximadamente 98% durante o evento.
+
+#### Middleware de Autenticação
+
+O padrão foi adotado para separar a lógica de verificação de autenticação e autorização do código de negócio dos Controllers. Em vez de cada rota verificar individualmente se o usuário está autenticado e qual é o seu perfil, essa responsabilidade foi extraída para um middleware que é reutilizável e que intercepta as requisições antes de chegarem ao Controller correspondente.
+
+Esse padrão responde diretamente às regras de negócio RN08 e RN09, que limitam ações operacionais para o Promotor de Field Marketing e ações administrativas à Gestora de Operações. Como o middleware é aplicado nas rotas antes do processamento, o Controller nunca chega a executar sua lógica caso o usuário não possua o perfil adequado, diminuindo a superfície de erros relacionados a autorização.
+
+A separação também facilita a manutenção. Caso as regras de autorização precisem ser ajustadas, a alteração ocorre em um único ponto sem precisar revisar cada Controller de forma individual.
+
+#### Princípios SOLID Aplicados
+
+Os padrões descritos acima foram adotados em conjunto com os princípios SOLID, que orientam a estrutura da aplicação de forma mais aberta.
+
+O **Princípio da Responsabilidade Única** é o que sustenta toda a arquitetura em camadas. Controller, Service, Repository e Model têm responsabilidades bem definidas e que não se sobrepõem. O `TurnoController`, por exemplo, nunca contém validações de KM, e o `TurnoRepository` nunca toma decisões de negócio sobre quando um turno pode ser encerrado.
+
+O **Princípio Aberto-Fechado** foi considerado na modelagem das funções de usuário. A entidade `Funcao` foi projetada para permitir que novos perfis sejam adicionados sem modificar o código existente dos Services que verificam permissões. Um novo perfil de acesso pode ser implementado na tabela de funções e tratado pelo middleware sem que os Controllers precisem ser alterados.
+
+O **Princípio da Inversão de Dependências** se manifesta na relação entre Services e Repositories. Os Services dependem de abstrações dos Repositories e não de implementações concretas, o que permite substituir o Supabase por outro provedor sem impacto na camada de negócio. 
+
+#### Justificativa Geral
+
+Portanto, conclui-se que a combinação dos padrões Repository, Service Layer, DTO, Singleton e Middleware de Autenticação foi escolhida pois cada um resolve um problema específicoe: isolamento do banco, concentração de regras de negócio, controle de dados expostos pela API, eficiência na gestão de conexões e separação da lógica de autorização.
 
 ## 3.3. Wireframes (sprint 2)
 
@@ -1731,7 +1640,7 @@ Para todo o desenvolvimento gráfico do wireframe, foi utilizado o Figma, um sof
 
 ### 3.3.1 Descrição detalhada das telas do wireframe e seus fluxos de navegação
 
-### Tela de seleção de função
+#### Tela de seleção de função
 
 A tela de seleção de função do sistema é responsável por definir qual tipo de acesso será utilizado pelo usuário. Sua principal função é direcionar o usuário para o conjunto de funcionalidades correspondente às suas responsabilidades dentro da operação do evento.
 
@@ -1768,7 +1677,7 @@ A interface apresenta dois elementos interativos em formato de botão, cada um r
 
 Apenas uma equipe pode ser escolhida por vez. Ao clicar em um dos botões, o usuário é direcionado para a tela de seleção dos atletas vinculados à equipe correspondente.
 
-### Tela de seleção dos atletas
+#### Tela de seleção dos atletas
 
 A interface de seleção de atleta é acessada pelo operador do evento após a escolha de uma equipe. Sua principal função é apresentar a lista de integrantes do time e permitir a rápida seleção do próximo participante que assumirá a esteira.
 
@@ -1846,7 +1755,7 @@ O Modo TV é uma interface destinada especialmente para a exibição da competi�
 
 Este layout representa o primeiro estado do Modo TV, que corresponde ao período no qual a competição está em andamento. A partir deste layout, é possível concluir que a tela exibe as duas equipes lado a lado, com o total de quilômetros de cada equipe posicionado como elemento de maior destaque visual, garantindo fácil interpretação e usabilidade. A composição do valor exibido segue a lógica estabelecida pela RN10, sendo calculado a partir da soma dos quilômetros registrados nos turnos já encerrados acrescida do valor do último checkpoint válido do turno em andamento, o que garante que o placar reflita o progresso das equipes em tempo real. Além disso, a atualização do placar ocorre de forma automática a cada novo checkpoint registrado, sem necessidade de nenhuma ação por parte do usuário. 
 
-### Tela de placar final
+#### Tela de placar final
 
 A Figura 17 ilustra o wireframe da tela de placar final. Atendendo à necessidade de comparação simultânea entre as equipes (US12), a tela é estruturada em dois painéis, cada um exibindo os indicadores de desempenho da respectiva equipe: total de quilômetros percorridos, total de trocas realizadas e velocidade média. O painel da equipe vencedora é exibido em tamanho maior, estabelecendo uma hierarquia visual clara que destaca seu desempenho superior na competição.
 <br>
@@ -1860,7 +1769,7 @@ A Figura 17 ilustra o wireframe da tela de placar final. Atendendo à necessidad
 
 O _layout_ dos painéis permite identificar o desfecho da competição de forma direta, sem a necessidade de navegação adicional. Na parte inferior, um atalho direciona ao relatório final do evento, onde métricas e dados mais completos estão disponíveis para consulta e possíveis alterações. A tela representa o encerramento do fluxo principal da aplicação, consolidando os resultados de ambas as equipes em uma visualização conclusiva.
 
-### Tela de exportação de dados
+#### Tela de exportação de dados
 
 A interface de exportação de dados é acessada a partir da tela de placar final após a conclusão do evento. Sua principal finalidade é viabilizar a extração e o download de relatórios detalhados referentes às métricas e aos resultados consolidados da competição, conferindo ao usuário flexibilidade na parametrização dos dados que comporão o documento gerado.
 
@@ -1945,9 +1854,20 @@ A disposição gráfica apresentada evidencia que a uniformidade da fonte Inter,
 
 ### 3.4.3 Iconografia e imagens 
 
-*(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
+A definição do conjunto de ícones da aplicação tem uma função muito importante na comunicação rápida das ações disponíveis ao usuário. No contexto operacional como o da competição Red Bull 24 horas, onde os operadores precisam realizar interações ágeis sob condições de pressão constante, a iconografia atua como um sistema de sinalização visual que reduz a dependência de leitura de textos e agiliza a tomada de decisão.
 
-*posicione aqui imagens e textos contendo exemplos padronizados de ícones e imagens, com seus respectivos atributos de aplicação, utilizadas na solução*
+Para garantir a reconhecibilidade, os ícones foram organizados em quatro categorias: navegação, usuário e perfil, operação e dados, e localização e checkpoint. Dessa forma, distribuem-se os elementos na solução, o que facilita a localização intuitiva das funcionalidades pelo usuário. Todos os ícones seguem um padrão visual único, com traços consistentes e fundos arredondados, alinhados à identidade visual de toda a interface do projeto. Os ícones de estado, como Confirmado, Erro, Alerta, Ativo e Inativo, utilizam as cores definidas na paleta do sistema para reforçar o significado de cada ação ou condição da operação.
+
+A Figura 21 apresenta o conjunto completo de ícones utilizados na interface, organizados por categoria funcional.
+
+<div align="center">
+
+**Figura 21 – Espécime tipográfico e variações de estilo da fonte Inter**
+ <img src="../assets/bullpace_iconografia.png" width="100%"><br>
+*Fonte: Elaborado pelos autores (2026).*
+</div>
+
+A organização apresentada mostra que a padronização do conjunto de ícones contribui diretamente para a coerência visual da interface. A uniformidade no estilo gráfico dos ícones, junto ao uso das cores para estados operacionais, assegura que o usuário entenda o significado de cada elemento de uma forma muito simples, sem a necessidade de nenhum texto adicional. Dessa forma, a iconografia definida reforça a usabilidade e a acessibilidade do sistema, além de colaborar com a redução de erros operacionais ao longo das 24 horas de competição. 
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 

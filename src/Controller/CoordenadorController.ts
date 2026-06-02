@@ -9,9 +9,9 @@ export class CoordenadorController {
     // Lista coordenadores.
     listarCoordenadores(req: Request, res: Response) {
 
-      const coordenadores = this.coordenadorService.listar();
+        const coordenadores = this.coordenadorService.listar();
 
-      return res.status(200).json(coordenadores);
+        return res.status(200).json(coordenadores);
 
     }
 
