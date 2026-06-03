@@ -76,7 +76,7 @@ A ameaça é média. Os substitutos imediatos não são outras plataformas digit
 #### 5. Poder de barganha dos clientes
 O poder de barganha é alto. O projeto possui um cenário de monopsônio, onde há apenas um cliente direto: a Red Bull (representada pelo time de Field Marketing). Como único "comprador" e definidor de requisitos, o cliente tem total controle sobre o escopo, as prioridades e os critérios de aceitação. A ausência de outros clientes no horizonte do projeto aumenta a autoridade da Red Bull para exigir ajustes e determinar o sucesso ou fracasso da solução.
 
-### Conclusão
+### Visão Geral
 Com base nessa análise das cinco forças do projeto, pode ser concluído que o ambiente competitivo se mostra favorável à implementação da ferramenta. A rivalidade praticamente inexistente, somada ao baixo poder de barganha dos fornecedores, contribui para um cenário de "oceano azul", no qual a pressão externa de mercado é mínima pelo nível de especificidade do nicho e grande diversidade de recursos tecnológicos.
 
 Entretanto, o equilíbrio estratégico do projeto é sensível a dois fatores: 
@@ -102,6 +102,8 @@ No contexto do Red Bull 24 Horas, a SWOT foi utilizada para avaliar a situação
 
 #### Forças
 
+As forças reúnem os pontos em que a Red Bull já chega na frente para tocar o projeto. São vantagens que vêm da própria marca, da estrutura de eventos e da relação com o público.
+
 - Marca globalmente reconhecida e associada a esporte, energia, performance e experiências de alto impacto.
 - Estrutura interna de Field Marketing experiente na execução de eventos proprietários.
 - Capacidade de mobilizar público jovem e engajado em ativações esportivas e urbanas.
@@ -118,6 +120,8 @@ Outro ponto forte é o próprio formato do Red Bull 24 Horas. Por ter uma dinâm
 Em relação aos concorrentes, a força da Red Bull está na dificuldade de replicar integralmente sua combinação de marca, público, experiência e operação proprietária. Outras marcas podem promover eventos esportivos, mas a Red Bull possui um posicionamento consolidado nesse tipo de ativação, o que favorece a diferenciação do evento.
 
 #### Fraquezas
+
+As fraquezas apontam os limites internos que o projeto precisa encarar. A maior parte delas vem do jeito como a apuração é feita hoje e das condições de operar 24 horas seguidas.
 
 - Processo atual de apuração dependente de registros manuais em prancheta.
 - Maior risco de erro humano, ilegibilidade, perda de dados ou inconsistência entre registros.
@@ -140,6 +144,8 @@ Do ponto de vista do posicionamento da Red Bull, essa fragilidade gera uma contr
 
 #### Oportunidades
 
+As oportunidades mostram o que a solução pode destravar para além do evento atual. São ganhos que aparecem quando a apuração deixa de ser manual e passa a gerar dados organizados.
+
 - Crescimento do interesse por corrida, fitness e desafios esportivos de resistência.
 - Possibilidade de digitalizar e profissionalizar a apuração do Red Bull 24 Horas.
 - Aumento da confiabilidade, rastreabilidade e transparência na apuração dos resultados.
@@ -160,6 +166,8 @@ A solução proposta pode ainda gerar valor além da edição atual. Ao estrutur
 Em relação ao posicionamento competitivo, essa oportunidade é relevante porque a Red Bull pode diferenciar sua operação não apenas pela força da marca, mas também pela qualidade da gestão dos dados do evento. A confiabilidade da apuração passa a ser parte da experiência entregue.
 
 #### Ameaças
+
+As ameaças são os fatores externos que podem travar a adoção do sistema. Boa parte delas tem a ver com o método manual continuar sendo uma saída fácil e com os riscos de uma prova longa.
 
 - Concorrência com outros eventos esportivos e experiências de marca voltadas ao mesmo público.
 - Existência de substitutos simples, como pranchetas, planilhas colaborativas e aplicativos genéricos.
@@ -300,7 +308,7 @@ Além disso, a geração de uma base estruturada para auditoria pós-evento ampl
 
 ---
 
-**Conclusão**
+**Visão Geral**
 
 A análise do Mapa de Valor evidencia que a proposta da aplicação está alinhada às principais necessidades operacionais do Red Bull 24 Horas. O cliente precisa registrar e validar dados de forma contínua, confiável e rastreável, enquanto suas principais dores estão relacionadas ao processo manual, à ausência de integração direta com as esteiras e à dificuldade de auditoria dos registros.
 
