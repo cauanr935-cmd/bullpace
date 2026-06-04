@@ -29,7 +29,7 @@
 
 ## 📝 Descrição
 
-A proposta desse projeto surgiu a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior.
+A proposta deste projeto surgiu a partir de um desafio operacional real do evento Red Bull 24 Horas, uma competição de corrida em esteira na qual duas equipes, compostas por 16 participantes cada, se revezam ao longo de 24 horas. O objetivo da competição é identificar qual equipe acumula a maior quilometragem ao final da prova. Atualmente, a apuração é realizada de forma manual, por meio de anotações em prancheta feitas pelo time operacional de Field Marketing, o que torna o processo mais suscetível a falhas de registro, inconsistências e dificuldades de conferência posterior.
 
 Diante desse cenário, propõe-se o desenvolvimento de uma aplicação web para apoiar o registro, a organização e a consolidação dos dados da competição. O sistema permitirá selecionar a equipe, o atleta e a esteira utilizada, registrar o início e o encerramento de turnos, inserir checkpoints periódicos com quilometragem acumulada e armazenar timestamps automáticos para aumentar a rastreabilidade dos registros. A aplicação também deverá consolidar os resultados por equipe, possibilitando o acompanhamento da quilometragem acumulada e a comparação final entre os grupos competidores.
 
@@ -79,21 +79,21 @@ npm start
 
 * 0.5.0 - XX/XX/2026
     * 
-* 0.4.0 - XX/XX/2026
+* 0.4.0 - 12/06/2026
     * 
 * 0.3.0 - 29/05/2026
-    *  Lógica Proposicional das consultas SQL
-        * Seção 3.6.4: Consultas SQL do banco de dados e sua lógica proposional
+    *  Lógica proposicional das consultas SQL
+        * Seção 3.6.4: Consultas SQL do banco de dados e sua lógica proposicional
     
-    * Protótipo de Alta Fidelidade e Guia de Estilos
+    * Protótipo de alta fidelidade e guia de estilos
         * Seção 3.4: Guia de estilos
         * Seção 3.5: Protótipo de alta fidelidade
 
-    * 1ª Versão do Sistema Web
+    * 1ª Versão do sistema web
         * Seção 4.1: Primeira versão funcional do backend com WebAPI operante
 
     * Arquitetura da solução
-        * Atualização da seção 3.1.3: Requisitos Não Funcionais (RNF)
+        * Atualização da seção 3.1.3: Requisitos não funcionais (RNF)
         * Seção 3.2.1: Arquitetura em Camadas
         * Seção 3.2.3.1: Diagrama de Classes Arquitetural
         * Seção 3.2.4: Diagrama de Sequência UML
@@ -110,10 +110,10 @@ npm start
         * Seção 3.2.3: Diagrama de Classes do Domínio (notação UML com multiplicidades, associação, agregação, composição e herança);
         * Seção 3.2.4: Diagrama de Sequência UML (fluxo *Controller → Service → Repository → Banco*, com mensagens síncronas e assíncronas e retornos tracejados);
         * Seção 3.6.1: Modelo Entidade-Relacionamento (ER) conceitual (notação Chen ou Crow's Foot, consistente);
-        * Seção 3.6.2: Diagrama Entidade-Relacionamento (DER) (cardinalidades explícitas em ambos os lados, Chaves Primárias (PK) e Chaves Estrangiras (FK) identificadas, coerente com o diagrama de classes);
+        * Seção 3.6.2: Diagrama Entidade-Relacionamento (DER) (cardinalidades explícitas em ambos os lados, Chaves Primárias (PK) e Chaves Estrangeiras (FK) identificadas, coerente com o diagrama de classes);
         * Seção 3.6.3: Modelo Relacional e Modelo Físico (arquivo *migration.sql* com Linguagem de Definição de Dados (DDL) executável, constraints NOT NULL, UNIQUE, FOREIGN KEY, CHECK, CREATE INDEX, e ordem correta de dependências entre tabelas).
     
-* 0.1.0 - 30/04/2024
+* 0.1.0 - 30/04/2026
     * Entendimento do negócio
         * Seção 1 do WAD: Introdução;
         * Seção 2.1 do WAD: Escopo do projeto (Modelo de 5 Forças de Porter, análise SWOT, solução, Canvas Proposta de Valor e Matriz de Riscos).
@@ -122,7 +122,7 @@ npm start
         * Seção 2.2: Personas;
         * Seção 2.3: User stories.
 
-    * Projeto técnico e Requisitos
+    * Projeto técnico e requisitos
         * Seção 3.1: Requisitos do sistema (Minimundo do sistema, Requisitos Funcionais, Regras de Negócio, Requisitos Não Funcionais e Fundamentação dos Eixos);
         * Seção 3.1.4: Matriz *RF → RN → Endpoint* iniciada.
 
