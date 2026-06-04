@@ -1856,7 +1856,31 @@ A organização apresentada mostra que a padronização do conjunto de ícones c
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
-*posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização)*
+O protótipo de alta fidelidade do BullPace foi desenvolvido no Figma para representar a experiência final esperada da aplicação web. Ele apresenta os principais fluxos de navegação do sistema, contemplando tanto o uso operacional do promotor quanto o acompanhamento administrativo da coordenadora durante a prova.
+
+O protótipo navegável completo está disponível no link abaixo:
+
+[Protótipo navegável BullPace no Figma](https://www.figma.com/proto/PcgrQX9uFsYl5BrW1WKM3y/prototipo-bullpace?node-id=89-89&p=f&t=r4UGCO89YUV6yPny-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=89%3A89&show-proto-sidebar=1)
+
+<br>
+<div align="center">
+  <b>Figura 21 — Fluxo do promotor no protótipo de alta fidelidade</b><br>
+  <img src="../assets/prototipo.png" width="100%" alt="Fluxo do promotor no protótipo de alta fidelidade do BullPace"><br>
+  <sub>Fonte: Elaborado pelos autores no Figma (2026).</sub>
+</div>
+<br>
+
+O fluxo do promotor contempla a seleção de perfil, identificação do responsável pela operação, escolha da equipe, seleção do atleta, vínculo com a esteira, início do turno, registro de checkpoints e encerramento da corrida.
+
+<br>
+<div align="center">
+  <b>Figura 22 — Fluxo da coordenadora no protótipo de alta fidelidade</b><br>
+  <img src="../assets/prototipo gestora.png" width="100%" alt="Fluxo da coordenadora no protótipo de alta fidelidade do BullPace"><br>
+  <sub>Fonte: Elaborado pelos autores no Figma (2026).</sub>
+</div>
+<br>
+
+O fluxo da coordenadora foi estruturado para apoiar o acompanhamento geral da competição, a auditoria dos registros, o Modo TV, o fechamento da prova e a validação dos resultados oficiais.
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
 
@@ -2811,8 +2835,15 @@ A tela de encerramento apresenta um resumo completo do turno antes da confirmaç
 
 ## 6.2 Análise de Mercado
 
-*a) Visão Geral do Setor (até 250 palavras)*
-*Contextualize o setor no qual a aplicação está inserida, considerando aspectos econômicos, tecnológicos e regulatórios. Utilize fontes confiáveis.*
+A aplicação BullPace está inserida no setor de tecnologia aplicada a eventos esportivos, com foco em gestão operacional, registro de desempenho e consolidação de dados em tempo real. Esse segmento combina elementos do mercado de eventos presenciais, da indústria fitness e da chamada sport tech, área que utiliza sistemas digitais, sensores, plataformas de dados e interfaces de acompanhamento para melhorar a organização, a experiência e a confiabilidade de atividades esportivas.
+
+No caso do Red Bull 24 Horas, o problema central não está na criação de um aplicativo fitness para o consumidor final, mas na digitalização de uma operação específica: registrar manualmente informações de atletas, esteiras, turnos e checkpoints ao longo de uma competição de resistência. A solução atua como uma camada de controle operacional, substituindo pranchetas e anotações dispersas por uma base de dados estruturada e auditável.
+
+Do ponto de vista econômico, o setor esportivo tem se mostrado relevante porque eventos, experiências de marca e conteúdos esportivos continuam atraindo investimento. A Ampere Analysis projeta que os gastos globais com direitos esportivos ultrapassem US$ 78 bilhões em 2030, crescimento de 20% em relação a 2025, indicando que o esporte permanece como um ativo estratégico para marcas, mídia e entretenimento. Embora o BullPace não atue diretamente em direitos de transmissão, esse dado demonstra a força econômica do ecossistema esportivo e a valorização de experiências esportivas bem organizadas.
+
+No aspecto tecnológico, há uma tendência de digitalização das experiências esportivas e fitness. O uso de wearables, aplicativos de exercício, plataformas de acompanhamento e dashboards de performance mostra que a coleta e interpretação de dados passaram a fazer parte da experiência esportiva. Segundo estimativa da Grand View Research citada pela Vogue Business, o mercado global de wearables deve atingir US$ 186 bilhões em 2030, com CAGR de 13,6% entre 2025 e 2030. Esse avanço reforça a importância de dados, rastreabilidade e acompanhamento em tempo real no universo esportivo, ainda que o BullPace opte por entrada manual assistida devido à ausência de integração com as esteiras Technogym.
+
+Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de Proteção de Dados Pessoais, já que armazena nomes de atletas, operadores e registros associados à participação no evento. A ANPD disponibiliza a LGPD como referência institucional para orientar o tratamento de dados pessoais no Brasil, o que reforça a necessidade de limitar dados coletados, manter rastreabilidade, controlar permissões e evitar exposição indevida de informações.
 
 *b) Tamanho e Crescimento do Mercado (até 250 palavras)*
 *Apresente dados quantitativos sobre o tamanho atual e projeções de crescimento do mercado. Utilize fontes confiáveis.*
