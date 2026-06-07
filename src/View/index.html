@@ -951,37 +951,35 @@
         <div class="operator-list treadmill-list" aria-label="Seleção de esteira">
           <% esteiras.forEach((esteira) => { %>
             <% const esteiraAtual = typeof esteiraSelecionada !== 'undefined' && esteiraSelecionada === esteira.nome; %>
-            <% const bloqueada = esteira.tipo !== 'livre'; %>
-            <% if (bloqueada) { %>
-              <article class="operator-row treadmill-row is-disabled">
-                <span class="status-dot muted-dot" aria-hidden="true"></span>
+            <% const emManutencao = esteira.tipo !== 'livre'; %>
+            <form action="/selecionar-esteira" method="post" class="function-form <%= emManutencao ? 'maintenance-bypass-form' : '' %>" data-treadmill-name="<%= esteira.nome %>">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+              <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+              <input type="hidden" name="esteira" value="<%= esteira.nome %>">
+              <% if (emManutencao) { %>
+                <input type="hidden" name="bypassManutencao" value="sim">
+              <% } %>
+              <button type="submit" class="operator-row treadmill-row <%= esteiraAtual ? 'is-selected' : '' %> <%= emManutencao ? 'is-maintenance-bypass' : '' %>">
+                <span class="status-dot <%= emManutencao ? 'muted-dot' : '' %>" aria-hidden="true"></span>
                 <span class="operator-name">
                   <%= esteira.nome %>
                   <small><%= esteira.status %></small>
                 </span>
+                <% if (esteiraAtual) { %>
+                  <span class="selected-badge">SELECIONADO</span>
+                <% } %>
                 <span class="operator-radio" aria-hidden="true"></span>
-              </article>
-            <% } else { %>
-              <form action="/selecionar-esteira" method="post" class="function-form">
-                <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-                <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-                <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-                <input type="hidden" name="esteira" value="<%= esteira.nome %>">
-                <button type="submit" class="operator-row treadmill-row <%= esteiraAtual ? 'is-selected' : '' %>">
-                  <span class="status-dot" aria-hidden="true"></span>
-                  <span class="operator-name">
-                    <%= esteira.nome %>
-                    <small><%= esteira.status %></small>
-                  </span>
-                  <% if (esteiraAtual) { %>
-                    <span class="selected-badge">SELECIONADO</span>
-                  <% } %>
-                  <span class="operator-radio" aria-hidden="true"></span>
-                </button>
-              </form>
-            <% } %>
+              </button>
+            </form>
           <% }) %>
         </div>
+
+        <% if (typeof esteiraEmManutencaoSelecionada !== 'undefined' && esteiraEmManutencaoSelecionada) { %>
+          <p class="turn-note maintenance-bypass-note">
+            Você está utilizando uma esteira em manutenção e confirmou que está de acordo.
+          </p>
+        <% } %>
 
         <p class="turn-note">O horário de início será salvo automaticamente.</p>
 
@@ -992,11 +990,69 @@
             <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
             <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
             <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
+            <% if (typeof esteiraEmManutencaoSelecionada !== 'undefined' && esteiraEmManutencaoSelecionada) { %>
+              <input type="hidden" name="bypassManutencao" value="sim">
+            <% } %>
             <button type="submit" class="continue-button">
               Iniciar turno na <%= esteiraSelecionada %>
             </button>
           </form>
         <% } %>
+
+        <div id="maintenanceBypassModal" class="modal-overlay" hidden>
+          <section class="modal-box maintenance-bypass-modal" role="dialog" aria-modal="true" aria-labelledby="maintenanceBypassTitle">
+            <h2 id="maintenanceBypassTitle">Esteira em manutenção</h2>
+            <p>
+              Você está selecionando a <strong id="maintenanceBypassName">esteira</strong>, marcada como em manutenção.
+              Confirme que está de acordo para usar este bypass.
+            </p>
+            <div class="modal-actions">
+              <button id="cancelMaintenanceBypass" type="button" class="modal-secondary-button">Cancelar</button>
+              <button id="confirmMaintenanceBypass" type="button">Estou de acordo</button>
+            </div>
+          </section>
+        </div>
+
+        <script>
+          (() => {
+            const modal = document.getElementById('maintenanceBypassModal');
+            const treadmillName = document.getElementById('maintenanceBypassName');
+            const cancelButton = document.getElementById('cancelMaintenanceBypass');
+            const confirmButton = document.getElementById('confirmMaintenanceBypass');
+            let pendingForm = null;
+
+            document.querySelectorAll('.maintenance-bypass-form').forEach((form) => {
+              form.addEventListener('submit', (event) => {
+                if (form.dataset.bypassConfirmed === 'true') {
+                  return;
+                }
+
+                event.preventDefault();
+                pendingForm = form;
+                treadmillName.textContent = form.dataset.treadmillName || 'esteira';
+                modal.hidden = false;
+                confirmButton.focus();
+              });
+            });
+
+            const closeModal = () => {
+              modal.hidden = true;
+              pendingForm = null;
+            };
+
+            cancelButton.addEventListener('click', closeModal);
+
+            confirmButton.addEventListener('click', () => {
+              if (!pendingForm) {
+                closeModal();
+                return;
+              }
+
+              pendingForm.dataset.bypassConfirmed = 'true';
+              pendingForm.submit();
+            });
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'checkpoint') { %>

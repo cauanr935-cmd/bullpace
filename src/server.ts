@@ -637,7 +637,7 @@ app.post('/continuar-atleta', (req: Request, res: Response): void => {
 });
 
 app.post('/selecionar-esteira', (req: Request, res: Response): void => {
-  const { operador, equipe, atleta, esteira } = req.body;
+  const { operador, equipe, atleta, esteira, bypassManutencao } = req.body;
 
   res.render('index', {
     // Mantem a tela de esteiras e destaca a esteira escolhida.
@@ -647,6 +647,7 @@ app.post('/selecionar-esteira', (req: Request, res: Response): void => {
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
     esteiraSelecionada: esteira,
+    esteiraEmManutencaoSelecionada: bypassManutencao === 'sim',
     esteiras
   });
 });

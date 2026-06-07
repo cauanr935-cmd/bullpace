@@ -1658,8 +1658,8 @@ body {
   letter-spacing: 0;
 }
 
-.operator-row.is-disabled {
-  cursor: not-allowed;
+.operator-row.is-disabled,
+.operator-row.is-maintenance-bypass {
   color: #707070;
   background: #f4f4f4;
   box-shadow: inset 0 0 0 3px #d8d8d8;
@@ -1671,6 +1671,25 @@ body {
 }
 
 .operator-row.is-disabled .operator-name small {
+  color: #707070;
+}
+
+.operator-row.is-maintenance-bypass {
+  cursor: pointer;
+}
+
+.operator-row.is-maintenance-bypass:hover,
+.operator-row.is-maintenance-bypass:focus-visible {
+  background: #eeeeee;
+}
+
+.operator-row.is-maintenance-bypass.is-selected {
+  color: #202124;
+  background: #ffffff;
+  box-shadow: inset 5px 0 0 #202124, inset 0 0 0 3px #202124;
+}
+
+.operator-row.is-maintenance-bypass.is-selected .operator-name small {
   color: #707070;
 }
 
@@ -1688,6 +1707,13 @@ body {
   font-size: 17px;
   text-align: center;
   box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.maintenance-bypass-note {
+  background: #fff8e5;
+  color: #202124;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px #d9a800;
 }
 
 .flow-context {
@@ -2007,6 +2033,23 @@ body {
   font: inherit;
   font-weight: 800;
   cursor: pointer;
+}
+
+.modal-box strong {
+  font-weight: 800;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-box .modal-secondary-button {
+  color: #202124;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
 }
 
 .final-check-modal {
