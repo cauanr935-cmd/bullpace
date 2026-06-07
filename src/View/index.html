@@ -1349,23 +1349,51 @@
           <span>Histórico preservado</span>
         </section>
 
-        <form action="/confirmar-encerramento" method="post" class="continue-form">
-          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-          <button type="submit" class="continue-button">
-            Confirmar encerramento
-          </button>
-        </form>
+        <div class="modal-overlay final-check-modal">
+          <section class="modal-box final-check-box" role="dialog" aria-modal="true" aria-labelledby="finalCheckTitle" aria-describedby="finalCheckDescription">
+            <p class="final-check-kicker">Verificação final</p>
+            <h2 id="finalCheckTitle">Está tudo certo com o encerramento?</h2>
+            <p id="finalCheckDescription">
+              Confira o KM final da esteira e o tempo total corrido antes de liberar o próximo atleta.
+            </p>
 
-        <form action="/voltar-checkpoint" method="post" class="continue-form secondary-form">
-          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-          <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
-          <input type="hidden" name="inicioTurnoTimestamp" value="<%= inicioTurnoTimestamp %>">
-          <button type="submit" class="finish-button secondary-action">Voltar ao checkpoint</button>
-        </form>
+            <section class="final-check-athlete" aria-label="Atleta em encerramento">
+              <span class="operator-photo summary-photo" aria-hidden="true">
+                <%= atletaSelecionado.split(' ').map((parte) => parte[0]).join('').slice(0, 2) %>
+              </span>
+              <div>
+                <strong><%= atletaSelecionado %></strong>
+                <span><%= esteiraSelecionada %> · <%= equipeSelecionada %></span>
+              </div>
+            </section>
+
+            <form action="/confirmar-encerramento" method="post" class="final-check-form">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+              <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+
+              <section class="final-check-grid" aria-label="Dados finais do turno">
+                <label>
+                  <strong>KM FINAL DA ESTEIRA</strong>
+                  <span class="final-check-input-wrap">
+                    <input name="kmFinal" type="text" inputmode="decimal" value="<%= kmFinal %>" aria-label="KM final da esteira" required>
+                    <small>km</small>
+                  </span>
+                </label>
+                <label>
+                  <strong>TEMPO TOTAL CORRIDO</strong>
+                  <input name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" required>
+                </label>
+              </section>
+
+              <div class="final-check-actions">
+                <button type="submit" class="continue-button">
+                  Confirmar encerramento
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
       <% } %>
     </section>
   </main>
