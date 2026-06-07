@@ -22,6 +22,7 @@
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -30,6 +31,7 @@
         <% /* Volta para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -38,6 +40,7 @@
         <% /* Volta do fechamento para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -46,6 +49,7 @@
         <% /* Volta da confirmacao para a revisao de fechamento. */ %>
         <form action="/voltar-fechamento" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -54,6 +58,7 @@
         <% /* Volta do resultado oficial para a revisao de fechamento. */ %>
         <form action="/voltar-fechamento" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -62,6 +67,7 @@
         <% /* Volta da publicacao para o resultado oficial privado. */ %>
         <form action="/voltar-resultado-oficial" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -70,6 +76,7 @@
         <% /* Volta para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -78,6 +85,7 @@
         <% /* Volta para os detalhes gerais da equipe. */ %>
         <form action="/detalhes-equipe" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
@@ -175,12 +183,13 @@
           Entre para administrar a operação.
         </p>
 
-        <span class="login-badge">COORDENADOR(A)</span>
+        <span class="login-badge"><%= perfilLogin === 'administrador_geral' ? 'ADMINISTRADOR(A) GERAL' : 'COORDENADOR(A)' %></span>
         <p class="login-helper">Ações administrativas ficam registradas.</p>
 
         <form action="/login-coordenador" method="post" class="login-form" id="coordinatorLoginForm">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilLogin || perfilUsuario || 'coordenador' %>">
           <label class="field-group" for="coordenadorNome">
-            <span class="field-label">NOME DO(A) COORDENADOR(A) *</span>
+            <span class="field-label">NOME DO USUÁRIO *</span>
             <input id="coordenadorNome" name="coordenador" class="checkpoint-input" type="text" placeholder="Digite o nome" required>
           </label>
 
@@ -191,7 +200,7 @@
 
           <section class="permission-card">
             <strong>PERMISSÕES</strong>
-            <span>Auditoria, correção, TV e encerramento</span>
+            <span><%= perfilLogin === 'administrador_geral' ? 'Acesso completo, pausa, retomada e encerramento' : 'Auditoria, correção, TV e exportação' %></span>
           </section>
 
           <% if (typeof loginMensagem !== 'undefined') { %>
@@ -219,7 +228,7 @@
               // Desativa o botao quando ainda falta algum campo.
               button.disabled = !ready;
               // Troca o texto do botao para orientar o usuario.
-              button.textContent = ready ? 'Entrar como coordenador(a)' : 'Preencha os campos para entrar';
+              button.textContent = ready ? 'Entrar no painel' : 'Preencha os campos para entrar';
             };
 
             // Escuta digitacao em cada campo obrigatorio.
@@ -279,8 +288,12 @@
 
         <section class="panel-progress">
           <strong>08h 42min de 24h</strong>
-          <span>EM ANDAMENTO</span>
+          <span><%= estadoProva.status === 'finalizada' ? 'FINALIZADA' : estadoProva.status === 'pausada' ? 'PAUSADA' : 'EM ANDAMENTO' %></span>
         </section>
+
+        <% if (typeof painelMensagem !== 'undefined') { %>
+          <p class="checkpoint-message success"><%= painelMensagem %></p>
+        <% } %>
 
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
@@ -309,6 +322,7 @@
               </div>
               <form action="/detalhes-equipe" method="post" class="details-form">
                 <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+                <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
                 <input type="hidden" name="equipe" value="<%= equipe.nome %>">
                 <button type="submit">DETALHES</button>
               </form>
@@ -322,12 +336,31 @@
           <button type="button" class="is-active">Auditoria</button>
           <form action="/modo-tv" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <button type="submit">Modo TV</button>
           </form>
-          <form action="/fechamento" method="post">
-            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
-            <button type="submit">Fechamento</button>
-          </form>
+          <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="panel-action-link">Exportar CSV</a>
+          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+            <form action="/pausar-prova" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Pausar prova</button>
+            </form>
+          <% } %>
+          <% if (pode('retomar_prova') && estadoProva.status === 'pausada') { %>
+            <form action="/retomar-prova" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Retomar prova</button>
+            </form>
+          <% } %>
+          <% if (pode('finalizar_prova')) { %>
+            <form action="/fechamento" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Fechamento</button>
+            </form>
+          <% } %>
         </section>
       <% } %>
 
@@ -562,6 +595,7 @@
 
         <form action="/finalizar-prova" method="post" class="continue-form closure-action-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="continue-button">
             Finalizar prova
           </button>
@@ -569,6 +603,7 @@
 
         <form action="/voltar-painel-coordenador" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Voltar ao painel
           </button>
@@ -592,6 +627,7 @@
 
         <form action="/confirmar-finalizacao" method="post" class="confirmation-form" id="finishConfirmationForm">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
 
           <label class="confirmation-check-card" for="finishConfirmationCheck">
             <input id="finishConfirmationCheck" name="confirmaBloqueio" value="sim" type="checkbox">
@@ -614,6 +650,7 @@
 
         <form action="/voltar-fechamento" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Cancelar
           </button>
@@ -670,12 +707,13 @@
           </article>
         </section>
 
-        <button type="button" class="continue-button result-action-button">
+        <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="continue-button result-action-button">
           Exportar CSV
-        </button>
+        </a>
 
         <form action="/publicar-resultado" method="post" class="continue-form secondary-form result-publish-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button result-tv-link">
             Publicar no Modo TV
           </button>
@@ -704,6 +742,7 @@
 
         <form action="/confirmar-publicacao" method="post" class="continue-form closure-action-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="continue-button">
             Confirmar publicação
           </button>
@@ -711,6 +750,7 @@
 
         <form action="/voltar-resultado-oficial" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Cancelar
           </button>
@@ -736,6 +776,7 @@
           <button type="button" class="is-active">Todos os checkpoints</button>
           <form action="/filtro-atletas-equipe" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
             <button type="submit">Por atleta</button>
           </form>
@@ -782,6 +823,7 @@
         <section class="detail-tabs">
           <form action="/detalhes-equipe" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
             <button type="submit">Todos os checkpoints</button>
           </form>
@@ -795,6 +837,7 @@
             <% const atletaAtual = atletaSelecionado === atleta.nome; %>
             <form action="/filtro-atletas-equipe" method="post" class="function-form">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
               <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
               <input type="hidden" name="atleta" value="<%= atleta.nome %>">
               <button type="submit" class="operator-row filter-athlete-row <%= atletaAtual ? 'is-selected' : '' %>">

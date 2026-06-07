@@ -576,10 +576,10 @@ body {
   width: min(100%, 760px);
   /* Separa as acoes do bloco anterior. */
   margin: 20px auto 0;
-  /* Distribui Auditoria, Modo TV e Fechamento em colunas. */
+  /* Distribui as acoes conforme o perfil autenticado. */
   display: grid;
-  /* Cria tres colunas com largura igual. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Ajusta a quantidade de colunas sem quebrar quando o admin tem mais comandos. */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   /* Define espaco entre os botoes. */
   gap: 22px;
 }
@@ -588,7 +588,8 @@ body {
   margin: 0;
 }
 
-.panel-actions button {
+.panel-actions button,
+.panel-action-link {
   width: 100%;
   min-height: 64px;
   border: 2px solid #d8d8d8;
@@ -601,8 +602,17 @@ body {
   cursor: pointer;
 }
 
+.panel-action-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .panel-actions button:hover,
-.panel-actions button:focus-visible {
+.panel-actions button:focus-visible,
+.panel-action-link:hover,
+.panel-action-link:focus-visible {
   border-color: #202124;
   outline: none;
 }

@@ -2,8 +2,8 @@
 import 'dotenv/config';
 // Importa o Express, que cria as rotas HTTP do projeto.
 import express from 'express';
-// Importa os tipos do Express para deixar req/res tipados no TypeScript.
-import type { Request, Response } from 'express';
+// Importa os tipos do Express para deixar req/res/next tipados no TypeScript.
+import type { NextFunction, Request, Response } from 'express';
 // Importa o path para montar caminhos de pasta sem depender do sistema operacional.
 import path from 'path';
 // Importa o client centralizado do Supabase para ler e escrever dados no banco.
@@ -18,6 +18,111 @@ const app = express();
 // Permite receber dados em JSON e tambem dados enviados por formularios HTML.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const ROLES = {
+  OPERADOR: 'operador',
+  COORDENADOR: 'coordenador',
+  ADMINISTRADOR_GERAL: 'administrador_geral'
+} as const;
+
+type PapelUsuario = typeof ROLES[keyof typeof ROLES];
+type StatusProva = 'em_andamento' | 'pausada' | 'finalizada';
+type UsuarioRequisicao = {
+  nome?: string;
+  papel: PapelUsuario;
+};
+type RequestComUsuario = Request & {
+  usuario?: UsuarioRequisicao;
+};
+
+const estadoProva: {
+  status: StatusProva;
+  atualizadoPor?: string;
+  atualizadoEm: Date;
+} = {
+  status: 'em_andamento',
+  atualizadoEm: new Date()
+};
+
+const normalizarPapel = (papel: unknown): PapelUsuario | null => {
+  if (typeof papel !== 'string') return null;
+
+  const valor = papel.trim().toLowerCase();
+  const aliases: Record<string, PapelUsuario> = {
+    operador: ROLES.OPERADOR,
+    operadora: ROLES.OPERADOR,
+    coordenador: ROLES.COORDENADOR,
+    coordenadora: ROLES.COORDENADOR,
+    organizador: ROLES.COORDENADOR,
+    organizadora: ROLES.COORDENADOR,
+    admin: ROLES.ADMINISTRADOR_GERAL,
+    administrador: ROLES.ADMINISTRADOR_GERAL,
+    administradora: ROLES.ADMINISTRADOR_GERAL,
+    administrador_geral: ROLES.ADMINISTRADOR_GERAL,
+    administradora_geral: ROLES.ADMINISTRADOR_GERAL
+  };
+
+  return aliases[valor] || null;
+};
+
+const extrairPapelDaRequisicao = (req: Request): PapelUsuario | null => {
+  const candidatos = [
+    req.body?.perfilUsuario,
+    req.body?.perfil,
+    req.body?.papel,
+    req.body?.funcao,
+    req.query?.perfilUsuario,
+    req.query?.perfil,
+    req.query?.papel
+  ];
+
+  for (const candidato of candidatos) {
+    const papel = normalizarPapel(Array.isArray(candidato) ? candidato[0] : candidato);
+    if (papel) return papel;
+  }
+
+  if (req.body?.operador) return ROLES.OPERADOR;
+  if (req.body?.coordenador) return ROLES.COORDENADOR;
+
+  return null;
+};
+
+const autorizarPapeis = (...papeisPermitidos: PapelUsuario[]) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const papel = extrairPapelDaRequisicao(req);
+
+    if (!papel || !papeisPermitidos.includes(papel)) {
+      res.status(403).json({ error: 'Acesso negado para este perfil.' });
+      return;
+    }
+
+    (req as RequestComUsuario).usuario = {
+      nome: req.body?.operador || req.body?.coordenador,
+      papel
+    };
+
+    next();
+  };
+};
+
+const podeExportarDados = (papel: PapelUsuario): boolean => {
+  return papel === ROLES.COORDENADOR || papel === ROLES.ADMINISTRADOR_GERAL;
+};
+
+const podeControlarProva = (papel: PapelUsuario): boolean => {
+  return papel === ROLES.ADMINISTRADOR_GERAL;
+};
+
+const bloquearOperacaoSeProvaFinalizada = (req: Request, res: Response, next: NextFunction): void => {
+  if (estadoProva.status === 'finalizada') {
+    res.status(403).json({
+      error: 'Prova finalizada. Alterações operacionais não são permitidas.'
+    });
+    return;
+  }
+
+  next();
+};
 
 // Configura arquivos .html para serem renderizados pelo EJS e define onde ficam os arquivos visuais.
 app.engine('html', ejs.renderFile);
@@ -193,6 +298,22 @@ const formatarHorario = (timestamp: number): string => new Date(timestamp).toLoc
   minute: '2-digit'
 });
 
+const contextoAutorizacao = (papel: PapelUsuario = ROLES.OPERADOR) => ({
+  perfilUsuario: papel,
+  estadoProva,
+  pode: (acao: string) => {
+    if (acao === 'exportar_dados') return podeExportarDados(papel);
+    if (acao === 'pausar_prova' || acao === 'retomar_prova' || acao === 'finalizar_prova') {
+      return podeControlarProva(papel);
+    }
+    return false;
+  }
+});
+
+const obterPapelRenderizacao = (req: Request, fallback: PapelUsuario = ROLES.COORDENADOR): PapelUsuario => {
+  return extrairPapelDaRequisicao(req) || fallback;
+};
+
 const tabelasPermitidas = new Set([
   'atletas',
   'checkpoints',
@@ -236,7 +357,8 @@ app.get('/', (req: Request, res: Response): void => {
     titulo: 'SELEÇÃO DE FUNÇÃO',
     funcoes: [
       { nome: 'OPERADOR(A)', valor: 'operador' },
-      { nome: 'COORDENADOR(A)', valor: 'coordenador' }
+      { nome: 'COORDENADOR(A)', valor: 'coordenador' },
+      { nome: 'ADMINISTRADOR(A)', valor: 'administrador_geral' }
     ]
   });
 });
@@ -258,11 +380,15 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
   }
 
   // Se escolheu coordenador, renderiza a tela de login da coordenacao.
-  if (funcao === 'coordenador' || funcao === 'organizador') {
+  if (funcao === 'coordenador' || funcao === 'organizador' || funcao === 'administrador_geral') {
+    const papel = funcao === 'administrador_geral' ? ROLES.ADMINISTRADOR_GERAL : ROLES.COORDENADOR;
+
     res.render('index', {
       // Mostra a tela de autenticacao restrita do coordenador.
       tela: 'loginCoordenador',
-      titulo: 'ACESSO RESTRITO'
+      titulo: 'ACESSO RESTRITO',
+      perfilLogin: papel,
+      ...contextoAutorizacao(papel)
     });
     return;
   }
@@ -274,6 +400,7 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
 app.post('/login-coordenador', (req: Request, res: Response): void => {
   // Le nome e senha enviados pela tela de login.
   const { coordenador, senha } = req.body;
+  const papel = obterPapelRenderizacao(req);
 
   // Se os dois campos vieram preenchidos, libera o painel.
   if (coordenador && senha) {
@@ -282,7 +409,8 @@ app.post('/login-coordenador', (req: Request, res: Response): void => {
       tela: 'painelCoordenador',
       titulo: 'PAINEL DA PROVA',
       coordenadorSelecionado: coordenador,
-      equipesPainel
+      equipesPainel,
+      ...contextoAutorizacao(papel)
     });
     return;
   }
@@ -291,6 +419,8 @@ app.post('/login-coordenador', (req: Request, res: Response): void => {
     // Login visual temporario ate a tela administrativa ser criada.
     tela: 'loginCoordenador',
     titulo: 'ACESSO RESTRITO',
+    perfilLogin: papel,
+    ...contextoAutorizacao(papel),
     loginMensagem: coordenador && senha
       ? `Acesso recebido para ${coordenador}.`
       : 'Preencha o nome do coordenador(a) e a senha para entrar.'
@@ -299,53 +429,63 @@ app.post('/login-coordenador', (req: Request, res: Response): void => {
 
 app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = obterPapelRenderizacao(req);
 
   res.render('index', {
     // Retorna do painel para a autenticacao do coordenador(a).
     tela: 'loginCoordenador',
     titulo: 'ACESSO RESTRITO',
-    coordenadorSelecionado: coordenador
+    coordenadorSelecionado: coordenador,
+    perfilLogin: papel,
+    ...contextoAutorizacao(papel)
   });
 });
 
 app.post('/voltar-painel-coordenador', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = obterPapelRenderizacao(req);
 
   res.render('index', {
     // Retorna dos detalhes para a visao geral da coordenacao.
     tela: 'painelCoordenador',
     titulo: 'PAINEL DA PROVA',
     coordenadorSelecionado: coordenador,
-    equipesPainel
+    equipesPainel,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/modo-tv', (req: Request, res: Response): void => {
+app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
 
   res.render('index', {
     // Tela de controle do placar publico, usada no tablet da coordenacao.
     tela: 'modoTv',
     titulo: 'MODO TV',
     coordenadorSelecionado: coordenador,
-    equipesPainel
+    equipesPainel,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/fechamento', (req: Request, res: Response): void => {
+app.post('/fechamento', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
 
   res.render('index', {
     // Tela de revisao final antes de encerrar a prova.
     tela: 'fechamento',
     titulo: 'Fechamento',
     coordenadorSelecionado: coordenador,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/finalizar-prova', (req: Request, res: Response): void => {
+app.post('/finalizar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
 
   res.render('index', {
     // Confirmacao obrigatoria antes de bloquear novos registros e oficializar o resultado.
@@ -353,12 +493,14 @@ app.post('/finalizar-prova', (req: Request, res: Response): void => {
     titulo: 'Confirmar encerramento',
     coordenadorSelecionado: coordenador,
     resultadoOficial,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/confirmar-finalizacao', (req: Request, res: Response): void => {
+app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   const { coordenador, confirmaBloqueio } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
 
   if (confirmaBloqueio !== 'sim') {
     res.render('index', {
@@ -368,10 +510,15 @@ app.post('/confirmar-finalizacao', (req: Request, res: Response): void => {
       coordenadorSelecionado: coordenador,
       resultadoOficial,
       rankingFechamento,
+      ...contextoAutorizacao(papel),
       confirmacaoMensagem: 'Marque a confirmação para continuar.'
     });
     return;
   }
+
+  estadoProva.status = 'finalizada';
+  estadoProva.atualizadoPor = coordenador;
+  estadoProva.atualizadoEm = new Date();
 
   res.render('index', {
     // Resultado oficial apos a confirmacao do fechamento da prova.
@@ -379,12 +526,14 @@ app.post('/confirmar-finalizacao', (req: Request, res: Response): void => {
     titulo: 'Resultado oficial',
     coordenadorSelecionado: coordenador,
     resultadoOficial,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/publicar-resultado', (req: Request, res: Response): void => {
+app.post('/publicar-resultado', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
 
   res.render('index', {
     // Confirmacao explicita antes de mostrar o resultado final no placar publico.
@@ -392,11 +541,12 @@ app.post('/publicar-resultado', (req: Request, res: Response): void => {
     titulo: 'Publicar resultado',
     coordenadorSelecionado: coordenador,
     resultadoOficial,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/confirmar-publicacao', (req: Request, res: Response): void => {
+app.post('/confirmar-publicacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   res.render('index', {
     // Tela publica final, liberada apos a confirmacao da coordenacao.
     tela: 'tvResultado',
@@ -408,18 +558,21 @@ app.post('/confirmar-publicacao', (req: Request, res: Response): void => {
 
 app.post('/voltar-fechamento', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = obterPapelRenderizacao(req);
 
   res.render('index', {
     // Volta do resultado oficial para a revisao de fechamento.
     tela: 'fechamento',
     titulo: 'Fechamento',
     coordenadorSelecionado: coordenador,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
 app.post('/voltar-resultado-oficial', (req: Request, res: Response): void => {
   const { coordenador } = req.body;
+  const papel = obterPapelRenderizacao(req);
 
   res.render('index', {
     // Retorna da publicacao para o resultado oficial privado.
@@ -427,7 +580,8 @@ app.post('/voltar-resultado-oficial', (req: Request, res: Response): void => {
     titulo: 'Resultado oficial',
     coordenadorSelecionado: coordenador,
     resultadoOficial,
-    rankingFechamento
+    rankingFechamento,
+    ...contextoAutorizacao(papel)
   });
 });
 
@@ -450,9 +604,10 @@ app.get('/tv-resultado', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/detalhes-equipe', (req: Request, res: Response): void => {
+app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   // Recebe qual coordenador esta logado e qual equipe foi aberta.
   const { coordenador, equipe } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
   // Procura os dados da equipe; se nao achar, usa a primeira equipe como fallback.
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
 
@@ -462,13 +617,15 @@ app.post('/detalhes-equipe', (req: Request, res: Response): void => {
     titulo: equipePainel.nome,
     coordenadorSelecionado: coordenador,
     equipePainel,
-    checkpoints: checkpointsPorEquipe[equipePainel.nome] || []
+    checkpoints: checkpointsPorEquipe[equipePainel.nome] || [],
+    ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/filtro-atletas-equipe', (req: Request, res: Response): void => {
+app.post('/filtro-atletas-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
   // Recebe a equipe e, opcionalmente, o atleta selecionado no filtro.
   const { coordenador, equipe, atleta } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
   // Recupera o resumo da equipe escolhida.
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
   // Busca a lista de atletas dessa equipe.
@@ -483,7 +640,8 @@ app.post('/filtro-atletas-equipe', (req: Request, res: Response): void => {
     coordenadorSelecionado: coordenador,
     equipePainel,
     atletasFiltro: atletas,
-    atletaSelecionado
+    atletaSelecionado,
+    ...contextoAutorizacao(papel)
   });
 });
 
@@ -510,7 +668,7 @@ app.post('/selecionar-operador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/continuar-operador', (req: Request, res: Response): void => {
+app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador } = req.body;
 
   res.render('index', {
@@ -534,7 +692,7 @@ app.post('/voltar-operador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/selecionar-equipe', (req: Request, res: Response): void => {
+app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe } = req.body;
 
   res.render('index', {
@@ -547,7 +705,7 @@ app.post('/selecionar-equipe', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/continuar-equipe', (req: Request, res: Response): void => {
+app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe } = req.body;
 
   res.render('index', {
@@ -574,7 +732,7 @@ app.post('/voltar-equipe', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/selecionar-atleta', (req: Request, res: Response): void => {
+app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   // Recebe o atleta clicado e o ultimo atleta que correu.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
 
@@ -606,7 +764,7 @@ app.post('/selecionar-atleta', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/continuar-atleta', (req: Request, res: Response): void => {
+app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   // Recebe os dados necessarios para seguir da selecao de atleta para a esteira.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
 
@@ -636,7 +794,7 @@ app.post('/continuar-atleta', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/selecionar-esteira', (req: Request, res: Response): void => {
+app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira, bypassManutencao } = req.body;
 
   res.render('index', {
@@ -667,7 +825,7 @@ app.post('/voltar-atleta', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/iniciar-turno', (req: Request, res: Response): void => {
+app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira } = req.body;
   const inicioTurnoTimestamp = Date.now();
 
@@ -683,7 +841,7 @@ app.post('/iniciar-turno', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/finalizar-turno', (req: Request, res: Response): void => {
+app.post('/finalizar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe, atleta, esteira, kmFinal, duracaoTurno } = req.body;
   const inicioTurnoTimestamp = obterInicioTurno(req.body.inicioTurnoTimestamp);
 
@@ -718,7 +876,7 @@ app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
+app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
   const { operador, equipe, atleta } = req.body;
 
   res.render('index', {
@@ -733,8 +891,56 @@ app.post('/confirmar-encerramento', (req: Request, res: Response): void => {
   });
 });
 
+app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+  estadoProva.status = 'pausada';
+  estadoProva.atualizadoPor = req.body.coordenador;
+  estadoProva.atualizadoEm = new Date();
+
+  res.render('index', {
+    tela: 'painelCoordenador',
+    titulo: 'PAINEL DA PROVA',
+    coordenadorSelecionado: req.body.coordenador,
+    equipesPainel,
+    painelMensagem: 'Prova pausada com sucesso.',
+    ...contextoAutorizacao((req as RequestComUsuario).usuario!.papel)
+  });
+});
+
+app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+  estadoProva.status = 'em_andamento';
+  estadoProva.atualizadoPor = req.body.coordenador;
+  estadoProva.atualizadoEm = new Date();
+
+  res.render('index', {
+    tela: 'painelCoordenador',
+    titulo: 'PAINEL DA PROVA',
+    coordenadorSelecionado: req.body.coordenador,
+    equipesPainel,
+    painelMensagem: 'Prova retomada com sucesso.',
+    ...contextoAutorizacao((req as RequestComUsuario).usuario!.papel)
+  });
+});
+
+app.get('/exportar-dados', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): Response => {
+  const linhas = [
+    'posicao,equipe,km,checkpoints,correcoes',
+    ...rankingFechamento.map((equipe) => [
+      equipe.posicao,
+      equipe.nome,
+      equipe.km.replace(' km', ''),
+      equipe.checkpoints,
+      equipe.correcoes
+    ].join(','))
+  ];
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', 'attachment; filename="bullpace-auditoria.csv"');
+
+  return res.status(200).send(linhas.join('\n'));
+});
+
 // Buscar todos os registros de uma tabela
-app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
+app.get('/api/:tabela', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
   try {
     // Le o nome da tabela vindo da URL, por exemplo /api/atletas.
     const tabela = obterTabelaPermitida(req.params.tabela as string);
@@ -757,7 +963,7 @@ app.get('/api/:tabela', async (req: Request, res: Response): Promise<Response> =
 });
 
 // Inserir um novo registro em uma tabela
-app.post('/api/:tabela', async (req: Request, res: Response): Promise<Response> => {
+app.post('/api/:tabela', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
   try {
     // Le o nome da tabela que recebera o novo registro.
     const tabela = obterTabelaPermitida(req.params.tabela as string);
