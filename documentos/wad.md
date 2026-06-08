@@ -1427,7 +1427,7 @@ O usuário autorizado solicita a listagem dos operadores cadastrados na aplicaç
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Trata o fluxo de criação de uma nova competição/evento no ecossistema. O EventoController desestrutura o payload recebido e aciona o EventoService; a camada de serviço atribui um identificador único temporal ao objeto e invoca o método salvar() do EventoRepository, inserindo os dados estruturados de localidade, nome e período direto no banco de dados.
+O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. Após validar a permissão de acesso, a aplicação consulta a tabela de esteiras e retorna os equipamentos disponíveis para acompanhamento ou uso na operação da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que as esteiras possam ser visualizadas e gerenciadas apenas por usuários com permissão administrativa.
 
 ---
 
