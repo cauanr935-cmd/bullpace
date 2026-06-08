@@ -1,21 +1,35 @@
-import { Atleta } from "../Models/AtletaModels";
+import { supabase } from '../database/supabase';
+
+export interface AtletaDB {
+  id_atleta: number;
+  id_equipe: number;
+  nome: string;
+  status: string;
+  deleted_at: boolean;
+}
 
 export class AtletaRepository {
 
-  // Simula banco.
-  private atletas: Atleta[] = [];
+  async listarPorEquipe(idEquipe: number): Promise<AtletaDB[]> {
+    const { data, error } = await supabase
+      .from('atletas')
+      .select('id_atleta, id_equipe, nome, status')
+      .eq('id_equipe', idEquipe)
+      .eq('deleted_at', false);
 
-  // Lista atletas.
-  listar(): Atleta[] {
-
-    return this.atletas;
+    if (error) throw new Error(`[AtletaRepository.listarPorEquipe] ${error.message}`);
+    return (data || []) as AtletaDB[];
   }
 
-  // Salva atleta.
-  salvar(atleta: Atleta): Atleta {
+  async buscarPorNome(nome: string, idEquipe: number): Promise<AtletaDB | null> {
+    const { data, error } = await supabase
+      .from('atletas')
+      .select('*')
+      .eq('nome', nome)
+      .eq('id_equipe', idEquipe)
+      .maybeSingle();
 
-    this.atletas.push(atleta);
-
-    return atleta;
+    if (error) throw new Error(`[AtletaRepository.buscarPorNome] ${error.message}`);
+    return data as AtletaDB | null;
   }
 }

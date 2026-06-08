@@ -1,18 +1,49 @@
-import { Evento } from "../Models/EventoModels";
+import { supabase } from '../database/supabase';
+
+export interface EventoDB {
+  id_evento: number;
+  nome: string;
+  cidade: string;
+  estado: string;
+  data_inicio: string;
+  data_fim: string;
+  status: string;
+  deleted_at: boolean;
+}
 
 export class EventoRepository {
 
-  private eventos: Evento[] = [];
+  async listar(): Promise<EventoDB[]> {
+    const { data, error } = await supabase
+      .from('eventos')
+      .select('*')
+      .eq('deleted_at', false);
 
-  listar(): Evento[] {
-
-    return this.eventos;
+    if (error) throw new Error(`[EventoRepository.listar] ${error.message}`);
+    return (data || []) as EventoDB[];
   }
 
-  salvar(evento: Evento): Evento {
+  /** Retorna o primeiro evento ativo encontrado (convenção: evento em andamento). */
+  async buscarAtivo(): Promise<EventoDB | null> {
+    const { data, error } = await supabase
+      .from('eventos')
+      .select('*')
+      .eq('status', 'ativo')
+      .eq('deleted_at', false)
+      .order('data_inicio', { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    this.eventos.push(evento);
+    if (error) throw new Error(`[EventoRepository.buscarAtivo] ${error.message}`);
+    return data as EventoDB | null;
+  }
 
-    return evento;
+  async atualizarStatus(idEvento: number, status: string): Promise<void> {
+    const { error } = await supabase
+      .from('eventos')
+      .update({ status })
+      .eq('id_evento', idEvento);
+
+    if (error) throw new Error(`[EventoRepository.atualizarStatus] ${error.message}`);
   }
 }

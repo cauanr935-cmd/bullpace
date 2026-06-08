@@ -1,18 +1,36 @@
-import { Esteira } from "../Models/EsteiraModels";
+import { supabase } from '../database/supabase';
+
+export interface EsteiraDB {
+  id_esteira: number;
+  id_equipe: number | null;
+  id_evento: number | null;
+  marca: string;
+  modelo: string;
+  numero_serie: string;
+  status: string;
+  delet_at: boolean;
+}
 
 export class EsteiraRepository {
 
-  private esteiras: Esteira[] = [];
+  async listar(): Promise<EsteiraDB[]> {
+    const { data, error } = await supabase
+      .from('esteiras')
+      .select('id_esteira, id_equipe, id_evento, marca, modelo, numero_serie, status')
+      .eq('delet_at', false);
 
-  listar(): Esteira[] {
-
-    return this.esteiras;
+    if (error) throw new Error(`[EsteiraRepository.listar] ${error.message}`);
+    return (data || []) as EsteiraDB[];
   }
 
-  salvar(esteira: Esteira): Esteira {
+  async buscarPorModelo(modelo: string): Promise<EsteiraDB | null> {
+    const { data, error } = await supabase
+      .from('esteiras')
+      .select('*')
+      .eq('modelo', modelo)
+      .maybeSingle();
 
-    this.esteiras.push(esteira);
-
-    return esteira;
+    if (error) throw new Error(`[EsteiraRepository.buscarPorModelo] ${error.message}`);
+    return data as EsteiraDB | null;
   }
 }

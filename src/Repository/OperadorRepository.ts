@@ -1,18 +1,45 @@
-import { Operador } from "../Models/OperadorModels";
+import { supabase } from '../database/supabase';
+
+export interface OperadorDB {
+  id_operador: number;
+  nome: string;
+  login: string;
+  senha: string;
+  id_sessao_operacional: number | null;
+}
 
 export class OperadorRepository {
 
-  private operadores: Operador[] = [];
+  async listar(): Promise<OperadorDB[]> {
+    const { data, error } = await supabase
+      .from('operador')
+      .select('id_operador, nome, login, id_sessao_operacional');
 
-  listar(): Operador[] {
-
-    return this.operadores;
+    if (error) throw new Error(`[OperadorRepository.listar] ${error.message}`);
+    return (data || []) as OperadorDB[];
   }
 
-  salvar(operador: Operador): Operador {
+  async buscarPorLogin(login: string): Promise<OperadorDB | null> {
+    const { data, error } = await supabase
+      .from('operador')
+      .select('*')
+      .eq('login', login)
+      .maybeSingle();
 
-    this.operadores.push(operador);
+    if (error) throw new Error(`[OperadorRepository.buscarPorLogin] ${error.message}`);
+    return data as OperadorDB | null;
+  }
 
-    return operador;
+  async criar(nome: string): Promise<OperadorDB> {
+    const login = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '.');
+    const senha = '123';
+    const { data, error } = await supabase
+      .from('operador')
+      .insert({ nome, login, senha })
+      .select()
+      .single();
+
+    if (error) throw new Error(`[OperadorRepository.criar] ${error.message}`);
+    return data as OperadorDB;
   }
 }

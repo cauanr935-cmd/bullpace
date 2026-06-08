@@ -1,30 +1,24 @@
 import { Request, Response } from 'express';
 import { OperadorService } from '../Service/OperadorService';
 
-// Controller do operador. 
 export class OperadorController {
 
-    // Criar conexão com o serviço do operador.
-    private operadorService = new OperadorService();
+  private operadorService = new OperadorService();
 
-    // Listar operadores.
-    listarOperadores = async (req: Request, res: Response) => {
-
-        const operadores = this.operadorService.listarOperadores();
-
-        return res.status(200).json(operadores);
+  // Lista todos os operadores cadastrados.
+  listarOperadores = async (req: Request, res: Response) => {
+    try {
+      const operadores = await this.operadorService.listar();
+      return res.status(200).json(operadores);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro ao listar operadores.' });
     }
+  }
 
-    // Mostar permissões do operador.
-    listarPermissoes = (req: Request, res: Response) => {
-
-        // Pegar o id do operador da requisição.
-        const id = String(req.params.id);
-
-        // Busca as permissões do operador.
-        const permissoes = this.operadorService.listarPermissoes(id);
-
-        // Retorna as permissões do operador.
-        return res.status(200).json(permissoes);
-    }
+  // Mostra permissões de um operador pelo id.
+  listarPermissoes = (req: Request, res: Response) => {
+    const id = String(req.params.id);
+    const permissoes = this.operadorService.listarPermissoes(id);
+    return res.status(200).json(permissoes);
+  }
 }
