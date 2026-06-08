@@ -1464,7 +1464,7 @@ Acionado para inspecionar os privilégios de controle de um operador específico
 
 <div align="center">
   <sub>Figura 7 - Fluxo obter placar</sub><br>
-  <img src="../assets/fluxo8.png" width="100%"><br>
+  <img src="../assets/fluxo8Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 

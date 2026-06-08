@@ -38,7 +38,7 @@ export async function obterDadosPlacar(idEvento: number): Promise<DadosPlacar> {
   const { data: evento, error: erroEvento } = await supabase
     .from('eventos')
     .select('modo_tv_bloqueado')
-    .eq('id_evento', idEvento)
+    .eq('id_evento', idEvento) 
     .single();
 
   if (erroEvento || !evento) {
