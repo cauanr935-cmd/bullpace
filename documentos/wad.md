@@ -1434,11 +1434,11 @@ Trata o fluxo de criação de uma nova competição/evento no ecossistema. O Eve
 
 ### Módulo: Operador
 
-#### Fluxo 6: Listar Operadores (Leitura)
+#### Fluxo 6: Cadastrar Novo Evento (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar Operadores</sub><br>
-  <img src="../assets/fluxo6.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
+  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
