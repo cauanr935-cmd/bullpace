@@ -1420,11 +1420,11 @@ Requisição voltada para coletar as informações técnicas dos equipamentos do
 
 Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
 
-#### Fluxo 5: Cadastrar Novo Evento (Escrita/Criação)
+#### Fluxo 5: Listar Esteiras (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
-  <img src="../assets/fluxo5.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar esteiras</sub><br>
+  <img src="../assets/ListarEsteirasFluxo5.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
