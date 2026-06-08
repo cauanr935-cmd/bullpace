@@ -1372,11 +1372,11 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 ### Módulo: Coordenador
 
 
-#### Fluxo 1: Listar Coordenadores (Leitura)
+#### Fluxo 1: Login de Coordenadores (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar coordenadores</sub><br>
-  <img src="../assets/fluxo1.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo login do coordenador</sub><br>
+  <img src="../assets/LoginCoordenadorFluxo1.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
