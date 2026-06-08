@@ -1369,7 +1369,6 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
-### Módulo: Coordenador
 
 
 #### Fluxo 1: Login de Coordenadores (Autenticação)
@@ -1396,13 +1395,12 @@ O usuário submete suas credenciais (email e senha) via corpo da requisição (P
 
 ---
 
-### Módulo: Esteiras
 
-#### Fluxo 3: Listar Esteiras Disponíveis (Leitura)
+#### Fluxo 3: Listar Permissões dos Operadores (Consulta)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
-  <img src="../assets/fluxo3.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar permissões dos operadores</sub><br>
+  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
