@@ -1102,7 +1102,6 @@ Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 2
 --- 
 A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com operadores em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
 
-
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
 A Matriz RF → RN → Endpoint é um mapa técnico que interliga o que o sistema deve fazer (Requisitos Funcionais), as regras que deve respeitar (Regras de Negócio) e a sua implementação real no servidor (Endpoints). Ela serve como guia para os programadores, garantindo que toda funcionalidade exigida seja desenvolvida e processada no local correto da API.
