@@ -1374,13 +1374,12 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 #### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo login do coordenador</sub><br>
+  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
   <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O cliente faz uma requisição HTTP GET para coletar todos os coordenadores registrados. O CoordenadorController aciona o método listar() do CoordenadorService, que por sua vez consulta a coleção de dados exposta pelo CoordenadorRepository para retornar o array com os objetos ao usuário final.
-
+O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta.
 
 
 #### Fluxo 2: Login do Administrador (Autenticação)
