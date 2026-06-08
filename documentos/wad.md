@@ -1498,11 +1498,11 @@ O operador inicia sua jornada por meio do método iniciarNovaSessao() na camada 
 
 <div align="center">
   <sub>Figura 7 - Fluxo sessão existente</sub><br>
-  <img src="../assets/fluxo11.png" width="100%"><br>
+  <img src="../assets/fluxo11Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Registra a saída do operador do painel de controle. O SessaoService aciona o encerramento fornecendo o identificador da sessão; o sistema injeta o timestamp corrente do servidor (fim_em) e atualiza o estado do registro para 'encerrada', salvando e blindando o histórico de auditoria.
+O encerramento do período de trabalho do operador é processado ao acionar o método encerrarSessaoExistente() exposto pelo SessaoService, que encapsula a execução do método encerrarSessao() na estrutura do SessaoController. No momento da execução, o controlador gera dinamicamente em tempo de execução o timestamp de término através do construtor de data do servidor mapeado em formato ISO. Na sequência, é estruturada uma operação de atualização assíncrona utilizando os recursos fluentes .from().update().eq() do cliente Supabase para modificar o registro na tabela sessoes_operacionais, alterando seu status de forma definitiva para o valor literal 'encerrada'.
 
 ---
 
