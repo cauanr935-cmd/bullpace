@@ -1374,7 +1374,7 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 #### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
+  <sub>Figura 7 - Fluxo login de coordenadores</sub><br>
   <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
