@@ -2857,8 +2857,17 @@ Além disso, o crescimento do mercado de wearables mostra a valorização de dad
 
 Assim, mesmo sendo uma solução específica para a operação do Red Bull 24 Horas, o BullPace acompanha uma tendência maior de digitalização, monitoramento e uso de dados em experiências esportivas.
 
-*c) Tendências de Mercado (até 300 palavras)*
-*Identifique e analise tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilize fontes confiáveis.*
+## Tendências de Mercado
+
+O setor em que o BullPace está inserido é influenciado por tendências tecnológicas, comportamentais e mercadológicas ligadas à digitalização de eventos esportivos, ao uso de dados de performance e à busca por experiências presenciais mais interativas.
+
+A primeira tendência é a digitalização da operação esportiva. Segundo a TechRadar, com base em estudo da SportsPro e da Sportradar, mais de 80% das organizações esportivas já utilizam inteligência artificial, enquanto 98% pretendem ampliar esse uso nos próximos 12 meses. Embora o BullPace não tenha como foco o uso de IA, esse dado mostra que o setor esportivo está cada vez mais orientado por tecnologia, dados e sistemas digitais de apoio à operação.
+
+A segunda tendência é a valorização dos dados de performance. Segundo a Reuters, a partir de estudo da Oliver Wyman para o World Economic Forum, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030. Esse crescimento reforça a importância de soluções que profissionalizem a gestão de eventos esportivos, especialmente em contextos nos quais a confiabilidade dos dados influencia diretamente a experiência e a validação dos resultados.
+
+A terceira tendência é a transformação dos eventos esportivos em experiências mais visuais e acompanháveis. Segundo a AVNetwork, arenas e eventos esportivos caminham para estruturas mais digitais, com telas, conteúdos em tempo real e recursos voltados ao engajamento do público. Nesse sentido, o Modo TV do BullPace acompanha essa tendência ao permitir a visualização clara do andamento da competição.
+
+Assim, o BullPace se conecta a uma movimentação maior do mercado: substituir processos manuais por fluxos digitais, rastreáveis e baseados em dados, sem ignorar as restrições reais do ambiente do evento.
 
 ## 6.3 Análise da Concorrência
 
