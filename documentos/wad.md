@@ -2865,8 +2865,11 @@ Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de 
 *a) Segmentação de Mercado (até 250 palavras)*
 Descreva os principais segmentos de mercado a serem atendidos pela aplicação. Utilize bases de dados e fontes confiáveis.*
 
-*b) Perfil do Público-Alvo (até 250 palavras)*
-*Caracterize o público-alvo com dados demográficos, psicográficos e comportamentais, incluindo necessidades específicas. Utilize fontes obrigatórias.*
+O público-alvo do sistema reúne dois perfis complementares. O primeiro é o cliente contratante: gestores de marketing esportivo, agências e produtoras que organizam o evento e operam a aplicação. O segundo é o usuário final, aletas amadores que correm em equipe e o público que acompanha o placar, e é sobre ele que existem os dados mais consolidados. 
+
+No geral, é um público adulto jovem, concentrado na faixa dos 25 aos 45 anos [21] e na região Sudeste. Nos últimos anos a corrida ficou mais diversa e democrática, chegando a um equilíbrio entre homens e mulheres [20]. Mais do que um esporte, ela virou estilo de vida, as pessoas correm em busca de saúde, bem-estar mental e superação, e valorizam o sentimento de pertencer a uma comunidade. Boa parte começou a não muito tempo, cerca de 71% começaram a correr depois de 2021[21]. 
+
+Esse corredor também participa cada vez mais de provas oficiais [20] e está mais exigente, querem organização, segurança e cronometragem precisa [22]. É justamente aí que se concentram as necessidades atendidas pela aplicação, um placar e tempo real, apuração transparente e confiavel por equipe e turno, e uma vizualização clara para atletas e plateia. 
 
 
 ## 6.5 Posicionamento
@@ -2932,6 +2935,12 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 [15] KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
 
 [16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
+
+[20] PESQUISA: com impulso de mulheres, jovens e Classe C, corrida de rua alcança 15 milhões de praticantes no Brasil. **Máquina do Esporte**, [s. l.], 31 jan. 2026. Disponível em: https://maquinadoesporte.com.br/running/pesquisa-com-impulso-de-mulheres-jovens-e-classe-c-corrida-de-rua-alcanca-15-milhoes-de-praticantes-no-brasil/.
+
+[21] CORRIDA de rua se torna fenômeno social no Brasil com 13 milhões de praticantes. **Portal Tela**, [s. l.], 2 fev. 2025. Disponível em: https://www.portaltela.com/esportes/geral/2025/02/02/corrida-de-rua-se-torna-fenomeno-social-no-brasil-com-13-milhoes-de-praticantes.
+
+[22] CORRIDAS de rua crescem 85% e viram fenômeno esportivo. **Terra**, [s. l.], 28 jan. 2026. Disponível em: https://www.terra.com.br/vida-e-estilo/saude/corridas-de-rua-crescem-85-e-viram-fenomeno-esportivo.
 
 # <a name="c9"></a>Anexos
 
