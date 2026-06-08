@@ -2862,8 +2862,14 @@ Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de 
 
 ## 6.4 Público-Alvo
 
-*a) Segmentação de Mercado (até 250 palavras)*
-Descreva os principais segmentos de mercado a serem atendidos pela aplicação. Utilize bases de dados e fontes confiáveis.*
+O BullPace se encaixa em 3 mercados em forte expansão no Brasil, que se cruzam justamente em eventos e situações como o Redbull 24 horas.
+
+O primeiro é o universo da corrida e dos esportes de resistência, que ultimamente vem crescendo e atigindo um publico cada vez maior, O país já reúne quase 15 milhões de corredores ativos e movimenta um mercado estimado em R$ 1,1 bilhão por ano, somando inscrições, assessorias, equipamentos e patrocínios[17]. É um público cada vez mais numeroso, engajado e habituado a provas cronometradas. 
+
+O segundo é o de live marketing e ativação de marca, em que empresas transformam experiências esportivas em ferramenta de relacionamento com o consumidor. Esse setor movimentou US$ 22,2 bilhões em 2025[18]. Nele estão as marcas patrocinadoras e as produtoras responsáveis por organizar competições desse tipo.
+
+O terceiro é o mercado fitness indoor. Como a disputa ocorre em esteiras, o contexto de uso se aproxima do de academias e redes, e o Brasil está entre os quatro maiores mercados do mundo, com mais de 41 mil academias ativas[19].
+
 
 O público-alvo do sistema reúne dois perfis complementares. O primeiro é o cliente contratante: gestores de marketing esportivo, agências e produtoras que organizam o evento e operam a aplicação. O segundo é o usuário final, aletas amadores que correm em equipe e o público que acompanha o placar, e é sobre ele que existem os dados mais consolidados. 
 
@@ -2935,6 +2941,12 @@ Esse corredor também participa cada vez mais de provas oficiais [20] e está ma
 [15] KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
 
 [16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
+
+[17] CORRIDA de rua cresce no Brasil: já são 15 milhões de praticantes, a maioria mulheres. **IstoÉ**, [s. l.], 1 fev. 2026. Disponível em: https://istoe.com.br/corrida-de-rua-15-milhoes-corredores-maioria-mulheres.
+
+[18] SETOR de eventos no Brasil inicia 2026 com recorde de consumo e geração de empregos. **Transamerica Expo Center**, São Paulo, 7 abr. 2026. Disponível em: https://www.transamericaexpo.com.br/setor-de-eventos-no-brasil-inicia-2026-com-recorde-de-consumo-e-geracao-de-empregos/. 
+
+[19] MERCADO fitness latino-americano em 2026: dados, tendências e o que muda pro Brasil. **Blog da Pacto**, [s. l.], 29 abr. 2026. Disponível em: https://blog.sistemapacto.com.br/mercado-fitness-latino-americano-brasil-2026/.
 
 [20] PESQUISA: com impulso de mulheres, jovens e Classe C, corrida de rua alcança 15 milhões de praticantes no Brasil. **Máquina do Esporte**, [s. l.], 31 jan. 2026. Disponível em: https://maquinadoesporte.com.br/running/pesquisa-com-impulso-de-mulheres-jovens-e-classe-c-corrida-de-rua-alcanca-15-milhoes-de-praticantes-no-brasil/.
 
