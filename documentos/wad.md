@@ -1431,7 +1431,6 @@ O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. A
 
 ---
 
-### Módulo: Operador
 
 #### Fluxo 6: Cadastrar Novo Evento (Leitura)
 
@@ -1441,7 +1440,7 @@ O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. A
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
+O Administrador Geral envia os dados necessários para cadastrar um novo evento. A API valida se o perfil possui permissão de escrita, verifica se a prova não está finalizada, filtra os campos permitidos e registra o novo evento no banco de dados. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que apenas administradores possam criar novos eventos e que os dados sejam validados antes do registro.
 
 #### Fluxo 7: Listar Eventos (Leitura)
 
