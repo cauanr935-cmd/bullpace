@@ -1575,7 +1575,7 @@ A adoção do DTO também contribui para a segurança da aplicação. Conforme o
 
 #### Singleton
 
-O padrão foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
+O padrão Singleton foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
 
 A justificativa para esse padrão está nos requisitos de desempenho e confiabilidade. O requisito DES01 exige que as ações do fluxo principal respondam em menos de 1.000 ms no percentil 95. Criar e destruir conexões com o banco a cada requisição introduziria latência desnecessária, especialmente em momentos de maior volume de registros, como os picos de checkpoints simultâneos das duas equipes operando ao mesmo tempo.
 
