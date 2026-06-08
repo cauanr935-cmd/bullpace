@@ -1375,7 +1375,7 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 <div align="center">
   <sub>Figura 7 - Fluxo login do coordenador</sub><br>
-  <img src="../assets/LoginCoordenadorFluxo1.png" width="100%"><br>
+  <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1387,7 +1387,7 @@ O cliente faz uma requisição HTTP GET para coletar todos os coordenadores regi
 
 <div align="center">
   <sub>Figura 7 - Fluxo de login do Administrador</sub><br>
-  <img src="../assets/AdministraçãoFluxo2.png" width="100%"><br>
+  <img src="../assets/AdministraçãoFluxo2.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1400,7 +1400,7 @@ O usuário submete suas credenciais (email e senha) via corpo da requisição (P
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar permissões dos operadores</sub><br>
-  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="100%"><br>
+  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1414,7 +1414,7 @@ Requisição voltada para coletar as informações técnicas dos equipamentos do
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar operadores</sub><br>
-  <img src="../assets/ListasOperadoresFluxo4.png" width="100%"><br>
+  <img src="../assets/ListasOperadoresFluxo4.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1424,7 +1424,7 @@ Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plata
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
-  <img src="../assets/ListarEsteirasFluxo5.png" width="100%"><br>
+  <img src="../assets/ListarEsteirasFluxo5.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1438,17 +1438,17 @@ Trata o fluxo de criação de uma nova competição/evento no ecossistema. O Eve
 
 <div align="center">
   <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
-  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="100%"><br>
+  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
 
-#### Fluxo 7: Listar Permissões do Operador (Consulta)
+#### Fluxo 7: Listar Eventos (Consulta)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo Permissões do operador</sub><br>
-  <img src="../assets/fluxo7.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar eventos</sub><br>
+  <img src="../assets/ListarEventoFluxo7.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
