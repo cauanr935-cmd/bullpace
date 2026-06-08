@@ -1372,7 +1372,7 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 ### Módulo: Coordenador
 
 
-#### Fluxo 1: Login de Coordenadores (Leitura)
+#### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
   <sub>Figura 7 - Fluxo login do coordenador</sub><br>
@@ -1384,11 +1384,11 @@ O cliente faz uma requisição HTTP GET para coletar todos os coordenadores regi
 
 
 
-#### Fluxo 2: Login do Coordenador (Autenticação)
+#### Fluxo 2: Login do Administrador (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo de login do coordenador</sub><br>
-  <img src="../assets/fluxo2.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo de login do Administrador</sub><br>
+  <img src="../assets/AdministraçãoFluxo2.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
