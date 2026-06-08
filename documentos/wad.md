@@ -2906,7 +2906,7 @@ A partir disso, é possível identificar três modelos de precificação coerent
 
 O segundo é o licenciamento por evento, no qual a aplicação é disponibilizada a cada nova edição mediante um valor de licença anual ou por ocorrência. Esse modelo passa a fazer mais sentido conforme a solução amadurece e se torna parte da infraestrutura permanente do evento, sendo aprimorada a cada edição com base no feedback do time de Field Marketing.
 
-O terceiro, mais distante do cenário atual mas relevante como horizonte estratégico, é o modelo de plataforma configurável para eventos de resistência, no qual o BullPace seria adaptado para outros formatos de corrida coletiva e licenciado para produtoras e agências de eventos. Nesse caso, a estrutura de preço se aproximaria de um SaaS B2B, definido pelo porte do evento e pelo número de usuários ativos.
+O terceiro, mais distante do cenário atual mas relevante como horizonte estratégico, é o modelo de plataforma configurável para eventos de resistência, no qual o BullPace seria adaptado para outros formatos de corrida coletiva e licenciado para produtoras e agências de eventos. Nesse caso, a estrutura de preço se aproximaria de um SaaS B2B (Software as a Service Business to Business), definido pelo porte do evento e pelo número de usuários ativos.
 
 Em todos os modelos, o referencial de valor é o mesmo: o problema que a solução resolve. Operar 24 horas com pranchetas expõe o evento a erros de registro e inconsistências de apuração, o que pode comprometer a credibilidade da Red Bull enquanto organizadora. Quando o preço é ancorado nesse risco evitado, a proposta de valor se fortalece.
 
@@ -2932,7 +2932,7 @@ A principal forma de promoção é o próprio desempenho da aplicação durante 
 
 O segundo momento de promoção ocorre depois do evento, com o relatório pós-operação. A exportação em CSV, combinada com o histórico auditável de registros, permite que a coordenação produza um dossiê completo com quilometragem por atleta, por turno e por equipe. Apresentado internamente na Red Bull, esse relatório demonstra na prática o que a digitalização entrega e o que seria perdido numa eventual regressão ao método manual com pranchetas.
 
-Uma terceira frente, mais relevante no horizonte de expansão da solução, é a documentação técnica do projeto. O WAD, o código e o histórico de decisões de desenvolvimento constroem a credibilidade da equipe como fornecedora de soluções para eventos esportivos. Em relações B2B, a reputação técnica precede qualquer negociação.
+Uma terceira frente, mais relevante no horizonte de expansão da solução, é a documentação técnica do projeto. O WAD, o código e o histórico de decisões de desenvolvimento constroem a credibilidade da equipe como fornecedora de soluções para eventos esportivos. Em relações B2B (Business to Business), a reputação técnica precede qualquer negociação.
 
 Por fim, em um cenário de expansão para outras marcas e eventos, as estratégias poderiam incluir presença em encontros do setor de eventos esportivos e produção de conteúdo técnico sobre digitalização de operações de competição. O posicionamento de nicho definido em 6.5 favorece esse tipo de promoção segmentada: não é preciso alcançar um público amplo, mas sim ser reconhecida pelo grupo restrito de profissionais que organiza eventos com as características do Red Bull 24 Horas.
 
