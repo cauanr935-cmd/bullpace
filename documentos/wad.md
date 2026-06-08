@@ -2880,11 +2880,9 @@ Esse corredor também participa cada vez mais de provas oficiais [20] e está ma
 
 ## 6.5 Posicionamento
 
-*a) Proposta de Valor Única (até 250 palavras)*
-*Defina de maneira clara o que torna a sua aplicação única e valiosa para o mercado.*
+A aplicação posiciona-se como uma solução especializada para o suporte operacional do evento Red Bull 24 Horas, com foco na organização e consolidação dos registros da competição. Seu diferencial está na adaptação ao fluxo específico do evento, oferecendo uma alternativa mais estruturada e confiável em comparação aos métodos tradicionais de registro.
 
-*b) Estratégia de Diferenciação (até 250 palavras)*
-*Explique como sua aplicação se destacará da concorrência, evidenciando a lógica por trás do posicionamento.*
+O sistema busca ser percebido como uma ferramenta de apoio à equipe operacional, priorizando praticidade, padronização e rastreabilidade dos dados. Dessa forma, o posicionamento da solução está associado à melhoria da eficiência do processo de apuração, contribuindo para uma gestão mais organizada e transparente da competição.
 
 ## 6.6 Estratégia de Marketing 
 
