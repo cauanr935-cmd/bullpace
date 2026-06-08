@@ -576,10 +576,10 @@ body {
   width: min(100%, 760px);
   /* Separa as acoes do bloco anterior. */
   margin: 20px auto 0;
-  /* Distribui Auditoria, Modo TV e Fechamento em colunas. */
+  /* Distribui as acoes conforme o perfil autenticado. */
   display: grid;
-  /* Cria tres colunas com largura igual. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Ajusta a quantidade de colunas sem quebrar quando o admin tem mais comandos. */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   /* Define espaco entre os botoes. */
   gap: 22px;
 }
@@ -588,7 +588,8 @@ body {
   margin: 0;
 }
 
-.panel-actions button {
+.panel-actions button,
+.panel-action-link {
   width: 100%;
   min-height: 64px;
   border: 2px solid #d8d8d8;
@@ -601,8 +602,17 @@ body {
   cursor: pointer;
 }
 
+.panel-action-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .panel-actions button:hover,
-.panel-actions button:focus-visible {
+.panel-actions button:focus-visible,
+.panel-action-link:hover,
+.panel-action-link:focus-visible {
   border-color: #202124;
   outline: none;
 }
@@ -1658,8 +1668,8 @@ body {
   letter-spacing: 0;
 }
 
-.operator-row.is-disabled {
-  cursor: not-allowed;
+.operator-row.is-disabled,
+.operator-row.is-maintenance-bypass {
   color: #707070;
   background: #f4f4f4;
   box-shadow: inset 0 0 0 3px #d8d8d8;
@@ -1671,6 +1681,25 @@ body {
 }
 
 .operator-row.is-disabled .operator-name small {
+  color: #707070;
+}
+
+.operator-row.is-maintenance-bypass {
+  cursor: pointer;
+}
+
+.operator-row.is-maintenance-bypass:hover,
+.operator-row.is-maintenance-bypass:focus-visible {
+  background: #eeeeee;
+}
+
+.operator-row.is-maintenance-bypass.is-selected {
+  color: #202124;
+  background: #ffffff;
+  box-shadow: inset 5px 0 0 #202124, inset 0 0 0 3px #202124;
+}
+
+.operator-row.is-maintenance-bypass.is-selected .operator-name small {
   color: #707070;
 }
 
@@ -1688,6 +1717,13 @@ body {
   font-size: 17px;
   text-align: center;
   box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.maintenance-bypass-note {
+  background: #fff8e5;
+  color: #202124;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px #d9a800;
 }
 
 .flow-context {
@@ -1774,6 +1810,45 @@ body {
   margin: 26px auto 0;
 }
 
+.athlete-checkpoint-summary {
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 12px;
+}
+
+.athlete-checkpoint-summary article {
+  min-height: 86px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.athlete-checkpoint-summary span,
+.athlete-checkpoint-summary strong {
+  display: block;
+}
+
+.athlete-checkpoint-summary article > span {
+  color: #707070;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.athlete-checkpoint-summary strong {
+  margin-top: 10px;
+  color: #202124;
+  font-size: 18px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.athlete-checkpoint-summary strong span {
+  display: inline;
+}
+
 .field-label {
   display: block;
   margin: 0 0 10px;
@@ -1826,13 +1901,6 @@ body {
 .checkpoint-input:focus {
   border-color: #202124;
   outline: none;
-}
-
-.checkpoint-grid {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
 }
 
 .last-checkpoint {
@@ -1975,6 +2043,160 @@ body {
   font: inherit;
   font-weight: 800;
   cursor: pointer;
+}
+
+.modal-box strong {
+  font-weight: 800;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-box .modal-secondary-button {
+  color: #202124;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+}
+
+.final-check-modal {
+  background: rgba(32, 33, 36, 0.5);
+}
+
+.final-check-box {
+  width: min(100%, 560px);
+  padding: 32px;
+  text-align: left;
+}
+
+.final-check-kicker {
+  margin: 0 0 10px;
+  color: #707070;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.final-check-box h2 {
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.final-check-box p {
+  margin: 14px 0 0;
+}
+
+.final-check-athlete {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.final-check-athlete div {
+  min-width: 0;
+}
+
+.final-check-athlete strong,
+.final-check-athlete span {
+  display: block;
+}
+
+.final-check-athlete strong {
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.final-check-athlete span {
+  margin-top: 5px;
+  color: #707070;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.final-check-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.final-check-form {
+  margin: 0;
+}
+
+.final-check-grid label {
+  min-height: 104px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px #202124;
+  cursor: text;
+}
+
+.final-check-grid strong,
+.final-check-grid input {
+  display: block;
+}
+
+.final-check-grid strong {
+  color: #707070;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.final-check-grid input {
+  width: 100%;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #202124;
+  font: inherit;
+  font-size: 28px;
+  font-weight: 800;
+  outline: none;
+}
+
+.final-check-grid input:focus {
+  box-shadow: 0 3px 0 #202124;
+}
+
+.final-check-input-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.final-check-input-wrap input {
+  min-width: 0;
+}
+
+.final-check-input-wrap small {
+  color: #202124;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.final-check-actions {
+  margin-top: 24px;
+}
+
+.final-check-actions .continue-button {
+  width: 100%;
+  min-height: 58px;
+  margin: 0;
+  font-size: 18px;
 }
 
 .end-warning {
@@ -2223,6 +2445,7 @@ body {
   .detail-tabs,
   .detail-subtitle,
   .checkpoint-record-list,
+  .athlete-checkpoint-summary,
   .filter-athlete-list,
   .audit-button,
   .team-status,
@@ -2298,12 +2521,23 @@ body {
     flex-direction: column;
   }
 
-  .checkpoint-grid {
+  .athlete-checkpoint-summary {
     grid-template-columns: 1fr;
   }
 
-  .end-metrics {
+  .end-metrics,
+  .final-check-grid,
+  .final-check-actions {
     grid-template-columns: 1fr;
+  }
+
+  .final-check-box {
+    padding: 24px;
+  }
+
+  .final-check-athlete {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .panel-progress,

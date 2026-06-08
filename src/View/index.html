@@ -22,6 +22,7 @@
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -30,6 +31,7 @@
         <% /* Volta para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -38,6 +40,7 @@
         <% /* Volta do fechamento para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -46,6 +49,7 @@
         <% /* Volta da confirmacao para a revisao de fechamento. */ %>
         <form action="/voltar-fechamento" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -54,6 +58,7 @@
         <% /* Volta do resultado oficial para a revisao de fechamento. */ %>
         <form action="/voltar-fechamento" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -62,6 +67,7 @@
         <% /* Volta da publicacao para o resultado oficial privado. */ %>
         <form action="/voltar-resultado-oficial" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -70,6 +76,7 @@
         <% /* Volta para a visao geral da coordenacao. */ %>
         <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
       <% } %>
@@ -78,6 +85,7 @@
         <% /* Volta para os detalhes gerais da equipe. */ %>
         <form action="/detalhes-equipe" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
@@ -175,12 +183,13 @@
           Entre para administrar a operação.
         </p>
 
-        <span class="login-badge">COORDENADOR(A)</span>
+        <span class="login-badge"><%= perfilLogin === 'administrador_geral' ? 'ADMINISTRADOR(A) GERAL' : 'COORDENADOR(A)' %></span>
         <p class="login-helper">Ações administrativas ficam registradas.</p>
 
         <form action="/login-coordenador" method="post" class="login-form" id="coordinatorLoginForm">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilLogin || perfilUsuario || 'coordenador' %>">
           <label class="field-group" for="coordenadorNome">
-            <span class="field-label">NOME DO(A) COORDENADOR(A) *</span>
+            <span class="field-label">NOME DO USUÁRIO *</span>
             <input id="coordenadorNome" name="coordenador" class="checkpoint-input" type="text" placeholder="Digite o nome" required>
           </label>
 
@@ -191,7 +200,7 @@
 
           <section class="permission-card">
             <strong>PERMISSÕES</strong>
-            <span>Auditoria, correção, TV e encerramento</span>
+            <span><%= perfilLogin === 'administrador_geral' ? 'Acesso completo, pausa, retomada e encerramento' : 'Auditoria, correção, TV e exportação' %></span>
           </section>
 
           <% if (typeof loginMensagem !== 'undefined') { %>
@@ -219,7 +228,7 @@
               // Desativa o botao quando ainda falta algum campo.
               button.disabled = !ready;
               // Troca o texto do botao para orientar o usuario.
-              button.textContent = ready ? 'Entrar como coordenador(a)' : 'Preencha os campos para entrar';
+              button.textContent = ready ? 'Entrar no painel' : 'Preencha os campos para entrar';
             };
 
             // Escuta digitacao em cada campo obrigatorio.
@@ -279,8 +288,12 @@
 
         <section class="panel-progress">
           <strong>08h 42min de 24h</strong>
-          <span>EM ANDAMENTO</span>
+          <span><%= estadoProva.status === 'finalizada' ? 'FINALIZADA' : estadoProva.status === 'pausada' ? 'PAUSADA' : 'EM ANDAMENTO' %></span>
         </section>
+
+        <% if (typeof painelMensagem !== 'undefined') { %>
+          <p class="checkpoint-message success"><%= painelMensagem %></p>
+        <% } %>
 
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
@@ -309,6 +322,7 @@
               </div>
               <form action="/detalhes-equipe" method="post" class="details-form">
                 <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+                <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
                 <input type="hidden" name="equipe" value="<%= equipe.nome %>">
                 <button type="submit">DETALHES</button>
               </form>
@@ -322,12 +336,31 @@
           <button type="button" class="is-active">Auditoria</button>
           <form action="/modo-tv" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <button type="submit">Modo TV</button>
           </form>
-          <form action="/fechamento" method="post">
-            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
-            <button type="submit">Fechamento</button>
-          </form>
+          <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="panel-action-link">Exportar CSV</a>
+          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+            <form action="/pausar-prova" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Pausar prova</button>
+            </form>
+          <% } %>
+          <% if (pode('retomar_prova') && estadoProva.status === 'pausada') { %>
+            <form action="/retomar-prova" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Retomar prova</button>
+            </form>
+          <% } %>
+          <% if (pode('finalizar_prova')) { %>
+            <form action="/fechamento" method="post">
+              <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+              <button type="submit">Fechamento</button>
+            </form>
+          <% } %>
         </section>
       <% } %>
 
@@ -562,6 +595,7 @@
 
         <form action="/finalizar-prova" method="post" class="continue-form closure-action-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="continue-button">
             Finalizar prova
           </button>
@@ -569,6 +603,7 @@
 
         <form action="/voltar-painel-coordenador" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Voltar ao painel
           </button>
@@ -592,6 +627,7 @@
 
         <form action="/confirmar-finalizacao" method="post" class="confirmation-form" id="finishConfirmationForm">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
 
           <label class="confirmation-check-card" for="finishConfirmationCheck">
             <input id="finishConfirmationCheck" name="confirmaBloqueio" value="sim" type="checkbox">
@@ -614,6 +650,7 @@
 
         <form action="/voltar-fechamento" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Cancelar
           </button>
@@ -670,12 +707,13 @@
           </article>
         </section>
 
-        <button type="button" class="continue-button result-action-button">
+        <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="continue-button result-action-button">
           Exportar CSV
-        </button>
+        </a>
 
         <form action="/publicar-resultado" method="post" class="continue-form secondary-form result-publish-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button result-tv-link">
             Publicar no Modo TV
           </button>
@@ -704,6 +742,7 @@
 
         <form action="/confirmar-publicacao" method="post" class="continue-form closure-action-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="continue-button">
             Confirmar publicação
           </button>
@@ -711,6 +750,7 @@
 
         <form action="/voltar-resultado-oficial" method="post" class="continue-form secondary-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="finish-button">
             Cancelar
           </button>
@@ -736,6 +776,7 @@
           <button type="button" class="is-active">Todos os checkpoints</button>
           <form action="/filtro-atletas-equipe" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
             <button type="submit">Por atleta</button>
           </form>
@@ -782,6 +823,7 @@
         <section class="detail-tabs">
           <form action="/detalhes-equipe" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
             <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
             <button type="submit">Todos os checkpoints</button>
           </form>
@@ -795,6 +837,7 @@
             <% const atletaAtual = atletaSelecionado === atleta.nome; %>
             <form action="/filtro-atletas-equipe" method="post" class="function-form">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+              <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
               <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
               <input type="hidden" name="atleta" value="<%= atleta.nome %>">
               <button type="submit" class="operator-row filter-athlete-row <%= atletaAtual ? 'is-selected' : '' %>">
@@ -951,37 +994,35 @@
         <div class="operator-list treadmill-list" aria-label="Seleção de esteira">
           <% esteiras.forEach((esteira) => { %>
             <% const esteiraAtual = typeof esteiraSelecionada !== 'undefined' && esteiraSelecionada === esteira.nome; %>
-            <% const bloqueada = esteira.tipo !== 'livre'; %>
-            <% if (bloqueada) { %>
-              <article class="operator-row treadmill-row is-disabled">
-                <span class="status-dot muted-dot" aria-hidden="true"></span>
+            <% const emManutencao = esteira.tipo !== 'livre'; %>
+            <form action="/selecionar-esteira" method="post" class="function-form <%= emManutencao ? 'maintenance-bypass-form' : '' %>" data-treadmill-name="<%= esteira.nome %>">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+              <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+              <input type="hidden" name="esteira" value="<%= esteira.nome %>">
+              <% if (emManutencao) { %>
+                <input type="hidden" name="bypassManutencao" value="sim">
+              <% } %>
+              <button type="submit" class="operator-row treadmill-row <%= esteiraAtual ? 'is-selected' : '' %> <%= emManutencao ? 'is-maintenance-bypass' : '' %>">
+                <span class="status-dot <%= emManutencao ? 'muted-dot' : '' %>" aria-hidden="true"></span>
                 <span class="operator-name">
                   <%= esteira.nome %>
                   <small><%= esteira.status %></small>
                 </span>
+                <% if (esteiraAtual) { %>
+                  <span class="selected-badge">SELECIONADO</span>
+                <% } %>
                 <span class="operator-radio" aria-hidden="true"></span>
-              </article>
-            <% } else { %>
-              <form action="/selecionar-esteira" method="post" class="function-form">
-                <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-                <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-                <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-                <input type="hidden" name="esteira" value="<%= esteira.nome %>">
-                <button type="submit" class="operator-row treadmill-row <%= esteiraAtual ? 'is-selected' : '' %>">
-                  <span class="status-dot" aria-hidden="true"></span>
-                  <span class="operator-name">
-                    <%= esteira.nome %>
-                    <small><%= esteira.status %></small>
-                  </span>
-                  <% if (esteiraAtual) { %>
-                    <span class="selected-badge">SELECIONADO</span>
-                  <% } %>
-                  <span class="operator-radio" aria-hidden="true"></span>
-                </button>
-              </form>
-            <% } %>
+              </button>
+            </form>
           <% }) %>
         </div>
+
+        <% if (typeof esteiraEmManutencaoSelecionada !== 'undefined' && esteiraEmManutencaoSelecionada) { %>
+          <p class="turn-note maintenance-bypass-note">
+            Você está utilizando uma esteira em manutenção e confirmou que está de acordo.
+          </p>
+        <% } %>
 
         <p class="turn-note">O horário de início será salvo automaticamente.</p>
 
@@ -992,11 +1033,69 @@
             <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
             <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
             <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
+            <% if (typeof esteiraEmManutencaoSelecionada !== 'undefined' && esteiraEmManutencaoSelecionada) { %>
+              <input type="hidden" name="bypassManutencao" value="sim">
+            <% } %>
             <button type="submit" class="continue-button">
               Iniciar turno na <%= esteiraSelecionada %>
             </button>
           </form>
         <% } %>
+
+        <div id="maintenanceBypassModal" class="modal-overlay" hidden>
+          <section class="modal-box maintenance-bypass-modal" role="dialog" aria-modal="true" aria-labelledby="maintenanceBypassTitle">
+            <h2 id="maintenanceBypassTitle">Esteira em manutenção</h2>
+            <p>
+              Você está selecionando a <strong id="maintenanceBypassName">esteira</strong>, marcada como em manutenção.
+              Confirme que está de acordo para usar este bypass.
+            </p>
+            <div class="modal-actions">
+              <button id="cancelMaintenanceBypass" type="button" class="modal-secondary-button">Cancelar</button>
+              <button id="confirmMaintenanceBypass" type="button">Estou de acordo</button>
+            </div>
+          </section>
+        </div>
+
+        <script>
+          (() => {
+            const modal = document.getElementById('maintenanceBypassModal');
+            const treadmillName = document.getElementById('maintenanceBypassName');
+            const cancelButton = document.getElementById('cancelMaintenanceBypass');
+            const confirmButton = document.getElementById('confirmMaintenanceBypass');
+            let pendingForm = null;
+
+            document.querySelectorAll('.maintenance-bypass-form').forEach((form) => {
+              form.addEventListener('submit', (event) => {
+                if (form.dataset.bypassConfirmed === 'true') {
+                  return;
+                }
+
+                event.preventDefault();
+                pendingForm = form;
+                treadmillName.textContent = form.dataset.treadmillName || 'esteira';
+                modal.hidden = false;
+                confirmButton.focus();
+              });
+            });
+
+            const closeModal = () => {
+              modal.hidden = true;
+              pendingForm = null;
+            };
+
+            cancelButton.addEventListener('click', closeModal);
+
+            confirmButton.addEventListener('click', () => {
+              if (!pendingForm) {
+                closeModal();
+                return;
+              }
+
+              pendingForm.dataset.bypassConfirmed = 'true';
+              pendingForm.submit();
+            });
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'checkpoint') { %>
@@ -1016,28 +1115,25 @@
         </section>
 
         <form id="checkpointForm" class="checkpoint-form" novalidate>
+          <section class="athlete-checkpoint-summary" aria-label="Resumo de checkpoints do atleta ativo">
+            <article>
+              <span>KM TOTAL DO ATLETA</span>
+              <strong><span id="athleteTotalKm">0,000</span> km</strong>
+            </article>
+            <article>
+              <span>ÚLTIMO CHECKPOINT</span>
+              <strong id="athleteLastCheckpoint">Nenhum registro</strong>
+            </article>
+            <article>
+              <span>PRÓXIMO CHECKPOINT</span>
+              <strong id="nextCheckpointTimer">Disponível agora</strong>
+            </article>
+          </section>
+
           <label class="field-label" for="kmAcumulado">KM ACUMULADO *</label>
           <div class="input-with-unit">
             <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="12,480" required>
             <span>km</span>
-          </div>
-
-          <div class="checkpoint-grid">
-            <label class="field-group" for="paceMedio">
-              <span class="field-label">PACE MÉDIO *</span>
-              <div class="input-with-unit">
-                <input id="paceMedio" name="paceMedio" class="checkpoint-input" type="text" inputmode="numeric" placeholder="05:12" required>
-                <span>/ km</span>
-              </div>
-            </label>
-
-            <label class="field-group" for="velocidadeMedia">
-              <span class="field-label">VELOCIDADE MÉDIA *</span>
-              <div class="input-with-unit">
-                <input id="velocidadeMedia" name="velocidadeMedia" class="checkpoint-input" type="text" inputmode="decimal" placeholder="11,5" required>
-                <span>km/h</span>
-              </div>
-            </label>
           </div>
 
           <section class="last-checkpoint">
@@ -1087,6 +1183,10 @@
             const lastCheckpointText = document.getElementById('lastCheckpointText');
             // Busca o selo de status do ultimo checkpoint.
             const checkpointStatus = document.getElementById('checkpointStatus');
+            // Busca os indicadores consolidados do atleta ativo.
+            const athleteTotalKm = document.getElementById('athleteTotalKm');
+            const athleteLastCheckpoint = document.getElementById('athleteLastCheckpoint');
+            const nextCheckpointTimer = document.getElementById('nextCheckpointTimer');
             // Busca o modal exibido depois de registrar.
             const modal = document.getElementById('checkpointModal');
             // Busca o botao que fecha o modal.
@@ -1109,6 +1209,14 @@
             const pageParams = new URLSearchParams(window.location.search);
             const turnStartedAt = Number(pageParams.get('inicioTurnoTimestamp') || '<%= inicioTurnoTimestamp %>') || Date.now();
             finishInicioTurnoTimestamp.value = String(turnStartedAt);
+            // Identifica os checkpoints do atleta ativo no armazenamento local da tela.
+            const activeAthleteKey = [
+              'checkpoints',
+              '<%= equipeSelecionada %>',
+              '<%= atletaSelecionado %>'
+            ].join(':');
+            // Lista em memoria dos checkpoints vinculados ao atleta ativo.
+            let athleteCheckpoints = [];
 
             // Formata segundos no padrao HH:MM:SS.
             const formatTime = (seconds) => {
@@ -1118,6 +1226,83 @@
               return `${hours}:${minutes}:${remainingSeconds}`;
             };
 
+            // Converte a quilometragem informada em numero, aceitando virgula decimal.
+            const parseKilometers = (value) => {
+              const normalizedValue = String(value)
+                .trim()
+                .replace(/\./g, '')
+                .replace(',', '.');
+              const kilometers = Number(normalizedValue);
+              return Number.isFinite(kilometers) ? kilometers : 0;
+            };
+
+            // Formata quilometragem no padrao visual usado pela aplicacao.
+            const formatKilometers = (value) => value.toLocaleString('pt-BR', {
+              minimumFractionDigits: 3,
+              maximumFractionDigits: 3
+            });
+
+            // Formata data e hora do checkpoint mais recente.
+            const formatCheckpointDate = (timestamp) => new Date(timestamp).toLocaleString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            });
+
+            // Carrega registros anteriores do atleta ativo quando existirem.
+            const loadAthleteCheckpoints = () => {
+              try {
+                const storedCheckpoints = JSON.parse(localStorage.getItem(activeAthleteKey) || '[]');
+                athleteCheckpoints = Array.isArray(storedCheckpoints) ? storedCheckpoints : [];
+              } catch (error) {
+                athleteCheckpoints = [];
+              }
+            };
+
+            // Persiste a lista atualizada para manter o vinculo com o atleta ativo.
+            const saveAthleteCheckpoints = () => {
+              localStorage.setItem(activeAthleteKey, JSON.stringify(athleteCheckpoints));
+            };
+
+            // Atualiza KM total do atleta, ultimo checkpoint e valor levado ao encerramento.
+            const updateAthleteCheckpointSummary = () => {
+              const totalKm = athleteCheckpoints.reduce((total, checkpoint) => total + checkpoint.km, 0);
+              const lastCheckpoint = athleteCheckpoints
+                .slice()
+                .sort((a, b) => b.registeredAt - a.registeredAt)[0];
+
+              athleteTotalKm.textContent = formatKilometers(totalKm);
+
+              if (!lastCheckpoint) {
+                athleteLastCheckpoint.textContent = 'Nenhum registro';
+                lastCheckpointText.textContent = 'Nenhum checkpoint registrado';
+                checkpointStatus.textContent = 'AGUARDANDO';
+                finishKmFinal.value = '';
+                return;
+              }
+
+              const formattedDate = formatCheckpointDate(lastCheckpoint.registeredAt);
+              athleteLastCheckpoint.textContent = formattedDate;
+              lastCheckpointText.textContent = `${formatKilometers(lastCheckpoint.km)} km · ${formattedDate}`;
+              finishKmFinal.value = lastCheckpoint.rawKm;
+              checkpointStatus.textContent = 'SALVO';
+            };
+
+            // Calcula quanto falta para o proximo checkpoint obrigatorio.
+            const updateNextCheckpointTimer = (availableAt = Date.now()) => {
+              const remaining = Math.max(0, availableAt - Date.now());
+              const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
+              const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+
+              nextCheckpointTimer.textContent = remaining > 0 ? `${minutes}:${seconds}` : 'Disponível agora';
+              button.textContent = remaining > 0 ? `Novo checkpoint em ${minutes}:${seconds}` : 'Registrar novo checkpoint';
+
+              return remaining;
+            };
+
             // Atualiza o relogio do turno com base no horario real de inicio.
             const updateTurnTimer = () => {
               const turnSeconds = Math.max(0, Math.floor((Date.now() - turnStartedAt) / 1000));
@@ -1125,6 +1310,8 @@
               finishDuracaoTurno.value = turnTimer.textContent;
             };
 
+            loadAthleteCheckpoints();
+            updateAthleteCheckpointSummary();
             updateTurnTimer();
             setInterval(updateTurnTimer, 1000);
 
@@ -1140,13 +1327,12 @@
               // Calcula o horario em que o botao sera liberado novamente.
               const availableAt = Date.now() + cooldownMilliseconds;
               button.disabled = true;
+              clearInterval(cooldownInterval);
+              updateNextCheckpointTimer(availableAt);
 
               // Atualiza o texto do botao varias vezes por segundo.
               cooldownInterval = setInterval(() => {
-                const remaining = Math.max(0, availableAt - Date.now());
-                const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
-                const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
-                button.textContent = remaining > 0 ? `Novo checkpoint em ${minutes}:${seconds}` : 'Registrar novo checkpoint';
+                const remaining = updateNextCheckpointTimer(availableAt);
 
                 // Quando o tempo acaba, libera o botao e para o intervalo.
                 if (remaining <= 0) {
@@ -1173,20 +1359,19 @@
               }
 
               // Le a quilometragem informada.
-              const km = document.getElementById('kmAcumulado').value;
-              // Captura o horario atual no formato brasileiro.
-              const now = new Date().toLocaleTimeString('pt-BR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-              });
+              const km = document.getElementById('kmAcumulado').value.trim();
+              const checkpointTimestamp = Date.now();
 
-              // Atualiza o resumo do ultimo checkpoint na tela.
-              lastCheckpointText.textContent = `${km} · ${now}`;
-              // Salva o km no campo escondido usado ao finalizar o turno.
-              finishKmFinal.value = km;
-              // Troca o status visual para SALVO.
-              checkpointStatus.textContent = 'SALVO';
+              // Vincula o novo checkpoint ao atleta ativo e atualiza os indicadores dinamicamente.
+              athleteCheckpoints.push({
+                atleta: '<%= atletaSelecionado %>',
+                equipe: '<%= equipeSelecionada %>',
+                km: parseKilometers(km),
+                rawKm: km,
+                registeredAt: checkpointTimestamp
+              });
+              saveAthleteCheckpoints();
+              updateAthleteCheckpointSummary();
               // Exibe mensagem de sucesso.
               showMessage('Checkpoint registrado com sucesso.', 'success');
               // Abre o modal de confirmacao.
@@ -1263,23 +1448,51 @@
           <span>Histórico preservado</span>
         </section>
 
-        <form action="/confirmar-encerramento" method="post" class="continue-form">
-          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-          <button type="submit" class="continue-button">
-            Confirmar encerramento
-          </button>
-        </form>
+        <div class="modal-overlay final-check-modal">
+          <section class="modal-box final-check-box" role="dialog" aria-modal="true" aria-labelledby="finalCheckTitle" aria-describedby="finalCheckDescription">
+            <p class="final-check-kicker">Verificação final</p>
+            <h2 id="finalCheckTitle">Está tudo certo com o encerramento?</h2>
+            <p id="finalCheckDescription">
+              Confira o KM final da esteira e o tempo total corrido antes de liberar o próximo atleta.
+            </p>
 
-        <form action="/voltar-checkpoint" method="post" class="continue-form secondary-form">
-          <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
-          <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
-          <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
-          <input type="hidden" name="esteira" value="<%= esteiraSelecionada %>">
-          <input type="hidden" name="inicioTurnoTimestamp" value="<%= inicioTurnoTimestamp %>">
-          <button type="submit" class="finish-button secondary-action">Voltar ao checkpoint</button>
-        </form>
+            <section class="final-check-athlete" aria-label="Atleta em encerramento">
+              <span class="operator-photo summary-photo" aria-hidden="true">
+                <%= atletaSelecionado.split(' ').map((parte) => parte[0]).join('').slice(0, 2) %>
+              </span>
+              <div>
+                <strong><%= atletaSelecionado %></strong>
+                <span><%= esteiraSelecionada %> · <%= equipeSelecionada %></span>
+              </div>
+            </section>
+
+            <form action="/confirmar-encerramento" method="post" class="final-check-form">
+              <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
+              <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
+              <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
+
+              <section class="final-check-grid" aria-label="Dados finais do turno">
+                <label>
+                  <strong>KM FINAL DA ESTEIRA</strong>
+                  <span class="final-check-input-wrap">
+                    <input name="kmFinal" type="text" inputmode="decimal" value="<%= kmFinal %>" aria-label="KM final da esteira" required>
+                    <small>km</small>
+                  </span>
+                </label>
+                <label>
+                  <strong>TEMPO TOTAL CORRIDO</strong>
+                  <input name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" required>
+                </label>
+              </section>
+
+              <div class="final-check-actions">
+                <button type="submit" class="continue-button">
+                  Confirmar encerramento
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
       <% } %>
     </section>
   </main>

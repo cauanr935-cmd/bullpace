@@ -29,7 +29,10 @@ export class OperadorService {
   listarPermissoes(id: string) {
     return {
       id_operador: Number(id),
-      permissoes: []
+      papel: 'operador',
+      pode_exportar: false,
+      pode_pausar_prova: false,
+      pode_finalizar_prova: false
     };
   }
 }

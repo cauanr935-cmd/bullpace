@@ -21,9 +21,15 @@ export class CoordenadorService {
     return this.coordenadorRepository.salvar(coordenador);
   }
 
-  login(email: string, senha: string) {
+  login(email: string, senha: string, papelSolicitado = 'coordenador') {
+    const papel = papelSolicitado === 'administrador_geral' ? 'administrador_geral' : 'coordenador';
+
     return {
       email,
+      papel,
+      pode_exportar: true,
+      pode_pausar_prova: papel === 'administrador_geral',
+      pode_finalizar_prova: papel === 'administrador_geral',
       autenticado: Boolean(email && senha)
     };
   }
