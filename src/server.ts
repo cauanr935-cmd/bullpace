@@ -1018,16 +1018,19 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
     const { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno } = req.body;
 
     // --- Validação numérica do km acumulado ---
-    const kmRaw = String(kmAcumulado || '').replace(',', '.');
-    const km = parseFloat(kmRaw);
+    const kmRaw = String(kmAcumulado || '').trim();
+    const kmNormalizado = kmRaw.includes(',')
+      ? kmRaw.replace(/\./g, '').replace(',', '.')
+      : kmRaw;
+    const km = Number(kmNormalizado);
 
-    if (!kmRaw || isNaN(km) || km <= 0) {
+    if (!kmRaw || !Number.isFinite(km) || km <= 0) {
       return res.status(400).json({ error: 'km_acumulado deve ser um número positivo.' });
     }
 
     // Máximo de 3 casas decimais.
     const kmArredondado = Math.round(km * 1000) / 1000;
-    if (kmArredondado !== km && kmRaw.includes('.') && kmRaw.split('.')[1].length > 3) {
+    if (kmArredondado !== km && kmNormalizado.includes('.') && kmNormalizado.split('.')[1].length > 3) {
       return res.status(400).json({ error: 'km_acumulado aceita no máximo 3 casas decimais.' });
     }
 
@@ -1084,19 +1087,20 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       return res.status(400).json({ error: `km_acumulado (${kmArredondado}) deve ser maior que o checkpoint anterior (${kmAnterior}).` });
     }
 
-    // Calcula tempo decorrido desde o início do turno ou último checkpoint.
+    // Calcula tempo decorrido desde o início do turno.
     const agora = Date.now();
-    const referencia = anterior
-      ? new Date(anterior.registrado_em).getTime()
-      : (turnoRow.horario_inicio ? new Date(turnoRow.horario_inicio).getTime() : Number(inicioTurnoTimestamp));
-    const segundosDecorridos = Math.max(1, (agora - referencia) / 1000);
+    const inicioTurno = turnoRow.horario_inicio
+      ? new Date(turnoRow.horario_inicio).getTime()
+      : Number(inicioTurnoTimestamp);
+    const referenciaTurno = Number.isFinite(inicioTurno) && inicioTurno > 0 ? inicioTurno : agora;
+    const segundosDecorridos = Math.max(1, (agora - referenciaTurno) / 1000);
 
-    // Pace em min/km: tempo (min) dividido por km percorridos neste trecho.
-    const paceMinKm = kmDelta > 0 ? (segundosDecorridos / 60) / kmDelta : 0;
+    // Pace em min/km: tempo total do turno (min) dividido pelo KM acumulado registrado.
+    const paceMinKm = (segundosDecorridos / 60) / kmArredondado;
     const paceArredondado = Math.round(paceMinKm * 1000) / 1000;
 
-    // Velocidade média em km/h: km/tempo_em_horas.
-    const velocidadeMedia = kmDelta > 0 ? kmDelta / (segundosDecorridos / 3600) : 0;
+    // Velocidade média em km/h: KM acumulado dividido pelo tempo total do turno.
+    const velocidadeMedia = kmArredondado / (segundosDecorridos / 3600);
     const velocidadeArredondada = Math.round(velocidadeMedia * 100) / 100;
 
     // --- Persiste checkpoint no Supabase ---

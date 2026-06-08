@@ -1898,6 +1898,53 @@ body {
   white-space: nowrap;
 }
 
+.computed-pace-panel {
+  min-height: 76px;
+  margin-top: 14px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: #202124;
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.computed-pace-panel strong,
+.computed-pace-panel span,
+.computed-pace-panel output,
+.computed-pace-panel small {
+  display: block;
+}
+
+.computed-pace-panel strong {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.computed-pace-panel span {
+  margin-top: 5px;
+  color: #d8d8d8;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.computed-pace-panel output {
+  min-width: 74px;
+  text-align: right;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.computed-pace-panel small {
+  color: #d8d8d8;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .checkpoint-input:focus {
   border-color: #202124;
   outline: none;
@@ -2519,6 +2566,15 @@ body {
   .last-checkpoint {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .computed-pace-panel {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .computed-pace-panel output {
+    text-align: left;
   }
 
   .athlete-checkpoint-summary {
