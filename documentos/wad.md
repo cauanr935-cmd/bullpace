@@ -1408,7 +1408,6 @@ O usuário autorizado solicita a consulta das permissões de um operador especí
 
 ---
 
-### Módulo: Eventos
 
 #### Fluxo 4: Listar Operadores (Leitura)
 
@@ -1418,7 +1417,7 @@ O usuário autorizado solicita a consulta das permissões de um operador especí
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
+O usuário autorizado solicita a listagem dos operadores cadastrados na aplicação. A API valida o perfil de acesso, consulta a tabela de operadores por meio do Supabase e retorna os registros encontrados em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores possam ser visualizados e gerenciados apenas por usuários com permissão administrativa.
 
 #### Fluxo 5: Listar Esteiras Disponíveis (Leitura)
 
