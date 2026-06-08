@@ -1522,7 +1522,7 @@ A troca e entrada de um atleta na área de corrida é mediada pela camada TurnoS
 
 <div align="center">
   <sub>Figura 7 - fluxo finalizar turno</sub><br>
-  <img src="../assets/fluxo13.png" width="100%"><br>
+  <img src="../assets/fluxo13Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
