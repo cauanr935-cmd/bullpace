@@ -2845,8 +2845,17 @@ No aspecto tecnológico, há uma tendência de digitalização das experiências
 
 Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de Proteção de Dados Pessoais, já que armazena nomes de atletas, operadores e registros associados à participação no evento. A ANPD disponibiliza a LGPD como referência institucional para orientar o tratamento de dados pessoais no Brasil, o que reforça a necessidade de limitar dados coletados, manter rastreabilidade, controlar permissões e evitar exposição indevida de informações.
 
-*b) Tamanho e Crescimento do Mercado (até 250 palavras)*
-*Apresente dados quantitativos sobre o tamanho atual e projeções de crescimento do mercado. Utilize fontes confiáveis.*
+## Tamanho e Crescimento do Mercado
+
+O BullPace está inserido em um nicho de tecnologia aplicada à operação de eventos esportivos, especialmente em soluções de registro, acompanhamento e auditoria de dados de performance. Como não há dados públicos específicos sobre “sistemas de apuração para revezamentos em esteira”, a análise considera mercados adjacentes, como economia do esporte, sport tech, eventos esportivos, wearables e infraestrutura digital para experiências presenciais.
+
+O setor esportivo possui grande relevância econômica. Segundo estudo da Oliver Wyman para o World Economic Forum, citado pela Reuters, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030, demonstrando crescimento significativo em atividades ligadas a eventos, turismo esportivo, mídia, produtos esportivos, tecnologia e experiências presenciais.
+
+Outro indicador importante é o mercado de direitos esportivos. A Ampere Analysis projeta que os gastos globais com direitos de mídia esportiva ultrapassem US$ 78 bilhões em 2030, crescimento de aproximadamente 20% em relação a 2025. Embora o BullPace não atue diretamente em mídia, esse dado reforça a valorização econômica do esporte como experiência, conteúdo e plataforma de relacionamento entre marcas e público.
+
+Além disso, o crescimento do mercado de wearables mostra a valorização de dados de desempenho no esporte e no fitness. Estimativas da Grand View Research, citadas pela Vogue Business, apontam que o mercado global de wearables pode chegar a US$ 186 bilhões em 2030, com crescimento anual composto de 13,6% entre 2025 e 2030.
+
+Assim, mesmo sendo uma solução específica para a operação do Red Bull 24 Horas, o BullPace acompanha uma tendência maior de digitalização, monitoramento e uso de dados em experiências esportivas.
 
 *c) Tendências de Mercado (até 300 palavras)*
 *Identifique e analise tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilize fontes confiáveis.*
