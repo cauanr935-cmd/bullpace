@@ -1450,7 +1450,7 @@ O Administrador Geral envia os dados necessários para cadastrar um novo evento.
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
+O usuário autorizado solicita a listagem dos eventos cadastrados na aplicação. O sistema valida o perfil de acesso, consulta a tabela de eventos por meio do Supabase e retorna os registros disponíveis em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que os eventos possam ser visualizados por usuários com permissão de leitura, como operadores e coordenadores, enquanto a criação de eventos fica restrita a administradores.
 
 #### Fluxo 8: Tentativa de Cadastrar Evento sem Permissão (Escrita)
 
