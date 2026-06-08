@@ -1,36 +1,18 @@
-import { Coordenador } from "../Models/CoordenadorModels";
-
-import { CoordenadorRepository } from "../Repository/CoordenadorRepository";
+import { CoordenadorDB, AdminPrincipalDB, CoordenadorRepository } from '../Repository/CoordenadorRepository';
 
 export class CoordenadorService {
 
   private coordenadorRepository = new CoordenadorRepository();
 
-  listar(): Coordenador[] {
-
+  async listar(): Promise<CoordenadorDB[]> {
     return this.coordenadorRepository.listar();
   }
 
-  criar(nome: string): Coordenador {
-
-    const coordenador: Coordenador = {
-      id_coordenador: Date.now(),
-      nome
-    };
-
-    return this.coordenadorRepository.salvar(coordenador);
+  async autenticar(login: string, senha: string): Promise<CoordenadorDB | null> {
+    return this.coordenadorRepository.autenticar(login, senha);
   }
 
-  login(email: string, senha: string, papelSolicitado = 'coordenador') {
-    const papel = papelSolicitado === 'administrador_geral' ? 'administrador_geral' : 'coordenador';
-
-    return {
-      email,
-      papel,
-      pode_exportar: true,
-      pode_pausar_prova: papel === 'administrador_geral',
-      pode_finalizar_prova: papel === 'administrador_geral',
-      autenticado: Boolean(email && senha)
-    };
+  async autenticarAdmin(login: string, senha: string): Promise<AdminPrincipalDB | null> {
+    return this.coordenadorRepository.autenticarAdmin(login, senha);
   }
 }

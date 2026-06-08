@@ -1,21 +1,40 @@
 // Carrega as variaveis do arquivo .env antes do servidor iniciar.
 import 'dotenv/config';
-// Importa o Express, que cria as rotas HTTP do projeto.
 import express from 'express';
-// Importa os tipos do Express para deixar req/res/next tipados no TypeScript.
 import type { NextFunction, Request, Response } from 'express';
-// Importa o path para montar caminhos de pasta sem depender do sistema operacional.
 import path from 'path';
-// Importa o client centralizado do Supabase para ler e escrever dados no banco.
 import { supabase } from './database/supabase';
 
-// Importa o EJS para renderizar o arquivo HTML que ainda usa variaveis dinamicas.
-const ejs = require('ejs');
+// Importando repositórios para integração real com o banco de dados Supabase
+import { OperadorRepository } from './Repository/OperadorRepository';
+import { EquipeRepository } from './Repository/EquipeRepository';
+import { AtletaRepository } from './Repository/AtletaRepository';
+import { EsteiraRepository } from './Repository/EsteiraRepository';
+import { CoordenadorRepository } from './Repository/CoordenadorRepository';
+import { CheckpointRepository } from './Repository/CheckpointRepository';
+import { TurnoRepository } from './Repository/TurnoRepository';
+import { EventoRepository } from './Repository/EventoRepository';
+import { SessaoRepository } from './Repository/SessaoRepository';
 
-// Cria a aplicacao Express que vai receber as requisicoes do navegador.
+const operadorRepo = new OperadorRepository();
+const equipeRepo = new EquipeRepository();
+const atletaRepo = new AtletaRepository();
+const esteiraRepo = new EsteiraRepository();
+const coordenadorRepo = new CoordenadorRepository();
+const checkpointRepo = new CheckpointRepository();
+const turnoRepo = new TurnoRepository();
+const eventoRepo = new EventoRepository();
+const sessaoRepo = new SessaoRepository();
+
+const ejs = require('ejs');
 const app = express();
 
-// Permite receber dados em JSON e tambem dados enviados por formularios HTML.
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'View'));
+
+// Serve arquivos estaticos (CSS, imagens) a partir da pasta View sob o prefixo /static.
+app.use('/static', express.static(path.join(__dirname, 'View')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,6 +54,7 @@ type RequestComUsuario = Request & {
   usuario?: UsuarioRequisicao;
 };
 
+// Mantido em memória apenas o estado da prova (será integrado à tabela eventos na Fase 5)
 const estadoProva: {
   status: StatusProva;
   atualizadoPor?: string;
@@ -124,156 +144,10 @@ const bloquearOperacaoSeProvaFinalizada = (req: Request, res: Response, next: Ne
   next();
 };
 
-// Configura arquivos .html para serem renderizados pelo EJS e define onde ficam os arquivos visuais.
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'html');
-app.set('views', path.join(process.cwd(), 'src', 'View'));
-
-// Libera arquivos estaticos, como o style.css, pela rota /static.
-app.use('/static', express.static(path.join(process.cwd(), 'src', 'View')));
-
-// Serve a documentacao navegavel da WebAPI solicitada na secao 3.7 do WAD.
-app.get('/docs/webapi', (req: Request, res: Response): void => {
-  res.sendFile(path.join(process.cwd(), 'documentos', 'webapi.html'));
-});
-
-// Lista temporaria usada para montar a tela de selecao de operador.
-const operadores = [
-  { nome: 'Ana Martins', iniciais: 'AM' },
-  { nome: 'João Lima', iniciais: 'JL' },
-  { nome: 'Marina Souza', iniciais: 'MS' },
-  { nome: 'Pedro Alves', iniciais: 'PA' }
-];
-
-// Lista temporaria usada para montar a tela de selecao de equipe.
-const equipes = [
-  { nome: 'Equipe Vermelha', iniciais: 'EV', atletas: 16 },
-  { nome: 'Equipe Azul', iniciais: 'EA', atletas: 16 }
-];
-
-// Dados resumidos usados no painel da coordenacao.
-const equipesPainel = [
-  { nome: 'Equipe Vermelha', km: '124,480 km', atleta: 'Rafael Luz em turno', atletas: 16 },
-  { nome: 'Equipe Azul', km: '121,930 km', atleta: 'Beatriz em turno', atletas: 16 }
-];
-
-// Dados consolidados usados na etapa de fechamento.
-const rankingFechamento = [
-  { posicao: 1, nome: 'Equipe Vermelha', km: '348,920 km', checkpoints: 412, correcoes: 3 },
-  { posicao: 2, nome: 'Equipe Azul', km: '344,180 km', checkpoints: 407, correcoes: 1 }
-];
-
-// Resultado final usado na tela oficial e na TV de resultado.
-const resultadoOficial = {
-  vencedor: rankingFechamento[0],
-  segundoLugar: rankingFechamento[1],
-  totalCheckpoints: 819,
-  correcoesAuditadas: 4,
-  validadoPor: 'Camila Rocha',
-  diferenca: '+ 4,740 km'
+// Helpers para computação e mapeamento de dados do banco para os templates EJS
+const obterIniciais = (nome: string): string => {
+  return (nome || '').split(' ').map((parte) => parte[0]).join('').toUpperCase().slice(0, 2);
 };
-
-// Checkpoints temporarios exibidos nas telas de auditoria por equipe.
-const checkpointsPorEquipe: Record<string, { horario: string, atleta: string, km: string, operador: string, selecionado?: boolean }[]> = {
-  'Equipe Vermelha': [
-    { horario: '15:24:48', atleta: 'Rafael Luz', km: '12,760 km', operador: 'Ana Martins' },
-    { horario: '15:04:51', atleta: 'Bia Torres', km: '12,480 km', operador: 'Ana Martins', selecionado: true },
-    { horario: '14:22:31', atleta: 'Clara Nunes', km: '11,940 km', operador: 'João Lima' },
-    { horario: '13:58:06', atleta: 'Enzo Reis', km: '11,600 km', operador: 'João Lima' },
-    { horario: '13:21:44', atleta: 'Marina Costa', km: '11,240 km', operador: 'Ana Martins' },
-    { horario: '12:48:19', atleta: 'Diego Ramos', km: '10,980 km', operador: 'Pedro Alves' },
-    { horario: '12:12:57', atleta: 'Elisa Rocha', km: '10,610 km', operador: 'Marina Souza' },
-    { horario: '11:37:22', atleta: 'Felipe Dias', km: '10,220 km', operador: 'João Lima' }
-  ],
-  'Equipe Azul': [
-    { horario: '15:18:20', atleta: 'Beatriz', km: '12,240 km', operador: 'Marina Souza', selecionado: true },
-    { horario: '14:50:15', atleta: 'Lucas Lima', km: '11,980 km', operador: 'Pedro Alves' },
-    { horario: '14:12:03', atleta: 'Sofia Cardoso', km: '11,620 km', operador: 'Marina Souza' },
-    { horario: '13:44:42', atleta: 'Mateus Campos', km: '11,300 km', operador: 'Pedro Alves' },
-    { horario: '13:08:34', atleta: 'Alice Martins', km: '10,940 km', operador: 'Ana Martins' },
-    { horario: '12:32:08', atleta: 'Bruno Faria', km: '10,570 km', operador: 'João Lima' },
-    { horario: '11:59:46', atleta: 'Camila Teixeira', km: '10,190 km', operador: 'Marina Souza' },
-    { horario: '11:21:30', atleta: 'Daniel Souza', km: '9,880 km', operador: 'Pedro Alves' }
-  ]
-};
-
-// Lista temporaria usada no filtro de auditoria por atleta.
-const atletasFiltroPorEquipe: Record<string, { nome: string, iniciais: string, status: string, selecionado?: boolean }[]> = {
-  'Equipe Vermelha': [
-    { nome: 'Rafael Luz', iniciais: 'RL', status: 'Turno ativo · 3 checkpoints', selecionado: true },
-    { nome: 'Bia Torres', iniciais: 'BT', status: 'Último turno há 34 min' },
-    { nome: 'Clara Nunes', iniciais: 'CN', status: 'Último turno há 1h12' },
-    { nome: 'Enzo Reis', iniciais: 'ER', status: 'Sem turno registrado' },
-    { nome: 'Marina Costa', iniciais: 'MC', status: 'Último turno há 1h48' },
-    { nome: 'Diego Ramos', iniciais: 'DR', status: 'Último turno há 2h10' },
-    { nome: 'Elisa Rocha', iniciais: 'ER', status: 'Disponível para investigação' },
-    { nome: 'Felipe Dias', iniciais: 'FD', status: 'Disponível para investigação' },
-    { nome: 'Gabriela Reis', iniciais: 'GR', status: 'Disponível para investigação' },
-    { nome: 'Henrique Melo', iniciais: 'HM', status: 'Disponível para investigação' },
-    { nome: 'Isabela Costa', iniciais: 'IC', status: 'Disponível para investigação' },
-    { nome: 'Júlia Prado', iniciais: 'JP', status: 'Disponível para investigação' }
-  ],
-  'Equipe Azul': [
-    { nome: 'Beatriz', iniciais: 'BZ', status: 'Turno ativo · 4 checkpoints', selecionado: true },
-    { nome: 'Lucas Lima', iniciais: 'LL', status: 'Último turno há 28 min' },
-    { nome: 'Sofia Cardoso', iniciais: 'SC', status: 'Último turno há 1h04' },
-    { nome: 'Mateus Campos', iniciais: 'MC', status: 'Sem turno registrado' },
-    { nome: 'Alice Martins', iniciais: 'AM', status: 'Último turno há 1h35' },
-    { nome: 'Bruno Faria', iniciais: 'BF', status: 'Último turno há 2h02' },
-    { nome: 'Camila Teixeira', iniciais: 'CT', status: 'Disponível para investigação' },
-    { nome: 'Daniel Souza', iniciais: 'DS', status: 'Disponível para investigação' },
-    { nome: 'Eduarda Pires', iniciais: 'EP', status: 'Disponível para investigação' },
-    { nome: 'Fernando Brito', iniciais: 'FB', status: 'Disponível para investigação' },
-    { nome: 'Giovana Freitas', iniciais: 'GF', status: 'Disponível para investigação' },
-    { nome: 'Hugo Moreira', iniciais: 'HM', status: 'Disponível para investigação' }
-  ]
-};
-
-// Lista temporaria de atletas por equipe para montar a tela de selecao do proximo turno.
-const atletasPorEquipe: Record<string, { nome: string, iniciais: string, status: string }[]> = {
-  'Equipe Vermelha': [
-    { nome: 'Rafael Luz', iniciais: 'RL', status: 'Turno anterior há 1h12' },
-    { nome: 'Bia Torres', iniciais: 'BT', status: 'Disponível para revezamento' },
-    { nome: 'Clara Nunes', iniciais: 'CN', status: 'Disponível para revezamento' },
-    { nome: 'Diego Ramos', iniciais: 'DR', status: 'Disponível para revezamento' },
-    { nome: 'Elisa Rocha', iniciais: 'ER', status: 'Disponível para revezamento' },
-    { nome: 'Felipe Dias', iniciais: 'FD', status: 'Disponível para revezamento' },
-    { nome: 'Gabriela Reis', iniciais: 'GR', status: 'Disponível para revezamento' },
-    { nome: 'Henrique Melo', iniciais: 'HM', status: 'Disponível para revezamento' },
-    { nome: 'Isabela Costa', iniciais: 'IC', status: 'Disponível para revezamento' },
-    { nome: 'Júlia Prado', iniciais: 'JP', status: 'Disponível para revezamento' },
-    { nome: 'Lucas Lima', iniciais: 'LL', status: 'Disponível para revezamento' },
-    { nome: 'Marcos Alves', iniciais: 'MA', status: 'Disponível para revezamento' },
-    { nome: 'Nina Barros', iniciais: 'NB', status: 'Disponível para revezamento' },
-    { nome: 'Otávio Silva', iniciais: 'OS', status: 'Disponível para revezamento' },
-    { nome: 'Paula Gomes', iniciais: 'PG', status: 'Disponível para revezamento' },
-    { nome: 'Victor Lopes', iniciais: 'VL', status: 'Disponível para revezamento' }
-  ],
-  'Equipe Azul': [
-    { nome: 'Alice Martins', iniciais: 'AM', status: 'Disponível para revezamento' },
-    { nome: 'Bruno Faria', iniciais: 'BF', status: 'Disponível para revezamento' },
-    { nome: 'Camila Teixeira', iniciais: 'CT', status: 'Disponível para revezamento' },
-    { nome: 'Daniel Souza', iniciais: 'DS', status: 'Turno anterior há 52min' },
-    { nome: 'Eduarda Pires', iniciais: 'EP', status: 'Disponível para revezamento' },
-    { nome: 'Fernando Brito', iniciais: 'FB', status: 'Disponível para revezamento' },
-    { nome: 'Giovana Freitas', iniciais: 'GF', status: 'Disponível para revezamento' },
-    { nome: 'Hugo Moreira', iniciais: 'HM', status: 'Disponível para revezamento' },
-    { nome: 'Igor Neves', iniciais: 'IN', status: 'Disponível para revezamento' },
-    { nome: 'Laura Mendes', iniciais: 'LM', status: 'Disponível para revezamento' },
-    { nome: 'Mateus Campos', iniciais: 'MC', status: 'Disponível para revezamento' },
-    { nome: 'Natália Ribeiro', iniciais: 'NR', status: 'Disponível para revezamento' },
-    { nome: 'Renan Duarte', iniciais: 'RD', status: 'Disponível para revezamento' },
-    { nome: 'Sofia Cardoso', iniciais: 'SC', status: 'Disponível para revezamento' },
-    { nome: 'Thiago Matos', iniciais: 'TM', status: 'Disponível para revezamento' },
-    { nome: 'Yasmin Araújo', iniciais: 'YA', status: 'Disponível para revezamento' }
-  ]
-};
-
-// Lista de esteiras e seus estados para a tela de inicio de turno.
-const esteiras = [
-  { nome: 'Esteira 01', status: 'Livre para iniciar turno', tipo: 'livre' },
-  { nome: 'Esteira 02', status: 'Em manutenção', tipo: 'manutencao' }
-];
 
 const obterInicioTurno = (valor: unknown): number => {
   const timestamp = Number(valor);
@@ -312,6 +186,191 @@ const contextoAutorizacao = (papel: PapelUsuario = ROLES.OPERADOR) => ({
 
 const obterPapelRenderizacao = (req: Request, fallback: PapelUsuario = ROLES.COORDENADOR): PapelUsuario => {
   return extrairPapelDaRequisicao(req) || fallback;
+};
+
+// Funções para carregar dados reais do Supabase estruturados para o EJS
+const obterOperadoresReal = async () => {
+  const ops = await operadorRepo.listar();
+  return ops.map(op => ({
+    nome: op.nome,
+    iniciais: obterIniciais(op.nome)
+  }));
+};
+
+const obterEquipesReal = async () => {
+  const listaEquipes = await equipeRepo.listar();
+  const equipes = [];
+  for (const eq of listaEquipes) {
+    const atletasList = await atletaRepo.listarPorEquipe(eq.id_equipe);
+    equipes.push({
+      nome: eq.nome,
+      iniciais: obterIniciais(eq.nome),
+      atletas: atletasList.length
+    });
+  }
+  return equipes;
+};
+
+const obterAtletasReal = async (nomeEquipe: string) => {
+  const eq = await equipeRepo.buscarPorNome(nomeEquipe);
+  if (!eq) return [];
+  const atletasDB = await atletaRepo.listarPorEquipe(eq.id_equipe);
+  return atletasDB.map(at => ({
+    nome: at.nome,
+    iniciais: obterIniciais(at.nome),
+    status: at.status || 'Disponível para revezamento'
+  }));
+};
+
+const obterEsteirasReal = async () => {
+  const esteirasDB = await esteiraRepo.listar();
+  return esteirasDB.map(est => ({
+    nome: est.modelo,
+    tipo: est.status === 'ativo' || est.status === 'livre' ? 'livre' : 'manutencao',
+    status: est.status === 'ativo' || est.status === 'livre' ? 'Livre para iniciar turno' : 'Em manutenção'
+  }));
+};
+
+const obterEquipesPainelReal = async () => {
+  const listaEquipes = await equipeRepo.listar();
+  const { data: turnosAtivos } = await supabase
+    .from('turnos')
+    .select('id_turno, id_atleta, atletas (nome, id_equipe)')
+    .eq('status', 'em_andamento');
+
+  const equipesPainel = [];
+  for (const eq of listaEquipes) {
+    const active = (turnosAtivos || []).find(t => t.atletas && (t.atletas as any).id_equipe === eq.id_equipe);
+    const atletaStr = active ? `${(active.atletas as any).nome} em turno` : 'Nenhum atleta em turno';
+    const numAtletas = (await atletaRepo.listarPorEquipe(eq.id_equipe)).length;
+    equipesPainel.push({
+      nome: eq.nome,
+      km: `${eq.km_total.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+      atleta: atletaStr,
+      atletas: numAtletas
+    });
+  }
+  return equipesPainel;
+};
+
+const obterRankingFechamentoReal = async () => {
+  const listaEquipes = await equipeRepo.listar();
+  listaEquipes.sort((a, b) => b.km_total - a.km_total);
+
+  const { data: hist } = await supabase
+    .from('vw_historico_completo')
+    .select('id_equipe, id_checkpoint, is_ajuste');
+
+  return listaEquipes.map((eq, index) => {
+    const teamRows = (hist || []).filter(r => r.id_equipe === eq.id_equipe && r.id_checkpoint !== null);
+    const checkpointsCount = teamRows.length;
+    const correcoesCount = teamRows.filter(r => r.is_ajuste === true).length;
+    return {
+      posicao: index + 1,
+      nome: eq.nome,
+      km: `${eq.km_total.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+      checkpoints: checkpointsCount,
+      correcoes: correcoesCount
+    };
+  });
+};
+
+const obterResultadoOficialReal = async (coordenador: string) => {
+  const ranking = await obterRankingFechamentoReal();
+  const vencedor = ranking[0] || { nome: 'Nenhuma', km: '0,000 km' };
+  const segundoLugar = ranking[1] || { nome: 'Nenhuma', km: '0,000 km' };
+  const totalCheckpoints = ranking.reduce((acc, r) => acc + r.checkpoints, 0);
+  const correcoesAuditadas = ranking.reduce((acc, r) => acc + r.correcoes, 0);
+
+  const kmVencedor = parseFloat(vencedor.km.replace(' km', '').replace(/\./g, '').replace(',', '.'));
+  const kmSegundo = parseFloat(segundoLugar.km.replace(' km', '').replace(/\./g, '').replace(',', '.'));
+  const diffKm = Math.max(0, kmVencedor - kmSegundo);
+  const diferenca = `+ ${diffKm.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`;
+
+  return {
+    vencedor,
+    segundoLugar,
+    totalCheckpoints,
+    correcoesAuditadas,
+    validadoPor: coordenador || estadoProva.atualizadoPor || 'Coordenador',
+    diferenca
+  };
+};
+
+const obterCheckpointsEquipeReal = async (nomeEquipe: string) => {
+  const eq = await equipeRepo.buscarPorNome(nomeEquipe);
+  if (!eq) return [];
+
+  const { data: hist, error } = await supabase
+    .from('vw_historico_completo')
+    .select('registrado_em, atleta_nome, km_acumulado, id_checkpoint, id_sessao_registro_checkpoint')
+    .eq('id_equipe', eq.id_equipe)
+    .order('registrado_em', { ascending: false });
+
+  if (error) {
+    console.error("Error fetching checkpoints:", error);
+    return [];
+  }
+
+  const { data: ops } = await supabase
+    .from('operador')
+    .select('nome, id_sessao_operacional');
+
+  return (hist || [])
+    .filter(r => r.id_checkpoint !== null)
+    .map(r => {
+      const op = (ops || []).find(o => o.id_sessao_operacional === r.id_sessao_registro_checkpoint);
+      const operadorNome = op ? op.nome : 'Sistema';
+
+      const dataReg = new Date(r.registrado_em);
+      const horario = dataReg.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      return {
+        horario,
+        atleta: r.atleta_nome,
+        km: `${Number(r.km_acumulado).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+        operador: operadorNome
+      };
+    });
+};
+
+const obterAtletasFiltroReal = async (nomeEquipe: string) => {
+  const eq = await equipeRepo.buscarPorNome(nomeEquipe);
+  if (!eq) return [];
+
+  const atletasDB = await atletaRepo.listarPorEquipe(eq.id_equipe);
+
+  const { data: turnosAtletas } = await supabase
+    .from('turnos')
+    .select('id_turno, id_atleta, status, horario_inicio, horario_fim')
+    .in('id_atleta', atletasDB.map(a => a.id_atleta))
+    .order('horario_inicio', { ascending: false });
+
+  return atletasDB.map(at => {
+    const turnos = (turnosAtletas || []).filter(t => t.id_atleta === at.id_atleta);
+    let statusText = 'Sem turno registrado';
+    if (turnos.length > 0) {
+      const active = turnos.find(t => t.status === 'em_andamento');
+      if (active) {
+        statusText = 'Turno ativo';
+      } else {
+        const last = turnos[0];
+        const fim = last.horario_fim ? new Date(last.horario_fim) : new Date(last.horario_inicio);
+        const diffMs = Date.now() - fim.getTime();
+        const diffMin = Math.floor(diffMs / 60000);
+        if (diffMin < 60) {
+          statusText = `Último turno há ${diffMin} min`;
+        } else {
+          statusText = `Último turno há ${Math.floor(diffMin / 60)}h${String(diffMin % 60).padStart(2, '0')}`;
+        }
+      }
+    }
+    return {
+      nome: at.nome,
+      iniciais: obterIniciais(at.nome),
+      status: statusText
+    };
+  });
 };
 
 const tabelasPermitidas = new Set([
@@ -364,12 +423,13 @@ app.get('/', (req: Request, res: Response): void => {
 });
 
 // Recebe a funcao escolhida na tela inicial e direciona para o proximo passo do fluxo.
-app.post('/selecionar-funcao', (req: Request, res: Response): void => {
+app.post('/selecionar-funcao', async (req: Request, res: Response): Promise<void> => {
   // Pega do formulario qual funcao foi escolhida.
   const { funcao } = req.body;
 
   // Se escolheu operador, renderiza a tela de operadores.
   if (funcao === 'operador') {
+    const operadores = await obterOperadoresReal();
     res.render('index', {
       // Mostra a segunda etapa do fluxo usando o mesmo index.html.
       tela: 'operador',
@@ -397,34 +457,66 @@ app.post('/selecionar-funcao', (req: Request, res: Response): void => {
   res.redirect('/');
 });
 
-app.post('/login-coordenador', (req: Request, res: Response): void => {
-  // Le nome e senha enviados pela tela de login.
+app.post('/login-coordenador', async (req: Request, res: Response): Promise<void> => {
+  // Le login e senha enviados pela tela de login.
   const { coordenador, senha } = req.body;
   const papel = obterPapelRenderizacao(req);
 
-  // Se os dois campos vieram preenchidos, libera o painel.
-  if (coordenador && senha) {
+  if (!coordenador || !senha) {
     res.render('index', {
-      // Depois da autenticacao visual, abre o painel geral da prova.
-      tela: 'painelCoordenador',
-      titulo: 'PAINEL DA PROVA',
-      coordenadorSelecionado: coordenador,
-      equipesPainel,
-      ...contextoAutorizacao(papel)
+      tela: 'loginCoordenador',
+      titulo: 'ACESSO RESTRITO',
+      perfilLogin: papel,
+      ...contextoAutorizacao(papel),
+      loginMensagem: 'Preencha o login e a senha para entrar.'
     });
     return;
   }
 
-  res.render('index', {
-    // Login visual temporario ate a tela administrativa ser criada.
-    tela: 'loginCoordenador',
-    titulo: 'ACESSO RESTRITO',
-    perfilLogin: papel,
-    ...contextoAutorizacao(papel),
-    loginMensagem: coordenador && senha
-      ? `Acesso recebido para ${coordenador}.`
-      : 'Preencha o nome do coordenador(a) e a senha para entrar.'
-  });
+  try {
+    // Autenticação real: testa contra admin_principal primeiro (se perfil for administrador_geral),
+    // caso contrário valida contra a tabela coordenador.
+    let nomeAutenticado: string | null = null;
+
+    if (papel === ROLES.ADMINISTRADOR_GERAL) {
+      const admin = await coordenadorRepo.autenticarAdmin(coordenador, senha);
+      if (admin) nomeAutenticado = admin.nome;
+    } else {
+      const coord = await coordenadorRepo.autenticar(coordenador, senha);
+      if (coord) nomeAutenticado = coord.nome;
+    }
+
+    if (!nomeAutenticado) {
+      res.render('index', {
+        tela: 'loginCoordenador',
+        titulo: 'ACESSO RESTRITO',
+        perfilLogin: papel,
+        ...contextoAutorizacao(papel),
+        loginMensagem: 'Login ou senha incorretos. Tente novamente.'
+      });
+      return;
+    }
+
+    // Credenciais válidas: abre o painel com dados reais do banco.
+    const equipesPainel = await obterEquipesPainelReal();
+    res.render('index', {
+      tela: 'painelCoordenador',
+      titulo: 'PAINEL DA PROVA',
+      coordenadorSelecionado: nomeAutenticado,
+      equipesPainel,
+      ...contextoAutorizacao(papel)
+    });
+
+  } catch (err: any) {
+    console.error('[/login-coordenador] Erro na autenticação:', err.message);
+    res.render('index', {
+      tela: 'loginCoordenador',
+      titulo: 'ACESSO RESTRITO',
+      perfilLogin: papel,
+      ...contextoAutorizacao(papel),
+      loginMensagem: 'Erro interno. Tente novamente em instantes.'
+    });
+  }
 });
 
 app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
@@ -441,9 +533,10 @@ app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/voltar-painel-coordenador', (req: Request, res: Response): void => {
+app.post('/voltar-painel-coordenador', async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = obterPapelRenderizacao(req);
+  const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
     // Retorna dos detalhes para a visao geral da coordenacao.
@@ -455,9 +548,10 @@ app.post('/voltar-painel-coordenador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
+  const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
     // Tela de controle do placar publico, usada no tablet da coordenacao.
@@ -469,9 +563,10 @@ app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERA
   });
 });
 
-app.post('/fechamento', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/fechamento', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
+  const rankingFechamento = await obterRankingFechamentoReal();
 
   res.render('index', {
     // Tela de revisao final antes de encerrar a prova.
@@ -483,9 +578,11 @@ app.post('/fechamento', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Reques
   });
 });
 
-app.post('/finalizar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/finalizar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal(coordenador);
 
   res.render('index', {
     // Confirmacao obrigatoria antes de bloquear novos registros e oficializar o resultado.
@@ -498,9 +595,11 @@ app.post('/finalizar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: R
   });
 });
 
-app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { coordenador, confirmaBloqueio } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal(coordenador);
 
   if (confirmaBloqueio !== 'sim') {
     res.render('index', {
@@ -531,9 +630,11 @@ app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (
   });
 });
 
-app.post('/publicar-resultado', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/publicar-resultado', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal(coordenador);
 
   res.render('index', {
     // Confirmacao explicita antes de mostrar o resultado final no placar publico.
@@ -546,7 +647,10 @@ app.post('/publicar-resultado', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req
   });
 });
 
-app.post('/confirmar-publicacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/confirmar-publicacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  const { coordenador } = req.body;
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal(coordenador);
   res.render('index', {
     // Tela publica final, liberada apos a confirmacao da coordenacao.
     tela: 'tvResultado',
@@ -556,9 +660,10 @@ app.post('/confirmar-publicacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (r
   });
 });
 
-app.post('/voltar-fechamento', (req: Request, res: Response): void => {
+app.post('/voltar-fechamento', async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = obterPapelRenderizacao(req);
+  const rankingFechamento = await obterRankingFechamentoReal();
 
   res.render('index', {
     // Volta do resultado oficial para a revisao de fechamento.
@@ -570,9 +675,11 @@ app.post('/voltar-fechamento', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/voltar-resultado-oficial', (req: Request, res: Response): void => {
+app.post('/voltar-resultado-oficial', async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = obterPapelRenderizacao(req);
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal(coordenador);
 
   res.render('index', {
     // Retorna da publicacao para o resultado oficial privado.
@@ -585,7 +692,8 @@ app.post('/voltar-resultado-oficial', (req: Request, res: Response): void => {
   });
 });
 
-app.get('/tv', (req: Request, res: Response): void => {
+app.get('/tv', async (req: Request, res: Response): Promise<void> => {
+  const equipesPainel = await obterEquipesPainelReal();
   res.render('index', {
     // Tela publica somente leitura, pensada para abrir na TV ou projetor.
     tela: 'tvPublica',
@@ -594,7 +702,9 @@ app.get('/tv', (req: Request, res: Response): void => {
   });
 });
 
-app.get('/tv-resultado', (req: Request, res: Response): void => {
+app.get('/tv-resultado', async (req: Request, res: Response): Promise<void> => {
+  const rankingFechamento = await obterRankingFechamentoReal();
+  const resultadoOficial = await obterResultadoOficialReal('');
   res.render('index', {
     // Tela publica final, pensada para divulgar o resultado oficial na TV.
     tela: 'tvResultado',
@@ -604,12 +714,14 @@ app.get('/tv-resultado', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   // Recebe qual coordenador esta logado e qual equipe foi aberta.
   const { coordenador, equipe } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
   // Procura os dados da equipe; se nao achar, usa a primeira equipe como fallback.
+  const equipesPainel = await obterEquipesPainelReal();
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
+  const checkpoints = await obterCheckpointsEquipeReal(equipePainel.nome);
 
   res.render('index', {
     // Abre os registros gerais da equipe para auditoria.
@@ -617,21 +729,22 @@ app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRA
     titulo: equipePainel.nome,
     coordenadorSelecionado: coordenador,
     equipePainel,
-    checkpoints: checkpointsPorEquipe[equipePainel.nome] || [],
+    checkpoints,
     ...contextoAutorizacao(papel)
   });
 });
 
-app.post('/filtro-atletas-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/filtro-atletas-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   // Recebe a equipe e, opcionalmente, o atleta selecionado no filtro.
   const { coordenador, equipe, atleta } = req.body;
   const papel = (req as RequestComUsuario).usuario!.papel;
   // Recupera o resumo da equipe escolhida.
+  const equipesPainel = await obterEquipesPainelReal();
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
   // Busca a lista de atletas dessa equipe.
-  const atletas = atletasFiltroPorEquipe[equipePainel.nome] || [];
+  const atletas = await obterAtletasFiltroReal(equipePainel.nome);
   // Mantem o atleta clicado ou usa o atleta marcado como padrao.
-  const atletaSelecionado = atleta || atletas.find((item) => item.selecionado)?.nome;
+  const atletaSelecionado = atleta || atletas[0]?.nome;
 
   res.render('index', {
     // Mostra o filtro por atleta dentro dos detalhes da equipe.
@@ -646,7 +759,8 @@ app.post('/filtro-atletas-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMI
 });
 
 // Mostra diretamente a selecao de operadores caso a rota seja acessada pela URL.
-app.get('/operador', (req: Request, res: Response): void => {
+app.get('/operador', async (req: Request, res: Response): Promise<void> => {
+  const operadores = await obterOperadoresReal();
   res.render('index', {
     // Permite acessar a selecao de operadores diretamente pela URL /operador.
     tela: 'operador',
@@ -656,8 +770,9 @@ app.get('/operador', (req: Request, res: Response): void => {
 });
 
 // Recebe o operador escolhido e mostra uma confirmacao simples na mesma tela.
-app.post('/selecionar-operador', (req: Request, res: Response): void => {
+app.post('/selecionar-operador', async (req: Request, res: Response): Promise<void> => {
   const { operador } = req.body;
+  const operadores = await obterOperadoresReal();
 
   res.render('index', {
     // Mantem a tela de operadores e destaca quem foi selecionado.
@@ -668,8 +783,9 @@ app.post('/selecionar-operador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador } = req.body;
+  const equipes = await obterEquipesReal();
 
   res.render('index', {
     // Mostra a etapa seguinte, mantendo o operador escolhido visivel no topo.
@@ -680,8 +796,9 @@ app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADO
   });
 });
 
-app.post('/voltar-operador', (req: Request, res: Response): void => {
+app.post('/voltar-operador', async (req: Request, res: Response): Promise<void> => {
   const { operador } = req.body;
+  const operadores = await obterOperadoresReal();
 
   res.render('index', {
     // Volta da selecao de equipe para a etapa anterior, mantendo o operador selecionado.
@@ -692,8 +809,9 @@ app.post('/voltar-operador', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
+  const equipes = await obterEquipesReal();
 
   res.render('index', {
     // Mantem a tela de equipes e destaca a equipe escolhida futuramente.
@@ -705,8 +823,10 @@ app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
   });
 });
 
-app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
+  const atletas = await obterAtletasReal(equipe);
+  const esteiras = await obterEsteirasReal();
 
   res.render('index', {
     // Mostra todos os atletas da equipe selecionada e o status das esteiras.
@@ -714,13 +834,14 @@ app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR,
     titulo: equipe,
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
-    atletas: atletasPorEquipe[equipe] || [],
+    atletas,
     esteiras
   });
 });
 
-app.post('/voltar-equipe', (req: Request, res: Response): void => {
+app.post('/voltar-equipe', async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
+  const equipes = await obterEquipesReal();
 
   res.render('index', {
     // Volta da selecao de atleta para a tela de equipe, mantendo a equipe marcada.
@@ -732,9 +853,11 @@ app.post('/voltar-equipe', (req: Request, res: Response): void => {
   });
 });
 
-app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   // Recebe o atleta clicado e o ultimo atleta que correu.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
+  const atletas = await obterAtletasReal(equipe);
+  const esteiras = await obterEsteirasReal();
 
   // Bloqueia a regra de negocio: o mesmo atleta nao pode correr dois turnos seguidos.
   if (ultimoAtleta && atleta === ultimoAtleta) {
@@ -745,7 +868,7 @@ app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
       operadorSelecionado: operador,
       equipeSelecionada: equipe,
       ultimoAtleta,
-      atletas: atletasPorEquipe[equipe] || [],
+      atletas,
       esteiras
     });
     return;
@@ -759,14 +882,16 @@ app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
     ultimoAtleta,
-    atletas: atletasPorEquipe[equipe] || [],
+    atletas,
     esteiras
   });
 });
 
-app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   // Recebe os dados necessarios para seguir da selecao de atleta para a esteira.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
+  const atletas = await obterAtletasReal(equipe);
+  const esteiras = await obterEsteirasReal();
 
   // Repete a validacao para evitar que alguem avance manualmente pelo HTML.
   if (ultimoAtleta && atleta === ultimoAtleta) {
@@ -777,7 +902,7 @@ app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR,
       operadorSelecionado: operador,
       equipeSelecionada: equipe,
       ultimoAtleta,
-      atletas: atletasPorEquipe[equipe] || [],
+      atletas,
       esteiras
     });
     return;
@@ -794,8 +919,9 @@ app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR,
   });
 });
 
-app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe, atleta, esteira, bypassManutencao } = req.body;
+  const esteiras = await obterEsteirasReal();
 
   res.render('index', {
     // Mantem a tela de esteiras e destaca a esteira escolhida.
@@ -810,8 +936,10 @@ app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADO
   });
 });
 
-app.post('/voltar-atleta', (req: Request, res: Response): void => {
+app.post('/voltar-atleta', async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe, atleta } = req.body;
+  const atletas = await obterAtletasReal(equipe);
+  const esteiras = await obterEsteirasReal();
 
   res.render('index', {
     // Volta da selecao de esteira para a tela de atletas.
@@ -820,29 +948,187 @@ app.post('/voltar-atleta', (req: Request, res: Response): void => {
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
-    atletas: atletasPorEquipe[equipe] || [],
+    atletas,
     esteiras
   });
 });
 
-app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
+app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe, atleta, esteira } = req.body;
   const inicioTurnoTimestamp = Date.now();
 
-  res.render('index', {
-    // Abre a tela de checkpoint com o turno em andamento.
-    tela: 'checkpoint',
-    titulo: 'TURNO ATIVO',
-    operadorSelecionado: operador,
-    equipeSelecionada: equipe,
-    atletaSelecionado: atleta,
-    esteiraSelecionada: esteira,
-    inicioTurnoTimestamp
-  });
+  try {
+    // Resolve IDs reais no banco a partir dos nomes recebidos do formulário.
+    const atletaDB = await atletaRepo.buscarPorNome(atleta, (await equipeRepo.buscarPorNome(equipe))?.id_equipe ?? 0);
+    const esteiraDB = await esteiraRepo.buscarPorModelo(esteira);
+    const eventoAtivo = await eventoRepo.buscarAtivo();
+
+    let idTurno: number | null = null;
+
+    if (atletaDB && esteiraDB && eventoAtivo) {
+      // Cria sessao operacional para o operador desta jornada.
+      const sessao = await sessaoRepo.insert({
+        id_evento: eventoAtivo.id_evento,
+        id_funcao: 1, // funcao padrão: operador de esteira
+        inicio_em: new Date()
+      });
+
+      // Insere o turno vinculando atleta, esteira e sessao operacional.
+      const turno = await turnoRepo.insert({
+        id_atleta: atletaDB.id_atleta,
+        id_esteira: esteiraDB.id_esteira,
+        id_sessao_operacional: sessao.id_sessao_operacional,
+        horario_inicio: new Date()
+      });
+      idTurno = turno.id_turno;
+    }
+
+    res.render('index', {
+      // Abre a tela de checkpoint com o turno em andamento.
+      tela: 'checkpoint',
+      titulo: 'TURNO ATIVO',
+      operadorSelecionado: operador,
+      equipeSelecionada: equipe,
+      atletaSelecionado: atleta,
+      esteiraSelecionada: esteira,
+      inicioTurnoTimestamp,
+      idTurno
+    });
+  } catch (err: any) {
+    console.error('[/iniciar-turno] Erro ao persistir turno:', err.message);
+    // Mesmo com erro no banco, abre a tela para não bloquear o operador.
+    res.render('index', {
+      tela: 'checkpoint',
+      titulo: 'TURNO ATIVO',
+      operadorSelecionado: operador,
+      equipeSelecionada: equipe,
+      atletaSelecionado: atleta,
+      esteiraSelecionada: esteira,
+      inicioTurnoTimestamp,
+      idTurno: null
+    });
+  }
+});
+
+// Registra um checkpoint de km acumulado no Supabase com cálculo de pace.
+// Recebe JSON via fetch do front-end: { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno }
+app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno } = req.body;
+
+    // --- Validação numérica do km acumulado ---
+    const kmRaw = String(kmAcumulado || '').replace(',', '.');
+    const km = parseFloat(kmRaw);
+
+    if (!kmRaw || isNaN(km) || km <= 0) {
+      return res.status(400).json({ error: 'km_acumulado deve ser um número positivo.' });
+    }
+
+    // Máximo de 3 casas decimais.
+    const kmArredondado = Math.round(km * 1000) / 1000;
+    if (kmArredondado !== km && kmRaw.includes('.') && kmRaw.split('.')[1].length > 3) {
+      return res.status(400).json({ error: 'km_acumulado aceita no máximo 3 casas decimais.' });
+    }
+
+    // --- Resolve id_turno ---
+    let turnoId = idTurno ? Number(idTurno) : null;
+
+    // Se não veio idTurno, tenta achar o turno ativo do atleta no banco.
+    if (!turnoId) {
+      const eq = await equipeRepo.buscarPorNome(equipe);
+      if (eq) {
+        const atletaDB = await atletaRepo.buscarPorNome(atleta, eq.id_equipe);
+        if (atletaDB) {
+          const { data: turnoAtivo } = await supabase
+            .from('turnos')
+            .select('id_turno, id_sessao_operacional')
+            .eq('id_atleta', atletaDB.id_atleta)
+            .eq('status', 'em_andamento')
+            .order('horario_inicio', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+          if (turnoAtivo) turnoId = turnoAtivo.id_turno;
+        }
+      }
+    }
+
+    if (!turnoId) {
+      return res.status(400).json({ error: 'Turno ativo não encontrado. Inicie o turno antes de registrar checkpoints.' });
+    }
+
+    // --- Busca sessão operacional vinculada ao turno ---
+    const { data: turnoRow } = await supabase
+      .from('turnos')
+      .select('id_sessao_operacional, horario_inicio, km_turno')
+      .eq('id_turno', turnoId)
+      .single();
+
+    if (!turnoRow) {
+      return res.status(404).json({ error: `Turno #${turnoId} não encontrado no banco.` });
+    }
+
+    const idSessaoOperacional = turnoRow.id_sessao_operacional;
+
+    // --- Busca checkpoint anterior para calcular pace ---
+    const checkpointsAnteriores = await checkpointRepo.findByTurno(turnoId);
+    const anterior = checkpointsAnteriores.length > 0
+      ? checkpointsAnteriores.reduce((a, b) =>
+          new Date(a.registrado_em) > new Date(b.registrado_em) ? a : b)
+      : null;
+
+    const kmAnterior = anterior ? Number(anterior.km_acumulado) : 0;
+    const kmDelta = kmArredondado - kmAnterior;
+
+    if (kmDelta <= 0 && checkpointsAnteriores.length > 0) {
+      return res.status(400).json({ error: `km_acumulado (${kmArredondado}) deve ser maior que o checkpoint anterior (${kmAnterior}).` });
+    }
+
+    // Calcula tempo decorrido desde o início do turno ou último checkpoint.
+    const agora = Date.now();
+    const referencia = anterior
+      ? new Date(anterior.registrado_em).getTime()
+      : (turnoRow.horario_inicio ? new Date(turnoRow.horario_inicio).getTime() : Number(inicioTurnoTimestamp));
+    const segundosDecorridos = Math.max(1, (agora - referencia) / 1000);
+
+    // Pace em min/km: tempo (min) dividido por km percorridos neste trecho.
+    const paceMinKm = kmDelta > 0 ? (segundosDecorridos / 60) / kmDelta : 0;
+    const paceArredondado = Math.round(paceMinKm * 1000) / 1000;
+
+    // Velocidade média em km/h: km/tempo_em_horas.
+    const velocidadeMedia = kmDelta > 0 ? kmDelta / (segundosDecorridos / 3600) : 0;
+    const velocidadeArredondada = Math.round(velocidadeMedia * 100) / 100;
+
+    // --- Persiste checkpoint no Supabase ---
+    const checkpoint = await checkpointRepo.insert({
+      id_turno: turnoId,
+      id_sessao_operacional: idSessaoOperacional,
+      km_acumulado: kmArredondado,
+      pace_medio: paceArredondado,
+      velocidade_media: velocidadeArredondada,
+      registrado_em: new Date(),
+      is_ajuste: false
+    });
+
+    return res.status(201).json({
+      ok: true,
+      idTurno: turnoId,
+      checkpoint: {
+        id: checkpoint.id_checkpoint,
+        km_acumulado: kmArredondado,
+        pace_medio: paceArredondado,
+        velocidade_media: velocidadeArredondada,
+        registrado_em: checkpoint.registrado_em
+      }
+    });
+
+  } catch (err: any) {
+    console.error('[/registrar-checkpoint] Erro:', err.message);
+    return res.status(500).json({ error: err.message || 'Erro interno ao registrar checkpoint.' });
+  }
 });
 
 app.post('/finalizar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
-  const { operador, equipe, atleta, esteira, kmFinal, duracaoTurno } = req.body;
+  const { operador, equipe, atleta, esteira, kmFinal, duracaoTurno, idTurno } = req.body;
   const inicioTurnoTimestamp = obterInicioTurno(req.body.inicioTurnoTimestamp);
 
   res.render('index', {
@@ -856,12 +1142,13 @@ app.post('/finalizar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, 
     kmFinal: kmFinal || '0',
     duracaoTurno: formatarDuracao(inicioTurnoTimestamp, duracaoTurno || '00:00:00'),
     inicioTurno: formatarHorario(inicioTurnoTimestamp),
-    inicioTurnoTimestamp
+    inicioTurnoTimestamp,
+    idTurno: idTurno || null
   });
 });
 
 app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
-  const { operador, equipe, atleta, esteira } = req.body;
+  const { operador, equipe, atleta, esteira, idTurno } = req.body;
   const inicioTurnoTimestamp = obterInicioTurno(req.body.inicioTurnoTimestamp);
 
   res.render('index', {
@@ -872,12 +1159,26 @@ app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
     equipeSelecionada: equipe,
     atletaSelecionado: atleta,
     esteiraSelecionada: esteira,
-    inicioTurnoTimestamp
+    inicioTurnoTimestamp,
+    idTurno: idTurno || null
   });
 });
 
-app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, (req: Request, res: Response): void => {
-  const { operador, equipe, atleta } = req.body;
+app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+  const { operador, equipe, atleta, idTurno, kmFinal } = req.body;
+
+  // Persiste o encerramento do turno no banco de dados.
+  if (idTurno) {
+    try {
+      const kmFinalNum = parseFloat(String(kmFinal || '0').replace(',', '.')) || 0;
+      await turnoRepo.updateParaEncerrado(Number(idTurno), kmFinalNum);
+    } catch (err: any) {
+      console.error('[/confirmar-encerramento] Erro ao fechar turno no banco:', err.message);
+    }
+  }
+
+  const atletas = await obterAtletasReal(equipe);
+  const esteiras = await obterEsteirasReal();
 
   res.render('index', {
     // Encerramento confirmado: volta para a selecao de atletas da mesma equipe.
@@ -886,15 +1187,16 @@ app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDE
     operadorSelecionado: operador,
     equipeSelecionada: equipe,
     ultimoAtleta: atleta,
-    atletas: atletasPorEquipe[equipe] || [],
+    atletas,
     esteiras
   });
 });
 
-app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   estadoProva.status = 'pausada';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
     tela: 'painelCoordenador',
@@ -906,10 +1208,11 @@ app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Requ
   });
 });
 
-app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   estadoProva.status = 'em_andamento';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
     tela: 'painelCoordenador',
@@ -921,7 +1224,8 @@ app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), (req: Req
   });
 });
 
-app.get('/exportar-dados', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): Response => {
+app.get('/exportar-dados', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
+  const rankingFechamento = await obterRankingFechamentoReal();
   const linhas = [
     'posicao,equipe,km,checkpoints,correcoes',
     ...rankingFechamento.map((equipe) => [

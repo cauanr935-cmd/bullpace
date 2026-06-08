@@ -1,39 +1,36 @@
-// Importa os tipos de Request e Response do Express.
 import { Request, Response } from 'express';
-
-// Importa o service do atleta.
 import { AtletaService } from '../Service/AtletaService';
 
-// Classe responsável por receber as requisições HTTP dos atleta, repassá-las ao service e retornar a resposta esperada.
 export class AtletaController {
 
-    // Responsável pela lógica de negócios.
-    private atletaService = new AtletaService();
+  private atletaService = new AtletaService();
 
-    // Lista todos os atletas cadastrados.
-    async listarAtletas(req: Request, res: Response) {
-        try {
-            const atletas = await this.atletaService.listarAtletas();
-            return res.status(200).json(atletas);
-        } catch (error) {
-            return res.status(500).json({ message: 'Erro ao listar atletas.' });
-        }
+  // Lista atletas de uma equipe (id_equipe via query param).
+  async listarAtletas(req: Request, res: Response) {
+    try {
+      const idEquipe = Number(req.query.id_equipe);
+      if (!idEquipe) {
+        return res.status(400).json({ message: 'Parâmetro id_equipe obrigatório.' });
+      }
+      const atletas = await this.atletaService.listarPorEquipe(idEquipe);
+      return res.status(200).json(atletas);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro ao listar atletas.' });
     }
+  }
 
-    // Cadastra um novo atleta.
-    async cadastrarAtleta(req: Request, res: Response) {
-        try {
-            const { nome, equipe } = req.body;
-
-            // Campos obrigatórios do formulário.
-            if (!nome || !equipe) {
-                return res.status(400).json({ message: 'Nome e equipe são obrigatórios.' });
-            }
-
-            const novoAtleta = await this.atletaService.cadastrarAtleta(nome, equipe);
-            return res.status(201).json(novoAtleta);
-        } catch (error) {
-            return res.status(500).json({ message: 'Erro ao cadastrar atleta.' });
-        }
+  // Busca um atleta por nome dentro de uma equipe.
+  async buscarAtleta(req: Request, res: Response) {
+    try {
+      const { nome, id_equipe } = req.body;
+      if (!nome || !id_equipe) {
+        return res.status(400).json({ message: 'Nome e id_equipe são obrigatórios.' });
+      }
+      const atleta = await this.atletaService.buscarPorNome(nome, Number(id_equipe));
+      if (!atleta) return res.status(404).json({ message: 'Atleta não encontrado.' });
+      return res.status(200).json(atleta);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro ao buscar atleta.' });
     }
+  }
 }

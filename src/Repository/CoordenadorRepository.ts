@@ -1,18 +1,55 @@
-import { Coordenador } from "../Models/CoordenadorModels";
+import { supabase } from '../database/supabase';
+
+export interface CoordenadorDB {
+  id_coordenador: number;
+  nome: string;
+  login: string;
+  senha: string;
+  id_sessao_operacional: number | null;
+}
+
+export interface AdminPrincipalDB {
+  id_admin: number;
+  id_evento: number | null;
+  nome: string;
+  login: string;
+  senha: string;
+}
 
 export class CoordenadorRepository {
 
-  private coordenadores: Coordenador[] = [];
+  async listar(): Promise<CoordenadorDB[]> {
+    const { data, error } = await supabase
+      .from('coordenador')
+      .select('id_coordenador, nome, login, id_sessao_operacional');
 
-  listar(): Coordenador[] {
-
-    return this.coordenadores;
+    if (error) throw new Error(`[CoordenadorRepository.listar] ${error.message}`);
+    return (data || []) as CoordenadorDB[];
   }
 
-  salvar(coordenador: Coordenador): Coordenador {
+  /** Verifica credenciais na tabela coordenador */
+  async autenticar(login: string, senha: string): Promise<CoordenadorDB | null> {
+    const { data, error } = await supabase
+      .from('coordenador')
+      .select('*')
+      .eq('login', login)
+      .eq('senha', senha)
+      .maybeSingle();
 
-    this.coordenadores.push(coordenador);
+    if (error) throw new Error(`[CoordenadorRepository.autenticar] ${error.message}`);
+    return data as CoordenadorDB | null;
+  }
 
-    return coordenador;
+  /** Verifica credenciais na tabela admin_principal */
+  async autenticarAdmin(login: string, senha: string): Promise<AdminPrincipalDB | null> {
+    const { data, error } = await supabase
+      .from('admin_principal')
+      .select('*')
+      .eq('login', login)
+      .eq('senha', senha)
+      .maybeSingle();
+
+    if (error) throw new Error(`[CoordenadorRepository.autenticarAdmin] ${error.message}`);
+    return data as AdminPrincipalDB | null;
   }
 }
