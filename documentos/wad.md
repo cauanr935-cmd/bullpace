@@ -1512,11 +1512,11 @@ O encerramento do período de trabalho do operador é processado ao acionar o m�
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar novo turno</sub><br>
-  <img src="../assets/fluxo12.png" width="100%"><br>
+  <img src="../assets/fluxo12Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Mapeia o momento exato em que um atleta assume uma determinada esteira dentro da sessão operacional. O TurnoService encaminha a requisição de inserção de turno, que valida os dados obrigatórios e insere o registro com status definido em 'em_andamento' e a quilometragem inicializada estritamente em 0.
+A troca e entrada de um atleta na área de corrida é mediada pela camada TurnoService através do método iniciarNovoTurno(), que consome o atributo funcional abstrato mapeado para o método iniciarTurno() do TurnoController. O controlador executa a verificação estrutural estrita validarDadosInicioTurno() para garantir a presença dos vínculos de integridade referencial. Após a validação, o controlador formata a estampa temporal de início e submete um comando de inserção assíncrona na tabela turnos por meio do Supabase, salvando o novo registro operacional com o estado de ciclo de vida definido para 'em_andamento' e inicializando o acumulador de distância física (km_turno) rigorosamente em zero.
 
 #### Fluxo 13: Finalizar Turno Existente (Saída do Atleta com Gravação de KM)
 
