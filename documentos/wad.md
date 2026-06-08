@@ -244,7 +244,9 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [4](#ref-4).
+O Value Proposition Canvas é uma ferramenta que conecta dois lados: de um, o que o cliente precisa, suas tarefas, dores e ganhos; de outro, o que a solução entrega pra responder a isso. A análise é dividida em Pe  qrfil do Cliente e Mapa de Valor, e a ideia é checar se cada coisa que o sistema faz tem relação direta com uma necessidade real da operação [4](#ref-4).
+
+No caso do BullPace, o cliente é o time de Field Marketing da Red Bull, que opera o registro dos dados ao longo das 24 horas de prova. A Figura 3 mostra o canvas completo, e nas seções seguintes detalhamos cada bloco dos dois lados.
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
