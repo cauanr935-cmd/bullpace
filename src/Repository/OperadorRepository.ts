@@ -29,4 +29,17 @@ export class OperadorRepository {
     if (error) throw new Error(`[OperadorRepository.buscarPorLogin] ${error.message}`);
     return data as OperadorDB | null;
   }
+
+  async criar(nome: string): Promise<OperadorDB> {
+    const login = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '.');
+    const senha = '123';
+    const { data, error } = await supabase
+      .from('operador')
+      .insert({ nome, login, senha })
+      .select()
+      .single();
+
+    if (error) throw new Error(`[OperadorRepository.criar] ${error.message}`);
+    return data as OperadorDB;
+  }
 }

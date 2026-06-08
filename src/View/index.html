@@ -1524,5 +1524,342 @@
       <% } %>
     </section>
   </main>
+
+  <!-- Componente de Cadastro Rápido -->
+  <style>
+    .floating-cad-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff6b00;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .floating-cad-btn:hover {
+      background-color: #e05300;
+      transform: translateY(-2px);
+    }
+    .cad-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cad-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cad-modal-box {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 450px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      color: #fff;
+      position: relative;
+    }
+    .cad-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 12px;
+    }
+    .cad-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #ff6b00;
+    }
+    .cad-modal-close {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .cad-modal-close:hover {
+      color: #fff;
+    }
+    .cad-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
+    .cad-tab-btn {
+      background: none;
+      border: none;
+      color: #888;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .cad-tab-btn.active {
+      color: #ff6b00;
+      border-bottom: 2px solid #ff6b00;
+    }
+    .cad-form-group {
+      margin-bottom: 16px;
+    }
+    .cad-form-group label {
+      display: block;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .cad-input {
+      width: 100%;
+      background-color: #2b2b2b;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 10px;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    .cad-input:focus {
+      border-color: #ff6b00;
+      outline: none;
+    }
+    .cad-submit-btn {
+      width: 100%;
+      background-color: #ff6b00;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .cad-submit-btn:hover {
+      background-color: #e05300;
+    }
+    .cad-message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      display: none;
+    }
+    .cad-message.success {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+      display: block;
+    }
+    .cad-message.error {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+      display: block;
+    }
+  </style>
+
+  <%
+    const roleCad = typeof perfilUsuario !== 'undefined' ? perfilUsuario : 'operador';
+    const showAdminTab = roleCad === 'administrador_geral';
+    const showCoordTab = roleCad === 'coordenador' || roleCad === 'administrador_geral';
+  %>
+
+  <button class="floating-cad-btn" onclick="toggleCadModal(true)">
+    <span>+</span>
+    <span>Cadastro Rápido</span>
+  </button>
+
+  <div id="cadModalOverlay" class="cad-modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="cad-modal-box">
+      <div class="cad-modal-header">
+        <h3>Cadastro Rápido</h3>
+        <button class="cad-modal-close" onclick="toggleCadModal(false)">&times;</button>
+      </div>
+
+      <div class="cad-tabs">
+        <button id="tabBtnOperador" class="cad-tab-btn active" onclick="switchCadTab('operador')">Operador</button>
+        <% if (showCoordTab) { %>
+          <button id="tabBtnCoordenador" class="cad-tab-btn" onclick="switchCadTab('coordenador')">Coordenador</button>
+        <% } %>
+        <% if (showAdminTab) { %>
+          <button id="tabBtnAdmin" class="cad-tab-btn" onclick="switchCadTab('admin')">Admin Principal</button>
+        <% } %>
+      </div>
+
+      <!-- Formulário Operador -->
+      <form id="cadFormOperador" onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
+        <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+        <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+        <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+        
+        <div class="cad-form-group">
+          <label>Nome do Operador</label>
+          <input type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+        </div>
+        <button type="submit" class="cad-submit-btn">Cadastrar Operador</button>
+      </form>
+
+      <!-- Formulário Coordenador -->
+      <% if (showCoordTab) { %>
+        <form id="cadFormCoordenador" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label>Nome</label>
+            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
+          </div>
+          <div class="cad-form-group">
+            <label>Login</label>
+            <input type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
+          </div>
+          <div class="cad-form-group">
+            <label>Senha</label>
+            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Coordenador</button>
+        </form>
+      <% } %>
+
+      <!-- Formulário Admin -->
+      <% if (showAdminTab) { %>
+        <form id="cadFormAdmin" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label>Nome</label>
+            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
+          </div>
+          <div class="cad-form-group">
+            <label>Login</label>
+            <input type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
+          </div>
+          <div class="cad-form-group">
+            <label>Senha</label>
+            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Admin</button>
+        </form>
+      <% } %>
+
+      <div id="cadFeedbackMsg" class="cad-message"></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleCadModal(show) {
+      const overlay = document.getElementById('cadModalOverlay');
+      if (show) {
+        overlay.classList.add('active');
+      } else {
+        overlay.classList.remove('active');
+        resetCadModal();
+      }
+    }
+
+    function handleOverlayClick(event) {
+      if (event.target === document.getElementById('cadModalOverlay')) {
+        toggleCadModal(false);
+      }
+    }
+
+    function switchCadTab(tab) {
+      const forms = ['Operador', 'Coordenador', 'Admin'];
+      forms.forEach(f => {
+        const el = document.getElementById('cadForm' + f);
+        if (el) el.style.display = 'none';
+        const btn = document.getElementById('tabBtn' + (f === 'Admin' ? 'Admin' : f));
+        if (btn) btn.classList.remove('active');
+      });
+
+      const activeForm = document.getElementById('cadForm' + tab.charAt(0).toUpperCase() + tab.slice(1));
+      if (activeForm) activeForm.style.display = 'block';
+      const activeBtn = document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const msg = document.getElementById('cadFeedbackMsg');
+      msg.className = 'cad-message';
+      msg.style.display = 'none';
+    }
+
+    function resetCadModal() {
+      const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin'];
+      forms.forEach(f => {
+        const el = document.getElementById(f);
+        if (el) el.reset();
+      });
+      const msg = document.getElementById('cadFeedbackMsg');
+      msg.className = 'cad-message';
+      msg.style.display = 'none';
+      switchCadTab('operador');
+    }
+
+    async function submitCadForm(event, url) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const msg = document.getElementById('cadFeedbackMsg');
+      msg.className = 'cad-message';
+      msg.style.display = 'none';
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Erro ao realizar cadastro.');
+        }
+
+        msg.textContent = 'Cadastro realizado com sucesso!';
+        msg.className = 'cad-message success';
+        form.reset();
+
+        setTimeout(() => {
+          if (window.location.pathname === '/' || window.location.pathname === '/operador') {
+            window.location.reload();
+          }
+        }, 1500);
+
+      } catch (error) {
+        msg.textContent = error.message;
+        msg.className = 'cad-message error';
+      }
+    }
+  </script>
 </body>
 </html>

@@ -79,7 +79,8 @@ const normalizarPapel = (papel: unknown): PapelUsuario | null => {
     administrador: ROLES.ADMINISTRADOR_GERAL,
     administradora: ROLES.ADMINISTRADOR_GERAL,
     administrador_geral: ROLES.ADMINISTRADOR_GERAL,
-    administradora_geral: ROLES.ADMINISTRADOR_GERAL
+    administradora_geral: ROLES.ADMINISTRADOR_GERAL,
+    admin_principal: ROLES.ADMINISTRADOR_GERAL
   };
 
   return aliases[valor] || null;
@@ -1262,6 +1263,48 @@ app.get('/api/:tabela', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_G
     return res.status(200).json(data);
   } catch (error: any) {
     // Responde com status 500 quando algo falha no servidor ou no Supabase.
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Cadastro Rápido de Operadores
+app.post('/cadastro-rapido/operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { nome } = req.body;
+    if (!nome) {
+      return res.status(400).json({ error: 'Nome do operador é obrigatório.' });
+    }
+    const operador = await operadorRepo.criar(nome);
+    return res.status(201).json(operador);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Cadastro Rápido de Coordenadores
+app.post('/cadastro-rapido/coordenador', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { nome, login, senha } = req.body;
+    if (!nome || !login || !senha) {
+      return res.status(400).json({ error: 'Nome, login e senha são obrigatórios.' });
+    }
+    const coordenador = await coordenadorRepo.criarCoordenador(nome, login, senha);
+    return res.status(201).json(coordenador);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Cadastro Rápido de Admins Principais
+app.post('/cadastro-rapido/admin', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { nome, login, senha } = req.body;
+    if (!nome || !login || !senha) {
+      return res.status(400).json({ error: 'Nome, login e senha são obrigatórios.' });
+    }
+    const admin = await coordenadorRepo.criarAdmin(nome, login, senha);
+    return res.status(201).json(admin);
+  } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
 });

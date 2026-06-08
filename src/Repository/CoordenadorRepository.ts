@@ -52,4 +52,26 @@ export class CoordenadorRepository {
     if (error) throw new Error(`[CoordenadorRepository.autenticarAdmin] ${error.message}`);
     return data as AdminPrincipalDB | null;
   }
+
+  async criarCoordenador(nome: string, login: string, senha: string): Promise<CoordenadorDB> {
+    const { data, error } = await supabase
+      .from('coordenador')
+      .insert({ nome, login, senha })
+      .select()
+      .single();
+
+    if (error) throw new Error(`[CoordenadorRepository.criarCoordenador] ${error.message}`);
+    return data as CoordenadorDB;
+  }
+
+  async criarAdmin(nome: string, login: string, senha: string): Promise<AdminPrincipalDB> {
+    const { data, error } = await supabase
+      .from('admin_principal')
+      .insert({ nome, login, senha })
+      .select()
+      .single();
+
+    if (error) throw new Error(`[CoordenadorRepository.criarAdmin] ${error.message}`);
+    return data as AdminPrincipalDB;
+  }
 }
