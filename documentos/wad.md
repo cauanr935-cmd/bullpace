@@ -1488,11 +1488,11 @@ Fluxo de controle administrativo disparado pelo Coordenador diretamente na funç
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar nova sessão</sub><br>
-  <img src="../assets/fluxo10.png" width="100%"><br>
+  <img src="../assets/fluxo10Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Inicia o período de trabalho do operador registrando sua função e o evento associado para fins de auditoria. O SessaoService aciona o mecanismo que submete os dados à validação estrutural do controlador, e após a verificação de consistência, grava o registro no Supabase com o timestamp inicial e a marcação de status igual a 'ativa'.
+O operador inicia sua jornada por meio do método iniciarNovaSessao() na camada SessaoService, que repassa o payload de dados à função abrirSessao() do SessaoController. O controlador intercepta o processamento para executar a rotina interna validarAberturaSessao(). Caso sejam detectadas ausências de chaves obrigatórias como identificador do evento, função ou data de início, uma exceção é lançada imediatamente para tratamento na camada de rotas. Estando os dados íntegros, o controlador converte a instância cronológica em uma string padronizada ISO e comanda uma inserção assíncrona no cliente Supabase na tabela sessoes_operacionais, forçando o atributo de estado inicial do registro estritamente para o valor literal 'ativa'.
 
 #### Fluxo 11: Encerrar Sessão Existente (Auditoria/Fechamento)
 
