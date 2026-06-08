@@ -1368,29 +1368,30 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
-
+---
 
 
 #### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo login de coordenadores</sub><br>
+  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
   <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
 O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta.
 
+---
 
-#### Fluxo 2: Login do Administrador (Autenticação)
+#### Fluxo 2: Login de Administradores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo de login do Administrador</sub><br>
+  <sub>Figura 7 - Fluxo de login de administradores</sub><br>
   <img src="../assets/AdministraçãoFluxo2.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O usuário submete suas credenciais (email e senha) via corpo da requisição (POST). O CoordenadorController delega os parâmetros ao CoordenadorService, que realiza uma validação booleana em memória para certificar que ambos os campos foram preenchidos, retornando o status de autenticado e o e-mail do usuário.
+O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova.
 
 ---
 
