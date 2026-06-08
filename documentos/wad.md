@@ -1410,11 +1410,11 @@ Requisição voltada para coletar as informações técnicas dos equipamentos do
 
 ### Módulo: Eventos
 
-#### Fluxo 4: Listar Eventos (Leitura)
+#### Fluxo 4: Listar Operadores (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar eventos</sub><br>
-  <img src="../assets/fluxo4.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar operadores</sub><br>
+  <img src="../assets/ListasOperadoresFluxo4.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
