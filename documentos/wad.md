@@ -376,11 +376,11 @@ A segunda persona representa **Camila**, coordenadora responsável pelo acompanh
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto. [8](#ref-8).
+As User Stories descrevem o que cada usuário precisa fazer no sistema. Cada uma segue o formato de quem usa, o que quer fazer e por quê, no padrão "Como [perfil], quero [ação] para [objetivo]" [8](#ref-8).
 
-Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
+Esse formato ajuda a equipe a partir de uma necessidade real e chegar em uma entrega que pode ser planejada. Também facilita priorizar o backlog, separando o que é essencial para o sistema funcionar do que pode ficar para depois.
 
-Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
+Cada User Story vem acompanhada de critérios de aceite, que definem o mínimo para a entrega ser considerada pronta. São eles que permitem à equipe conferir se a funcionalidade faz o que deveria antes de seguir adiante.
 
 ---
 
