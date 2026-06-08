@@ -1379,7 +1379,7 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta.
+O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que coordenadores só possam visualizar informações sem permissão de controle operacional.
 
 ---
 
@@ -1391,7 +1391,7 @@ O Coordenador seleciona sua função na aplicação e informa suas credenciais n
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova.
+O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que administradores possam realizar ações de configuração e controle operacional, como cadastrar eventos, operadores e alternar o bloqueio do Modo TV.
 
 ---
 
@@ -1404,7 +1404,7 @@ O Administrador Geral seleciona o perfil administrativo e envia suas credenciais
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Requisição voltada para coletar as informações técnicas dos equipamentos do evento. O estímulo trafega do EsteiraController para o EsteiraService, que consome o método de listagem do EsteiraRepository, retornando a lista contendo as marcas, modelos, números de série e status de conectividade das esteiras registradas no banco.
+O usuário autorizado solicita a consulta das permissões de um operador específico. O OperadorController recebe o identificador do operador, aciona o OperadorService e retorna o conjunto de permissões associadas ao perfil operacional. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores só possam realizar ações compatíveis com suas funções.
 
 ---
 
