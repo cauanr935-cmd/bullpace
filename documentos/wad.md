@@ -364,7 +364,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A primeira persona representa **Ricardo**, operador de campo responsável pelo registro dos dados durante o evento. Sua função é acompanhar a troca dos atletas, selecionar equipe, atleta e esteira, iniciar e encerrar turnos e registrar checkpoints no sistema ao longo da prova. Essa persona foi escolhida porque está diretamente ligada ao momento mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, Ricardo é o principal usuário operacional, utilizando a aplicação para substituir a prancheta e garantir que os registros fiquem vinculados corretamente a equipe, atleta, esteira, turno e checkpoint.
+A primeira persona é o **Ricardo**, operador de campo que registra os dados durante o evento. É ele quem acompanha a troca dos atletas, escolhe equipe, atleta e esteira, abre e encerra turnos e marca os checkpoints ao longo da prova. Essa persona foi escolhida porque está no ponto mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, o Ricardo é o usuário operacional principal. Ele usa a aplicação no lugar da prancheta e responde por manter cada registro ligado à equipe, ao atleta, à esteira, ao turno e ao checkpoint corretos.
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
@@ -372,7 +372,7 @@ A primeira persona representa **Ricardo**, operador de campo responsável pelo r
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A segunda persona representa **Camila**, coordenadora responsável pelo acompanhamento geral da competição e pela validação dos resultados. Sua função no evento é monitorar o andamento das equipes, conferir dados consolidados, tomar decisões em casos de inconsistência e garantir maior segurança na apuração final. Essa persona foi escolhida porque representa a necessidade de gestão, controle e confiabilidade dos dados ao longo das 24 horas. No sistema, Camila se relaciona principalmente com as telas de acompanhamento, Modo TV, resultados consolidados, comparação entre equipes e exportação dos dados para auditoria.
+A segunda persona é a **Camila**, coordenadora que acompanha a competição inteira e valida os resultados. No evento, ela monitora as duas equipes, confere os dados consolidados, decide o que fazer quando aparece alguma inconsistência e responde pela apuração final. Essa persona foi escolhida porque representa o lado de gestão e controle, que depende da confiabilidade dos dados ao longo das 24 horas. No sistema, a Camila usa principalmente as telas de acompanhamento, o Modo TV, os resultados consolidados, a comparação entre equipes e a exportação dos dados para auditoria.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
