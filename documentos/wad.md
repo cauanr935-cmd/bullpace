@@ -1460,6 +1460,8 @@ O usuário autorizado solicita a listagem dos eventos cadastrados na aplicação
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
+Um usuário sem permissão de escrita tenta cadastrar um novo evento pela rota de criação. O middleware de autorização identifica que o perfil não possui acesso administrativo e bloqueia a requisição, retornando erro HTTP 403 antes de qualquer gravação no banco de dados.
+
 ---
 
 ### Módulo: Placar
