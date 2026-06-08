@@ -1444,7 +1444,7 @@ Trata o fluxo de criação de uma nova competição/evento no ecossistema. O Eve
 
 Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
 
-#### Fluxo 7: Listar Eventos (Consulta)
+#### Fluxo 7: Listar Eventos (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar eventos</sub><br>
@@ -1453,6 +1453,14 @@ Recupera a listagem de funcionários/operadores encarregados da telemetria do si
 </div>
 
 Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
+
+#### Fluxo 8: Tentativa de Cadastrar Evento sem Permissão (Escrita)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo tentativa de cadastrar evento sem permissão</sub><br>
+  <img src="../assets/TentativadeCadastrarEventoSemPermissãoFluxo8.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
 
 ---
 
