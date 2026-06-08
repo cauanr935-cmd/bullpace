@@ -1468,17 +1468,17 @@ Acionado para inspecionar os privilégios de controle de um operador específico
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo crítico do painel visual (Modo TV). O PlacarService aciona a função de leitura que executa uma query no cliente do Supabase para extrair a flag de segurança (modo_tv_bloqueado). Caso esteja ativa, o fluxo intercepta o processamento e retorna uma classificação vazia; caso esteja livre, o sistema busca os turnos associados, calcula as somas de quilometragens em memória e devolve a classificação ranqueada do líder ao lanterna.
+O painel visual ou cliente requisita a classificação atualizada invocando o método obterPlacarGeralDoEvento() na camada PlacarService, que delega o processamento procedural à função obterDadosPlacar() do PlacarController. O controlador efetua uma consulta unária via cliente SDK do Supabase à tabela eventos para verificar o estado lógico da flag modo_tv_bloqueado. Caso a propriedade seja verdadeira, um bloco condicional interrompe a leitura da telemetria por segurança e retorna uma estrutura de classificação limpa ([]). Caso seja falsa, o controlador dispara uma nova requisição assíncrona para extrair os registros brutos da tabela turnos, processa o agrupamento e somatório das distâncias por esteira em memória, aplica formatação decimal fixa e ordena o vetor resultante de forma decrescente (do líder ao lanterna) antes de resolver a promessa.
 
 #### Fluxo 9: Alternar Bloqueio do Modo TV (Ação de Controle do Coordenador)
 
 <div align="center">
   <sub>Figura 7 - Fluxo Alternar bloqueio do modo tv</sub><br>
-  <img src="../assets/fluxo9.png" width="100%"><br>
+  <img src="../assets/fluxo9Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo administrativo em que o coordenador altera a experiência do público. A função no controlador dispara uma instrução direta de atualização (UPDATE) no cliente de configuração global do Supabase, modificando o estado lógico da coluna de suspense na tabela de eventos para o evento corrente.
+Fluxo de controle administrativo disparado pelo Coordenador diretamente na função alternarBloqueioModoTV() do PlacarController. O fluxo estabelece uma comunicação assíncrona síncrona com o cliente SDK do Supabase, invocando uma operação de mutação baseada no encadeamento dos métodos .from('eventos').update(). A instrução injeta o novo estado booleano de bloqueio na coluna correspondente, filtrando o registro alvo por meio da cláusula .eq() baseada no identificador do evento. Após a persistência bem-sucedida e a validação de ausência de erros de infraestrutura, um log de auditoria é registrado no console do servidor e a execução é encerrada.
 
 ---
 
