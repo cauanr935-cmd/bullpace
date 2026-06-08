@@ -2882,17 +2882,59 @@ Esse corredor também participa cada vez mais de provas oficiais [20] e está ma
 
 ## 6.6 Estratégia de Marketing 
 
-*a) Produto/Serviço (até 200 palavras)*
-*Descreva as funcionalidades, benefícios e diferenciais da aplicação*
+A estratégia de marketing representa um ponto de unificação de tudo o que foi analisado nas seções anteriores. Se a análise de mercado (6.2) mapeou o ambiente em que o BullPace opera, a análise da concorrência (6.3) revelou os diferenciais que precisam ser comunicados, o público-alvo (6.4) definiu para quem a solução foi construída e o posicionamento (6.5) estabeleceu o lugar que ela ocupa na mente do cliente, então a estratégia de marketing é a tradução de tudo isso em decisões sobre o produto, preço, distribuição e promoção.
 
-*b) Preço (até 200 palavras)*
-*Explique o modelo de precificação adotado e justifique com base nas análises anteriores.*
+### a) Produto/Serviço
 
-*c) Praça (Distribuição) (até 200 palavras)*
-*Apresente os canais digitais utilizados para distribuir e entregar a aplicação ao público.*
+O BullPace é uma aplicação web, focada no controle operacional desenvolvida exclusivamente para o Red Bull 24 Horas. Seu núcleo funcional gira em torno de quatro processos: cadastro e gestão de atletas/equipes, controle de turnos e esteiras em tempo real, registro de checkpoints com quilometragem acumulada e consolidação de resultados com exportação em CSV para auditoria pós-evento.
 
-*d) Promoção (até 200 palavras)*
-*Descreva as estratégias digitais planejadas, como SEO, redes sociais, marketing de conteúdo e campanhas pagas.*
+Do ponto de vista de produto, o diferencial não está na complexidade técnica, mas na aderência ao contexto operacional, vindo principalmente das frequentes validações com o parceiro. A aplicação foi projetada para substituir a prancheta utilizada pelo time de Field Marketing sem exigir qualquer integração com as esteiras, assim como foi delimitado pelo parceiro por conta da capacidade técnica do evento, como descrito na introdução do projeto. Isso significa que o produto entrega valor precisamente dentro dos limites do que é possível fazer no ambiente do evento, sem criar dependências de infraestrutura que poderiam comprometer a operação.
+
+Todas as funcionalidades estão organizadas em camadas de acesso distintas para operadores, administradores e visualização pública dos resultados, descritas em detalhe na seção de distribuição (6.6c).
+
+Outro aspecto relevante do produto é a rastreabilidade. Cada registro carrega um timestamp automático, criando um histórico totalmente auditável da operação. Isso responde a uma necessidade explicitada pelo público-alvo (6.4): corredores e organizadores que exigem transparência e confiabilidade na apuração dos resultados. A rastreabilidade também atende à conformidade com a LGPD (6.2), ao manter o controle sobre quais dados são armazenados e por quem foram inseridos.
+
+Como serviço, o BullPace vai além de uma interface de registro: entrega confiança operacional para a equipe de Field Marketing ao longo das 24 horas de prova.
+
+### b) Preço
+
+O BullPace nasce de uma parceria acadêmica entre a Inteli e a Red Bull, o que afasta qualquer modelo comercial tradicional do escopo atual. Mas para que a estratégia de precificação faça sentido como parte de um plano de marketing real, é preciso projetá-la além do projeto acadêmico, considerando o que aconteceria se a solução fosse mantida, expandida ou replicada para outras edições e eventos.
+
+O ponto de partida para essa análise é o poder de barganha do cliente. Como identificado nas 5 Forças de Porter (2.1.1), o cenário configura um monopsônio: há apenas um comprador direto, com alto poder de negociação, que define escopo, prioridades e critérios de aceitação. Isso não significa que o produto não tem valor. Significa que esse valor precisa ser justificado de forma concreta, com base no problema que resolve e não no custo de desenvolvimento.
+
+A partir disso, é possível identificar três modelos de precificação coerentes com o perfil da solução. O primeiro, e mais imediato, é o modelo de projeto fechado por encomenda: o cliente paga um valor fixo pelo desenvolvimento e entrega da aplicação, tal como ocorre no contexto atual, mas formalizado como contrato comercial. Esse modelo funciona bem enquanto o escopo é específico e bem delimitado, como é o caso do Red Bull 24 Horas.
+
+O segundo é o licenciamento por evento, no qual a aplicação é disponibilizada a cada nova edição mediante um valor de licença anual ou por ocorrência. Esse modelo passa a fazer mais sentido conforme a solução amadurece e se torna parte da infraestrutura permanente do evento, sendo aprimorada a cada edição com base no feedback do time de Field Marketing.
+
+O terceiro, mais distante do cenário atual mas relevante como horizonte estratégico, é o modelo de plataforma configurável para eventos de resistência, no qual o BullPace seria adaptado para outros formatos de corrida coletiva e licenciado para produtoras e agências de eventos. Nesse caso, a estrutura de preço se aproximaria de um SaaS B2B, definido pelo porte do evento e pelo número de usuários ativos.
+
+Em todos os modelos, o referencial de valor é o mesmo: o problema que a solução resolve. Operar 24 horas com pranchetas expõe o evento a erros de registro e inconsistências de apuração, o que pode comprometer a credibilidade da Red Bull enquanto organizadora. Quando o preço é ancorado nesse risco evitado, a proposta de valor se fortalece.
+
+### c) Praça (Distribuição)
+
+Por ser uma aplicação web, a estratégia de distribuição do BullPace é direta: acesso via navegador, sem instalação, sem dependência de sistema operacional. Qualquer dispositivo com conexão à internet e um navegador atualizado funciona como ponto de acesso, o que elimina a necessidade de configuração por aparelho e reduz a chance de falhas de entrega no dia do evento.
+
+Na prática, o acesso se organiza em três pontos distintos, cada um correspondendo a um perfil de usuário. O primeiro é a estação do operador, onde um dispositivo dedicado fica posicionado ao lado de cada esteira. Por ali passam todos os registros do evento: início e encerramento de turnos, checkpoints e quilometragem. O acesso é autenticado e restrito ao perfil de operador, evitando que dados sejam alterados por quem não tem responsabilidade sobre aquela esteira.
+
+O segundo é o painel administrativo, acessado pela coordenação do evento. Ali ficam as funções de configuração global, como cadastro de atletas, equipes e turnos, e o monitoramento em tempo real de toda a operação. As permissões são mais amplas do que as do operador, refletindo a hierarquia de responsabilidades do evento.
+
+O terceiro é o placar público, acessível via URL aberta e projetado em telão durante o evento. Ele foi implementado sem autenticação a fim de facilitar o acesso imediato em caso de imprevistos de logística. É por ele que atletas e plateia acompanham os resultados em tempo real.
+
+Do ponto de vista de infraestrutura, a aplicação é hospedada em nuvem, garantindo disponibilidade ao longo das 24 horas sem depender de servidores locais do espaço do evento. Esse detalhe é mais estratégico do que técnico: uma falha de infraestrutura local no meio da madrugada seria muito mais difícil de contornar do que um eventual problema de conectividade com um serviço de nuvem.
+
+A praça, portanto, não é um canal de distribuição no sentido tradicional. Não há loja virtual, marketplace ou campanha de aquisição. O BullPace chega ao usuário já operacional no dia do evento, como parte da infraestrutura montada pela organização. Isso desloca a responsabilidade de "distribuição" para o momento de setup antes do evento, com testes, validações de acesso e configuração de dispositivos, que compõem o processo de entrega da solução.
+
+### d) Promoção
+
+A estratégia de promoção do BullPace não segue os padrões de uma campanha de marketing convencional, porque a solução não compete por atenção num mercado aberto. O cliente é a Red Bull, o canal de venda é o relacionamento, e a prova de valor é operacional. Isso muda completamente a lógica do que significa promover o produto.
+
+A principal forma de promoção é o próprio desempenho da aplicação durante o evento. Cada turno registrado com precisão, cada checkpoint sem inconsistência e cada resultado consolidado em tempo real funciona como argumento para que a Red Bull confie na solução nas próximas edições. Nesse sentido, o Red Bull 24 Horas não é apenas o contexto de uso; é o palco de validação da ferramenta. Uma operação bem executada vale mais do que qualquer material de divulgação.
+
+O segundo momento de promoção ocorre depois do evento, com o relatório pós-operação. A exportação em CSV, combinada com o histórico auditável de registros, permite que a coordenação produza um dossiê completo com quilometragem por atleta, por turno e por equipe. Apresentado internamente na Red Bull, esse relatório demonstra na prática o que a digitalização entrega e o que seria perdido numa eventual regressão ao método manual com pranchetas.
+
+Uma terceira frente, mais relevante no horizonte de expansão da solução, é a documentação técnica do projeto. O WAD, o código e o histórico de decisões de desenvolvimento constroem a credibilidade da equipe como fornecedora de soluções para eventos esportivos. Em relações B2B, a reputação técnica precede qualquer negociação.
+
+Por fim, em um cenário de expansão para outras marcas e eventos, as estratégias poderiam incluir presença em encontros do setor de eventos esportivos e produção de conteúdo técnico sobre digitalização de operações de competição. O posicionamento de nicho definido em 6.5 favorece esse tipo de promoção segmentada: não é preciso alcançar um público amplo, mas sim ser reconhecida pelo grupo restrito de profissionais que organiza eventos com as características do Red Bull 24 Horas.
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
