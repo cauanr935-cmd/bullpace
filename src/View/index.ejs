@@ -9,7 +9,7 @@
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
-  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'confirmacaoFechamento' || tela === 'resultadoOficial' || tela === 'publicarResultado' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'historicoOperacoes' || tela === 'modoTv' || tela === 'fechamento' || tela === 'confirmacaoFechamento' || tela === 'resultadoOficial' || tela === 'publicarResultado' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <% /* O frame tambem muda quando o conteudo deve ocupar a tela inteira da TV. */ %>
     <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
@@ -21,6 +21,15 @@
       <% if (tela === 'painelCoordenador') { %>
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'historicoOperacoes') { %>
+        <% /* Volta da auditoria para o painel da coordenacao. */ %>
+        <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
@@ -133,6 +142,7 @@
           operador: 'ETAPA 01 · OPERADOR(A)',
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
+          historicoOperacoes: 'ETAPA 03 · AUDITORIA',
           modoTv: 'RAMO A · EXIBIÇÃO',
           fechamento: 'RAMO B · FECHAMENTO',
           confirmacaoFechamento: 'RAMO B · CONFIRMAÇÃO',
@@ -333,7 +343,11 @@
         <p class="operator-list-title">AÇÕES DA COORDENAÇÃO</p>
 
         <section class="panel-actions">
-          <button type="button" class="is-active">Auditoria</button>
+          <form action="/historico-operacoes" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+            <button type="submit" class="is-active">Auditoria</button>
+          </form>
           <form action="/modo-tv" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
             <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
@@ -806,6 +820,98 @@
         <button type="button" class="continue-button audit-button">
           Auditar registro selecionado
         </button>
+      <% } %>
+
+      <% if (tela === 'historicoOperacoes') { %>
+        <% /* Nota: historico auditavel de operacoes do sistema. */ %>
+        <p class="operator-description">
+          Consulte ações registradas automaticamente durante a prova.
+        </p>
+
+        <section class="audit-visibility-card">
+          <strong><%= perfilUsuario === 'administrador_geral' ? 'ACESSO COMPLETO' : 'VISÃO DO COORDENADOR' %></strong>
+          <span>
+            <%= perfilUsuario === 'administrador_geral'
+              ? 'Exibindo operações de operadores, coordenadores e administradores.'
+              : 'Exibindo somente ações realizadas por operadores.' %>
+          </span>
+        </section>
+
+        <% if (typeof historicoMensagem !== 'undefined') { %>
+          <p class="checkpoint-message error"><%= historicoMensagem %></p>
+        <% } %>
+
+        <form action="/historico-operacoes" method="post" class="audit-filter-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+
+          <label>
+            <span>USUÁRIO</span>
+            <input name="nomeUsuario" type="text" value="<%= filtrosHistorico.nomeUsuario %>" placeholder="Nome do usuário">
+          </label>
+
+          <% if (perfilUsuario === 'administrador_geral') { %>
+            <label>
+              <span>PERFIL</span>
+              <select name="perfilFiltro">
+                <option value="" <%= !filtrosHistorico.perfilFiltro ? 'selected' : '' %>>Todos</option>
+                <option value="operador" <%= filtrosHistorico.perfilFiltro === 'operador' ? 'selected' : '' %>>Operador</option>
+                <option value="coordenador" <%= filtrosHistorico.perfilFiltro === 'coordenador' ? 'selected' : '' %>>Coordenador</option>
+                <option value="administrador_geral" <%= filtrosHistorico.perfilFiltro === 'administrador_geral' ? 'selected' : '' %>>Administrador</option>
+              </select>
+            </label>
+          <% } else { %>
+            <input type="hidden" name="perfilFiltro" value="operador">
+          <% } %>
+
+          <label>
+            <span>TIPO DE AÇÃO</span>
+            <input name="tipoOperacao" type="text" value="<%= filtrosHistorico.tipoOperacao %>" placeholder="Ex: registrar_checkpoint">
+          </label>
+
+          <label>
+            <span>DATA INICIAL</span>
+            <input name="dataInicio" type="date" value="<%= filtrosHistorico.dataInicio %>">
+          </label>
+
+          <label>
+            <span>DATA FINAL</span>
+            <input name="dataFim" type="date" value="<%= filtrosHistorico.dataFim %>">
+          </label>
+
+          <button type="submit">FILTRAR</button>
+        </form>
+
+        <p class="operator-list-title">REGISTROS DE AUDITORIA</p>
+
+        <div class="audit-record audit-record-header" aria-hidden="true">
+          <span>DATA</span>
+          <span>USUÁRIO</span>
+          <span>AÇÃO</span>
+          <span>ENTIDADE</span>
+          <span>ANTES</span>
+          <span>DEPOIS</span>
+        </div>
+
+        <div class="audit-record-list" aria-label="Histórico de operações">
+          <% if (historicoOperacoes.length === 0) { %>
+            <article class="audit-empty-state">
+              <strong>Nenhum registro encontrado</strong>
+              <span>Ajuste os filtros ou registre novas ações para alimentar o histórico.</span>
+            </article>
+          <% } %>
+
+          <% historicoOperacoes.forEach((registro) => { %>
+            <article class="audit-record">
+              <span><%= registro.dataHora %></span>
+              <strong><%= registro.nomeUsuario %> <small><%= registro.perfilUsuario %></small></strong>
+              <span><%= registro.tipoOperacao %></span>
+              <span><%= registro.entidade %> #<%= registro.entidadeId %></span>
+              <code><%= registro.valorAnterior %></code>
+              <code><%= registro.valorNovo %></code>
+            </article>
+          <% }) %>
+        </div>
       <% } %>
 
       <% if (tela === 'filtroAtletasEquipe') { %>
