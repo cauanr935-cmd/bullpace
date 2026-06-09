@@ -2829,9 +2829,23 @@ A tela de encerramento apresenta um resumo completo do turno antes da confirmaç
 
 ## 6.1 Resumo Executivo
 
-*Preencher com até 300 palavras, sem necessidade de fonte*
+O BullPace é uma aplicação web desenvolvida para digitalizar a operação de registro e apuração do Red Bull 24 Horas, uma competição de corrida em esteira em que duas equipes de 16 atletas se revezam ao longo de 24 horas ininterruptas. O sistema nasce da seguinte necesside: substituir o processo manual de prancheta, que expõe o evento a erros de anotação, inconsistências entre operadores e dificuldade de auditoria, por um fluxo digital rastreável, padronizado e adequado às restrições do evento.
 
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
+A oportunidade endereçada pelo projeto está em um nicho específico: a digitalização operacional de eventos esportivos de marcas. Esse segmento se situa na interseção de três mercados em crescimento simultâneo no Brasil: o universo da corrida e dos esportes de resistência, que já reúne aproximadamente 15 milhões de praticantes ativos [17]; o setor de live marketing e ativação de marca, que movimentou US$ 22,2 bilhões em 2025 [18]; e o mercado fitness indoor, no qual o Brasil figura entre os quatro maiores do mundo [19]. O ponto de encontro desses três setores é justamente o perfil do Red Bull 24 Horas: um evento de resistência, realizado em esteiras e construído como ativação proprietária de marca.
+
+Nesse contexto, o BullPace se posiciona como uma ferramenta de apoio operacional especializada, projetada para a realidade do evento: uso em iPad, condições de fadiga e pressão, operadores de campo sem treinamento técnico, ausência de integração automática com as esteiras Technogym e necessidade de funcionamento contínuo por 24 horas. Sua proposta de valor central não é a automação, mas a qualificação do registro manual.
+
+Do ponto de vista dos diferenciais competitivos, o BullPace se distingue de ferramentas genéricas de registro, planilhas colaborativas e aplicativos de produtividade por um conjunto de características que respondem diretamente ao fluxo operacional do evento. O sistema vincula cada checkpoint a uma cadeia rastreável de equipe, atleta, esteira, turno e promotor responsável, garantindo que a quilometragem acumulada, dado central da apuração, não possa ser corrompida por regressão (RN16) nem registrada fora de um turno ativo (RN23). A diferenciação também se manifesta na separação de perfis entre Promotor de Field Marketing e Gestora de Operações, que permite que operações sensíveis, como correções históricas e finalização de equipes, sejam restritas à coordenação com autenticação obrigatória e justificativa auditável.
+
+Outros diferenciais operacionais incluem o timer regressivo de cinco minutos para orientar o ritmo dos checkpoints, o cálculo automático de pace médio, o Modo TV em tempo real para acompanhamento da competição, com possibilidade de desligar a exposição pública do placar, e a exportação em CSV estruturado para auditoria pós-evento. A resiliência a quedas momentâneas de conectividade, com enfileiramento local e sincronização automática, também compõe a proposta, considerando que a infraestrutura de rede do evento depende de solução externa como Starlink.
+
+Os objetivos estratégicos do projeto se organizam em três horizontes. No horizonte imediato, o objetivo é demonstrar valor operacional durante a edição atual do Red Bull 24 Horas, validando o sistema em condições reais: múltiplos operadores, turnos ininterruptos ao longo de 24 horas, pressão de madrugada e dados que determinam o resultado oficial da competição. A métrica de sucesso nesse horizonte é a ausência de falhas críticas na apuração e a percepção positiva do time de Field Marketing sobre a confiabilidade e a facilidade de uso em relação à prancheta.
+
+No horizonte de médio prazo, o objetivo é consolidar o BullPace como a solução padrão para futuras edições do Red Bull 24 Horas no Brasil, com base no histórico de dados estruturados gerados na edição atual. O conjunto de registros de equipes, atletas, turnos, checkpoints e métricas de performance produzido pela aplicação forma uma base reutilizável para planejamento de edições futuras, análise de desempenho por equipe e produção de conteúdo de marketing pós-evento.
+
+No horizonte de longo prazo, o BullPace tem potencial de adaptação para outras ativações esportivas da Red Bull com formato semelhante de revezamento e apuração manual, incluindo possíveis edições internacionais. Dado que a arquitetura foi desenhada de forma modular, com separação estrita entre camadas e entidades configuráveis como eventos, equipes, atletas e esteiras, a adaptação a novos contextos exigiria configuração de dados sem reescrita estrutural do sistema.
+
+Em resumo, o BullPace representa uma resposta a uma fragilidade operacional. As seções seguintes aprofundam a análise de mercado, a concorrência, o público-alvo, o posicionamento e as estratégias de marketing que sustentam essa proposta.
 
 ## 6.2 Análise de Mercado
 
