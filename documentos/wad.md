@@ -1526,7 +1526,7 @@ A troca e entrada de um atleta na área de corrida é mediada pela camada TurnoS
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Conclui o ciclo de corrida de um participante. O TurnoService repassa o identificador do turno e a marcação do odômetro final coletada; a camada controladora processa a requisição e realiza uma operação de atualização no banco de dados, imputando o horário final do revezamento, computando a quilometragem total acumulada e chaveando o status para 'encerrado'.
+O encerramento da corrida de um participante ocorre ao invocar o método finalizarTurnoExistente() no TurnoService, transmitindo o identificador exclusivo do turno e a medição final consolidada do odômetro. O serviço delega a persistência final para a função finalizarTurno() do TurnoController. O controlador captura o momento exato do fechamento por meio do relógio do servidor, gerando a variável local horarioFim. Por fim, o sistema realiza um comando de mutação via cliente Supabase, aplicando uma query de atualização parametrizada que armazena a marcação de tempo final, atualiza o status do turno para o valor estrito 'encerrado' e consolida a quilometragem total acumulada na tabela correspondente.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
@@ -2934,5 +2934,4 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 [16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
 
 # <a name="c9"></a>Anexos
-
 <a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
