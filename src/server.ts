@@ -15,6 +15,8 @@ import { CheckpointRepository } from './Repository/CheckpointRepository';
 import { TurnoRepository } from './Repository/TurnoRepository';
 import { EventoRepository } from './Repository/EventoRepository';
 import { SessaoRepository } from './Repository/SessaoRepository';
+import { HistoricoOperacaoService } from './Service/HistoricoOperacaoService';
+import { CriarHistoricoOperacaoInput, FiltrosHistoricoOperacao } from './Models/HistoricoOperacaoModels';
 
 const operadorRepo = new OperadorRepository();
 const equipeRepo = new EquipeRepository();
@@ -25,6 +27,7 @@ const checkpointRepo = new CheckpointRepository();
 const turnoRepo = new TurnoRepository();
 const eventoRepo = new EventoRepository();
 const sessaoRepo = new SessaoRepository();
+const historicoService = new HistoricoOperacaoService();
 
 const ejs = require('ejs');
 const app = express();
@@ -34,6 +37,8 @@ app.set('views', path.join(__dirname, 'View'));
 
 // Serve arquivos estaticos (CSS, imagens) a partir da pasta View sob o prefixo /static.
 app.use('/static', express.static(path.join(__dirname, 'View')));
+// Serve os assets do projeto, incluindo a logo oficial Red Bull 24h.
+app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -52,6 +57,18 @@ type UsuarioRequisicao = {
 };
 type RequestComUsuario = Request & {
   usuario?: UsuarioRequisicao;
+};
+
+type HistoricoViewItem = {
+  dataHora: string;
+  nomeUsuario: string;
+  perfilUsuario: string;
+  tipoOperacao: string;
+  entidade: string;
+  entidadeId: string;
+  valorAnterior: string;
+  valorNovo: string;
+  motivo: string;
 };
 
 // Mantido em memória apenas o estado da prova (será integrado à tabela eventos na Fase 5)
@@ -173,6 +190,25 @@ const formatarHorario = (timestamp: number): string => new Date(timestamp).toLoc
   minute: '2-digit'
 });
 
+const formatarDataHoraHistorico = (valor: string): string => new Date(valor).toLocaleString('pt-BR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+});
+
+const formatarValorHistorico = (valor: unknown): string => {
+  if (valor === null || valor === undefined || valor === '') return '--';
+  if (typeof valor === 'string') return valor;
+  try {
+    return JSON.stringify(valor);
+  } catch {
+    return String(valor);
+  }
+};
+
 const contextoAutorizacao = (papel: PapelUsuario = ROLES.OPERADOR) => ({
   perfilUsuario: papel,
   estadoProva,
@@ -187,6 +223,61 @@ const contextoAutorizacao = (papel: PapelUsuario = ROLES.OPERADOR) => ({
 
 const obterPapelRenderizacao = (req: Request, fallback: PapelUsuario = ROLES.COORDENADOR): PapelUsuario => {
   return extrairPapelDaRequisicao(req) || fallback;
+};
+
+const registrarHistorico = async (input: CriarHistoricoOperacaoInput): Promise<void> => {
+  try {
+    await historicoService.registrar({
+      ...input,
+      data_hora: input.data_hora || new Date()
+    });
+  } catch (error: any) {
+    console.error('[historico_operacoes] Registro ignorado:', error.message);
+  }
+};
+
+const registrarHistoricoOperador = async (
+  operador: string,
+  tipoOperacao: string,
+  entidade: string,
+  dados: Record<string, unknown>,
+  entidadeId?: string | number | null,
+  valorAnterior: unknown = null
+): Promise<void> => {
+  await registrarHistorico({
+    usuario_id: dados.operadorId ? String(dados.operadorId) : null,
+    nome_usuario: operador || 'Operador não informado',
+    perfil_usuario: ROLES.OPERADOR,
+    tipo_operacao: tipoOperacao,
+    entidade,
+    entidade_id: entidadeId !== undefined && entidadeId !== null ? String(entidadeId) : null,
+    valor_anterior: valorAnterior,
+    valor_novo: dados,
+    motivo: null
+  });
+};
+
+const registrarHistoricoAdministrativo = async (
+  req: Request,
+  tipoOperacao: string,
+  entidade: string,
+  valorNovo: Record<string, unknown>,
+  entidadeId?: string | number | null,
+  valorAnterior: unknown = null,
+  motivo: string | null = null
+): Promise<void> => {
+  const usuario = (req as RequestComUsuario).usuario;
+  await registrarHistorico({
+    usuario_id: null,
+    nome_usuario: usuario?.nome || req.body?.coordenador || 'Usuário administrativo',
+    perfil_usuario: usuario?.papel || obterPapelRenderizacao(req),
+    tipo_operacao: tipoOperacao,
+    entidade,
+    entidade_id: entidadeId !== undefined && entidadeId !== null ? String(entidadeId) : null,
+    valor_anterior: valorAnterior,
+    valor_novo: valorNovo,
+    motivo
+  });
 };
 
 // Funções para carregar dados reais do Supabase estruturados para o EJS
@@ -335,6 +426,30 @@ const obterCheckpointsEquipeReal = async (nomeEquipe: string) => {
     });
 };
 
+const obterHistoricoOperacoesView = async (
+  papel: PapelUsuario,
+  filtros: FiltrosHistoricoOperacao
+): Promise<HistoricoViewItem[]> => {
+  const filtrosAplicados: FiltrosHistoricoOperacao = {
+    ...filtros,
+    perfilUsuario: papel === ROLES.COORDENADOR ? ROLES.OPERADOR : filtros.perfilUsuario
+  };
+
+  const registros = await historicoService.listar(filtrosAplicados);
+
+  return registros.map((registro) => ({
+    dataHora: formatarDataHoraHistorico(registro.data_hora),
+    nomeUsuario: registro.nome_usuario,
+    perfilUsuario: registro.perfil_usuario,
+    tipoOperacao: registro.tipo_operacao,
+    entidade: registro.entidade,
+    entidadeId: registro.entidade_id || '--',
+    valorAnterior: formatarValorHistorico(registro.valor_anterior),
+    valorNovo: formatarValorHistorico(registro.valor_novo),
+    motivo: registro.motivo || '--'
+  }));
+};
+
 const obterAtletasFiltroReal = async (nomeEquipe: string) => {
   const eq = await equipeRepo.buscarPorNome(nomeEquipe);
   if (!eq) return [];
@@ -398,6 +513,18 @@ const camposPermitidosPorTabela: Record<string, Set<string>> = {
   turnos: new Set(['id_atleta', 'id_esteira', 'id_sessao_operacional', 'horario_inicio'])
 };
 
+const chavesPrimariasPorTabela: Record<string, string> = {
+  atletas: 'id_atleta',
+  checkpoints: 'id_checkpoint',
+  coordenadores: 'id_coordenador',
+  equipes: 'id_equipe',
+  esteiras: 'id_esteira',
+  eventos: 'id_evento',
+  operadores: 'id_operador',
+  sessoes_operacionais: 'id_sessao_operacional',
+  turnos: 'id_turno'
+};
+
 const obterTabelaPermitida = (tabela: string): string | null => {
   return tabelasPermitidas.has(tabela) ? tabela : null;
 };
@@ -408,6 +535,16 @@ const filtrarRegistroPermitido = (tabela: string, registro: Record<string, unkno
     Object.entries(registro).filter(([campo]) => camposPermitidos.has(campo))
   );
 };
+
+app.use(async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    res.locals.operadoresQuick = await obterOperadoresReal();
+  } catch {
+    res.locals.operadoresQuick = [];
+  }
+
+  next();
+});
 
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou coordenador.
 app.get('/', (req: Request, res: Response): void => {
@@ -620,6 +757,12 @@ app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), a
   estadoProva.atualizadoPor = coordenador;
   estadoProva.atualizadoEm = new Date();
 
+  await registrarHistoricoAdministrativo(req, 'finalizar_prova', 'estado_prova', {
+    status: estadoProva.status,
+    atualizadoPor: coordenador,
+    atualizadoEm: estadoProva.atualizadoEm
+  }, null, { status: 'em_andamento_ou_pausada' });
+
   res.render('index', {
     // Resultado oficial apos a confirmacao do fechamento da prova.
     tela: 'resultadoOficial',
@@ -652,6 +795,11 @@ app.post('/confirmar-publicacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), as
   const { coordenador } = req.body;
   const rankingFechamento = await obterRankingFechamentoReal();
   const resultadoOficial = await obterResultadoOficialReal(coordenador);
+  await registrarHistoricoAdministrativo(req, 'publicar_resultado', 'resultado_oficial', {
+    coordenador,
+    vencedor: resultadoOficial.vencedor,
+    segundoLugar: resultadoOficial.segundoLugar
+  });
   res.render('index', {
     // Tela publica final, liberada apos a confirmacao da coordenacao.
     tela: 'tvResultado',
@@ -735,6 +883,43 @@ app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRA
   });
 });
 
+app.post('/historico-operacoes', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  const { coordenador, nomeUsuario, perfilFiltro, tipoOperacao, dataInicio, dataFim } = req.body;
+  const papel = (req as RequestComUsuario).usuario!.papel;
+  const filtrosHistorico: FiltrosHistoricoOperacao = {
+    nomeUsuario: nomeUsuario || undefined,
+    perfilUsuario: papel === ROLES.ADMINISTRADOR_GERAL ? (perfilFiltro || undefined) : ROLES.OPERADOR,
+    tipoOperacao: tipoOperacao || undefined,
+    dataInicio: dataInicio || undefined,
+    dataFim: dataFim || undefined
+  };
+  let historicoOperacoes: HistoricoViewItem[] = [];
+  let historicoMensagem: string | undefined;
+
+  try {
+    historicoOperacoes = await obterHistoricoOperacoesView(papel, filtrosHistorico);
+  } catch (error: any) {
+    console.error('[/historico-operacoes] Erro ao carregar histórico:', error.message);
+    historicoMensagem = 'Histórico indisponível. Aplique o script src/database/historico_operacoes.sql no Supabase.';
+  }
+
+  res.render('index', {
+    tela: 'historicoOperacoes',
+    titulo: 'HISTÓRICO OPERACIONAL',
+    coordenadorSelecionado: coordenador,
+    historicoOperacoes,
+    historicoMensagem,
+    filtrosHistorico: {
+      nomeUsuario: nomeUsuario || '',
+      perfilFiltro: papel === ROLES.ADMINISTRADOR_GERAL ? (perfilFiltro || '') : ROLES.OPERADOR,
+      tipoOperacao: tipoOperacao || '',
+      dataInicio: dataInicio || '',
+      dataFim: dataFim || ''
+    },
+    ...contextoAutorizacao(papel)
+  });
+});
+
 app.post('/filtro-atletas-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   // Recebe a equipe e, opcionalmente, o atleta selecionado no filtro.
   const { coordenador, equipe, atleta } = req.body;
@@ -775,6 +960,8 @@ app.post('/selecionar-operador', async (req: Request, res: Response): Promise<vo
   const { operador } = req.body;
   const operadores = await obterOperadoresReal();
 
+  await registrarHistoricoOperador(operador, 'selecionar_operador', 'operador', { operador });
+
   res.render('index', {
     // Mantem a tela de operadores e destaca quem foi selecionado.
     tela: 'operador',
@@ -813,6 +1000,8 @@ app.post('/voltar-operador', async (req: Request, res: Response): Promise<void> 
 app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
   const equipes = await obterEquipesReal();
+
+  await registrarHistoricoOperador(operador, 'selecionar_equipe', 'equipe', { operador, equipe });
 
   res.render('index', {
     // Mantem a tela de equipes e destaca a equipe escolhida futuramente.
@@ -859,6 +1048,13 @@ app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
   const atletas = await obterAtletasReal(equipe);
   const esteiras = await obterEsteirasReal();
+
+  await registrarHistoricoOperador(operador, 'selecionar_atleta', 'atleta', {
+    operador,
+    equipe,
+    atleta,
+    ultimoAtleta: ultimoAtleta || null
+  });
 
   // Bloqueia a regra de negocio: o mesmo atleta nao pode correr dois turnos seguidos.
   if (ultimoAtleta && atleta === ultimoAtleta) {
@@ -924,6 +1120,14 @@ app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADO
   const { operador, equipe, atleta, esteira, bypassManutencao } = req.body;
   const esteiras = await obterEsteirasReal();
 
+  await registrarHistoricoOperador(operador, 'selecionar_esteira', 'esteira', {
+    operador,
+    equipe,
+    atleta,
+    esteira,
+    bypassManutencao: bypassManutencao === 'sim'
+  });
+
   res.render('index', {
     // Mantem a tela de esteiras e destaca a esteira escolhida.
     tela: 'esteira',
@@ -984,6 +1188,15 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
       idTurno = turno.id_turno;
     }
 
+    await registrarHistoricoOperador(operador, 'iniciar_turno', 'turno', {
+      operador,
+      equipe,
+      atleta,
+      esteira,
+      inicioTurnoTimestamp,
+      idTurno
+    }, idTurno);
+
     res.render('index', {
       // Abre a tela de checkpoint com o turno em andamento.
       tela: 'checkpoint',
@@ -997,6 +1210,14 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
     });
   } catch (err: any) {
     console.error('[/iniciar-turno] Erro ao persistir turno:', err.message);
+    await registrarHistoricoOperador(operador, 'iniciar_turno_fallback', 'turno', {
+      operador,
+      equipe,
+      atleta,
+      esteira,
+      inicioTurnoTimestamp,
+      erro: err.message
+    });
     // Mesmo com erro no banco, abre a tela para não bloquear o operador.
     res.render('index', {
       tela: 'checkpoint',
@@ -1018,16 +1239,19 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
     const { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno } = req.body;
 
     // --- Validação numérica do km acumulado ---
-    const kmRaw = String(kmAcumulado || '').replace(',', '.');
-    const km = parseFloat(kmRaw);
+    const kmRaw = String(kmAcumulado || '').trim();
+    const kmNormalizado = kmRaw.includes(',')
+      ? kmRaw.replace(/\./g, '').replace(',', '.')
+      : kmRaw;
+    const km = Number(kmNormalizado);
 
-    if (!kmRaw || isNaN(km) || km <= 0) {
+    if (!kmRaw || !Number.isFinite(km) || km <= 0) {
       return res.status(400).json({ error: 'km_acumulado deve ser um número positivo.' });
     }
 
     // Máximo de 3 casas decimais.
     const kmArredondado = Math.round(km * 1000) / 1000;
-    if (kmArredondado !== km && kmRaw.includes('.') && kmRaw.split('.')[1].length > 3) {
+    if (kmArredondado !== km && kmNormalizado.includes('.') && kmNormalizado.split('.')[1].length > 3) {
       return res.status(400).json({ error: 'km_acumulado aceita no máximo 3 casas decimais.' });
     }
 
@@ -1084,19 +1308,20 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       return res.status(400).json({ error: `km_acumulado (${kmArredondado}) deve ser maior que o checkpoint anterior (${kmAnterior}).` });
     }
 
-    // Calcula tempo decorrido desde o início do turno ou último checkpoint.
+    // Calcula tempo decorrido desde o início do turno.
     const agora = Date.now();
-    const referencia = anterior
-      ? new Date(anterior.registrado_em).getTime()
-      : (turnoRow.horario_inicio ? new Date(turnoRow.horario_inicio).getTime() : Number(inicioTurnoTimestamp));
-    const segundosDecorridos = Math.max(1, (agora - referencia) / 1000);
+    const inicioTurno = turnoRow.horario_inicio
+      ? new Date(turnoRow.horario_inicio).getTime()
+      : Number(inicioTurnoTimestamp);
+    const referenciaTurno = Number.isFinite(inicioTurno) && inicioTurno > 0 ? inicioTurno : agora;
+    const segundosDecorridos = Math.max(1, (agora - referenciaTurno) / 1000);
 
-    // Pace em min/km: tempo (min) dividido por km percorridos neste trecho.
-    const paceMinKm = kmDelta > 0 ? (segundosDecorridos / 60) / kmDelta : 0;
+    // Pace em min/km: tempo total do turno (min) dividido pelo KM acumulado registrado.
+    const paceMinKm = (segundosDecorridos / 60) / kmArredondado;
     const paceArredondado = Math.round(paceMinKm * 1000) / 1000;
 
-    // Velocidade média em km/h: km/tempo_em_horas.
-    const velocidadeMedia = kmDelta > 0 ? kmDelta / (segundosDecorridos / 3600) : 0;
+    // Velocidade média em km/h: KM acumulado dividido pelo tempo total do turno.
+    const velocidadeMedia = kmArredondado / (segundosDecorridos / 3600);
     const velocidadeArredondada = Math.round(velocidadeMedia * 100) / 100;
 
     // --- Persiste checkpoint no Supabase ---
@@ -1109,6 +1334,20 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       registrado_em: new Date(),
       is_ajuste: false
     });
+
+    await registrarHistoricoOperador(operador, 'registrar_checkpoint', 'checkpoint', {
+      operador,
+      equipe,
+      atleta,
+      esteira,
+      km_acumulado: kmArredondado,
+      pace_medio: paceArredondado,
+      velocidade_media: velocidadeArredondada,
+      id_turno: turnoId
+    }, checkpoint.id_checkpoint, anterior ? {
+      id_checkpoint: anterior.id_checkpoint,
+      km_acumulado: kmAnterior
+    } : null);
 
     return res.status(201).json({
       ok: true,
@@ -1167,16 +1406,31 @@ app.post('/voltar-checkpoint', (req: Request, res: Response): void => {
 
 app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe, atleta, idTurno, kmFinal } = req.body;
+  let valorAnteriorTurno: unknown = null;
 
   // Persiste o encerramento do turno no banco de dados.
   if (idTurno) {
     try {
       const kmFinalNum = parseFloat(String(kmFinal || '0').replace(',', '.')) || 0;
+      const { data: turnoAntes } = await supabase
+        .from('turnos')
+        .select('id_turno, status, km_turno, horario_fim')
+        .eq('id_turno', Number(idTurno))
+        .maybeSingle();
+      valorAnteriorTurno = turnoAntes || null;
       await turnoRepo.updateParaEncerrado(Number(idTurno), kmFinalNum);
     } catch (err: any) {
       console.error('[/confirmar-encerramento] Erro ao fechar turno no banco:', err.message);
     }
   }
+
+  await registrarHistoricoOperador(operador, 'finalizar_turno', 'turno', {
+    operador,
+    equipe,
+    atleta,
+    idTurno: idTurno || null,
+    kmFinal
+  }, idTurno || null, valorAnteriorTurno);
 
   const atletas = await obterAtletasReal(equipe);
   const esteiras = await obterEsteirasReal();
@@ -1194,9 +1448,15 @@ app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDE
 });
 
 app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  const statusAnterior = estadoProva.status;
   estadoProva.status = 'pausada';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  await registrarHistoricoAdministrativo(req, 'pausar_prova', 'estado_prova', {
+    status: estadoProva.status,
+    atualizadoPor: estadoProva.atualizadoPor,
+    atualizadoEm: estadoProva.atualizadoEm
+  }, null, { status: statusAnterior });
   const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
@@ -1210,9 +1470,15 @@ app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req
 });
 
 app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  const statusAnterior = estadoProva.status;
   estadoProva.status = 'em_andamento';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  await registrarHistoricoAdministrativo(req, 'retomar_prova', 'estado_prova', {
+    status: estadoProva.status,
+    atualizadoPor: estadoProva.atualizadoPor,
+    atualizadoEm: estadoProva.atualizadoEm
+  }, null, { status: statusAnterior });
   const equipesPainel = await obterEquipesPainelReal();
 
   res.render('index', {
@@ -1267,6 +1533,55 @@ app.get('/api/:tabela', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_G
   }
 });
 
+// Atualizar um registro com auditoria de valor anterior e valor novo.
+app.patch('/api/:tabela/:id', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const tabela = obterTabelaPermitida(req.params.tabela as string);
+
+    if (!tabela) {
+      return res.status(403).json({ error: 'Tabela não permitida para correção pela API.' });
+    }
+
+    const chavePrimaria = chavesPrimariasPorTabela[tabela];
+    const registroId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const registro = filtrarRegistroPermitido(tabela, req.body);
+
+    if (Object.keys(registro).length === 0) {
+      return res.status(400).json({ error: 'Nenhum campo permitido foi enviado.' });
+    }
+
+    if (tabela === 'checkpoints') {
+      registro.is_ajuste = true;
+    }
+
+    const { data: valorAnterior, error: erroBusca } = await supabase
+      .from(tabela)
+      .select('*')
+      .eq(chavePrimaria, registroId)
+      .maybeSingle();
+
+    if (erroBusca) throw erroBusca;
+    if (!valorAnterior) {
+      return res.status(404).json({ error: `Registro ${registroId} não encontrado em ${tabela}.` });
+    }
+
+    const { data, error } = await supabase
+      .from(tabela)
+      .update(registro)
+      .eq(chavePrimaria, registroId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await registrarHistoricoAdministrativo(req, 'corrigir_registro', tabela, data, registroId, valorAnterior, req.body?.motivo || null);
+
+    return res.status(200).json(data);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 // Cadastro Rápido de Operadores
 app.post('/cadastro-rapido/operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -1275,6 +1590,11 @@ app.post('/cadastro-rapido/operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
       return res.status(400).json({ error: 'Nome do operador é obrigatório.' });
     }
     const operador = await operadorRepo.criar(nome);
+    await registrarHistoricoAdministrativo(req, 'cadastrar_operador', 'operador', {
+      id_operador: operador.id_operador,
+      nome: operador.nome,
+      login: operador.login
+    }, operador.id_operador);
     return res.status(201).json(operador);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
@@ -1289,6 +1609,11 @@ app.post('/cadastro-rapido/coordenador', autorizarPapeis(ROLES.COORDENADOR, ROLE
       return res.status(400).json({ error: 'Nome, login e senha são obrigatórios.' });
     }
     const coordenador = await coordenadorRepo.criarCoordenador(nome, login, senha);
+    await registrarHistoricoAdministrativo(req, 'cadastrar_coordenador', 'coordenador', {
+      id_coordenador: coordenador.id_coordenador,
+      nome: coordenador.nome,
+      login: coordenador.login
+    }, coordenador.id_coordenador);
     return res.status(201).json(coordenador);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
@@ -1303,6 +1628,11 @@ app.post('/cadastro-rapido/admin', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), b
       return res.status(400).json({ error: 'Nome, login e senha são obrigatórios.' });
     }
     const admin = await coordenadorRepo.criarAdmin(nome, login, senha);
+    await registrarHistoricoAdministrativo(req, 'cadastrar_admin', 'admin_principal', {
+      id_admin: admin.id_admin,
+      nome: admin.nome,
+      login: admin.login
+    }, admin.id_admin);
     return res.status(201).json(admin);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
@@ -1331,6 +1661,9 @@ app.post('/api/:tabela', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), bloquearOpe
 
     // Se o Supabase retornar erro, manda para o catch.
     if (error) throw error;
+    await registrarHistoricoAdministrativo(req, 'inserir_registro_api', tabela, {
+      registros: data
+    }, Array.isArray(data) && data[0]?.id ? data[0].id : null);
     // Responde com status 201, indicando criacao bem-sucedida.
     return res.status(201).json(data);
   } catch (error: any) {

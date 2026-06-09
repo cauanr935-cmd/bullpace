@@ -1136,6 +1136,15 @@
             <span>km</span>
           </div>
 
+          <section class="computed-pace-panel" aria-live="polite" aria-label="Pace calculado automaticamente">
+            <div>
+              <strong>PACE CALCULADO</strong>
+              <span>Tempo do turno / KM acumulado</span>
+            </div>
+            <output id="computedPace" for="kmAcumulado">--</output>
+            <small>min/km</small>
+          </section>
+
           <section class="last-checkpoint">
             <div>
               <strong>ÚLTIMO CHECKPOINT</strong>
@@ -1202,6 +1211,10 @@
             const finishDuracaoTurno = document.getElementById('finishDuracaoTurno');
             // Campo escondido que preserva o horario de inicio entre telas.
             const finishInicioTurnoTimestamp = document.getElementById('finishInicioTurnoTimestamp');
+            // Campo de leitura que exibe o pace calculado automaticamente.
+            const computedPace = document.getElementById('computedPace');
+            // Campo editavel de quilometragem acumulada.
+            const kmAcumuladoInput = document.getElementById('kmAcumulado');
             // Define o intervalo de 5 minutos entre checkpoints.
             const cooldownMilliseconds = 5 * 60 * 1000;
             // Guarda o id do intervalo que atualiza o contador do botao.
@@ -1229,10 +1242,10 @@
 
             // Converte a quilometragem informada em numero, aceitando virgula decimal.
             const parseKilometers = (value) => {
-              const normalizedValue = String(value)
-                .trim()
-                .replace(/\./g, '')
-                .replace(',', '.');
+              const rawValue = String(value).trim();
+              const normalizedValue = rawValue.includes(',')
+                ? rawValue.replace(/\./g, '').replace(',', '.')
+                : rawValue;
               const kilometers = Number(normalizedValue);
               return Number.isFinite(kilometers) ? kilometers : 0;
             };
@@ -1242,6 +1255,26 @@
               minimumFractionDigits: 3,
               maximumFractionDigits: 3
             });
+
+            // Formata pace em min/km no padrao M:SS.
+            const formatPace = (secondsPerKilometer) => {
+              const roundedSeconds = Math.round(secondsPerKilometer);
+              const minutes = Math.floor(roundedSeconds / 60);
+              const seconds = String(roundedSeconds % 60).padStart(2, '0');
+              return `${minutes}:${seconds}`;
+            };
+
+            // Calcula o pace do turno com base no tempo decorrido e no KM informado.
+            const updateComputedPace = () => {
+              const kilometers = parseKilometers(kmAcumuladoInput.value);
+              if (kilometers <= 0) {
+                computedPace.textContent = '--';
+                return;
+              }
+
+              const turnSeconds = Math.max(0, Math.floor((Date.now() - turnStartedAt) / 1000));
+              computedPace.textContent = formatPace(turnSeconds / kilometers);
+            };
 
             // Formata data e hora do checkpoint mais recente.
             const formatCheckpointDate = (timestamp) => new Date(timestamp).toLocaleString('pt-BR', {
@@ -1309,12 +1342,14 @@
               const turnSeconds = Math.max(0, Math.floor((Date.now() - turnStartedAt) / 1000));
               turnTimer.textContent = formatTime(turnSeconds);
               finishDuracaoTurno.value = turnTimer.textContent;
+              updateComputedPace();
             };
 
             loadAthleteCheckpoints();
             updateAthleteCheckpointSummary();
             updateTurnTimer();
             setInterval(updateTurnTimer, 1000);
+            kmAcumuladoInput.addEventListener('input', updateComputedPace);
 
             // Mostra uma mensagem padronizada abaixo do ultimo checkpoint.
             const showMessage = (text, type) => {
@@ -1360,7 +1395,7 @@
               }
 
               // Le a quilometragem informada.
-              const km = document.getElementById('kmAcumulado').value.trim();
+              const km = kmAcumuladoInput.value.trim();
               const checkpointTimestamp = Date.now();
 
               try {
@@ -1414,12 +1449,12 @@
             // Antes de encerrar o turno, garante que existe km final informado.
             finishForm.addEventListener('submit', (event) => {
               // Le a quilometragem final do campo visivel.
-              const km = document.getElementById('kmAcumulado').value.trim();
+              const km = kmAcumuladoInput.value.trim();
 
               // Bloqueia encerramento sem quilometragem.
               if (!km) {
                 event.preventDefault();
-                document.getElementById('kmAcumulado').focus();
+                kmAcumuladoInput.focus();
                 showMessage('Informe a quilometragem final antes de encerrar o turno.', 'error');
                 return;
               }

@@ -1079,28 +1079,28 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
-Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 25010:2011, que estrutura a qualidade de software em características como usabilidade, confiabilidade, eficiência de desempenho, segurança, compatibilidade, portabilidade e manutenibilidade. A tabela a seguir apresenta cada requisito, sua métrica verificável e a forma como o sistema o atende.
+Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 25010:2011, que estrutura a qualidade de software em características como usabilidade, confiabilidade, eficiência de desempenho, segurança, compatibilidade, portabilidade e manutenibilidade. A tabela a seguir apresenta cada requisito, seu critério de aceitação e a forma como foi atendido no sistema.
 
 | ID | Requisito | Métrica / Critério | Como atendido |
-| :--- | :--- | :--- | :--- |
-| **USAB01** | Um Promotor de Field Marketing sem treinamento prévio deve conseguir completar o fluxo principal (selecionar equipe, atleta, iniciar turno, registrar checkpoint e encerrar turno) sem auxílio externo. | Taxa de conclusão ≥ 90% em teste de primeiro uso com no mínimo 3 participantes; fluxo completo concluído em até 3 minutos sem erros críticos nem abandono de tela. | A interface foi projetada com hierarquia visual clara, affordance explícita nos elementos interativos e progressão linear de telas, reduzindo a carga cognitiva do operador. A lógica de fluxo espelha o processo já conhecido da prancheta para facilitar a curva de aprendizado. |
+|---|---|---|---|
+| **USAB01** | Um operador sem treinamento prévio deve conseguir completar o fluxo principal (selecionar equipe, atleta, iniciar turno, registrar checkpoint e encerrar turno) sem auxílio externo. | Taxa de conclusão ≥ 90% em teste de primeiro uso com no mínimo 3 participantes; fluxo completo concluído em até 3 minutos sem erros críticos nem abandono de tela. | A interface foi projetada com hierarquia visual clara, affordance explícita nos elementos interativos e progressão linear de telas, reduzindo a carga cognitiva do operador. A lógica de fluxo espelha o processo já conhecido da prancheta para facilitar a curva de aprendizado. |
 | **USAB02** | Todos os elementos interativos, como botões e campos de formulário, devem possuir área de toque mínima de 44×44pt, compatível com uso em iPad sob condições de fadiga ou movimento. | 100% dos elementos interativos com dimensão ≥ 44×44pt conforme Apple Human Interface Guidelines e WCAG 2.1 target size guideline; verificado por inspeção de CSS em todas as telas operacionais. | Os componentes de interface foram dimensionados com unidades relativas e restrições mínimas aplicadas globalmente via CSS, garantindo conformidade independentemente do tamanho de viewport. |
-| **USAB03** | O sistema deve bloquear ativamente entradas inválidas antes do envio ao banco, notificando o erro específico por campo sem necessidade de recarregamento de página. | 0 registros inválidos persistidos decorrentes de erro de digitação; o sistema deve notificar visualmente o erro após submissão inválida; testado com entradas intencionalmente incorretas, como KM regressivo, campo obrigatório vazio e turno inexistente. | As validações foram implementadas na camada Service (RN16, RN22, RN23) e replicadas como validação client-side no formulário de checkpoint, garantindo bloqueio duplo: no front-end para resposta imediata e no back-end como camada de segurança. |
-| **CONF01** | O sistema deve preservar checkpoints registrados em caso de queda momentânea de conectividade, sem perda de dados e sem intervenção do Promotor de Field Marketing. | 0% de perda de checkpoints em simulação de queda de rede durante turno ativo; dados sincronizados automaticamente após reconexão. | Foi implementado cache local no cliente para enfileirar registros durante indisponibilidade de rede, com reenvio automático ao restabelecer conexão. Alinhado ao RF026 e às RN37 e RN38, e ao plano de contingência do R01 (Matriz de Riscos). |
+| **USAB03** | O sistema deve bloquear ativamente entradas inválidas antes do envio ao banco, notificando o erro específico por campo sem necessidade de recarregamento de página. | 0 registros inválidos persistidos decorrentes de erro de digitação; o sistema deve notificar visualmente o erro após submissão inválida; testado com entradas intencionalmente incorretas, como KM regressivo, campo obrigatório vazio e turno inexistente. | As validações foram implementadas na camada Service (RN16, RN22, RN23), cobrindo progressão de quilometragem, obrigatoriedade do KM acumulado e vínculo a turno ativo. A validação client-side no formulário de checkpoint está prevista como camada adicional de resposta imediata, mas ainda não está presente no código atual. |
+| **CONF01** | O sistema deve preservar checkpoints registrados em caso de queda momentânea de conectividade, sem perda de dados e sem intervenção do operador. | 0% de perda de checkpoints em simulação de queda de rede durante turno ativo; dados sincronizados automaticamente após reconexão. | O comportamento está especificado em RF026 e RN37: registros de checkpoint criados durante turno ativo são persistidos localmente e sincronizados ao restabelecer conexão. A implementação do cache local não está presente no código atual e constitui requisito pendente de desenvolvimento. Alinhado ao plano de contingência do R01 (Matriz de Riscos). |
 | **CONF02** | O sistema deve manter operação contínua durante as 24 horas do evento, tolerando uma janela de indisponibilidade máxima acumulada de 30 minutos. | Uptime ≥ 97,9% durante a janela do evento, equivalente a ≤ 30 minutos de downtime acumulado em 24h; monitorado via Supabase e logs de aplicação. | O ambiente de produção foi configurado no Supabase com backups automáticos e monitoramento ativo. O plano de contingência documentado para R02 (indisponibilidade do banco) inclui fallback para registro local temporário. |
 | **CONF03** | Após qualquer falha técnica, como crash de browser ou queda de energia no dispositivo, o sistema deve retomar a operação com todos os dados confirmados previamente intactos. | 100% dos registros confirmados antes da falha recuperados após reinicialização, sem ação manual além de reabrir o browser; verificado em teste de kill de processo durante turno ativo. | A persistência de dados é garantida pelo Supabase (PostgreSQL) com confirmação transacional. O estado da sessão operacional é recuperável via consulta ao banco sem dependência de estado local volátil. |
-| **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | As consultas SQL foram otimizadas com índices definidos nas migrations para os campos de busca frequente (id_turno, id_atleta, status). As validações de negócio na camada Service evitam round-trips desnecessários ao banco antes da confirmação de dados válidos. |
-| **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado pela view vw_placar_parcial conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
-| **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo Promotor de Field Marketing ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado à RN21. |
-| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções realizadas pela Gestora de Operações devem preservar o histórico do valor anterior em log paralelo, com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; toda correção em registro histórico gera entrada na tabela paralela de log contendo valor anterior, valor novo, autora, timestamp e justificativa; verificado por query de auditoria após simulação de correção via interface. | A imutabilidade direta dos registros é garantida pela RN27. As correções pela Gestora seguem o modelo de "sobrescreve no registro principal + log paralelo de alterações", implementado via tabela dedicada de histórico de alterações. Alinhado às RN27, RN28 e RN29. |
-| **CAP** | O sistema deve suportar dois Promotores de Field Marketing realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
-| **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RF025 e à RN36. |
-| **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A compatibilidade com modo PWA está disponível como opção, sem obrigatoriedade. |
-| **MANUT01** | A arquitetura deve seguir o padrão MVC com separação estrita entre Controller, Service e Repository, de modo que alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência. | Cada camada possui responsabilidade única verificada em code review; nenhuma regra de negócio (RN16, RN22, RN23) implementada nas camadas Controller ou Repository; alteração de limiar de validação exige modificação apenas na camada Service. | A arquitetura em camadas verticais está documentada no Diagrama de Classes Arquitetural (Seção 3.2.3.1). As validações de domínio estão concentradas exclusivamente no Service, conforme padrão definido no Diagrama de Sequência (Seção 3.2.4). |
-| **MANUT02** | O código de back-end deve atingir cobertura mínima de testes automatizados que garanta rastreabilidade dos fluxos críticos da operação. | Cobertura ≥ 70% reportada pelo Jest (--coverage); cobertura de 100% nos testes dos fluxos de registro de checkpoint (RF010) e encerramento de turno (RF009), que concentram as validações de negócio mais sensíveis. | A suite de testes Jest foi estruturada com abordagem white-box nos Services (validações RN16, RN22, RN23) e black-box nos endpoints via Supertest (contratos HTTP). O relatório de cobertura é gerado automaticamente e está documentado na Seção 5.1. |
-| **REST** | O sistema não deve possuir dependência de integração automática com as esteiras Technogym, pulseiras ou qualquer hardware de terceiros para seu funcionamento completo. | 0% de dependência de integração via pulseiras, Bluetooth, API das esteiras ou captura automática de dados; sistema operável integralmente com apenas um browser e conexão à internet. | A interface foi projetada exclusivamente para entrada manual assistida, sem chamadas a APIs externas de hardware. Toda a operação depende apenas da leitura visual da esteira pelo Promotor de Field Marketing e da inserção manual no formulário. Alinhado à RN24. |
-
-A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com Promotores de Field Marketing em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
+| **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | Os índices nos campos de busca frequente (id_turno, id_atleta, status) estão previstos nas migrations. As validações de negócio na camada Service evitam round-trips desnecessários ao banco. O teste de carga via k6 ou ferramenta equivalente ainda não está configurado e constitui verificação pendente do critério. |
+| **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
+| **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo operador ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado ao RN21. |
+| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo deleted_at ou is_ajuste presente em todos os registros modificáveis; verificado por query de auditoria após simulação de exclusão via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original, e o soft delete está previsto para as tabelas críticas. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
+| **CAP** | O sistema deve suportar dois operadores realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta (migration 0007) impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
+| **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RNF de suportabilidade e ao RF025 / RN36. |
+| **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A configuração de PWA (manifest e service worker) não está presente no código atual e constitui recurso opcional pendente de configuração. |
+| **MANUT01** | A arquitetura deve seguir o padrão MVC com separação estrita entre Controller, Service e Repository, de modo que alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência. | Cada camada possui responsabilidade única verificada em code review; nenhuma regra de negócio (RN16, RN18, RN19) implementada nas camadas Controller ou Repository; alteração de limiar de validação exige modificação apenas na camada Service. | A arquitetura em camadas verticais está documentada no Diagrama de Classes Arquitetural (Seção 3.2.3.1). As validações de domínio estão concentradas exclusivamente no Service, conforme padrão definido no Diagrama de Sequência (Seção 3.2.4). |
+| **MANUT02** | O código de back-end deve atingir cobertura mínima de testes automatizados que garanta rastreabilidade dos fluxos críticos da operação. | Cobertura ≥ 70% reportada pelo Jest (--coverage); cobertura de 100% nos testes dos fluxos de registro de checkpoint (RF010) e encerramento de turno (RF009), que concentram as validações de negócio mais sensíveis. | A suite de testes atual cobre o fluxo principal de integração (sessão, turno, checkpoint). Testes unitários white-box nos Services (RN16, RN18, RN19) e configuração de cobertura via Jest --coverage constituem requisitos pendentes de implementação; o relatório de cobertura ainda não está disponível. |
+| **REST** | O sistema não deve possuir dependência de integração automática com as esteiras Technogym, pulseiras ou qualquer hardware de terceiros para seu funcionamento completo. | 0% de dependência de integração via pulseiras, Bluetooth, API das esteiras ou captura automática de dados; sistema operável integralmente com apenas um browser e conexão à internet. | A interface foi projetada exclusivamente para entrada manual assistida, sem chamadas a APIs externas de hardware. Toda a operação depende apenas da leitura visual da esteira pelo operador e da inserção manual no formulário. Alinhado ao RN24. |
+--- 
+A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com operadores em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
@@ -1368,93 +1368,99 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
+---
 
-### Módulo: Coordenador
 
-
-#### Fluxo 1: Listar Coordenadores (Leitura)
+#### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar coordenadores</sub><br>
-  <img src="../assets/fluxo1.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
+  <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O cliente faz uma requisição HTTP GET para coletar todos os coordenadores registrados. O CoordenadorController aciona o método listar() do CoordenadorService, que por sua vez consulta a coleção de dados exposta pelo CoordenadorRepository para retornar o array com os objetos ao usuário final.
-
-
-
-#### Fluxo 2: Login do Coordenador (Autenticação)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo de login do coordenador</sub><br>
-  <img src="../assets/fluxo2.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-O usuário submete suas credenciais (email e senha) via corpo da requisição (POST). O CoordenadorController delega os parâmetros ao CoordenadorService, que realiza uma validação booleana em memória para certificar que ambos os campos foram preenchidos, retornando o status de autenticado e o e-mail do usuário.
+O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que coordenadores só possam visualizar informações sem permissão de controle operacional.
 
 ---
 
-### Módulo: Esteiras
+#### Fluxo 2: Login de Administradores (Autenticação)
 
-#### Fluxo 3: Listar Esteiras Disponíveis (Leitura)
+<div align="center">
+  <sub>Figura 7 - Fluxo de login de administradores</sub><br>
+  <img src="../assets/AdministraçãoFluxo2.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que administradores possam realizar ações de configuração e controle operacional, como cadastrar eventos, operadores e alternar o bloqueio do Modo TV.
+
+---
+
+
+#### Fluxo 3: Listar Permissões dos Operadores (Consulta)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar permissões dos operadores</sub><br>
+  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a consulta das permissões de um operador específico. O OperadorController recebe o identificador do operador, aciona o OperadorService e retorna o conjunto de permissões associadas ao perfil operacional. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores só possam realizar ações compatíveis com suas funções.
+
+---
+
+
+#### Fluxo 4: Listar Operadores (Leitura)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar operadores</sub><br>
+  <img src="../assets/ListasOperadoresFluxo4.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a listagem dos operadores cadastrados na aplicação. A API valida o perfil de acesso, consulta a tabela de operadores por meio do Supabase e retorna os registros encontrados em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores possam ser visualizados e gerenciados apenas por usuários com permissão administrativa.
+
+#### Fluxo 5: Listar Esteiras Disponíveis (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
-  <img src="../assets/fluxo3.png" width="100%"><br>
+  <img src="../assets/ListarEsteirasFluxo5.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Requisição voltada para coletar as informações técnicas dos equipamentos do evento. O estímulo trafega do EsteiraController para o EsteiraService, que consome o método de listagem do EsteiraRepository, retornando a lista contendo as marcas, modelos, números de série e status de conectividade das esteiras registradas no banco.
+O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. Após validar a permissão de acesso, a aplicação consulta a tabela de esteiras e retorna os equipamentos disponíveis para acompanhamento ou uso na operação da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que as esteiras possam ser visualizadas e gerenciadas apenas por usuários com permissão administrativa.
 
 ---
 
-### Módulo: Eventos
 
-#### Fluxo 4: Listar Eventos (Leitura)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo listar eventos</sub><br>
-  <img src="../assets/fluxo4.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
-
-#### Fluxo 5: Cadastrar Novo Evento (Escrita/Criação)
+#### Fluxo 6: Cadastrar Novo Evento (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
-  <img src="../assets/fluxo5.png" width="100%"><br>
+  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Trata o fluxo de criação de uma nova competição/evento no ecossistema. O EventoController desestrutura o payload recebido e aciona o EventoService; a camada de serviço atribui um identificador único temporal ao objeto e invoca o método salvar() do EventoRepository, inserindo os dados estruturados de localidade, nome e período direto no banco de dados.
+O Administrador Geral envia os dados necessários para cadastrar um novo evento. A API valida se o perfil possui permissão de escrita, verifica se a prova não está finalizada, filtra os campos permitidos e registra o novo evento no banco de dados. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que apenas administradores possam criar novos eventos e que os dados sejam validados antes do registro.
 
----
-
-### Módulo: Operador
-
-#### Fluxo 6: Listar Operadores (Leitura)
+#### Fluxo 7: Listar Eventos (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar Operadores</sub><br>
-  <img src="../assets/fluxo6.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar eventos</sub><br>
+  <img src="../assets/ListarEventoFluxo7.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
+O usuário autorizado solicita a listagem dos eventos cadastrados na aplicação. O sistema valida o perfil de acesso, consulta a tabela de eventos por meio do Supabase e retorna os registros disponíveis em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que os eventos possam ser visualizados por usuários com permissão de leitura, como operadores e coordenadores, enquanto a criação de eventos fica restrita a administradores.
 
-#### Fluxo 7: Listar Permissões do Operador (Consulta)
+#### Fluxo 8: Tentativa de Cadastrar Evento sem Permissão (Escrita)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo Permissões do operador</sub><br>
-  <img src="../assets/fluxo7.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo tentativa de cadastrar evento sem permissão</sub><br>
+  <img src="../assets/TentativadeCadastrarEventoSemPermissãoFluxo8.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
+Um usuário sem permissão de escrita tenta cadastrar um novo evento pela rota de criação. O middleware de autorização identifica que o perfil não possui acesso administrativo e bloqueia a requisição, retornando erro HTTP 403 antes de qualquer gravação no banco de dados.
 
 ---
 
@@ -1543,13 +1549,13 @@ O encerramento da corrida de um participante ocorre ao invocar o método finaliz
 
 ### 3.2.7. Padrões de Projeto Aplicados (sprints 3 a 5)
 
-Essa seção documenta os padrões de projeto adotados, apresentando a justificativa de cada escolha com base nas necessidades reais identificadas. Os padrões foram selecionados para resolver problemas de organização do código, separação de responsabilidades da solução ao longo das 24 horas de operação do evento.
+Essa seção documenta os padrões de projeto adotados, apresentando a justificativa de cada escolha com base nas necessidades reais identificadas. Os padrões foram selecionados para resolver problemas de organização do código, separação de responsabilidades e manutenibilidade do sistema ao longo das 24 horas de operação do evento.
 
 #### Repository
 
-O padrão Repository foi aplicado para isolar o acesso ao banco de dados do restante da aplicação. Cada entidade do possui seu próprio repositório, como `TurnoRepository`, `CheckpointRepository` e `EsteiraRepository`, concentrando todos os comandos SQL executados.
+O padrão Repository foi aplicado para isolar o acesso ao banco de dados do restante da aplicação. Cada entidade possui seu próprio repositório, como `TurnoRepository`, `CheckpointRepository` e `EsteiraRepository`, concentrando todos os comandos SQL executados.
 
-A justificativa está diretamente ligada ao contexto. O BullPace precisa garantir que alterações nas regras de negócio, não impactem a camada de persistência. Com o Repository, qualquer mudança de query ou de estrutura de tabela fica restrita a um único ponto do código, sem necessidade de ajuste nos Services ou Controllers.
+A justificativa está diretamente ligada ao contexto. O BullPace precisa garantir que alterações nas regras de negócio não impactem a camada de persistência. Com o Repository, qualquer mudança de query ou de estrutura de tabela fica restrita a um único ponto do código, sem necessidade de ajuste nos Services ou Controllers.
 
 Além disso, o padrão facilita a criação de testes automatizados. Os Services podem ser testados isolados, utilizando repositórios simulados, o que é essencial para validar as regras de negócio críticas do sistema, como a progressão obrigatória do KM acumulado (RN16) e vinculação de checkpoint a turno ativo (RN23), sem depender de uma conexão real com o banco durante os testes.
 
@@ -1569,17 +1575,17 @@ O padrão também cumpre o requisito não funcional MANUT01, que exige separaç�
 
 O padrão DTO foi utilizado para estruturar os dados que estão entre as camadas da aplicação, evitando que objetos do banco de dados sejam expostos diretamente nas respostas da API ou que dados desnecessários circulem entre as camadas internas.
 
-Esse padrão se torna relevante principalmente no contexto dos checkpoints/turnos. Quando o `CheckpointService` monta o objeto antes de enviá-lo ao `CheckpointRepository`, ele constrói uma estrutura com campos muito bem definidos, incluindo o timestamp automatico gerado pelo servidor conforme a RN21, e exclui campos que não devem ser manipulados, como o campo `is_ajuste`, que identifica correções feitas pela Gestora de Operações.
+Esse padrão se torna relevante principalmente no contexto dos checkpoints/turnos. Quando o `CheckpointService` monta o objeto antes de enviá-lo ao `CheckpointRepository`, ele constrói uma estrutura com campos muito bem definidos, incluindo o timestamp automático gerado pelo servidor conforme a RN21, e exclui campos que não devem ser manipulados, como o campo `is_ajuste`, que identifica correções feitas pela Gestora de Operações.
 
-A adoção do DTO também contribui para a segurança da aplicação. Como dito  no requisito SEG01, o timestamp registrado não pode ser enviado pelo cliente nem editado manualmente. O DTO garante que esse campo seja sempre descartado antes de chegar ao banco.
+A adoção do DTO também contribui para a segurança da aplicação. Conforme o requisito não funcional SEG01, o timestamp registrado não pode ser enviado pelo cliente nem editado manualmente. O DTO garante que esse campo seja sempre descartado antes de chegar ao banco.
 
 #### Singleton
 
-O padrão foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
+O padrão Singleton foi aplicado na gestão da conexão com o Supabase. Em vez de criar uma nova instância do cliente a cada requisição, a aplicação mantém uma única instância compartilhada entre todos os repositórios.
 
 A justificativa para esse padrão está nos requisitos de desempenho e confiabilidade. O requisito DES01 exige que as ações do fluxo principal respondam em menos de 1.000 ms no percentil 95. Criar e destruir conexões com o banco a cada requisição introduziria latência desnecessária, especialmente em momentos de maior volume de registros, como os picos de checkpoints simultâneos das duas equipes operando ao mesmo tempo.
 
-Além disso também reduz o risco de esgotamento do pool de conexões durante as 24 horas do evento, cenário esse que poderia comprometer o requisito de disponibilidade CONF02, que exige um tempo de funcionamento mínimo de aproximadamente 98% durante o evento.
+O padrão também reduz o risco de esgotamento do pool de conexões durante as 24 horas do evento, cenário esse que poderia comprometer o requisito de disponibilidade CONF02, que exige um tempo de funcionamento mínimo de aproximadamente 98% durante o evento.
 
 #### Middleware de Autenticação
 
@@ -1591,17 +1597,17 @@ A separação também facilita a manutenção. Caso as regras de autorização p
 
 #### Princípios SOLID Aplicados
 
-Os padrões descritos acima foram adotados em conjunto com os princípios SOLID, que orientam a estrutura da aplicação de forma mais aberta.
+Os padrões descritos acima foram adotados em conjunto com os princípios SOLID, que orientam o design orientado a objetos da aplicação de forma transversal à arquitetura em camadas.
 
 O **Princípio da Responsabilidade Única** é o que sustenta toda a arquitetura em camadas. Controller, Service, Repository e Model têm responsabilidades bem definidas e que não se sobrepõem. O `TurnoController`, por exemplo, nunca contém validações de KM, e o `TurnoRepository` nunca toma decisões de negócio sobre quando um turno pode ser encerrado.
 
 O **Princípio Aberto-Fechado** foi considerado na modelagem das funções de usuário. A entidade `Funcao` foi projetada para permitir que novos perfis sejam adicionados sem modificar o código existente dos Services que verificam permissões. Um novo perfil de acesso pode ser implementado na tabela de funções e tratado pelo middleware sem que os Controllers precisem ser alterados.
 
-O **Princípio da Inversão de Dependências** se manifesta na relação entre Services e Repositories. Os Services dependem de abstrações dos Repositories e não de implementações concretas, o que permite substituir o Supabase por outro provedor sem impacto na camada de negócio. 
+O **Princípio da Inversão de Dependências** se manifesta na relação entre Services e Repositories. Os Services dependem de abstrações dos Repositories e não de implementações concretas, o que permite substituir o Supabase por outro provedor sem impacto na camada de negócio.
 
 #### Justificativa Geral
 
-Portanto, conclui-se que a combinação dos padrões Repository, Service Layer, DTO, Singleton e Middleware de Autenticação foi escolhida pois cada um resolve um problema específicoe: isolamento do banco, concentração de regras de negócio, controle de dados expostos pela API, eficiência na gestão de conexões e separação da lógica de autorização.
+Portanto, conclui-se que a combinação dos padrões Repository, Service Layer, DTO, Singleton e Middleware de Autenticação foi escolhida pois cada um resolve um problema específico: isolamento do banco, concentração de regras de negócio, controle de dados expostos pela API, eficiência na gestão de conexões e separação da lógica de autorização.
 
 ## 3.3. Wireframes (sprint 2)
 
@@ -2829,9 +2835,25 @@ A tela de encerramento apresenta um resumo completo do turno antes da confirmaç
 
 ## 6.1 Resumo Executivo
 
-*Preencher com até 300 palavras, sem necessidade de fonte*
+O BullPace é uma aplicação web desenvolvida para digitalizar a operação de registro e apuração do Red Bull 24 Horas, uma competição de corrida em esteira em que duas equipes de 16 atletas se revezam ao longo de 24 horas ininterruptas. O sistema nasce da seguinte necesside: substituir o processo manual de prancheta, que expõe o evento a erros de anotação, inconsistências entre operadores e dificuldade de auditoria, por um fluxo digital rastreável, padronizado e adequado às restrições do evento.
 
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
+A oportunidade endereçada pelo projeto está em um nicho específico: a digitalização operacional de eventos esportivos de marcas. Esse segmento se situa na interseção de três mercados em crescimento simultâneo no Brasil: o universo da corrida e dos esportes de resistência, que já reúne aproximadamente 15 milhões de praticantes ativos [17]; o setor de live marketing e ativação de marca, que movimentou US$ 22,2 bilhões em 2025 [18]; e o mercado fitness indoor, no qual o Brasil figura entre os quatro maiores do mundo [19]. O ponto de encontro desses três setores é justamente o perfil do Red Bull 24 Horas: um evento de resistência, realizado em esteiras e construído como ativação proprietária de marca.
+
+Nesse contexto, o BullPace se posiciona como uma ferramenta de apoio operacional especializada, projetada para a realidade do evento: uso em iPad, condições de fadiga e pressão, operadores de campo sem treinamento técnico, ausência de integração automática com as esteiras Technogym e necessidade de funcionamento contínuo por 24 horas. Sua proposta de valor central não é a automação, mas a qualificação do registro manual.
+
+Do ponto de vista dos diferenciais competitivos, o BullPace se distingue de ferramentas genéricas de registro, planilhas colaborativas e aplicativos de produtividade por um conjunto de características que respondem diretamente ao fluxo operacional do evento. O sistema vincula cada checkpoint a uma cadeia rastreável de equipe, atleta, esteira, turno e promotor responsável, garantindo que a quilometragem acumulada, dado central da apuração, não possa ser corrompida por regressão (RN16) nem registrada fora de um turno ativo (RN23). A diferenciação também se manifesta na separação de perfis entre Promotor de Field Marketing e Gestora de Operações, que permite que operações sensíveis, como correções históricas e finalização de equipes, sejam restritas à coordenação com autenticação obrigatória e justificativa auditável.
+
+Outros diferenciais operacionais incluem o timer regressivo de cinco minutos para orientar o ritmo dos checkpoints, o cálculo automático de pace médio, o Modo TV em tempo real para acompanhamento da competição, com possibilidade de desligar a exposição pública do placar, e a exportação em CSV estruturado para auditoria pós-evento. A resiliência a quedas momentâneas de conectividade, com enfileiramento local e sincronização automática, também compõe a proposta, considerando que a infraestrutura de rede do evento depende de solução externa como Starlink.
+
+Os objetivos estratégicos do projeto se organizam em três horizontes. No horizonte imediato, o objetivo é demonstrar valor operacional durante a edição atual do Red Bull 24 Horas, validando o sistema em condições reais: múltiplos operadores, turnos ininterruptos ao longo de 24 horas, pressão de madrugada e dados que determinam o resultado oficial da competição. A métrica de sucesso nesse horizonte é a ausência de falhas críticas na apuração e a percepção positiva do time de Field Marketing sobre a confiabilidade e a facilidade de uso em relação à prancheta.
+
+No horizonte de médio prazo, o objetivo é consolidar o BullPace como a solução padrão para futuras edições do Red Bull 24 Horas no Brasil, com base no histórico de dados estruturados gerados na edição atual. O conjunto de registros de equipes, atletas, turnos, checkpoints e métricas de performance produzido pela aplicação forma uma base reutilizável para planejamento de edições futuras, análise de desempenho por equipe e produção de conteúdo de marketing pós-evento.
+
+No horizonte de longo prazo, o BullPace tem potencial de adaptação para outras ativações esportivas da Red Bull com formato semelhante de revezamento e apuração manual, incluindo possíveis edições internacionais. Dado que a arquitetura foi desenhada de forma modular, com separação estrita entre camadas e entidades configuráveis como eventos, equipes, atletas e esteiras, a adaptação a novos contextos exigiria configuração de dados sem reescrita estrutural do sistema.
+
+Em resumo, o BullPace representa uma resposta a uma fragilidade operacional. As seções seguintes aprofundam a análise de mercado, a concorrência, o público-alvo, o posicionamento e as estratégias de marketing que sustentam essa proposta. 
+
+
 
 ## 6.2 Análise de Mercado
 
@@ -2862,34 +2884,83 @@ Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de 
 
 ## 6.4 Público-Alvo
 
-*a) Segmentação de Mercado (até 250 palavras)*
-Descreva os principais segmentos de mercado a serem atendidos pela aplicação. Utilize bases de dados e fontes confiáveis.*
+O BullPace se encaixa em 3 mercados em forte expansão no Brasil, que se cruzam justamente em eventos e situações como o Redbull 24 horas.
 
-*b) Perfil do Público-Alvo (até 250 palavras)*
-*Caracterize o público-alvo com dados demográficos, psicográficos e comportamentais, incluindo necessidades específicas. Utilize fontes obrigatórias.*
+O primeiro é o universo da corrida e dos esportes de resistência, que ultimamente vem crescendo e atigindo um publico cada vez maior, O país já reúne quase 15 milhões de corredores ativos e movimenta um mercado estimado em R$ 1,1 bilhão por ano, somando inscrições, assessorias, equipamentos e patrocínios[17]. É um público cada vez mais numeroso, engajado e habituado a provas cronometradas. 
+
+O segundo é o de live marketing e ativação de marca, em que empresas transformam experiências esportivas em ferramenta de relacionamento com o consumidor. Esse setor movimentou US$ 22,2 bilhões em 2025[18]. Nele estão as marcas patrocinadoras e as produtoras responsáveis por organizar competições desse tipo.
+
+O terceiro é o mercado fitness indoor. Como a disputa ocorre em esteiras, o contexto de uso se aproxima do de academias e redes, e o Brasil está entre os quatro maiores mercados do mundo, com mais de 41 mil academias ativas[19].
+
+
+O público-alvo do sistema reúne dois perfis complementares. O primeiro é o cliente contratante: gestores de marketing esportivo, agências e produtoras que organizam o evento e operam a aplicação. O segundo é o usuário final, aletas amadores que correm em equipe e o público que acompanha o placar, e é sobre ele que existem os dados mais consolidados. 
+
+No geral, é um público adulto jovem, concentrado na faixa dos 25 aos 45 anos [21] e na região Sudeste. Nos últimos anos a corrida ficou mais diversa e democrática, chegando a um equilíbrio entre homens e mulheres [20]. Mais do que um esporte, ela virou estilo de vida, as pessoas correm em busca de saúde, bem-estar mental e superação, e valorizam o sentimento de pertencer a uma comunidade. Boa parte começou a não muito tempo, cerca de 71% começaram a correr depois de 2021[21]. 
+
+Esse corredor também participa cada vez mais de provas oficiais [20] e está mais exigente, querem organização, segurança e cronometragem precisa [22]. É justamente aí que se concentram as necessidades atendidas pela aplicação, um placar e tempo real, apuração transparente e confiavel por equipe e turno, e uma vizualização clara para atletas e plateia. 
 
 
 ## 6.5 Posicionamento
 
-*a) Proposta de Valor Única (até 250 palavras)*
-*Defina de maneira clara o que torna a sua aplicação única e valiosa para o mercado.*
+A aplicação posiciona-se como uma solução especializada para o suporte operacional do evento Red Bull 24 Horas, com foco na organização e consolidação dos registros da competição. Seu diferencial está na adaptação ao fluxo específico do evento, oferecendo uma alternativa mais estruturada e confiável em comparação aos métodos tradicionais de registro.
 
-*b) Estratégia de Diferenciação (até 250 palavras)*
-*Explique como sua aplicação se destacará da concorrência, evidenciando a lógica por trás do posicionamento.*
+O sistema busca ser percebido como uma ferramenta de apoio à equipe operacional, priorizando praticidade, padronização e rastreabilidade dos dados. Dessa forma, o posicionamento da solução está associado à melhoria da eficiência do processo de apuração, contribuindo para uma gestão mais organizada e transparente da competição.
 
 ## 6.6 Estratégia de Marketing 
 
-*a) Produto/Serviço (até 200 palavras)*
-*Descreva as funcionalidades, benefícios e diferenciais da aplicação*
+A estratégia de marketing representa um ponto de unificação de tudo o que foi analisado nas seções anteriores. Se a análise de mercado (6.2) mapeou o ambiente em que o BullPace opera, a análise da concorrência (6.3) revelou os diferenciais que precisam ser comunicados, o público-alvo (6.4) definiu para quem a solução foi construída e o posicionamento (6.5) estabeleceu o lugar que ela ocupa na mente do cliente, então a estratégia de marketing é a tradução de tudo isso em decisões sobre o produto, preço, distribuição e promoção.
 
-*b) Preço (até 200 palavras)*
-*Explique o modelo de precificação adotado e justifique com base nas análises anteriores.*
+### a) Produto/Serviço
 
-*c) Praça (Distribuição) (até 200 palavras)*
-*Apresente os canais digitais utilizados para distribuir e entregar a aplicação ao público.*
+O BullPace é uma aplicação web, focada no controle operacional desenvolvida exclusivamente para o Red Bull 24 Horas. Seu núcleo funcional gira em torno de quatro processos: cadastro e gestão de atletas/equipes, controle de turnos e esteiras em tempo real, registro de checkpoints com quilometragem acumulada e consolidação de resultados com exportação em CSV para auditoria pós-evento.
 
-*d) Promoção (até 200 palavras)*
-*Descreva as estratégias digitais planejadas, como SEO, redes sociais, marketing de conteúdo e campanhas pagas.*
+Do ponto de vista de produto, o diferencial não está na complexidade técnica, mas na aderência ao contexto operacional, vindo principalmente das frequentes validações com o parceiro. A aplicação foi projetada para substituir a prancheta utilizada pelo time de Field Marketing sem exigir qualquer integração com as esteiras, assim como foi delimitado pelo parceiro por conta da capacidade técnica do evento, como descrito na introdução do projeto. Isso significa que o produto entrega valor precisamente dentro dos limites do que é possível fazer no ambiente do evento, sem criar dependências de infraestrutura que poderiam comprometer a operação.
+
+Todas as funcionalidades estão organizadas em camadas de acesso distintas para operadores, administradores e visualização pública dos resultados, descritas em detalhe na seção de distribuição (6.6c).
+
+Outro aspecto relevante do produto é a rastreabilidade. Cada registro carrega um timestamp automático, criando um histórico totalmente auditável da operação. Isso responde a uma necessidade explicitada pelo público-alvo (6.4): corredores e organizadores que exigem transparência e confiabilidade na apuração dos resultados. A rastreabilidade também atende à conformidade com a LGPD (6.2), ao manter o controle sobre quais dados são armazenados e por quem foram inseridos.
+
+Como serviço, o BullPace vai além de uma interface de registro: entrega confiança operacional para a equipe de Field Marketing ao longo das 24 horas de prova.
+
+### b) Preço
+
+O BullPace nasce de uma parceria acadêmica entre a Inteli e a Red Bull, o que afasta qualquer modelo comercial tradicional do escopo atual. Mas para que a estratégia de precificação faça sentido como parte de um plano de marketing real, é preciso projetá-la além do projeto acadêmico, considerando o que aconteceria se a solução fosse mantida, expandida ou replicada para outras edições e eventos.
+
+O ponto de partida para essa análise é o poder de barganha do cliente. Como identificado nas 5 Forças de Porter (2.1.1), o cenário configura um monopsônio: há apenas um comprador direto, com alto poder de negociação, que define escopo, prioridades e critérios de aceitação. Isso não significa que o produto não tem valor. Significa que esse valor precisa ser justificado de forma concreta, com base no problema que resolve e não no custo de desenvolvimento.
+
+A partir disso, é possível identificar três modelos de precificação coerentes com o perfil da solução. O primeiro, e mais imediato, é o modelo de projeto fechado por encomenda: o cliente paga um valor fixo pelo desenvolvimento e entrega da aplicação, tal como ocorre no contexto atual, mas formalizado como contrato comercial. Esse modelo funciona bem enquanto o escopo é específico e bem delimitado, como é o caso do Red Bull 24 Horas.
+
+O segundo é o licenciamento por evento, no qual a aplicação é disponibilizada a cada nova edição mediante um valor de licença anual ou por ocorrência. Esse modelo passa a fazer mais sentido conforme a solução amadurece e se torna parte da infraestrutura permanente do evento, sendo aprimorada a cada edição com base no feedback do time de Field Marketing.
+
+O terceiro, mais distante do cenário atual mas relevante como horizonte estratégico, é o modelo de plataforma configurável para eventos de resistência, no qual o BullPace seria adaptado para outros formatos de corrida coletiva e licenciado para produtoras e agências de eventos. Nesse caso, a estrutura de preço se aproximaria de um SaaS B2B (Software as a Service Business to Business), definido pelo porte do evento e pelo número de usuários ativos.
+
+Em todos os modelos, o referencial de valor é o mesmo: o problema que a solução resolve. Operar 24 horas com pranchetas expõe o evento a erros de registro e inconsistências de apuração, o que pode comprometer a credibilidade da Red Bull enquanto organizadora. Quando o preço é ancorado nesse risco evitado, a proposta de valor se fortalece.
+
+### c) Praça (Distribuição)
+
+Por ser uma aplicação web, a estratégia de distribuição do BullPace é direta: acesso via navegador, sem instalação, sem dependência de sistema operacional. Qualquer dispositivo com conexão à internet e um navegador atualizado funciona como ponto de acesso, o que elimina a necessidade de configuração por aparelho e reduz a chance de falhas de entrega no dia do evento.
+
+Na prática, o acesso se organiza em três pontos distintos, cada um correspondendo a um perfil de usuário. O primeiro é a estação do operador, onde um dispositivo dedicado fica posicionado ao lado de cada esteira. Por ali passam todos os registros do evento: início e encerramento de turnos, checkpoints e quilometragem. O acesso é autenticado e restrito ao perfil de operador, evitando que dados sejam alterados por quem não tem responsabilidade sobre aquela esteira.
+
+O segundo é o painel administrativo, acessado pela coordenação do evento. Ali ficam as funções de configuração global, como cadastro de atletas, equipes e turnos, e o monitoramento em tempo real de toda a operação. As permissões são mais amplas do que as do operador, refletindo a hierarquia de responsabilidades do evento.
+
+O terceiro é o placar público, acessível via URL aberta e projetado em telão durante o evento. Ele foi implementado sem autenticação a fim de facilitar o acesso imediato em caso de imprevistos de logística. É por ele que atletas e plateia acompanham os resultados em tempo real.
+
+Do ponto de vista de infraestrutura, a aplicação é hospedada em nuvem, garantindo disponibilidade ao longo das 24 horas sem depender de servidores locais do espaço do evento. Esse detalhe é mais estratégico do que técnico: uma falha de infraestrutura local no meio da madrugada seria muito mais difícil de contornar do que um eventual problema de conectividade com um serviço de nuvem.
+
+A praça, portanto, não é um canal de distribuição no sentido tradicional. Não há loja virtual, marketplace ou campanha de aquisição. O BullPace chega ao usuário já operacional no dia do evento, como parte da infraestrutura montada pela organização. Isso desloca a responsabilidade de "distribuição" para o momento de setup antes do evento, com testes, validações de acesso e configuração de dispositivos, que compõem o processo de entrega da solução.
+
+### d) Promoção
+
+A estratégia de promoção do BullPace não segue os padrões de uma campanha de marketing convencional, porque a solução não compete por atenção num mercado aberto. O cliente é a Red Bull, o canal de venda é o relacionamento, e a prova de valor é operacional. Isso muda completamente a lógica do que significa promover o produto.
+
+A principal forma de promoção é o próprio desempenho da aplicação durante o evento. Cada turno registrado com precisão, cada checkpoint sem inconsistência e cada resultado consolidado em tempo real funciona como argumento para que a Red Bull confie na solução nas próximas edições. Nesse sentido, o Red Bull 24 Horas não é apenas o contexto de uso; é o palco de validação da ferramenta. Uma operação bem executada vale mais do que qualquer material de divulgação.
+
+O segundo momento de promoção ocorre depois do evento, com o relatório pós-operação. A exportação em CSV, combinada com o histórico auditável de registros, permite que a coordenação produza um dossiê completo com quilometragem por atleta, por turno e por equipe. Apresentado internamente na Red Bull, esse relatório demonstra na prática o que a digitalização entrega e o que seria perdido numa eventual regressão ao método manual com pranchetas.
+
+Uma terceira frente, mais relevante no horizonte de expansão da solução, é a documentação técnica do projeto. O WAD, o código e o histórico de decisões de desenvolvimento constroem a credibilidade da equipe como fornecedora de soluções para eventos esportivos. Em relações B2B (Business to Business), a reputação técnica precede qualquer negociação.
+
+Por fim, em um cenário de expansão para outras marcas e eventos, as estratégias poderiam incluir presença em encontros do setor de eventos esportivos e produção de conteúdo técnico sobre digitalização de operações de competição. O posicionamento de nicho definido em 6.5 favorece esse tipo de promoção segmentada: não é preciso alcançar um público amplo, mas sim ser reconhecida pelo grupo restrito de profissionais que organiza eventos com as características do Red Bull 24 Horas.
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
@@ -2932,6 +3003,18 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 [15] KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
 
 [16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
+
+[17] CORRIDA de rua cresce no Brasil: já são 15 milhões de praticantes, a maioria mulheres. **IstoÉ**, [s. l.], 1 fev. 2026. Disponível em: https://istoe.com.br/corrida-de-rua-15-milhoes-corredores-maioria-mulheres.
+
+[18] SETOR de eventos no Brasil inicia 2026 com recorde de consumo e geração de empregos. **Transamerica Expo Center**, São Paulo, 7 abr. 2026. Disponível em: https://www.transamericaexpo.com.br/setor-de-eventos-no-brasil-inicia-2026-com-recorde-de-consumo-e-geracao-de-empregos/. 
+
+[19] MERCADO fitness latino-americano em 2026: dados, tendências e o que muda pro Brasil. **Blog da Pacto**, [s. l.], 29 abr. 2026. Disponível em: https://blog.sistemapacto.com.br/mercado-fitness-latino-americano-brasil-2026/.
+
+[20] PESQUISA: com impulso de mulheres, jovens e Classe C, corrida de rua alcança 15 milhões de praticantes no Brasil. **Máquina do Esporte**, [s. l.], 31 jan. 2026. Disponível em: https://maquinadoesporte.com.br/running/pesquisa-com-impulso-de-mulheres-jovens-e-classe-c-corrida-de-rua-alcanca-15-milhoes-de-praticantes-no-brasil/.
+
+[21] CORRIDA de rua se torna fenômeno social no Brasil com 13 milhões de praticantes. **Portal Tela**, [s. l.], 2 fev. 2025. Disponível em: https://www.portaltela.com/esportes/geral/2025/02/02/corrida-de-rua-se-torna-fenomeno-social-no-brasil-com-13-milhoes-de-praticantes.
+
+[22] CORRIDAS de rua crescem 85% e viram fenômeno esportivo. **Terra**, [s. l.], 28 jan. 2026. Disponível em: https://www.terra.com.br/vida-e-estilo/saude/corridas-de-rua-crescem-85-e-viram-fenomeno-esportivo.
 
 # <a name="c9"></a>Anexos
 <a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
