@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=10">
+  <link rel="stylesheet" href="/static/style.css?v=12">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -13,6 +13,24 @@
     <% /* O frame tambem muda quando o conteudo deve ocupar a tela inteira da TV. */ %>
     <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
+      <% if (tela !== 'tvPublica' && tela !== 'tvResultado') { %>
+        <div class="app-brand" aria-label="Red Bull 24h">
+          <img src="/assets/LogoRedBull24h.png" alt="Red Bull 24h">
+        </div>
+        <div class="nav-actions">
+          <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+            <button class="current-operator-btn" type="button" onclick="openOperatorSwitchModal()">
+              <span>Operador atual</span>
+              <strong data-current-operator-name><%= operadorSelecionado %></strong>
+            </button>
+          <% } %>
+          <button class="floating-cad-btn" type="button" onclick="toggleCadModal(true, 'operador')">
+            <span>+</span>
+            <span>Cadastro Rápido</span>
+          </button>
+        </div>
+      <% } %>
+
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
         <a href="/" class="back-link">VOLTAR</a>
@@ -125,14 +143,6 @@
           <input type="hidden" name="atleta" value="<%= atletaSelecionado %>">
           <button type="submit" class="back-link">VOLTAR</button>
         </form>
-      <% } %>
-
-      <% if (tela === 'equipe' || tela === 'atleta' || tela === 'esteira') { %>
-        <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
-        <div class="selected-user">
-          <span>OPERADOR(A)</span>
-          <strong><%= operadorSelecionado %></strong>
-        </div>
       <% } %>
 
       <%
@@ -882,13 +892,13 @@
           <button type="submit">FILTRAR</button>
         </form>
 
-        <p class="operator-list-title">REGISTROS DE AUDITORIA</p>
+        <p class="operator-list-title audit-section-title">REGISTROS DE AUDITORIA</p>
 
         <div class="audit-record audit-record-header" aria-hidden="true">
           <span>DATA</span>
           <span>USUÁRIO</span>
           <span>AÇÃO</span>
-          <span>ENTIDADE</span>
+          <span>ATLETA</span>
           <span>ANTES</span>
           <span>DEPOIS</span>
         </div>
@@ -1668,27 +1678,59 @@
 
   <!-- Componente de Cadastro Rápido -->
   <style>
-    .floating-cad-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #ff6b00;
+    .nav-actions {
+      position: absolute;
+      top: 14px;
+      right: 24px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .function-frame:not(.tv-frame) > .nav-actions {
+      position: absolute;
+    }
+    .floating-cad-btn,
+    .current-operator-btn {
+      min-height: 44px;
+      background-color: #db0840;
       color: #fff;
       border: none;
-      border-radius: 50px;
-      padding: 12px 24px;
+      border-radius: 8px;
+      padding: 10px 18px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 1000;
+      box-shadow: none;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .floating-cad-btn:hover {
-      background-color: #e05300;
+    .current-operator-btn {
+      min-width: 168px;
+      background-color: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+      text-align: left;
+    }
+    .current-operator-btn span {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 10px;
+      line-height: 1;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .current-operator-btn strong {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.15;
+    }
+    .floating-cad-btn:hover,
+    .current-operator-btn:hover {
+      background-color: #f30b47;
       transform: translateY(-2px);
     }
     .cad-modal-overlay {
@@ -1697,7 +1739,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0, 30, 60, 0.82);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1711,34 +1753,42 @@
       pointer-events: auto;
     }
     .cad-modal-box {
-      background-color: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
+      background-color: #fff;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
       width: 90%;
-      max-width: 450px;
-      padding: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      color: #fff;
+      max-width: 640px;
+      max-height: calc(100vh - 80px);
+      padding: 0;
+      box-shadow: 0 18px 44px rgba(0, 30, 60, 0.28);
+      color: #151827;
       position: relative;
+      overflow: hidden;
     }
     .cad-modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 12px;
+      margin-bottom: 0;
+      padding: 24px 32px;
+      background: #001e3c;
+      border-bottom: 3px solid #db0840;
     }
     .cad-modal-header h3 {
       margin: 0;
-      font-size: 18px;
-      color: #ff6b00;
+      font-size: 24px;
+      color: #fff;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-decoration-color: #4bb3ff;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 4px;
     }
     .cad-modal-close {
       background: none;
       border: none;
-      color: #aaa;
-      font-size: 20px;
+      color: #fff;
+      font-size: 18px;
       cursor: pointer;
     }
     .cad-modal-close:hover {
@@ -1747,23 +1797,32 @@
     .cad-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 8px;
+      margin: 0;
+      padding: 18px 32px 0;
+      border-bottom: 0;
+      background: #fff;
     }
     .cad-tab-btn {
-      background: none;
-      border: none;
-      color: #888;
-      padding: 6px 12px;
+      background: #f3f5f8;
+      border: 1px solid #dfe4ec;
+      border-radius: 999px;
+      color: #657084;
+      padding: 8px 14px;
       cursor: pointer;
       font-weight: bold;
       font-size: 13px;
       transition: color 0.2s;
     }
     .cad-tab-btn.active {
-      color: #ff6b00;
-      border-bottom: 2px solid #ff6b00;
+      color: #db0840;
+      border-color: #db0840;
+      background: #fff7fa;
+    }
+    #cadFormOperador,
+    #cadFormCoordenador,
+    #cadFormAdmin,
+    .operator-switch-panel {
+      padding: 24px 32px 32px;
     }
     .cad-form-group {
       margin-bottom: 16px;
@@ -1771,41 +1830,52 @@
     .cad-form-group label {
       display: block;
       font-size: 12px;
-      color: #aaa;
+      color: #657084;
       margin-bottom: 6px;
       text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
     .cad-input {
       width: 100%;
-      background-color: #2b2b2b;
-      border: 1px solid #444;
-      border-radius: 6px;
-      padding: 10px;
-      color: #fff;
+      min-height: 52px;
+      background-color: #fff;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #151827;
       box-sizing: border-box;
     }
     .cad-input:focus {
-      border-color: #ff6b00;
+      border-color: #db0840;
       outline: none;
+      box-shadow: 0 0 0 3px rgba(219, 8, 64, 0.12);
     }
     .cad-submit-btn {
       width: 100%;
-      background-color: #ff6b00;
+      min-height: 58px;
+      background-color: #db0840;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
+      font-size: 16px;
     }
     .cad-submit-btn:hover {
-      background-color: #e05300;
+      background-color: #f30b47;
+    }
+    .cad-submit-btn:disabled {
+      background: #e5e9f0;
+      color: #7b8494;
+      cursor: not-allowed;
     }
     .cad-message {
-      margin-top: 12px;
+      margin: 0 32px 24px;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
       display: none;
     }
@@ -1821,6 +1891,116 @@
       color: #e74c3c;
       display: block;
     }
+    .operator-switch-kicker {
+      color: #657084;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .operator-switch-panel h4 {
+      margin: 18px 0 22px;
+      color: #151827;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+    .operator-switch-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .operator-switch-option {
+      width: 100%;
+      min-height: 86px;
+      padding: 18px 22px;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
+      background: #fff;
+      color: #151827;
+      font: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      text-align: left;
+    }
+    .operator-switch-option strong,
+    .operator-switch-option small {
+      display: block;
+    }
+    .operator-switch-option strong {
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .operator-switch-option small {
+      margin-top: 8px;
+      color: #657084;
+      font-size: 15px;
+    }
+    .operator-switch-option.is-current,
+    .operator-switch-option.is-selected {
+      border-color: #db0840;
+      background: #fff7fa;
+      box-shadow: inset 4px 0 0 #db0840;
+    }
+    .operator-switch-option.is-current small,
+    .operator-switch-option.is-selected small {
+      color: #db0840;
+    }
+    .operator-switch-option.is-current .operator-radio,
+    .operator-switch-option.is-selected .operator-radio {
+      border-color: #db0840;
+    }
+    .operator-switch-option.is-current .operator-radio::after,
+    .operator-switch-option.is-selected .operator-radio::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #db0840;
+    }
+    .operator-switch-note {
+      margin: 20px 0 18px;
+      padding: 16px 18px;
+      border-radius: 8px;
+      background: #eef6fb;
+      color: #00557d;
+      box-shadow: inset 0 0 0 1px #cad8e2;
+    }
+    @media (max-width: 760px) {
+      .nav-actions {
+        top: 12px;
+        right: 14px;
+        gap: 8px;
+      }
+      .current-operator-btn {
+        min-width: 0;
+        max-width: 150px;
+        padding: 8px 10px;
+      }
+      .floating-cad-btn {
+        padding: 10px 12px;
+      }
+      .floating-cad-btn span:last-child {
+        display: none;
+      }
+      .cad-modal-box {
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 24px);
+      }
+      .cad-modal-header,
+      .cad-tabs,
+      #cadFormOperador,
+      #cadFormCoordenador,
+      #cadFormAdmin,
+      .operator-switch-panel {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
   </style>
 
   <%
@@ -1829,20 +2009,18 @@
     const showCoordTab = roleCad === 'coordenador' || roleCad === 'administrador_geral';
   %>
 
-  <button class="floating-cad-btn" onclick="toggleCadModal(true)">
-    <span>+</span>
-    <span>Cadastro Rápido</span>
-  </button>
-
   <div id="cadModalOverlay" class="cad-modal-overlay" onclick="handleOverlayClick(event)">
     <div class="cad-modal-box">
       <div class="cad-modal-header">
-        <h3>Cadastro Rápido</h3>
+        <h3 id="cadModalTitle">Cadastro Rápido</h3>
         <button class="cad-modal-close" onclick="toggleCadModal(false)">&times;</button>
       </div>
 
       <div class="cad-tabs">
-        <button id="tabBtnOperador" class="cad-tab-btn active" onclick="switchCadTab('operador')">Operador</button>
+        <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+          <button id="tabBtnTroca" class="cad-tab-btn active" type="button" onclick="switchCadTab('troca')">Trocar operador</button>
+        <% } %>
+        <button id="tabBtnOperador" class="cad-tab-btn <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? '' : 'active' %>" onclick="switchCadTab('operador')">Operador</button>
         <% if (showCoordTab) { %>
           <button id="tabBtnCoordenador" class="cad-tab-btn" onclick="switchCadTab('coordenador')">Coordenador</button>
         <% } %>
@@ -1851,8 +2029,37 @@
         <% } %>
       </div>
 
+      <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+        <section id="cadFormTroca" class="operator-switch-panel">
+          <span class="operator-switch-kicker">OPERADOR ATIVO</span>
+          <h4 data-current-operator-name><%= operadorSelecionado %></h4>
+          <div class="operator-switch-list" aria-label="Trocar operador">
+            <% const listaOperadoresTroca = typeof operadoresQuick !== 'undefined' && operadoresQuick.length ? operadoresQuick : (typeof operadores !== 'undefined' ? operadores : []); %>
+            <% listaOperadoresTroca.forEach((operador) => { %>
+              <% const isCurrentOperator = operador.nome === operadorSelecionado; %>
+              <button
+                type="button"
+                class="operator-switch-option <%= isCurrentOperator ? 'is-current' : '' %>"
+                data-switch-operator="<%= operador.nome %>"
+                onclick="selectOperatorForSwitch(this.dataset.switchOperator)"
+              >
+                <span class="operator-radio" aria-hidden="true"></span>
+                <span>
+                  <strong><%= operador.nome %></strong>
+                  <small><%= isCurrentOperator ? 'Operador atual' : 'Selecionar' %></small>
+                </span>
+              </button>
+            <% }) %>
+          </div>
+          <p class="operator-switch-note">Atleta, esteira e checkpoints permanecem inalterados.</p>
+          <button id="confirmOperatorSwitchBtn" class="cad-submit-btn" type="button" disabled onclick="confirmOperatorSwitch()">
+            Selecione outro operador
+          </button>
+        </section>
+      <% } %>
+
       <!-- Formulário Operador -->
-      <form id="cadFormOperador" onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
+      <form id="cadFormOperador" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
         <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
         <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
         <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
@@ -1915,14 +2122,21 @@
   </div>
 
   <script>
-    function toggleCadModal(show) {
+    let pendingOperatorSwitch = '';
+
+    function toggleCadModal(show, initialTab) {
       const overlay = document.getElementById('cadModalOverlay');
       if (show) {
         overlay.classList.add('active');
+        switchCadTab(initialTab || (document.getElementById('cadFormTroca') ? 'troca' : 'operador'));
       } else {
         overlay.classList.remove('active');
         resetCadModal();
       }
+    }
+
+    function openOperatorSwitchModal() {
+      toggleCadModal(true, 'troca');
     }
 
     function handleOverlayClick(event) {
@@ -1932,7 +2146,7 @@
     }
 
     function switchCadTab(tab) {
-      const forms = ['Operador', 'Coordenador', 'Admin'];
+      const forms = ['Troca', 'Operador', 'Coordenador', 'Admin'];
       forms.forEach(f => {
         const el = document.getElementById('cadForm' + f);
         if (el) el.style.display = 'none';
@@ -1950,6 +2164,68 @@
       msg.style.display = 'none';
     }
 
+    function selectOperatorForSwitch(nome) {
+      const currentOperator = document.querySelector('[data-current-operator-name]')?.textContent.trim() || '';
+      pendingOperatorSwitch = nome === currentOperator ? '' : nome;
+
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isSelected = button.dataset.switchOperator === nome;
+        const isCurrent = button.dataset.switchOperator === currentOperator;
+        button.classList.toggle('is-selected', isSelected && !isCurrent);
+        button.classList.toggle('is-current', isCurrent && !pendingOperatorSwitch);
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : (isSelected ? 'Selecionado' : 'Selecionar');
+        }
+      });
+
+      const confirmButton = document.getElementById('confirmOperatorSwitchBtn');
+      if (confirmButton) {
+        confirmButton.disabled = !pendingOperatorSwitch;
+        confirmButton.textContent = pendingOperatorSwitch
+          ? `Confirmar troca para ${pendingOperatorSwitch}`
+          : 'Selecione outro operador';
+      }
+    }
+
+    function confirmOperatorSwitch() {
+      if (!pendingOperatorSwitch) return;
+
+      document.querySelectorAll('input[name="operador"]').forEach((input) => {
+        input.value = pendingOperatorSwitch;
+      });
+
+      document.querySelectorAll('[data-current-operator-name]').forEach((element) => {
+        element.textContent = pendingOperatorSwitch;
+      });
+
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isCurrent = button.dataset.switchOperator === pendingOperatorSwitch;
+        button.classList.toggle('is-current', isCurrent);
+        button.classList.remove('is-selected');
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : 'Selecionar';
+        }
+      });
+
+      pendingOperatorSwitch = '';
+      toggleCadModal(false);
+    }
+
+    function resetOperatorSwitchOptions() {
+      const currentOperator = document.querySelector('[data-current-operator-name]')?.textContent.trim() || '';
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isCurrent = button.dataset.switchOperator === currentOperator;
+        button.classList.toggle('is-current', isCurrent);
+        button.classList.remove('is-selected');
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : 'Selecionar';
+        }
+      });
+    }
+
     function resetCadModal() {
       const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin'];
       forms.forEach(f => {
@@ -1959,7 +2235,14 @@
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
-      switchCadTab('operador');
+      pendingOperatorSwitch = '';
+      const confirmButton = document.getElementById('confirmOperatorSwitchBtn');
+      if (confirmButton) {
+        confirmButton.disabled = true;
+        confirmButton.textContent = 'Selecione outro operador';
+      }
+      resetOperatorSwitchOptions();
+      switchCadTab(document.getElementById('cadFormTroca') ? 'troca' : 'operador');
     }
 
     async function submitCadForm(event, url) {
