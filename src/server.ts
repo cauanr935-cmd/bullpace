@@ -37,6 +37,8 @@ app.set('views', path.join(__dirname, 'View'));
 
 // Serve arquivos estaticos (CSS, imagens) a partir da pasta View sob o prefixo /static.
 app.use('/static', express.static(path.join(__dirname, 'View')));
+// Serve os assets do projeto, incluindo a logo oficial Red Bull 24h.
+app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -533,6 +535,16 @@ const filtrarRegistroPermitido = (tabela: string, registro: Record<string, unkno
     Object.entries(registro).filter(([campo]) => camposPermitidos.has(campo))
   );
 };
+
+app.use(async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    res.locals.operadoresQuick = await obterOperadoresReal();
+  } catch {
+    res.locals.operadoresQuick = [];
+  }
+
+  next();
+});
 
 // Renderiza a tela inicial, onde o usuario escolhe se entrara como operador ou coordenador.
 app.get('/', (req: Request, res: Response): void => {
