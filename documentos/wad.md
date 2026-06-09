@@ -1368,93 +1368,99 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
+---
 
-### Módulo: Coordenador
 
-
-#### Fluxo 1: Listar Coordenadores (Leitura)
+#### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar coordenadores</sub><br>
-  <img src="../assets/fluxo1.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
+  <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O cliente faz uma requisição HTTP GET para coletar todos os coordenadores registrados. O CoordenadorController aciona o método listar() do CoordenadorService, que por sua vez consulta a coleção de dados exposta pelo CoordenadorRepository para retornar o array com os objetos ao usuário final.
-
-
-
-#### Fluxo 2: Login do Coordenador (Autenticação)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo de login do coordenador</sub><br>
-  <img src="../assets/fluxo2.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-O usuário submete suas credenciais (email e senha) via corpo da requisição (POST). O CoordenadorController delega os parâmetros ao CoordenadorService, que realiza uma validação booleana em memória para certificar que ambos os campos foram preenchidos, retornando o status de autenticado e o e-mail do usuário.
+O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que coordenadores só possam visualizar informações sem permissão de controle operacional.
 
 ---
 
-### Módulo: Esteiras
+#### Fluxo 2: Login de Administradores (Autenticação)
 
-#### Fluxo 3: Listar Esteiras Disponíveis (Leitura)
+<div align="center">
+  <sub>Figura 7 - Fluxo de login de administradores</sub><br>
+  <img src="../assets/AdministraçãoFluxo2.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que administradores possam realizar ações de configuração e controle operacional, como cadastrar eventos, operadores e alternar o bloqueio do Modo TV.
+
+---
+
+
+#### Fluxo 3: Listar Permissões dos Operadores (Consulta)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar permissões dos operadores</sub><br>
+  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a consulta das permissões de um operador específico. O OperadorController recebe o identificador do operador, aciona o OperadorService e retorna o conjunto de permissões associadas ao perfil operacional. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores só possam realizar ações compatíveis com suas funções.
+
+---
+
+
+#### Fluxo 4: Listar Operadores (Leitura)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar operadores</sub><br>
+  <img src="../assets/ListasOperadoresFluxo4.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a listagem dos operadores cadastrados na aplicação. A API valida o perfil de acesso, consulta a tabela de operadores por meio do Supabase e retorna os registros encontrados em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores possam ser visualizados e gerenciados apenas por usuários com permissão administrativa.
+
+#### Fluxo 5: Listar Esteiras Disponíveis (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
-  <img src="../assets/fluxo3.png" width="100%"><br>
+  <img src="../assets/ListarEsteirasFluxo5.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Requisição voltada para coletar as informações técnicas dos equipamentos do evento. O estímulo trafega do EsteiraController para o EsteiraService, que consome o método de listagem do EsteiraRepository, retornando a lista contendo as marcas, modelos, números de série e status de conectividade das esteiras registradas no banco.
+O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. Após validar a permissão de acesso, a aplicação consulta a tabela de esteiras e retorna os equipamentos disponíveis para acompanhamento ou uso na operação da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que as esteiras possam ser visualizadas e gerenciadas apenas por usuários com permissão administrativa.
 
 ---
 
-### Módulo: Eventos
 
-#### Fluxo 4: Listar Eventos (Leitura)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo listar eventos</sub><br>
-  <img src="../assets/fluxo4.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
-
-#### Fluxo 5: Cadastrar Novo Evento (Escrita/Criação)
+#### Fluxo 6: Cadastrar Novo Evento (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
-  <img src="../assets/fluxo5.png" width="100%"><br>
+  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Trata o fluxo de criação de uma nova competição/evento no ecossistema. O EventoController desestrutura o payload recebido e aciona o EventoService; a camada de serviço atribui um identificador único temporal ao objeto e invoca o método salvar() do EventoRepository, inserindo os dados estruturados de localidade, nome e período direto no banco de dados.
+O Administrador Geral envia os dados necessários para cadastrar um novo evento. A API valida se o perfil possui permissão de escrita, verifica se a prova não está finalizada, filtra os campos permitidos e registra o novo evento no banco de dados. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que apenas administradores possam criar novos eventos e que os dados sejam validados antes do registro.
 
----
-
-### Módulo: Operador
-
-#### Fluxo 6: Listar Operadores (Leitura)
+#### Fluxo 7: Listar Eventos (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar Operadores</sub><br>
-  <img src="../assets/fluxo6.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar eventos</sub><br>
+  <img src="../assets/ListarEventoFluxo7.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
+O usuário autorizado solicita a listagem dos eventos cadastrados na aplicação. O sistema valida o perfil de acesso, consulta a tabela de eventos por meio do Supabase e retorna os registros disponíveis em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que os eventos possam ser visualizados por usuários com permissão de leitura, como operadores e coordenadores, enquanto a criação de eventos fica restrita a administradores.
 
-#### Fluxo 7: Listar Permissões do Operador (Consulta)
+#### Fluxo 8: Tentativa de Cadastrar Evento sem Permissão (Escrita)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo Permissões do operador</sub><br>
-  <img src="../assets/fluxo7.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo tentativa de cadastrar evento sem permissão</sub><br>
+  <img src="../assets/TentativadeCadastrarEventoSemPermissãoFluxo8.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
+Um usuário sem permissão de escrita tenta cadastrar um novo evento pela rota de criação. O middleware de autorização identifica que o perfil não possui acesso administrativo e bloqueia a requisição, retornando erro HTTP 403 antes de qualquer gravação no banco de dados.
 
 ---
 
