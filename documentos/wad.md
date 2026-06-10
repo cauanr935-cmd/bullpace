@@ -1472,21 +1472,21 @@ Um usuário sem permissão de escrita tenta cadastrar um novo evento pela rota d
 
 <div align="center">
   <sub>Figura 7 - Fluxo obter placar</sub><br>
-  <img src="../assets/fluxo8.png" width="100%"><br>
+  <img src="../assets/fluxo8Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo crítico do painel visual (Modo TV). O PlacarService aciona a função de leitura que executa uma query no cliente do Supabase para extrair a flag de segurança (modo_tv_bloqueado). Caso esteja ativa, o fluxo intercepta o processamento e retorna uma classificação vazia; caso esteja livre, o sistema busca os turnos associados, calcula as somas de quilometragens em memória e devolve a classificação ranqueada do líder ao lanterna.
+O painel visual ou cliente requisita a classificação atualizada invocando o método obterPlacarGeralDoEvento() na camada PlacarService, que delega o processamento procedural à função obterDadosPlacar() do PlacarController. O controlador efetua uma consulta unária via cliente SDK do Supabase à tabela eventos para verificar o estado lógico da flag modo_tv_bloqueado. Caso a propriedade seja verdadeira, um bloco condicional interrompe a leitura da telemetria por segurança e retorna uma estrutura de classificação limpa ([]). Caso seja falsa, o controlador dispara uma nova requisição assíncrona para extrair os registros brutos da tabela turnos, processa o agrupamento e somatório das distâncias por esteira em memória, aplica formatação decimal fixa e ordena o vetor resultante de forma decrescente (do líder ao lanterna) antes de resolver a promessa.
 
 #### Fluxo 9: Alternar Bloqueio do Modo TV (Ação de Controle do Coordenador)
 
 <div align="center">
   <sub>Figura 7 - Fluxo Alternar bloqueio do modo tv</sub><br>
-  <img src="../assets/fluxo9.png" width="100%"><br>
+  <img src="../assets/fluxo9Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo administrativo em que o coordenador altera a experiência do público. A função no controlador dispara uma instrução direta de atualização (UPDATE) no cliente de configuração global do Supabase, modificando o estado lógico da coluna de suspense na tabela de eventos para o evento corrente.
+Fluxo de controle administrativo disparado pelo Coordenador diretamente na função alternarBloqueioModoTV() do PlacarController. O fluxo estabelece uma comunicação assíncrona síncrona com o cliente SDK do Supabase, invocando uma operação de mutação baseada no encadeamento dos métodos .from('eventos').update(). A instrução injeta o novo estado booleano de bloqueio na coluna correspondente, filtrando o registro alvo por meio da cláusula .eq() baseada no identificador do evento. Após a persistência bem-sucedida e a validação de ausência de erros de infraestrutura, um log de auditoria é registrado no console do servidor e a execução é encerrada.
 
 ---
 
@@ -1496,21 +1496,21 @@ Fluxo administrativo em que o coordenador altera a experiência do público. A f
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar nova sessão</sub><br>
-  <img src="../assets/fluxo10.png" width="100%"><br>
+  <img src="../assets/fluxo10Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Inicia o período de trabalho do operador registrando sua função e o evento associado para fins de auditoria. O SessaoService aciona o mecanismo que submete os dados à validação estrutural do controlador, e após a verificação de consistência, grava o registro no Supabase com o timestamp inicial e a marcação de status igual a 'ativa'.
+O operador inicia sua jornada por meio do método iniciarNovaSessao() na camada SessaoService, que repassa o payload de dados à função abrirSessao() do SessaoController. O controlador intercepta o processamento para executar a rotina interna validarAberturaSessao(). Caso sejam detectadas ausências de chaves obrigatórias como identificador do evento, função ou data de início, uma exceção é lançada imediatamente para tratamento na camada de rotas. Estando os dados íntegros, o controlador converte a instância cronológica em uma string padronizada ISO e comanda uma inserção assíncrona no cliente Supabase na tabela sessoes_operacionais, forçando o atributo de estado inicial do registro estritamente para o valor literal 'ativa'.
 
 #### Fluxo 11: Encerrar Sessão Existente (Auditoria/Fechamento)
 
 <div align="center">
   <sub>Figura 7 - Fluxo sessão existente</sub><br>
-  <img src="../assets/fluxo11.png" width="100%"><br>
+  <img src="../assets/fluxo11Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Registra a saída do operador do painel de controle. O SessaoService aciona o encerramento fornecendo o identificador da sessão; o sistema injeta o timestamp corrente do servidor (fim_em) e atualiza o estado do registro para 'encerrada', salvando e blindando o histórico de auditoria.
+O encerramento do período de trabalho do operador é processado ao acionar o método encerrarSessaoExistente() exposto pelo SessaoService, que encapsula a execução do método encerrarSessao() na estrutura do SessaoController. No momento da execução, o controlador gera dinamicamente em tempo de execução o timestamp de término através do construtor de data do servidor mapeado em formato ISO. Na sequência, é estruturada uma operação de atualização assíncrona utilizando os recursos fluentes .from().update().eq() do cliente Supabase para modificar o registro na tabela sessoes_operacionais, alterando seu status de forma definitiva para o valor literal 'encerrada'.
 
 ---
 
@@ -1520,21 +1520,21 @@ Registra a saída do operador do painel de controle. O SessaoService aciona o en
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar novo turno</sub><br>
-  <img src="../assets/fluxo12.png" width="100%"><br>
+  <img src="../assets/fluxo12Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Mapeia o momento exato em que um atleta assume uma determinada esteira dentro da sessão operacional. O TurnoService encaminha a requisição de inserção de turno, que valida os dados obrigatórios e insere o registro com status definido em 'em_andamento' e a quilometragem inicializada estritamente em 0.
+A troca e entrada de um atleta na área de corrida é mediada pela camada TurnoService através do método iniciarNovoTurno(), que consome o atributo funcional abstrato mapeado para o método iniciarTurno() do TurnoController. O controlador executa a verificação estrutural estrita validarDadosInicioTurno() para garantir a presença dos vínculos de integridade referencial. Após a validação, o controlador formata a estampa temporal de início e submete um comando de inserção assíncrona na tabela turnos por meio do Supabase, salvando o novo registro operacional com o estado de ciclo de vida definido para 'em_andamento' e inicializando o acumulador de distância física (km_turno) rigorosamente em zero.
 
 #### Fluxo 13: Finalizar Turno Existente (Saída do Atleta com Gravação de KM)
 
 <div align="center">
   <sub>Figura 7 - fluxo finalizar turno</sub><br>
-  <img src="../assets/fluxo13.png" width="100%"><br>
+  <img src="../assets/fluxo13Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Conclui o ciclo de corrida de um participante. O TurnoService repassa o identificador do turno e a marcação do odômetro final coletada; a camada controladora processa a requisição e realiza uma operação de atualização no banco de dados, imputando o horário final do revezamento, computando a quilometragem total acumulada e chaveando o status para 'encerrado'.
+O encerramento da corrida de um participante ocorre ao invocar o método finalizarTurnoExistente() no TurnoService, transmitindo o identificador exclusivo do turno e a medição final consolidada do odômetro. O serviço delega a persistência final para a função finalizarTurno() do TurnoController. O controlador captura o momento exato do fechamento por meio do relógio do servidor, gerando a variável local horarioFim. Por fim, o sistema realiza um comando de mutação via cliente Supabase, aplicando uma query de atualização parametrizada que armazena a marcação de tempo final, atualiza o status do turno para o valor estrito 'encerrado' e consolida a quilometragem total acumulada na tabela correspondente.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
@@ -2605,7 +2605,6 @@ Por fim, em um cenário de expansão para outras marcas e eventos, as estratégi
 [22] CORRIDAS de rua crescem 85% e viram fenômeno esportivo. **Terra**, [s. l.], 28 jan. 2026. Disponível em: https://www.terra.com.br/vida-e-estilo/saude/corridas-de-rua-crescem-85-e-viram-fenomeno-esportivo.
 
 # <a name="c9"></a>Anexos
-
 <a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
 
 <a name="scripts-das-migrations"></a>
