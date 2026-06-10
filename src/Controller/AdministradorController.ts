@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { CoordenadorService } from '../Service/CoordenadorService';
+import { AdministradorService } from '../Service/AdministradorService';
 
 export class AdministradorController {
 
-  private coordenadorService = new CoordenadorService();
+  private administradorService = new AdministradorService();
 
   // Login do administrador geral com validacao na tabela admin_principal.
   async login(req: Request, res: Response) {
@@ -15,7 +15,7 @@ export class AdministradorController {
         return res.status(400).json({ message: 'Login e senha são obrigatórios.' });
       }
 
-      const admin = await this.coordenadorService.autenticarAdmin(credencial, senha);
+      const admin = await this.administradorService.autenticar(credencial, senha);
 
       if (!admin) {
         return res.status(401).json({ autenticado: false, message: 'Credenciais inválidas.' });
