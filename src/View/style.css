@@ -205,10 +205,13 @@ body {
 .operator-list {
   width: min(100%, 620px);
   margin-top: 14px;
+  max-height: 400px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   align-items: center;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 .operator-list .function-form {
@@ -2741,6 +2744,8 @@ body {
 
   .athlete-scroll {
     max-height: 330px;
+    overflow-y: auto;
+    padding-right: 8px;
   }
 
   .treadmill-grid {

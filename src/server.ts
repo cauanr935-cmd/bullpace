@@ -1872,6 +1872,211 @@ app.post('/api/:tabela', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), bloquearOpe
 
 // Usa a porta do ambiente ou 3000 quando nenhuma porta for definida.
 const PORT = process.env.PORT || 3000;
+
+// ============ NOVOS ENDPOINTS - REGRAS 2 A 10 ============
+
+/**
+ * Regra 2 & 4: Atualiza o Km acumulado de um checkpoint específico.
+ * PUT /atualizar-checkpoint-km
+ * Body: { idCheckpoint, novoKm }
+ */
+app.put('/atualizar-checkpoint-km', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idCheckpoint, novoKm } = req.body;
+    
+    if (!idCheckpoint || !Number.isFinite(Number(novoKm)) || Number(novoKm) <= 0) {
+      return res.status(400).json({ error: 'idCheckpoint e novoKm (positivo) são obrigatórios.' });
+    }
+
+    const checkpoint = await checkpointRepo.updateKm(Number(idCheckpoint), Number(novoKm));
+    
+    // Registra no histórico
+    await registrarHistoricoOperador(
+      req.body.operador || 'Sistema',
+      'atualizar_checkpoint',
+      'checkpoint',
+      { id_checkpoint: idCheckpoint, novo_km: novoKm },
+      idCheckpoint,
+      null
+    );
+
+    return res.status(200).json({
+      ok: true,
+      checkpoint: {
+        id: checkpoint.id_checkpoint,
+        km_acumulado: checkpoint.km_acumulado
+      }
+    });
+  } catch (error: any) {
+    console.error('[PUT /atualizar-checkpoint-km] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Regra 3: Obtém a soma de KMs acumulados durante um turno
+ * GET /somar-kms-turno?idTurno=123
+ */
+app.get('/somar-kms-turno', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idTurno } = req.query;
+    
+    if (!idTurno || !Number.isFinite(Number(idTurno))) {
+      return res.status(400).json({ error: 'idTurno é obrigatório e deve ser um número.' });
+    }
+
+    const totalKms = await checkpointRepo.sumKmsPorEquipeDuranteTurno(Number(idTurno));
+    
+    return res.status(200).json({
+      ok: true,
+      idTurno: Number(idTurno),
+      totalKmsAcumulados: totalKms
+    });
+  } catch (error: any) {
+    console.error('[GET /somar-kms-turno] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Regra 5: Obtém histórico de checkpoints de um atleta durante um turno
+ * GET /historico-checkpoints-atleta?idAtleta=123&idTurno=456
+ */
+app.get('/historico-checkpoints-atleta', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idAtleta, idTurno } = req.query;
+    
+    if (!idAtleta || !idTurno || !Number.isFinite(Number(idAtleta)) || !Number.isFinite(Number(idTurno))) {
+      return res.status(400).json({ error: 'idAtleta e idTurno são obrigatórios e devem ser números.' });
+    }
+
+    const checkpoints = await checkpointRepo.findByAtletaDuranteTurno(Number(idAtleta), Number(idTurno));
+    
+    return res.status(200).json({
+      ok: true,
+      idAtleta: Number(idAtleta),
+      idTurno: Number(idTurno),
+      checkpoints: checkpoints.map(cp => ({
+        id: cp.id_checkpoint,
+        kmAcumulado: cp.km_acumulado,
+        paceMedio: cp.pace_medio,
+        velocidadeMedia: cp.velocidade_media,
+        registradoEm: cp.registrado_em
+      }))
+    });
+  } catch (error: any) {
+    console.error('[GET /historico-checkpoints-atleta] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Regra 7: Conta turnos ativos (status = 'em_andamento') em uma sessão
+ * GET /contar-turnos-ativos?idSessao=123
+ */
+app.get('/contar-turnos-ativos', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idSessao } = req.query;
+    
+    if (!idSessao || !Number.isFinite(Number(idSessao))) {
+      return res.status(400).json({ error: 'idSessao é obrigatório e deve ser um número.' });
+    }
+
+    const countTurnos = await turnoRepo.contarTurnosAtivos(Number(idSessao));
+    
+    return res.status(200).json({
+      ok: true,
+      idSessao: Number(idSessao),
+      turnosAtivos: countTurnos
+    });
+  } catch (error: any) {
+    console.error('[GET /contar-turnos-ativos] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Regra 8: Conta total de checkpoints registrados em uma sessão operacional
+ * GET /contar-checkpoints?idSessao=123
+ */
+app.get('/contar-checkpoints', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idSessao } = req.query;
+    
+    if (!idSessao || !Number.isFinite(Number(idSessao))) {
+      return res.status(400).json({ error: 'idSessao é obrigatório e deve ser um número.' });
+    }
+
+    const countCheckpoints = await checkpointRepo.countBySessao(Number(idSessao));
+    
+    return res.status(200).json({
+      ok: true,
+      idSessao: Number(idSessao),
+      totalCheckpoints: countCheckpoints
+    });
+  } catch (error: any) {
+    console.error('[GET /contar-checkpoints] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Regra 9: Validação de pace e geração de alertas
+ * POST /validar-pace-alerta
+ * Body: { idCheckpoint, paceMedio, coordenadorId }
+ * Retorna alerta se pace < 3 ou > 10
+ */
+app.post('/validar-pace-alerta', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idCheckpoint, paceMedio, coordenadorId } = req.body;
+    
+    if (!idCheckpoint || !Number.isFinite(Number(paceMedio))) {
+      return res.status(400).json({ error: 'idCheckpoint e paceMedio são obrigatórios.' });
+    }
+
+    const pace = Number(paceMedio);
+    let alerta = null;
+    let statusAlerta = 'OK';
+
+    // Validação Regra 9: Alerta se pace < 3 ou > 10
+    if (pace < 3 || pace > 10) {
+      statusAlerta = 'ALERTA';
+      alerta = {
+        tipo: pace < 3 ? 'PACE_MUITO_RAPIDO' : 'PACE_MUITO_LENTO',
+        mensagem: pace < 3 
+          ? `⚠️ ALERTA: Pace muito rápido (${pace.toFixed(2)} min/km)! Verificar atleta.`
+          : `⚠️ ALERTA: Pace muito lento (${pace.toFixed(2)} min/km)! Verificar condições da esteira.`,
+        coordenadorId: coordenadorId || 'coordenador_padrao',
+        timestampAlerta: new Date().toISOString(),
+        idCheckpoint
+      };
+
+      // Registra o alerta no histórico (fire-and-forget)
+      void registrarHistoricoOperador(
+        'Sistema-AlertaPace',
+        'gerar_alerta_pace',
+        'checkpoint',
+        alerta,
+        idCheckpoint,
+        null
+      );
+    }
+
+    return res.status(200).json({
+      ok: true,
+      idCheckpoint,
+      pace,
+      statusAlerta,
+      alerta
+    });
+  } catch (error: any) {
+    console.error('[POST /validar-pace-alerta] Erro:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// ============ FIM DOS NOVOS ENDPOINTS ============
+
 // Inicia o servidor e mostra no terminal a porta usada.
 app.listen(PORT, () => {
   console.log(`Servidor TypeScript ativo na porta ${PORT}`);

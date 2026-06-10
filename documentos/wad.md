@@ -1,4 +1,4 @@
-<img src="../assets/logointeli.png">
+﻿<img src="../assets/logointeli.png">
 
 
 # WAD - Web Application Document - Módulo 2 - Inteli
@@ -244,7 +244,9 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [4](#ref-4).
+O Value Proposition Canvas é uma ferramenta que conecta dois lados: de um, o que o cliente precisa, suas tarefas, dores e ganhos; de outro, o que a solução entrega pra responder a isso. A análise é dividida em Pe  qrfil do Cliente e Mapa de Valor, e a ideia é checar se cada coisa que o sistema faz tem relação direta com uma necessidade real da operação [4](#ref-4).
+
+No caso do BullPace, o cliente é o time de Field Marketing da Red Bull, que opera o registro dos dados ao longo das 24 horas de prova. A Figura 3 mostra o canvas completo, e nas seções seguintes detalhamos cada bloco dos dois lados.
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
@@ -362,7 +364,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A primeira persona representa **Ricardo**, operador de campo responsável pelo registro dos dados durante o evento. Sua função é acompanhar a troca dos atletas, selecionar equipe, atleta e esteira, iniciar e encerrar turnos e registrar checkpoints no sistema ao longo da prova. Essa persona foi escolhida porque está diretamente ligada ao momento mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, Ricardo é o principal usuário operacional, utilizando a aplicação para substituir a prancheta e garantir que os registros fiquem vinculados corretamente a equipe, atleta, esteira, turno e checkpoint.
+A primeira persona é o **Ricardo**, operador de campo que registra os dados durante o evento. É ele quem acompanha a troca dos atletas, escolhe equipe, atleta e esteira, abre e encerra turnos e marca os checkpoints ao longo da prova. Essa persona foi escolhida porque está no ponto mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, o Ricardo é o usuário operacional principal. Ele usa a aplicação no lugar da prancheta e responde por manter cada registro ligado à equipe, ao atleta, à esteira, ao turno e ao checkpoint corretos.
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
@@ -370,15 +372,15 @@ A primeira persona representa **Ricardo**, operador de campo responsável pelo r
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A segunda persona representa **Camila**, coordenadora responsável pelo acompanhamento geral da competição e pela validação dos resultados. Sua função no evento é monitorar o andamento das equipes, conferir dados consolidados, tomar decisões em casos de inconsistência e garantir maior segurança na apuração final. Essa persona foi escolhida porque representa a necessidade de gestão, controle e confiabilidade dos dados ao longo das 24 horas. No sistema, Camila se relaciona principalmente com as telas de acompanhamento, Modo TV, resultados consolidados, comparação entre equipes e exportação dos dados para auditoria.
+A segunda persona é a **Camila**, coordenadora que acompanha a competição inteira e valida os resultados. No evento, ela monitora as duas equipes, confere os dados consolidados, decide o que fazer quando aparece alguma inconsistência e responde pela apuração final. Essa persona foi escolhida porque representa o lado de gestão e controle, que depende da confiabilidade dos dados ao longo das 24 horas. No sistema, a Camila usa principalmente as telas de acompanhamento, o Modo TV, os resultados consolidados, a comparação entre equipes e a exportação dos dados para auditoria.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto. [8](#ref-8).
+As User Stories descrevem o que cada usuário precisa fazer no sistema. Cada uma segue o formato de quem usa, o que quer fazer e por quê, no padrão "Como [perfil], quero [ação] para [objetivo]" [8](#ref-8).
 
-Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
+Esse formato ajuda a equipe a partir de uma necessidade real e chegar em uma entrega que pode ser planejada. Também facilita priorizar o backlog, separando o que é essencial para o sistema funcionar do que pode ficar para depois.
 
-Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
+Cada User Story vem acompanhada de critérios de aceite, que definem o mínimo para a entrega ser considerada pronta. São eles que permitem à equipe conferir se a funcionalidade faz o que deveria antes de seguir adiante.
 
 ---
 
@@ -1002,34 +1004,34 @@ Os Requisitos Funcionais (RF) descrevem as funcionalidades que o sistema deve of
 
 Neste projeto, os RFs foram definidos a partir do fluxo principal da operação: seleção de equipe e atleta, gestão de esteiras, controle de turnos, registro de checkpoints, consolidação de resultados e exportação dos dados. Assim, eles servem como base para orientar o desenvolvimento e validar se o sistema atende ao escopo planejado.
 
-| ID | Descrição | Prioridade | Status |
-|---|---|---|---|
-| **RF001** | **Seleção de Perfil de Acesso:** o sistema deve apresentar, na tela inicial, a seleção entre dois perfis de acesso — Promotor de Field Marketing e Gestora de Operações — direcionando o usuário ao fluxo de autenticação correspondente. | Alta | Planejado |
-| **RF002** | **Autenticação por Credenciais:** o sistema deve autenticar o usuário mediante validação de login e senha previamente cadastrados, considerando o perfil selecionado, e rejeitar tentativas com credenciais inválidas exibindo mensagem de erro. | Alta | Planejado |
-| **RF003** | **Encerramento de Sessão:** o sistema deve permitir que o usuário autenticado encerre sua sessão a qualquer momento, retornando à tela inicial de seleção de perfil. | Alta | Planejado |
-| **RF004** | **Seleção de Equipe:** o sistema deve permitir que o Promotor de Field Marketing selecione a equipe à qual os registros realizados naquela sessão serão vinculados. | Alta | Planejado |
-| **RF005** | **Seleção de Atleta:** o sistema deve permitir que o Promotor de Field Marketing selecione um atleta dentro da equipe previamente selecionada, listando os atletas associados àquela equipe. | Alta | Planejado |
-| **RF006** | **Exibição de Esteiras com Status:** o sistema deve exibir as esteiras associadas à equipe selecionada, indicando o status de cada esteira como “livre”, “em uso” ou “indisponível”. | Alta | Planejado |
-| **RF007** | **Associação de Turno a Esteira:** o sistema deve permitir que o Promotor de Field Marketing associe um turno a uma esteira cujo status esteja marcado como “livre” no momento da associação. | Alta | Planejado |
-| **RF008** | **Início de Turno:** o sistema deve permitir que o Promotor de Field Marketing inicie um turno para o atleta selecionado, em uma esteira previamente associada. | Alta | Planejado |
-| **RF009** | **Encerramento de Turno:** o sistema deve permitir que o Promotor de Field Marketing encerre um turno em andamento, atualizando o status da esteira utilizada para “livre”. | Alta | Planejado |
-| **RF010** | **Registro de Checkpoint:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e aceitando preenchimento opcional de pace médio e velocidade média. | Alta | Planejado |
-| **RF011** | **Cálculo Automático de Pace:** o sistema deve calcular automaticamente o pace médio do checkpoint a partir do KM acumulado e do tempo decorrido sempre que o Promotor de Field Marketing não preencher esse campo manualmente. | Alta | Planejado |
-| **RF012** | **Registro Automático de Timestamps:** o sistema deve gravar automaticamente o timestamp do servidor nas ações de início de turno, registro de checkpoint e encerramento de turno, sem permitir edição manual pelo usuário. | Alta | Planejado |
-| **RF013** | **Exibição de Timer Regressivo:** o sistema deve exibir, durante um turno ativo, um timer regressivo até o próximo registro de checkpoint, sinalizando visualmente quando o tempo restante chega a zero. | Alta | Planejado |
-| **RF014** | **Exibição de Resultados do Turno:** o sistema deve exibir, ao encerramento de um turno, os resultados daquela sessão contendo KM total, pace médio, velocidade média e duração. | Alta | Planejado |
-| **RF015** | **Consulta de Registros Históricos:** o sistema deve permitir à Gestora de Operações consultar registros de turnos e checkpoints já gravados no sistema, independentemente do estado do turno ou da equipe correspondente, com filtros por equipe, atleta, esteira e período. | Alta | Planejado |
-| **RF016** | **Correção de Registros Históricos:** o sistema deve permitir à Gestora de Operações alterar o valor de registros já existentes em turnos encerrados, inclusive os pertencentes a equipes já finalizadas, sobrescrevendo o dado anterior; não é permitida a criação de registros novos por meio dessa funcionalidade. | Alta | Planejado |
-| **RF017** | **Justificativa em Correções:** o sistema deve registrar, junto a cada correção realizada em registro histórico, a justificativa textual informada pela Gestora de Operações. | Alta | Planejado |
-| **RF018** | **Exibição de Autoria:** o sistema deve exibir, junto a cada registro de turno, checkpoint e finalização de equipe, a identidade do usuário responsável pela ação. | Alta | Planejado |
-| **RF019** | **Consulta de Histórico de Alterações:** o sistema deve permitir à Gestora de Operações consultar o histórico de alterações realizadas em um registro, incluindo valor anterior, valor novo, autora da correção, timestamp e justificativa. | Alta | Planejado |
-| **RF020** | **Finalização de Equipe:** o sistema deve permitir que a Gestora de Operações finalize uma equipe mediante confirmação explícita. | Alta | Planejado |
-| **RF021** | **Bloqueio de Edição Direta após Finalização:** o sistema deve bloquear a edição direta dos dados de uma equipe após sua finalização para usuários do perfil Promotor de Field Marketing, mantendo os registros disponíveis para correção auditável pela Gestora de Operações. | Alta | Planejado |
-| **RF022** | **Visualização de Resultados Consolidados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados pela equipe, KM acumulado por atleta e duração total. | Alta | Planejado |
-| **RF023** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | Alta | Planejado |
-| **RF024** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | Média | Planejado |
-| **RF025** | **Exportação de Dados em CSV:** o sistema deve permitir à Gestora de Operações exportar os dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados e histórico de correções com justificativas. | Média | Planejado |
-| **RF026** | **Resiliência a Indisponibilidade de Rede:** o sistema deve persistir localmente os registros de checkpoint criados durante períodos de indisponibilidade de rede e sincronizá-los automaticamente com o servidor quando a conexão for restabelecida, sem ação manual do Promotor de Field Marketing. | Alta | Planejado |
+| ID | Descrição | Critério de aceite | Prioridade | Status |
+|---|---|---|---|---|
+| **RF001** | **Seleção de Perfil de Acesso:** o sistema deve apresentar, na tela inicial, a seleção entre dois perfis de acesso — Promotor de Field Marketing e Gestora de Operações — direcionando o usuário ao fluxo de autenticação correspondente. | O sistema deve exibir os dois perfis na tela inicial e levar cada um ao fluxo certo: o promotor para a identificação e a gestora para a autenticação. | Alta | Planejado |
+| **RF002** | **Autenticação por Credenciais:** o sistema deve autenticar o usuário mediante validação de login e senha previamente cadastrados, considerando o perfil selecionado, e rejeitar tentativas com credenciais inválidas exibindo mensagem de erro. | O sistema deve liberar o acesso com login e senha válidos e bloquear com mensagem de erro quando as credenciais estiverem erradas. | Alta | Planejado |
+| **RF003** | **Encerramento de Sessão:** o sistema deve permitir que o usuário autenticado encerre sua sessão a qualquer momento, retornando à tela inicial de seleção de perfil. | O sistema deve encerrar a sessão quando o usuário pedir e voltar para a tela de seleção de perfil. | Alta | Planejado |
+| **RF004** | **Seleção de Equipe:** o sistema deve permitir que o Promotor de Field Marketing selecione a equipe à qual os registros realizados naquela sessão serão vinculados. | O sistema deve listar as equipes do evento e manter a equipe escolhida vinculada aos registros feitos na sequência. | Alta | Planejado |
+| **RF005** | **Seleção de Atleta:** o sistema deve permitir que o Promotor de Field Marketing selecione um atleta dentro da equipe previamente selecionada, listando os atletas associados àquela equipe. | O sistema deve mostrar apenas os atletas da equipe selecionada e vincular o atleta escolhido ao próximo turno. | Alta | Planejado |
+| **RF006** | **Exibição de Esteiras com Status:** o sistema deve exibir as esteiras associadas à equipe selecionada, indicando o status de cada esteira como "livre", "em uso" ou "indisponível". | O sistema deve exibir as esteiras da equipe com o status correto: livre, em uso ou indisponível. | Alta | Planejado |
+| **RF007** | **Associação de Turno a Esteira:** o sistema deve permitir que o Promotor de Field Marketing associe um turno a uma esteira cujo status esteja marcado como "livre" no momento da associação. | O sistema deve permitir associar o turno só a uma esteira livre e recusar esteira em uso ou indisponível. | Alta | Planejado |
+| **RF008** | **Início de Turno:** o sistema deve permitir que o Promotor de Field Marketing inicie um turno para o atleta selecionado, em uma esteira previamente associada. | O sistema deve criar o turno vinculado a atleta e esteira, marcar a esteira como em uso e impedir dois turnos ativos na mesma esteira. | Alta | Planejado |
+| **RF009** | **Encerramento de Turno:** o sistema deve permitir que o Promotor de Field Marketing encerre um turno em andamento, atualizando o status da esteira utilizada para "livre". | O sistema deve encerrar só turno ativo, validar que o KM final não é menor que o último checkpoint e devolver a esteira para livre. | Alta | Planejado |
+| **RF010** | **Registro de Checkpoint:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e aceitando preenchimento opcional de pace médio e velocidade média. | O sistema deve exigir o KM acumulado, recusar valor menor que o checkpoint anterior e salvar pace e velocidade como opcionais. | Alta | Planejado |
+| **RF011** | **Cálculo Automático de Pace:** o sistema deve calcular automaticamente o pace médio do checkpoint a partir do KM acumulado e do tempo decorrido sempre que o Promotor de Field Marketing não preencher esse campo manualmente. | O sistema deve calcular o pace médio sozinho quando o campo ficar vazio, usando tempo decorrido sobre KM acumulado. | Alta | Planejado |
+| **RF012** | **Registro Automático de Timestamps:** o sistema deve gravar automaticamente o timestamp do servidor nas ações de início de turno, registro de checkpoint e encerramento de turno, sem permitir edição manual pelo usuário. | O sistema deve gravar o horário do servidor em início, checkpoint e encerramento, sem aceitar horário enviado pelo usuário. | Alta | Planejado |
+| **RF013** | **Exibição de Timer Regressivo:** o sistema deve exibir, durante um turno ativo, um timer regressivo até o próximo registro de checkpoint, sinalizando visualmente quando o tempo restante chega a zero. | O sistema deve mostrar o timer de 5 minutos durante o turno e sinalizar quando o tempo zerar. | Alta | Planejado |
+| **RF014** | **Exibição de Resultados do Turno:** o sistema deve exibir, ao encerramento de um turno, os resultados daquela sessão contendo KM total, pace médio, velocidade média e duração. | O sistema deve mostrar, ao fim do turno, o KM total, o pace médio, a velocidade média e a duração da sessão. | Alta | Planejado |
+| **RF015** | **Consulta de Registros Históricos:** o sistema deve permitir à Gestora de Operações consultar registros de turnos e checkpoints já gravados no sistema, independentemente do estado do turno ou da equipe correspondente, com filtros por equipe, atleta, esteira e período. | O sistema deve deixar a gestora consultar turnos e checkpoints já gravados, com filtro por equipe, atleta, esteira e período. | Alta | Planejado |
+| **RF016** | **Correção de Registros Históricos:** o sistema deve permitir à Gestora de Operações alterar o valor de registros já existentes em turnos encerrados, inclusive os pertencentes a equipes já finalizadas, sobrescrevendo o dado anterior; não é permitida a criação de registros novos por meio dessa funcionalidade. | O sistema deve permitir só à gestora corrigir registros encerrados, sem criar registros novos e sem apagar o valor anterior do histórico. | Alta | Planejado |
+| **RF017** | **Justificativa em Correções:** o sistema deve registrar, junto a cada correção realizada em registro histórico, a justificativa textual informada pela Gestora de Operações. | O sistema deve exigir uma justificativa textual em toda correção e salvá-la junto ao registro alterado. | Alta | Planejado |
+| **RF018** | **Exibição de Autoria:** o sistema deve exibir, junto a cada registro de turno, checkpoint e finalização de equipe, a identidade do usuário responsável pela ação. | O sistema deve mostrar quem fez cada turno, checkpoint e finalização de equipe. | Alta | Planejado |
+| **RF019** | **Consulta de Histórico de Alterações:** o sistema deve permitir à Gestora de Operações consultar o histórico de alterações realizadas em um registro, incluindo valor anterior, valor novo, autora da correção, timestamp e justificativa. | O sistema deve mostrar à gestora o histórico de cada alteração com valor anterior, valor novo, autora, horário e justificativa. | Alta | Planejado |
+| **RF020** | **Finalização de Equipe:** o sistema deve permitir que a Gestora de Operações finalize uma equipe mediante confirmação explícita. | O sistema deve finalizar a equipe só com confirmação da gestora e só quando não houver turno ativo. | Alta | Planejado |
+| **RF021** | **Bloqueio de Edição Direta após Finalização:** o sistema deve bloquear a edição direta dos dados de uma equipe após sua finalização para usuários do perfil Promotor de Field Marketing, mantendo os registros disponíveis para correção auditável pela Gestora de Operações. | O sistema deve impedir o promotor de editar dados de equipe finalizada e liberar só a correção auditável da gestora. | Alta | Planejado |
+| **RF022** | **Visualização de Resultados Consolidados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados pela equipe, KM acumulado por atleta e duração total. | O sistema deve mostrar o KM total da equipe, o KM por atleta e a duração total quando a equipe estiver finalizada. | Alta | Planejado |
+| **RF023** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | O sistema deve exibir o KM das duas equipes em modo somente leitura, sem permitir edição nem navegação, e sem exigir login. | Alta | Planejado |
+| **RF024** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | O sistema deve comparar as duas equipes finalizadas lado a lado e apontar a vencedora, ou empate quando o KM for igual. | Média | Planejado |
+| **RF025** | **Exportação de Dados em CSV:** o sistema deve permitir à Gestora de Operações exportar os dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados e histórico de correções com justificativas. | O sistema deve gerar um CSV com equipes, atletas, esteiras, turnos, checkpoints, timestamps e o histórico de correções com justificativa. | Média | Planejado |
+| **RF026** | **Resiliência a Indisponibilidade de Rede:** o sistema deve persistir localmente os registros de checkpoint criados durante períodos de indisponibilidade de rede e sincronizá-los automaticamente com o servidor quando a conexão for restabelecida, sem ação manual do Promotor de Field Marketing. | O sistema deve guardar os checkpoints localmente quando a rede cair e sincronizar sozinho quando a conexão voltar, sem ação do promotor. | Alta | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
@@ -1984,8 +1986,9 @@ A ordem das migrations respeita as dependências entre as tabelas. Tabelas indep
 - `0011_create_operador.sql`: depende de sessoes_operacionais;
 - `0012_create_coordenador.sql`: depende de sessoes_operacionais.
 
-### Scripts das Migrations
+Os scripts completos das migrations (0001 a 0012), incluindo as views, estão no anexo [Scripts das Migrations](#scripts-das-migrations).
 
+<<<<<<< HEAD
 **0001_create_eventos.sql**
 
 ```sql
@@ -2395,6 +2398,8 @@ CREATE TABLE coordenador (
 CREATE INDEX idx_coordenador_sessao_operacional
     ON coordenador(id_sessao_operacional);
 ```
+=======
+>>>>>>> ae1afb419b1c56c83bfaf1a90e3ff1b76505433f
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
@@ -3009,3 +3014,422 @@ Por fim, em um cenário de expansão para outras marcas e eventos, as estratégi
 
 # <a name="c9"></a>Anexos
 <a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
+
+<a name="scripts-das-migrations"></a>
+
+### Scripts das Migrations
+
+**0001_create_eventos.sql**
+
+```sql
+CREATE TABLE eventos (
+    id_evento      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    cidade         VARCHAR(100) NOT NULL,
+    estado         VARCHAR(100) NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+    deleted_at     BOOLEAN,
+
+    CONSTRAINT ck_eventos_status
+        CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
+
+    CONSTRAINT ck_eventos_datas
+        CHECK (data_fim > data_inicio)
+);
+```
+
+**0002_create_funcoes.sql**
+
+```sql
+CREATE TABLE funcoes (
+    id_funcao      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    descricao      TEXT,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at     BOOLEAN,
+
+    CONSTRAINT uq_funcoes_nome
+        UNIQUE (nome),
+
+    CONSTRAINT ck_funcoes_status
+        CHECK (status IN ('ativa', 'inativa'))
+);
+```
+
+**0003_create_equipes.sql**
+
+```sql
+CREATE TABLE equipes (
+    id_equipe      SERIAL PRIMARY KEY,
+    id_evento      INT NOT NULL,
+    nome           VARCHAR(100) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+    deleted_at     BOOLEAN,
+
+    CONSTRAINT fk_equipes_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_equipes_nome_evento
+        UNIQUE (id_evento, nome),
+
+    CONSTRAINT ck_equipes_status
+        CHECK (status IN ('ativa', 'inativa', 'finalizada')),
+
+    CONSTRAINT ck_equipes_km_total
+        CHECK (km_total >= 0)
+);
+
+CREATE INDEX idx_equipes_evento
+    ON equipes(id_evento);
+```
+
+**0004_create_atletas.sql**
+
+```sql
+CREATE TABLE atletas (
+    id_atleta      SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    nome           VARCHAR(150) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+    deleted_at     BOOLEAN,
+
+    CONSTRAINT fk_atletas_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_atletas_nome_equipe
+        UNIQUE (id_equipe, nome),
+
+    CONSTRAINT ck_atletas_status
+        CHECK (status IN ('ativo', 'inativo'))
+);
+
+CREATE INDEX idx_atletas_equipe
+    ON atletas(id_equipe);
+```
+
+**0005_create_esteiras.sql**
+
+```sql
+CREATE TABLE esteiras (
+    id_esteira     SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    id_evento      INT NOT NULL,
+    marca          VARCHAR(100) NOT NULL DEFAULT 'Technogym',
+    modelo         VARCHAR(100),
+    numero_serie   VARCHAR(100),
+    status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
+
+    CONSTRAINT fk_esteiras_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_esteiras_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_esteiras_numero_serie
+        UNIQUE (numero_serie),
+
+    CONSTRAINT ck_esteiras_status
+        CHECK (status IN ('livre', 'em_uso', 'manutencao', 'indisponivel'))
+);
+
+CREATE INDEX idx_esteiras_equipe
+    ON esteiras(id_equipe);
+
+CREATE INDEX idx_esteiras_evento
+    ON esteiras(id_evento);
+```
+
+**0006_create_sessoes_operacionais.sql**
+
+```sql
+CREATE TABLE sessoes_operacionais (
+    id_sessao_operacional SERIAL PRIMARY KEY,
+    id_evento             INT NOT NULL,
+    id_funcao             INT NOT NULL,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
+    status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    deleted_at            BOOLEAN,
+
+    CONSTRAINT fk_sessoes_operacionais_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_sessoes_operacionais_funcoes
+        FOREIGN KEY (id_funcao)
+        REFERENCES funcoes(id_funcao)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_sessoes_operacionais_status
+        CHECK (status IN ('ativa', 'encerrada', 'cancelada')),
+
+    CONSTRAINT ck_sessoes_operacionais_datas
+        CHECK (fim_em IS NULL OR fim_em > inicio_em)
+);
+
+CREATE INDEX idx_sessoes_operacionais_evento
+    ON sessoes_operacionais(id_evento);
+
+CREATE INDEX idx_sessoes_operacionais_funcao
+    ON sessoes_operacionais(id_funcao);
+
+CREATE INDEX idx_sessoes_operacionais_status
+    ON sessoes_operacionais(status);
+```
+
+**0007_create_turnos.sql**
+
+```sql
+CREATE TABLE turnos (
+    id_turno               SERIAL PRIMARY KEY,
+    id_atleta              INT NOT NULL,
+    id_esteira             INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
+    status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
+    km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_turnos_atletas
+        FOREIGN KEY (id_atleta)
+        REFERENCES atletas(id_atleta)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_esteiras
+        FOREIGN KEY (id_esteira)
+        REFERENCES esteiras(id_esteira)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_turnos_status
+        CHECK (status IN ('em_andamento', 'encerrado', 'cancelado')),
+
+    CONSTRAINT ck_turnos_datas
+        CHECK (horario_fim IS NULL OR horario_fim > horario_inicio),
+
+    CONSTRAINT ck_turnos_km
+        CHECK (km_turno >= 0)
+);
+
+CREATE INDEX idx_turnos_atleta
+    ON turnos(id_atleta);
+
+CREATE INDEX idx_turnos_esteira
+    ON turnos(id_esteira);
+
+CREATE INDEX idx_turnos_sessao_operacional
+    ON turnos(id_sessao_operacional);
+
+CREATE INDEX idx_turnos_status
+    ON turnos(status);
+
+CREATE UNIQUE INDEX uq_turnos_ativo_esteira
+    ON turnos(id_esteira)
+    WHERE status = 'em_andamento';
+
+CREATE UNIQUE INDEX uq_turnos_ativo_atleta
+    ON turnos(id_atleta)
+    WHERE status = 'em_andamento';
+```
+
+**0008_create_checkpoints.sql**
+
+```sql
+CREATE TABLE checkpoints (
+    id_checkpoint          SERIAL PRIMARY KEY,
+    id_turno               INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    km_acumulado           DECIMAL(10,3) NOT NULL,
+    pace_medio             DECIMAL(10,3),
+    velocidade_media       DECIMAL(10,3),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_checkpoints_turnos
+        FOREIGN KEY (id_turno)
+        REFERENCES turnos(id_turno)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_checkpoints_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_checkpoints_km
+        CHECK (km_acumulado >= 0),
+
+    CONSTRAINT ck_checkpoints_pace
+        CHECK (pace_medio IS NULL OR pace_medio > 0),
+
+    CONSTRAINT ck_checkpoints_velocidade
+        CHECK (velocidade_media IS NULL OR velocidade_media > 0)
+);
+
+CREATE INDEX idx_checkpoints_turno
+    ON checkpoints(id_turno);
+
+CREATE INDEX idx_checkpoints_sessao_operacional
+    ON checkpoints(id_sessao_operacional);
+
+CREATE INDEX idx_checkpoints_registrado_em
+    ON checkpoints(registrado_em DESC);
+
+CREATE INDEX idx_checkpoints_turno_data
+    ON checkpoints(id_turno, registrado_em DESC);
+```
+
+**0009_insert_dados_iniciais.sql**
+
+```sql
+INSERT INTO funcoes (nome, descricao, status) VALUES
+    ('operador', 'Responsável por iniciar turnos e registrar checkpoints.', 'ativa'),
+    ('coordenador', 'Responsável por acompanhar a operação e validar dados consolidados.', 'ativa');
+```
+
+**0010_create_views.sql**
+
+```sql
+CREATE OR REPLACE VIEW vw_placar_parcial AS
+WITH ultimo_checkpoint_por_turno AS (
+    SELECT DISTINCT ON (id_turno)
+        id_turno,
+        km_acumulado,
+        registrado_em
+    FROM checkpoints
+    ORDER BY id_turno, registrado_em DESC
+)
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+    eq.status AS equipe_status,
+    eq.km_total AS equipe_km_total,
+    COUNT(DISTINCT t.id_turno) AS total_turnos,
+    COALESCE(SUM(uc.km_acumulado), 0) AS km_total_parcial
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+LEFT JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+LEFT JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+LEFT JOIN ultimo_checkpoint_por_turno uc
+    ON uc.id_turno = t.id_turno
+GROUP BY
+    ev.id_evento,
+    ev.nome,
+    eq.id_equipe,
+    eq.nome,
+    eq.status,
+    eq.km_total;
+
+CREATE OR REPLACE VIEW vw_historico_completo AS
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+
+    a.id_atleta,
+    a.nome AS atleta_nome,
+
+    est.id_esteira,
+    est.marca AS esteira_marca,
+    est.modelo AS esteira_modelo,
+    est.numero_serie AS esteira_numero_serie,
+
+    t.id_turno,
+    t.horario_inicio,
+    t.horario_fim,
+    t.status AS turno_status,
+    t.km_turno,
+
+    so_turno.id_sessao_operacional AS id_sessao_inicio_turno,
+    f_turno.nome AS funcao_inicio_turno,
+
+    cp.id_checkpoint,
+    cp.km_acumulado,
+    cp.pace_medio,
+    cp.velocidade_media,
+    cp.registrado_em,
+    cp.is_ajuste,
+
+    so_cp.id_sessao_operacional AS id_sessao_registro_checkpoint,
+    f_cp.nome AS funcao_registro_checkpoint
+
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+JOIN esteiras est
+    ON est.id_esteira = t.id_esteira
+JOIN sessoes_operacionais so_turno
+    ON so_turno.id_sessao_operacional = t.id_sessao_operacional
+JOIN funcoes f_turno
+    ON f_turno.id_funcao = so_turno.id_funcao
+LEFT JOIN checkpoints cp
+    ON cp.id_turno = t.id_turno
+LEFT JOIN sessoes_operacionais so_cp
+    ON so_cp.id_sessao_operacional = cp.id_sessao_operacional
+LEFT JOIN funcoes f_cp
+    ON f_cp.id_funcao = so_cp.id_funcao
+ORDER BY
+    ev.id_evento,
+    eq.id_equipe,
+    t.horario_inicio,
+    cp.registrado_em;
+```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
+```
+**0012_create_coordenador**
+```sql
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
+```
