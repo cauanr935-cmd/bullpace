@@ -34,7 +34,7 @@ const validarInputHistorico = (input: Partial<CriarHistoricoOperacaoInput>): str
   return camposObrigatorios.filter((campo) => input[campo] === undefined || input[campo] === null || input[campo] === '');
 };
 
-export async function registrarHistoricoOperacao(input: CriarHistoricoOperacaoInput): Promise<HistoricoOperacao> {
+export async function registrarHistoricoOperacao(input: CriarHistoricoOperacaoInput): Promise<HistoricoOperacao | null> {
   return historicoOperacaoService.registrar(input);
 }
 
@@ -60,7 +60,10 @@ export class HistoricoOperacaoController {
       }
 
       const historico = await this.historicoService.registrar(input as CriarHistoricoOperacaoInput);
-      return res.status(201).json(historico);
+      return res.status(202).json({
+        message: 'Registro de auditoria operacional ignorado: não há tabela física de auditoria configurada.',
+        historico
+      });
     } catch (error) {
       return res.status(500).json({ message: 'Erro ao registrar histórico de operação.' });
     }

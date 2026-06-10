@@ -8,7 +8,6 @@ export interface EventoDB {
   data_inicio: string;
   data_fim: string;
   status: string;
-  deleted_at: boolean;
 }
 
 export class EventoRepository {
@@ -16,8 +15,7 @@ export class EventoRepository {
   async listar(): Promise<EventoDB[]> {
     const { data, error } = await supabase
       .from('eventos')
-      .select('*')
-      .eq('deleted_at', false);
+      .select('*');
 
     if (error) throw new Error(`[EventoRepository.listar] ${error.message}`);
     return (data || []) as EventoDB[];
@@ -29,7 +27,6 @@ export class EventoRepository {
       .from('eventos')
       .select('*')
       .eq('status', 'ativo')
-      .eq('deleted_at', false)
       .order('data_inicio', { ascending: false })
       .limit(1)
       .maybeSingle();

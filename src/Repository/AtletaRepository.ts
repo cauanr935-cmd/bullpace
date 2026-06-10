@@ -5,7 +5,6 @@ export interface AtletaDB {
   id_equipe: number;
   nome: string;
   status: string;
-  deleted_at: boolean;
 }
 
 export class AtletaRepository {
@@ -14,8 +13,7 @@ export class AtletaRepository {
     const { data, error } = await supabase
       .from('atletas')
       .select('id_atleta, id_equipe, nome, status')
-      .eq('id_equipe', idEquipe)
-      .eq('deleted_at', false);
+      .eq('id_equipe', idEquipe);
 
     if (error) throw new Error(`[AtletaRepository.listarPorEquipe] ${error.message}`);
     return (data || []) as AtletaDB[];

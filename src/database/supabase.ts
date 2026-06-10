@@ -18,3 +18,7 @@ export const supabase = createClient(
         }
     }
 );
+
+console.log("[AUDIT SUPABASE URL]", process.env.SUPABASE_URL);
+console.log("[AUDIT SUPABASE NEXT_PUBLIC_URL]", process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log("[AUDIT CLIENT INSTANCE]", supabase);

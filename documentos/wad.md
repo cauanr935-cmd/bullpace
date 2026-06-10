@@ -1094,7 +1094,7 @@ Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 2
 | **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | Os índices nos campos de busca frequente (id_turno, id_atleta, status) estão previstos nas migrations. As validações de negócio na camada Service evitam round-trips desnecessários ao banco. O teste de carga via k6 ou ferramenta equivalente ainda não está configurado e constitui verificação pendente do critério. |
 | **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
 | **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo operador ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado ao RN21. |
-| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo deleted_at ou is_ajuste presente em todos os registros modificáveis; verificado por query de auditoria após simulação de exclusão via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original, e o soft delete está previsto para as tabelas críticas. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
+| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo is_ajuste presente nos checkpoints modificáveis; verificado por query de auditoria após simulação de correção via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
 | **CAP** | O sistema deve suportar dois operadores realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta (migration 0007) impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
 | **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RNF de suportabilidade e ao RF025 / RN36. |
 | **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A configuração de PWA (manifest e service worker) não está presente no código atual e constitui recurso opcional pendente de configuração. |
@@ -1988,6 +1988,418 @@ A ordem das migrations respeita as dependências entre as tabelas. Tabelas indep
 
 Os scripts completos das migrations (0001 a 0012), incluindo as views, estão no anexo [Scripts das Migrations](#scripts-das-migrations).
 
+<<<<<<< HEAD
+**0001_create_eventos.sql**
+
+```sql
+CREATE TABLE eventos (
+    id_evento      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    cidade         VARCHAR(100) NOT NULL,
+    estado         VARCHAR(100) NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+
+    CONSTRAINT ck_eventos_status
+        CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
+
+    CONSTRAINT ck_eventos_datas
+        CHECK (data_fim > data_inicio)
+);
+```
+
+**0002_create_funcoes.sql**
+
+```sql
+CREATE TABLE funcoes (
+    id_funcao      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    descricao      TEXT,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT uq_funcoes_nome
+        UNIQUE (nome),
+
+    CONSTRAINT ck_funcoes_status
+        CHECK (status IN ('ativa', 'inativa'))
+);
+```
+
+**0003_create_equipes.sql**
+
+```sql
+CREATE TABLE equipes (
+    id_equipe      SERIAL PRIMARY KEY,
+    id_evento      INT NOT NULL,
+    nome           VARCHAR(100) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_equipes_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_equipes_nome_evento
+        UNIQUE (id_evento, nome),
+
+    CONSTRAINT ck_equipes_status
+        CHECK (status IN ('ativa', 'inativa', 'finalizada')),
+
+    CONSTRAINT ck_equipes_km_total
+        CHECK (km_total >= 0)
+);
+
+CREATE INDEX idx_equipes_evento
+    ON equipes(id_evento);
+```
+
+**0004_create_atletas.sql**
+
+```sql
+CREATE TABLE atletas (
+    id_atleta      SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    nome           VARCHAR(150) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT fk_atletas_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_atletas_nome_equipe
+        UNIQUE (id_equipe, nome),
+
+    CONSTRAINT ck_atletas_status
+        CHECK (status IN ('ativo', 'inativo'))
+);
+
+CREATE INDEX idx_atletas_equipe
+    ON atletas(id_equipe);
+```
+
+**0005_create_esteiras.sql**
+
+```sql
+CREATE TABLE esteiras (
+    id_esteira     SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    id_evento      INT NOT NULL,
+    marca          VARCHAR(100) NOT NULL DEFAULT 'Technogym',
+    modelo         VARCHAR(100),
+    numero_serie   VARCHAR(100),
+    status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
+
+    CONSTRAINT fk_esteiras_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_esteiras_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_esteiras_numero_serie
+        UNIQUE (numero_serie),
+
+    CONSTRAINT ck_esteiras_status
+        CHECK (status IN ('livre', 'em_uso', 'manutencao', 'indisponivel'))
+);
+
+CREATE INDEX idx_esteiras_equipe
+    ON esteiras(id_equipe);
+
+CREATE INDEX idx_esteiras_evento
+    ON esteiras(id_evento);
+```
+
+**0006_create_sessoes_operacionais.sql**
+
+```sql
+CREATE TABLE sessoes_operacionais (
+    id_sessao_operacional SERIAL PRIMARY KEY,
+    id_evento             INT NOT NULL,
+    id_funcao             INT NOT NULL,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
+    status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT fk_sessoes_operacionais_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_sessoes_operacionais_funcoes
+        FOREIGN KEY (id_funcao)
+        REFERENCES funcoes(id_funcao)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_sessoes_operacionais_status
+        CHECK (status IN ('ativa', 'encerrada', 'cancelada')),
+
+    CONSTRAINT ck_sessoes_operacionais_datas
+        CHECK (fim_em IS NULL OR fim_em > inicio_em)
+);
+
+CREATE INDEX idx_sessoes_operacionais_evento
+    ON sessoes_operacionais(id_evento);
+
+CREATE INDEX idx_sessoes_operacionais_funcao
+    ON sessoes_operacionais(id_funcao);
+
+CREATE INDEX idx_sessoes_operacionais_status
+    ON sessoes_operacionais(status);
+```
+
+**0007_create_turnos.sql**
+
+```sql
+CREATE TABLE turnos (
+    id_turno               SERIAL PRIMARY KEY,
+    id_atleta              INT NOT NULL,
+    id_esteira             INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
+    status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
+    km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_turnos_atletas
+        FOREIGN KEY (id_atleta)
+        REFERENCES atletas(id_atleta)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_esteiras
+        FOREIGN KEY (id_esteira)
+        REFERENCES esteiras(id_esteira)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_turnos_status
+        CHECK (status IN ('em_andamento', 'encerrado', 'cancelado')),
+
+    CONSTRAINT ck_turnos_datas
+        CHECK (horario_fim IS NULL OR horario_fim > horario_inicio),
+
+    CONSTRAINT ck_turnos_km
+        CHECK (km_turno >= 0)
+);
+
+CREATE INDEX idx_turnos_atleta
+    ON turnos(id_atleta);
+
+CREATE INDEX idx_turnos_esteira
+    ON turnos(id_esteira);
+
+CREATE INDEX idx_turnos_sessao_operacional
+    ON turnos(id_sessao_operacional);
+
+CREATE INDEX idx_turnos_status
+    ON turnos(status);
+
+CREATE UNIQUE INDEX uq_turnos_ativo_esteira
+    ON turnos(id_esteira)
+    WHERE status = 'em_andamento';
+
+CREATE UNIQUE INDEX uq_turnos_ativo_atleta
+    ON turnos(id_atleta)
+    WHERE status = 'em_andamento';
+```
+
+**0008_create_checkpoints.sql**
+
+```sql
+CREATE TABLE checkpoints (
+    id_checkpoint          SERIAL PRIMARY KEY,
+    id_turno               INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    km_acumulado           DECIMAL(10,3) NOT NULL,
+    pace_medio             DECIMAL(10,3),
+    velocidade_media       DECIMAL(10,3),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_checkpoints_turnos
+        FOREIGN KEY (id_turno)
+        REFERENCES turnos(id_turno)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_checkpoints_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_checkpoints_km
+        CHECK (km_acumulado >= 0),
+
+    CONSTRAINT ck_checkpoints_pace
+        CHECK (pace_medio IS NULL OR pace_medio > 0),
+
+    CONSTRAINT ck_checkpoints_velocidade
+        CHECK (velocidade_media IS NULL OR velocidade_media > 0)
+);
+
+CREATE INDEX idx_checkpoints_turno
+    ON checkpoints(id_turno);
+
+CREATE INDEX idx_checkpoints_sessao_operacional
+    ON checkpoints(id_sessao_operacional);
+
+CREATE INDEX idx_checkpoints_registrado_em
+    ON checkpoints(registrado_em DESC);
+
+CREATE INDEX idx_checkpoints_turno_data
+    ON checkpoints(id_turno, registrado_em DESC);
+```
+
+**0009_insert_dados_iniciais.sql**
+
+```sql
+INSERT INTO funcoes (nome, descricao, status) VALUES
+    ('operador', 'Responsável por iniciar turnos e registrar checkpoints.', 'ativa'),
+    ('coordenador', 'Responsável por acompanhar a operação e validar dados consolidados.', 'ativa');
+```
+
+**0010_create_views.sql**
+
+```sql
+CREATE OR REPLACE VIEW vw_placar_parcial AS
+WITH ultimo_checkpoint_por_turno AS (
+    SELECT DISTINCT ON (id_turno)
+        id_turno,
+        km_acumulado,
+        registrado_em
+    FROM checkpoints
+    ORDER BY id_turno, registrado_em DESC
+)
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+    eq.status AS equipe_status,
+    eq.km_total AS equipe_km_total,
+    COUNT(DISTINCT t.id_turno) AS total_turnos,
+    COALESCE(SUM(uc.km_acumulado), 0) AS km_total_parcial
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+LEFT JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+LEFT JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+LEFT JOIN ultimo_checkpoint_por_turno uc
+    ON uc.id_turno = t.id_turno
+GROUP BY
+    ev.id_evento,
+    ev.nome,
+    eq.id_equipe,
+    eq.nome,
+    eq.status,
+    eq.km_total;
+
+CREATE OR REPLACE VIEW vw_historico_completo AS
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+
+    a.id_atleta,
+    a.nome AS atleta_nome,
+
+    est.id_esteira,
+    est.marca AS esteira_marca,
+    est.modelo AS esteira_modelo,
+    est.numero_serie AS esteira_numero_serie,
+
+    t.id_turno,
+    t.horario_inicio,
+    t.horario_fim,
+    t.status AS turno_status,
+    t.km_turno,
+
+    so_turno.id_sessao_operacional AS id_sessao_inicio_turno,
+    f_turno.nome AS funcao_inicio_turno,
+
+    cp.id_checkpoint,
+    cp.km_acumulado,
+    cp.pace_medio,
+    cp.velocidade_media,
+    cp.registrado_em,
+    cp.is_ajuste,
+
+    so_cp.id_sessao_operacional AS id_sessao_registro_checkpoint,
+    f_cp.nome AS funcao_registro_checkpoint
+
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+JOIN esteiras est
+    ON est.id_esteira = t.id_esteira
+JOIN sessoes_operacionais so_turno
+    ON so_turno.id_sessao_operacional = t.id_sessao_operacional
+JOIN funcoes f_turno
+    ON f_turno.id_funcao = so_turno.id_funcao
+LEFT JOIN checkpoints cp
+    ON cp.id_turno = t.id_turno
+LEFT JOIN sessoes_operacionais so_cp
+    ON so_cp.id_sessao_operacional = cp.id_sessao_operacional
+LEFT JOIN funcoes f_cp
+    ON f_cp.id_funcao = so_cp.id_funcao
+ORDER BY
+    ev.id_evento,
+    eq.id_equipe,
+    t.horario_inicio,
+    cp.registrado_em;
+```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
+```
+**0012_create_coordenador**
+```sql
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
+```
+=======
+>>>>>>> ae1afb419b1c56c83bfaf1a90e3ff1b76505433f
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
@@ -1995,7 +2407,7 @@ A lógica proposicional, vertente matemática que estuda as proposições e seus
 
 ## Consulta 1
 
-Essa consulta retorna todos os checkpoints não excluídos (soft delete) que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo e ainda não removidos sejam exibidos.
+Essa consulta retorna todos os checkpoints que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo sejam exibidos.
 
 **Expressão SQL** |
 ``` sql
@@ -2004,15 +2416,14 @@ cp.registrado_em
 FROM checkpoint cp
 INNER JOIN turno t
 ON cp.id_turno = t.id_turno 
-WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
-IS NULL; 
+WHERE t.id_equipe = 1 AND t.status = 'em_andamento';
 ```
 #1 | ---
 --- | ---
-**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento') <br> $C$: O checkpoint não foi removido (cp.deleted_at IS NULL)
+**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento')
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land C$
+<br> $A \land B$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B \land C)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
@@ -2029,9 +2440,7 @@ SELECT e.id_equipe, e.nome, e.km_total,
 FROM equipe e
 LEFT JOIN turno t
   ON t.id_equipe = e.id_equipe
-  AND t.deleted_at IS NULL
-WHERE e.deleted_at IS NULL
-  AND e.status = 'ativa'
+WHERE e.status = 'ativa'
   AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
 GROUP BY e.id_equipe, e.nome, e.km_total
 ORDER BY e.km_total DESC;
@@ -2040,10 +2449,10 @@ ORDER BY e.km_total DESC;
 
 #2 | ---
 --- | ---
-**Proposições lógicas** | $A$: Equipe não foi removida (e.deleted_at IS NULL) <br> $B$: Equipe está ativa (e.status = 'ativa') <br> $C$: Equipe já tem km acumulado (e.km_total > 0) <br> $D$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
+**Proposições lógicas** | $A$: Equipe está ativa (e.status = 'ativa') <br> $B$: Equipe já tem km acumulado (e.km_total > 0) <br> $C$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
+<br> $A \land (B \lor C)$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
@@ -2058,8 +2467,7 @@ SELECT cp.id_checkpoint, cp.km_acumulado,
   cp.pace_medio, cp.velocidade_media, cp.registrado_em
 FROM checkpoint cp
 INNER JOIN turno t ON cp.id_turno = t.id_turno
-WHERE cp.deleted_at IS NULL
-  AND t.id_equipe = 1
+WHERE t.id_equipe = 1
   AND (
     cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
     OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
@@ -2068,10 +2476,10 @@ ORDER BY cp.registrado_em DESC;
 ```
 #3 | ---
 --- | ---
-**Proposições lógicas** | $A$: Checkpoint não foi removido (cp.deleted_at IS NULL) <br> $B$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $C$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $D$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
+**Proposições lógicas** | $A$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $C$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
+<br> $A \land (B \lor C)$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 

@@ -3,12 +3,16 @@ import {
   finalizarTurno, 
   Turno 
 } from '../Controller/TurnoController';
+import { TurnoRepository } from '../Repository/TurnoRepository';
 
 // Reaproveitando a tipagem de entrada definida no controller
 type IniciarTurnoInput = Omit<Turno, "id_turno" | "horario_fim" | "km_turno" | "status">;
 
 export class TurnoService {
   
+  // Instância do repositório
+  private turnoRepositoryInstance = new TurnoRepository();
+
   // Atributos definidos conforme o diagrama de classes
   private turnoRepository = {
     insert: iniciarTurno,
@@ -50,6 +54,18 @@ export class TurnoService {
       return turnoEncerrado;
     } catch (error) {
       console.error(`[TurnoService] Falha na delegação ao finalizar turno #${idTurno}:`, (error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * Regra 7: Conta turnos ativos (status = 'em_andamento') em uma sessão
+   */
+  public async contarTurnosAtivos(idSessao: number): Promise<number> {
+    try {
+      return await this.turnoRepositoryInstance.contarTurnosAtivos(idSessao);
+    } catch (error) {
+      console.error(`[TurnoService] Erro ao contar turnos ativos:`, (error as Error).message);
       throw error;
     }
   }

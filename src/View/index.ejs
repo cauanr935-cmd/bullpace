@@ -1676,6 +1676,27 @@
     </section>
   </main>
 
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+
+  <script id="vlibras-script" src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    (() => {
+      const initVLibras = () => {
+        if (window.__vlibrasWidgetLoaded || !window.VLibras?.Widget) return;
+        window.__vlibrasWidgetLoaded = true;
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+      };
+
+      document.getElementById('vlibras-script')?.addEventListener('load', initVLibras, { once: true });
+      initVLibras();
+    })();
+  </script>
+
   <!-- Componente de Cadastro Rápido -->
   <style>
     .nav-actions {
@@ -1796,6 +1817,7 @@
     }
     .cad-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin: 0;
       padding: 18px 32px 0;
@@ -1818,9 +1840,7 @@
       border-color: #db0840;
       background: #fff7fa;
     }
-    #cadFormOperador,
-    #cadFormCoordenador,
-    #cadFormAdmin,
+    .cad-form,
     .operator-switch-panel {
       padding: 24px 32px 32px;
     }
@@ -1993,9 +2013,7 @@
       }
       .cad-modal-header,
       .cad-tabs,
-      #cadFormOperador,
-      #cadFormCoordenador,
-      #cadFormAdmin,
+      .cad-form,
       .operator-switch-panel {
         padding-left: 20px;
         padding-right: 20px;
@@ -2007,13 +2025,14 @@
     const roleCad = typeof perfilUsuario !== 'undefined' ? perfilUsuario : 'operador';
     const showAdminTab = roleCad === 'administrador_geral';
     const showCoordTab = roleCad === 'coordenador' || roleCad === 'administrador_geral';
+    const showAtletaEquipeTab = roleCad === 'operador' || roleCad === 'coordenador' || roleCad === 'administrador_geral';
   %>
 
-  <div id="cadModalOverlay" class="cad-modal-overlay" onclick="handleOverlayClick(event)">
-    <div class="cad-modal-box">
+  <div id="cadModalOverlay" class="cad-modal-overlay" aria-hidden="true" onclick="handleOverlayClick(event)">
+    <div class="cad-modal-box" role="dialog" aria-modal="true" aria-labelledby="cadModalTitle">
       <div class="cad-modal-header">
         <h3 id="cadModalTitle">Cadastro Rápido</h3>
-        <button class="cad-modal-close" onclick="toggleCadModal(false)">&times;</button>
+        <button class="cad-modal-close" type="button" aria-label="Fechar cadastro rápido" onclick="toggleCadModal(false)">&times;</button>
       </div>
 
       <div class="cad-tabs">
@@ -2026,6 +2045,10 @@
         <% } %>
         <% if (showAdminTab) { %>
           <button id="tabBtnAdmin" class="cad-tab-btn" onclick="switchCadTab('admin')">Admin Principal</button>
+        <% } %>
+        <% if (showAtletaEquipeTab) { %>
+          <button id="tabBtnEquipe" class="cad-tab-btn" onclick="switchCadTab('equipe')">Equipe</button>
+          <button id="tabBtnAtleta" class="cad-tab-btn" onclick="switchCadTab('atleta')">Atleta</button>
         <% } %>
       </div>
 
@@ -2059,36 +2082,36 @@
       <% } %>
 
       <!-- Formulário Operador -->
-      <form id="cadFormOperador" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
+      <form id="cadFormOperador" class="cad-form" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
         <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
         <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
         <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
         
         <div class="cad-form-group">
-          <label>Nome do Operador</label>
-          <input type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+          <label for="cadOperadorNome">Nome do Operador</label>
+          <input id="cadOperadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
         </div>
         <button type="submit" class="cad-submit-btn">Cadastrar Operador</button>
       </form>
 
       <!-- Formulário Coordenador -->
       <% if (showCoordTab) { %>
-        <form id="cadFormCoordenador" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
+        <form id="cadFormCoordenador" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
+            <label for="cadCoordenadorNome">Nome</label>
+            <input id="cadCoordenadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
+            <label for="cadCoordenadorLogin">Login</label>
+            <input id="cadCoordenadorLogin" type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadCoordenadorSenha">Senha</label>
+            <input id="cadCoordenadorSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Coordenador</button>
         </form>
@@ -2096,24 +2119,58 @@
 
       <!-- Formulário Admin -->
       <% if (showAdminTab) { %>
-        <form id="cadFormAdmin" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
+        <form id="cadFormAdmin" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
+            <label for="cadAdminNome">Nome</label>
+            <input id="cadAdminNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
+            <label for="cadAdminLogin">Login</label>
+            <input id="cadAdminLogin" type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadAdminSenha">Senha</label>
+            <input id="cadAdminSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Admin</button>
+        </form>
+      <% } %>
+
+      <!-- Formulário Equipe -->
+      <% if (showAtletaEquipeTab) { %>
+        <form id="cadFormEquipe" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/equipe')">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label for="cadEquipeNome">Nome da Equipe</label>
+            <input id="cadEquipeNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Equipe Alpha">
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Equipe</button>
+        </form>
+
+        <!-- Formulário Atleta -->
+        <form id="cadFormAtleta" class="cad-form" style="display: none;" onsubmit="submitCadAtleta(event)">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label for="cadAtletaNome">Nome do Atleta</label>
+            <input id="cadAtletaNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+          </div>
+          <div class="cad-form-group">
+            <label for="cadAtletaEquipeSelect">Equipe</label>
+            <select name="id_equipe" id="cadAtletaEquipeSelect" class="cad-input" required>
+              <option value="">Selecione uma equipe...</option>
+            </select>
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Atleta</button>
         </form>
       <% } %>
 
@@ -2123,14 +2180,30 @@
 
   <script>
     let pendingOperatorSwitch = '';
+    const telaAtual = <%- JSON.stringify(tela) %>;
+
+    function obterIniciaisCliente(nome) {
+      return String(nome || '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(parte => parte[0].toUpperCase())
+        .join('') || '--';
+    }
 
     function toggleCadModal(show, initialTab) {
       const overlay = document.getElementById('cadModalOverlay');
       if (show) {
         overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
         switchCadTab(initialTab || (document.getElementById('cadFormTroca') ? 'troca' : 'operador'));
+        setTimeout(() => {
+          overlay.querySelector('.cad-tab-btn.active, input:not([type="hidden"]), select, button')?.focus();
+        }, 0);
       } else {
         overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
         resetCadModal();
       }
     }
@@ -2146,11 +2219,11 @@
     }
 
     function switchCadTab(tab) {
-      const forms = ['Troca', 'Operador', 'Coordenador', 'Admin'];
+      const forms = ['Troca', 'Operador', 'Coordenador', 'Admin', 'Equipe', 'Atleta'];
       forms.forEach(f => {
         const el = document.getElementById('cadForm' + f);
         if (el) el.style.display = 'none';
-        const btn = document.getElementById('tabBtn' + (f === 'Admin' ? 'Admin' : f));
+        const btn = document.getElementById('tabBtn' + f);
         if (btn) btn.classList.remove('active');
       });
 
@@ -2158,10 +2231,17 @@
       if (activeForm) activeForm.style.display = 'block';
       const activeBtn = document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1));
       if (activeBtn) activeBtn.classList.add('active');
+      document.querySelectorAll('.cad-tab-btn').forEach((button) => {
+        button.setAttribute('aria-selected', String(button.classList.contains('active')));
+      });
 
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
+
+      if (tab === 'atleta') {
+        carregarEquipesSelect();
+      }
     }
 
     function selectOperatorForSwitch(nome) {
@@ -2227,7 +2307,7 @@
     }
 
     function resetCadModal() {
-      const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin'];
+      const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin', 'cadFormEquipe', 'cadFormAtleta'];
       forms.forEach(f => {
         const el = document.getElementById(f);
         if (el) el.reset();
@@ -2245,22 +2325,208 @@
       switchCadTab(document.getElementById('cadFormTroca') ? 'troca' : 'operador');
     }
 
-    async function submitCadForm(event, url) {
+    async function carregarEquipesSelect() {
+      const select = document.getElementById('cadAtletaEquipeSelect');
+      if (!select) return;
+      const perfilUsuario = document.querySelector('#cadFormAtleta input[name="perfilUsuario"]')?.value || 'operador';
+      try {
+        const response = await fetch('/cadastro-rapido/equipes?perfilUsuario=' + encodeURIComponent(perfilUsuario), {
+          method: 'GET'
+        });
+        if (!response.ok) throw new Error('Erro ao carregar equipes.');
+        const equipes = await response.json();
+        console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes retornadas pela API:', equipes.length);
+        console.log('[AUDIT CADASTRO EQUIPE] Equipes retornadas pela API:', equipes.map(eq => ({
+          id: eq.id_equipe,
+          nome: eq.nome
+        })));
+        select.innerHTML = '<option value="">Selecione uma equipe...</option>';
+        equipes.forEach(eq => {
+          const opt = document.createElement('option');
+          opt.value = eq.id_equipe;
+          opt.textContent = eq.nome;
+          select.appendChild(opt);
+        });
+        console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas no select:', select.options.length - 1);
+      } catch (err) {
+        select.innerHTML = '<option value="">Erro ao carregar equipes</option>';
+      }
+    }
+
+    function renderizarEquipeNaSelecao(equipe) {
+      if (telaAtual !== 'equipe') return;
+
+      const lista = document.querySelector('.operator-list[aria-label="Seleção de equipe"]');
+      if (!lista || !equipe?.nome) return;
+
+      const jaExiste = Array.from(lista.querySelectorAll('input[name="equipe"]'))
+        .some(input => input.value === equipe.nome);
+      if (jaExiste) return;
+
+      const operador = document.querySelector('#cadFormEquipe input[name="operador"]')?.value || '';
+      const form = document.createElement('form');
+      form.action = '/selecionar-equipe';
+      form.method = 'post';
+      form.className = 'function-form';
+
+      const inputOperador = document.createElement('input');
+      inputOperador.type = 'hidden';
+      inputOperador.name = 'operador';
+      inputOperador.value = operador;
+
+      const inputEquipe = document.createElement('input');
+      inputEquipe.type = 'hidden';
+      inputEquipe.name = 'equipe';
+      inputEquipe.value = equipe.nome;
+
+      const button = document.createElement('button');
+      button.type = 'submit';
+      button.className = 'operator-row';
+
+      const avatar = document.createElement('span');
+      avatar.className = 'operator-photo';
+      avatar.setAttribute('aria-hidden', 'true');
+      avatar.textContent = obterIniciaisCliente(equipe.nome);
+
+      const nome = document.createElement('span');
+      nome.className = 'operator-name';
+      nome.append(document.createTextNode(equipe.nome));
+
+      const detalhe = document.createElement('small');
+      detalhe.textContent = '0 atletas';
+      nome.appendChild(detalhe);
+
+      const radio = document.createElement('span');
+      radio.className = 'operator-radio';
+      radio.setAttribute('aria-hidden', 'true');
+
+      button.append(avatar, nome, radio);
+      form.append(inputOperador, inputEquipe, button);
+      lista.appendChild(form);
+
+      console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas na tela:', lista.querySelectorAll('form').length);
+    }
+
+    function renderizarEquipeNoPainel(equipe) {
+      if (telaAtual !== 'painelCoordenador') return;
+
+      const lista = document.querySelector('.panel-team-list[aria-label="Equipes monitoradas"]');
+      if (!lista || !equipe?.nome) return;
+
+      const jaExiste = Array.from(lista.querySelectorAll('input[name="equipe"]'))
+        .some(input => input.value === equipe.nome);
+      if (jaExiste) return;
+
+      const coordenador = document.querySelector('#cadFormEquipe input[name="coordenador"]')?.value || '';
+      const perfilUsuario = document.querySelector('#cadFormEquipe input[name="perfilUsuario"]')?.value || 'operador';
+      const article = document.createElement('article');
+      article.className = 'panel-team-card';
+
+      const dot = document.createElement('span');
+      dot.className = 'status-dot';
+      dot.setAttribute('aria-hidden', 'true');
+
+      const info = document.createElement('div');
+      const nome = document.createElement('strong');
+      nome.textContent = equipe.nome;
+      const detalhe = document.createElement('small');
+      detalhe.textContent = '0,000 km · Nenhum atleta em turno';
+      info.append(nome, detalhe);
+
+      const form = document.createElement('form');
+      form.action = '/detalhes-equipe';
+      form.method = 'post';
+      form.className = 'details-form';
+
+      [
+        ['coordenador', coordenador],
+        ['perfilUsuario', perfilUsuario],
+        ['equipe', equipe.nome]
+      ].forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      const button = document.createElement('button');
+      button.type = 'submit';
+      button.textContent = 'DETALHES';
+      form.appendChild(button);
+
+      article.append(dot, info, form);
+      lista.appendChild(article);
+
+      console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas no painel:', lista.querySelectorAll('.panel-team-card').length);
+    }
+
+    async function submitCadAtleta(event) {
       event.preventDefault();
       const form = event.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const nome = form.querySelector('input[name="nome"]').value.trim();
+      const id_equipe = form.querySelector('select[name="id_equipe"]').value;
+      const perfilUsuario = form.querySelector('input[name="perfilUsuario"]').value;
+      const operador = form.querySelector('input[name="operador"]').value;
+      const coordenador = form.querySelector('input[name="coordenador"]').value;
 
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
 
+      if (!nome) {
+        msg.textContent = 'Nome do atleta é obrigatório.';
+        msg.className = 'cad-message error';
+        return;
+      }
+      if (!id_equipe) {
+        msg.textContent = 'Selecione uma equipe para o atleta.';
+        msg.className = 'cad-message error';
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
+      try {
+        const response = await fetch('/cadastro-rapido/atleta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, id_equipe: Number(id_equipe), perfilUsuario, operador, coordenador })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Erro ao cadastrar atleta.');
+        msg.textContent = 'Atleta cadastrado com sucesso!';
+        msg.className = 'cad-message success';
+        form.reset();
+        carregarEquipesSelect();
+      } catch (error) {
+        msg.textContent = error.message;
+        msg.className = 'cad-message error';
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Cadastrar Atleta'; }
+      }
+    }
+
+    async function submitCadForm(event, url) {
+      event.preventDefault();
+      const form = event.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.textContent : '';
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      if (url === '/cadastro-rapido/equipe') {
+        console.log('[AUDIT CADASTRO EQUIPE] payload frontend:', data);
+      }
+
+      const msg = document.getElementById('cadFeedbackMsg');
+      msg.className = 'cad-message';
+      msg.style.display = 'none';
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
       try {
         const response = await fetch(url, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
@@ -2273,15 +2539,22 @@
         msg.className = 'cad-message success';
         form.reset();
 
-        setTimeout(() => {
-          if (window.location.pathname === '/' || window.location.pathname === '/operador') {
-            window.location.reload();
-          }
-        }, 1500);
+        // Após cadastrar equipe, recarrega o SELECT de equipes imediatamente.
+        if (url === '/cadastro-rapido/equipe') {
+          carregarEquipesSelect();
+          renderizarEquipeNaSelecao(result);
+          renderizarEquipeNoPainel(result);
+        }
+
+        if (window.location.pathname === '/' || window.location.pathname === '/operador') {
+          setTimeout(() => window.location.reload(), 1500);
+        }
 
       } catch (error) {
         msg.textContent = error.message;
         msg.className = 'cad-message error';
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
       }
     }
   </script>
