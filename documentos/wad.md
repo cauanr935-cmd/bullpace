@@ -244,7 +244,9 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [4](#ref-4).
+O Value Proposition Canvas é uma ferramenta que conecta dois lados: de um, o que o cliente precisa, suas tarefas, dores e ganhos; de outro, o que a solução entrega pra responder a isso. A análise é dividida em Pe  qrfil do Cliente e Mapa de Valor, e a ideia é checar se cada coisa que o sistema faz tem relação direta com uma necessidade real da operação [4](#ref-4).
+
+No caso do BullPace, o cliente é o time de Field Marketing da Red Bull, que opera o registro dos dados ao longo das 24 horas de prova. A Figura 3 mostra o canvas completo, e nas seções seguintes detalhamos cada bloco dos dois lados.
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
@@ -362,7 +364,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A primeira persona representa **Ricardo**, operador de campo responsável pelo registro dos dados durante o evento. Sua função é acompanhar a troca dos atletas, selecionar equipe, atleta e esteira, iniciar e encerrar turnos e registrar checkpoints no sistema ao longo da prova. Essa persona foi escolhida porque está diretamente ligada ao momento mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, Ricardo é o principal usuário operacional, utilizando a aplicação para substituir a prancheta e garantir que os registros fiquem vinculados corretamente a equipe, atleta, esteira, turno e checkpoint.
+A primeira persona é o **Ricardo**, operador de campo que registra os dados durante o evento. É ele quem acompanha a troca dos atletas, escolhe equipe, atleta e esteira, abre e encerra turnos e marca os checkpoints ao longo da prova. Essa persona foi escolhida porque está no ponto mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, o Ricardo é o usuário operacional principal. Ele usa a aplicação no lugar da prancheta e responde por manter cada registro ligado à equipe, ao atleta, à esteira, ao turno e ao checkpoint corretos.
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
@@ -370,15 +372,15 @@ A primeira persona representa **Ricardo**, operador de campo responsável pelo r
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A segunda persona representa **Camila**, coordenadora responsável pelo acompanhamento geral da competição e pela validação dos resultados. Sua função no evento é monitorar o andamento das equipes, conferir dados consolidados, tomar decisões em casos de inconsistência e garantir maior segurança na apuração final. Essa persona foi escolhida porque representa a necessidade de gestão, controle e confiabilidade dos dados ao longo das 24 horas. No sistema, Camila se relaciona principalmente com as telas de acompanhamento, Modo TV, resultados consolidados, comparação entre equipes e exportação dos dados para auditoria.
+A segunda persona é a **Camila**, coordenadora que acompanha a competição inteira e valida os resultados. No evento, ela monitora as duas equipes, confere os dados consolidados, decide o que fazer quando aparece alguma inconsistência e responde pela apuração final. Essa persona foi escolhida porque representa o lado de gestão e controle, que depende da confiabilidade dos dados ao longo das 24 horas. No sistema, a Camila usa principalmente as telas de acompanhamento, o Modo TV, os resultados consolidados, a comparação entre equipes e a exportação dos dados para auditoria.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto. [8](#ref-8).
+As User Stories descrevem o que cada usuário precisa fazer no sistema. Cada uma segue o formato de quem usa, o que quer fazer e por quê, no padrão "Como [perfil], quero [ação] para [objetivo]" [8](#ref-8).
 
-Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
+Esse formato ajuda a equipe a partir de uma necessidade real e chegar em uma entrega que pode ser planejada. Também facilita priorizar o backlog, separando o que é essencial para o sistema funcionar do que pode ficar para depois.
 
-Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
+Cada User Story vem acompanhada de critérios de aceite, que definem o mínimo para a entrega ser considerada pronta. São eles que permitem à equipe conferir se a funcionalidade faz o que deveria antes de seguir adiante.
 
 ---
 
