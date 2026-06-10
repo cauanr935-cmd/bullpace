@@ -1676,6 +1676,27 @@
     </section>
   </main>
 
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+
+  <script id="vlibras-script" src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    (() => {
+      const initVLibras = () => {
+        if (window.__vlibrasWidgetLoaded || !window.VLibras?.Widget) return;
+        window.__vlibrasWidgetLoaded = true;
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+      };
+
+      document.getElementById('vlibras-script')?.addEventListener('load', initVLibras, { once: true });
+      initVLibras();
+    })();
+  </script>
+
   <!-- Componente de Cadastro Rápido -->
   <style>
     .nav-actions {
@@ -1796,6 +1817,7 @@
     }
     .cad-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin: 0;
       padding: 18px 32px 0;
@@ -1818,9 +1840,7 @@
       border-color: #db0840;
       background: #fff7fa;
     }
-    #cadFormOperador,
-    #cadFormCoordenador,
-    #cadFormAdmin,
+    .cad-form,
     .operator-switch-panel {
       padding: 24px 32px 32px;
     }
@@ -1993,11 +2013,7 @@
       }
       .cad-modal-header,
       .cad-tabs,
-      #cadFormOperador,
-      #cadFormCoordenador,
-      #cadFormAdmin,
-      #cadFormEquipe,
-      #cadFormAtleta,
+      .cad-form,
       .operator-switch-panel {
         padding-left: 20px;
         padding-right: 20px;
@@ -2012,11 +2028,11 @@
     const showAtletaEquipeTab = roleCad === 'operador' || roleCad === 'coordenador' || roleCad === 'administrador_geral';
   %>
 
-  <div id="cadModalOverlay" class="cad-modal-overlay" onclick="handleOverlayClick(event)">
-    <div class="cad-modal-box">
+  <div id="cadModalOverlay" class="cad-modal-overlay" aria-hidden="true" onclick="handleOverlayClick(event)">
+    <div class="cad-modal-box" role="dialog" aria-modal="true" aria-labelledby="cadModalTitle">
       <div class="cad-modal-header">
         <h3 id="cadModalTitle">Cadastro Rápido</h3>
-        <button class="cad-modal-close" onclick="toggleCadModal(false)">&times;</button>
+        <button class="cad-modal-close" type="button" aria-label="Fechar cadastro rápido" onclick="toggleCadModal(false)">&times;</button>
       </div>
 
       <div class="cad-tabs">
@@ -2066,36 +2082,36 @@
       <% } %>
 
       <!-- Formulário Operador -->
-      <form id="cadFormOperador" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
+      <form id="cadFormOperador" class="cad-form" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
         <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
         <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
         <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
         
         <div class="cad-form-group">
-          <label>Nome do Operador</label>
-          <input type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+          <label for="cadOperadorNome">Nome do Operador</label>
+          <input id="cadOperadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
         </div>
         <button type="submit" class="cad-submit-btn">Cadastrar Operador</button>
       </form>
 
       <!-- Formulário Coordenador -->
       <% if (showCoordTab) { %>
-        <form id="cadFormCoordenador" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
+        <form id="cadFormCoordenador" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
+            <label for="cadCoordenadorNome">Nome</label>
+            <input id="cadCoordenadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
+            <label for="cadCoordenadorLogin">Login</label>
+            <input id="cadCoordenadorLogin" type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadCoordenadorSenha">Senha</label>
+            <input id="cadCoordenadorSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Coordenador</button>
         </form>
@@ -2103,22 +2119,22 @@
 
       <!-- Formulário Admin -->
       <% if (showAdminTab) { %>
-        <form id="cadFormAdmin" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
+        <form id="cadFormAdmin" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
+            <label for="cadAdminNome">Nome</label>
+            <input id="cadAdminNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
+            <label for="cadAdminLogin">Login</label>
+            <input id="cadAdminLogin" type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadAdminSenha">Senha</label>
+            <input id="cadAdminSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Admin</button>
         </form>
@@ -2126,30 +2142,30 @@
 
       <!-- Formulário Equipe -->
       <% if (showAtletaEquipeTab) { %>
-        <form id="cadFormEquipe" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/equipe')">
+        <form id="cadFormEquipe" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/equipe')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome da Equipe</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Equipe Alpha">
+            <label for="cadEquipeNome">Nome da Equipe</label>
+            <input id="cadEquipeNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Equipe Alpha">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Equipe</button>
         </form>
 
         <!-- Formulário Atleta -->
-        <form id="cadFormAtleta" style="display: none;" onsubmit="submitCadAtleta(event)">
+        <form id="cadFormAtleta" class="cad-form" style="display: none;" onsubmit="submitCadAtleta(event)">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome do Atleta</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+            <label for="cadAtletaNome">Nome do Atleta</label>
+            <input id="cadAtletaNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
           </div>
           <div class="cad-form-group">
-            <label>Equipe</label>
+            <label for="cadAtletaEquipeSelect">Equipe</label>
             <select name="id_equipe" id="cadAtletaEquipeSelect" class="cad-input" required>
               <option value="">Selecione uma equipe...</option>
             </select>
@@ -2180,9 +2196,14 @@
       const overlay = document.getElementById('cadModalOverlay');
       if (show) {
         overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
         switchCadTab(initialTab || (document.getElementById('cadFormTroca') ? 'troca' : 'operador'));
+        setTimeout(() => {
+          overlay.querySelector('.cad-tab-btn.active, input:not([type="hidden"]), select, button')?.focus();
+        }, 0);
       } else {
         overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
         resetCadModal();
       }
     }
@@ -2210,6 +2231,9 @@
       if (activeForm) activeForm.style.display = 'block';
       const activeBtn = document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1));
       if (activeBtn) activeBtn.classList.add('active');
+      document.querySelectorAll('.cad-tab-btn').forEach((button) => {
+        button.setAttribute('aria-selected', String(button.classList.contains('active')));
+      });
 
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
