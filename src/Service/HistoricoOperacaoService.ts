@@ -4,7 +4,7 @@ import { HistoricoOperacaoRepository } from '../Repository/HistoricoOperacaoRepo
 export class HistoricoOperacaoService {
   private historicoRepository = new HistoricoOperacaoRepository();
 
-  public async registrar(input: CriarHistoricoOperacaoInput): Promise<HistoricoOperacao> {
+  public async registrar(input: CriarHistoricoOperacaoInput): Promise<HistoricoOperacao | null> {
     return this.historicoRepository.insert(input);
   }
 

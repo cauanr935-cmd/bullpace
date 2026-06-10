@@ -231,8 +231,8 @@ const registrarHistorico = async (input: CriarHistoricoOperacaoInput): Promise<v
       ...input,
       data_hora: input.data_hora || new Date()
     });
-  } catch (error: any) {
-    console.error('[historico_operacoes] Registro ignorado:', error.message);
+  } catch {
+    // Auditoria operacional legada não pode interromper o fluxo principal.
   }
 };
 
@@ -291,15 +291,22 @@ const obterOperadoresReal = async () => {
 
 const obterEquipesReal = async () => {
   const listaEquipes = await equipeRepo.listar();
+  console.log(`[AUDIT obterEquipesReal] Equipes carregadas: ${listaEquipes.length}`);
+  console.log('[AUDIT obterEquipesReal] Equipes retornadas:', listaEquipes.map((e) => ({
+    id: e.id_equipe,
+    nome: e.nome
+  })));
   const equipes = [];
   for (const eq of listaEquipes) {
     const atletasList = await atletaRepo.listarPorEquipe(eq.id_equipe);
+    console.log(`[AUDIT obterEquipesReal]   Equipe "${eq.nome}" (id=${eq.id_equipe}): ${atletasList.length} atleta(s)`);
     equipes.push({
       nome: eq.nome,
       iniciais: obterIniciais(eq.nome),
       atletas: atletasList.length
     });
   }
+  console.log(`[AUDIT obterEquipesReal] Total de atletas encontrados: ${equipes.reduce((s, e) => s + e.atletas, 0)}`);
   return equipes;
 };
 
@@ -314,6 +321,29 @@ const obterAtletasReal = async (nomeEquipe: string) => {
   }));
 };
 
+const obterIdEventoParaCadastroEquipe = async (): Promise<number> => {
+  const eventoAtivo = await eventoRepo.buscarAtivo();
+  if (eventoAtivo) return eventoAtivo.id_evento;
+
+  const { data, error } = await supabase
+    .from('eventos')
+    .select('id_evento, nome, status')
+    .order('id_evento', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`[AUDIT CADASTRO EQUIPE] Erro ao localizar evento para nova equipe: ${error.message}`);
+  }
+
+  if (!data) {
+    throw new Error('Nenhum evento encontrado para vincular a nova equipe.');
+  }
+
+  console.log('[AUDIT CADASTRO EQUIPE] Nenhum evento ativo encontrado; usando evento mais recente:', data);
+  return data.id_evento;
+};
+
 const obterEsteirasReal = async () => {
   const esteirasDB = await esteiraRepo.listar();
   return esteirasDB.map(est => ({
@@ -325,6 +355,11 @@ const obterEsteirasReal = async () => {
 
 const obterEquipesPainelReal = async () => {
   const listaEquipes = await equipeRepo.listar();
+  console.log(`[AUDIT obterEquipesPainelReal] Equipes carregadas: ${listaEquipes.length}`);
+  console.log('[AUDIT obterEquipesPainelReal] Equipes retornadas:', listaEquipes.map((e) => ({
+    id: e.id_equipe,
+    nome: e.nome
+  })));
   const { data: turnosAtivos } = await supabase
     .from('turnos')
     .select('id_turno, id_atleta, atletas (nome, id_equipe)')
@@ -335,6 +370,7 @@ const obterEquipesPainelReal = async () => {
     const active = (turnosAtivos || []).find(t => t.atletas && (t.atletas as any).id_equipe === eq.id_equipe);
     const atletaStr = active ? `${(active.atletas as any).nome} em turno` : 'Nenhum atleta em turno';
     const numAtletas = (await atletaRepo.listarPorEquipe(eq.id_equipe)).length;
+    console.log(`[AUDIT obterEquipesPainelReal]   Equipe "${eq.nome}" (id=${eq.id_equipe}): ${numAtletas} atleta(s)`);
     equipesPainel.push({
       nome: eq.nome,
       km: `${eq.km_total.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
@@ -342,6 +378,7 @@ const obterEquipesPainelReal = async () => {
       atletas: numAtletas
     });
   }
+  console.log(`[AUDIT obterEquipesPainelReal] Total de atletas encontrados: ${equipesPainel.reduce((s, e) => s + e.atletas, 0)}`);
   return equipesPainel;
 };
 
@@ -898,9 +935,8 @@ app.post('/historico-operacoes', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINI
 
   try {
     historicoOperacoes = await obterHistoricoOperacoesView(papel, filtrosHistorico);
-  } catch (error: any) {
-    console.error('[/historico-operacoes] Erro ao carregar histórico:', error.message);
-    historicoMensagem = 'Histórico indisponível. Aplique o script src/database/historico_operacoes.sql no Supabase.';
+  } catch {
+    historicoMensagem = 'Histórico operacional indisponível no momento.';
   }
 
   res.render('index', {
@@ -1615,6 +1651,168 @@ app.post('/cadastro-rapido/coordenador', autorizarPapeis(ROLES.COORDENADOR, ROLE
       login: coordenador.login
     }, coordenador.id_coordenador);
     return res.status(201).json(coordenador);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Listar Equipes para o SELECT do Cadastro Rápido de Atleta
+// Implementa paginação progressiva para buscar todas as equipes do banco sem limite oculto.
+app.get('/cadastro-rapido/equipes', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
+  try {
+    let allEquipes: any[] = [];
+    let start = 0;
+    const limit = 1000;
+    let keepFetching = true;
+
+    while (keepFetching) {
+      const { data, error } = await supabase
+        .from('equipes')
+        .select('id_equipe, nome')
+        .order('nome', { ascending: true })
+        .range(start, start + limit - 1);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        allEquipes = allEquipes.concat(data);
+        start += limit;
+        if (data.length < limit) {
+          keepFetching = false;
+        }
+      } else {
+        keepFetching = false;
+      }
+    }
+
+    console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes retornadas pela API:', allEquipes.length);
+    console.log('[AUDIT CADASTRO EQUIPE] Equipes retornadas pela API:', allEquipes.map((e) => ({
+      id: e.id_equipe,
+      nome: e.nome
+    })));
+
+    return res.status(200).json(allEquipes);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Cadastro Rápido de Equipes
+app.post('/cadastro-rapido/equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
+  try {
+    console.log('[AUDIT CADASTRO EQUIPE] payload:', req.body);
+    console.log('[AUDIT CLIENT INSTANCE CADASTRO EQUIPE]', supabase);
+    const { nome } = req.body;
+    if (!nome || !String(nome).trim()) {
+      return res.status(400).json({ error: 'Nome da equipe é obrigatório.' });
+    }
+
+    const idEvento = await obterIdEventoParaCadastroEquipe();
+    const payloadEquipe = {
+      nome: String(nome).trim(),
+      id_evento: idEvento
+    };
+    console.log('[AUDIT CADASTRO EQUIPE] payload normalizado:', payloadEquipe);
+
+    const { count: countAntesInsert, error: erroCountAntesInsert } = await supabase
+      .from('equipes')
+      .select('*', {
+        count: 'exact',
+        head: true
+      });
+
+    if (erroCountAntesInsert) {
+      console.log('[AUDIT COUNT ANTES INSERT] erro:', erroCountAntesInsert.message);
+    } else {
+      console.log('[AUDIT COUNT ANTES INSERT]', countAntesInsert);
+    }
+
+    const { data, error } = await supabase
+      .from('equipes')
+      .insert([payloadEquipe])
+      .select('id_equipe, id_evento, nome, status, km_total')
+      .single();
+    if (error) throw error;
+
+    console.log('[AUDIT CADASTRO EQUIPE] resultado insert:', data);
+    console.log('[AUDIT INSERT RESULT]', data);
+
+    const idEquipeInserida = data.id_equipe;
+
+    const { data: verificacao, error: erroVerificacao } = await supabase
+      .from('equipes')
+      .select('*')
+      .eq('id_equipe', idEquipeInserida);
+
+    if (erroVerificacao) {
+      console.log('[AUDIT POS INSERT] erro:', erroVerificacao.message);
+    } else {
+      console.log('[AUDIT POS INSERT]', verificacao);
+    }
+
+    const { count: countAposInsert, error: erroCountAposInsert } = await supabase
+      .from('equipes')
+      .select('*', {
+        count: 'exact',
+        head: true
+      });
+
+    if (erroCountAposInsert) {
+      console.log('[AUDIT COUNT APOS INSERT] erro:', erroCountAposInsert.message);
+    } else {
+      console.log('[AUDIT COUNT APOS INSERT]', countAposInsert);
+    }
+
+    const { data: equipesAposInsert, error: erroConsultaAposInsert } = await supabase
+      .from('equipes')
+      .select('*')
+      .order('id_equipe', { ascending: false });
+
+    if (erroConsultaAposInsert) {
+      console.log('[AUDIT CADASTRO EQUIPE] erro ao consultar equipes após insert:', erroConsultaAposInsert.message);
+    } else {
+      console.log('[AUDIT CADASTRO EQUIPE] quantidade de equipes no banco:', equipesAposInsert?.length || 0);
+      console.log('[AUDIT CADASTRO EQUIPE] SELECT * FROM equipes ORDER BY id_equipe DESC:', equipesAposInsert);
+    }
+
+    // Fire-and-forget: não bloqueia a resposta ao cliente.
+    void registrarHistoricoAdministrativo(req, 'cadastrar_equipe', 'equipes', {
+      id_equipe: data.id_equipe,
+      nome: data.nome
+    }, data.id_equipe);
+    return res.status(201).json(data);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Cadastro Rápido de Atletas
+app.post('/cadastro-rapido/atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { nome, id_equipe } = req.body;
+    if (!nome || !String(nome).trim()) {
+      return res.status(400).json({ error: 'Nome do atleta é obrigatório.' });
+    }
+    if (!id_equipe) {
+      return res.status(400).json({ error: 'Equipe é obrigatória.' });
+    }
+    const idEquipeNum = Number(id_equipe);
+    if (!Number.isFinite(idEquipeNum) || idEquipeNum <= 0) {
+      return res.status(400).json({ error: 'Equipe inválida.' });
+    }
+    const { data, error } = await supabase
+      .from('atletas')
+      .insert([{ nome: String(nome).trim(), id_equipe: idEquipeNum }])
+      .select('id_atleta, nome, id_equipe')
+      .single();
+    if (error) throw error;
+    // Fire-and-forget: não bloqueia a resposta ao cliente.
+    void registrarHistoricoAdministrativo(req, 'cadastrar_atleta', 'atletas', {
+      id_atleta: data.id_atleta,
+      nome: data.nome,
+      id_equipe: data.id_equipe
+    }, data.id_atleta);
+    return res.status(201).json(data);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

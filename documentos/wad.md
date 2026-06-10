@@ -1092,7 +1092,7 @@ Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 2
 | **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | Os índices nos campos de busca frequente (id_turno, id_atleta, status) estão previstos nas migrations. As validações de negócio na camada Service evitam round-trips desnecessários ao banco. O teste de carga via k6 ou ferramenta equivalente ainda não está configurado e constitui verificação pendente do critério. |
 | **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
 | **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo operador ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado ao RN21. |
-| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo deleted_at ou is_ajuste presente em todos os registros modificáveis; verificado por query de auditoria após simulação de exclusão via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original, e o soft delete está previsto para as tabelas críticas. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
+| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo is_ajuste presente nos checkpoints modificáveis; verificado por query de auditoria após simulação de correção via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
 | **CAP** | O sistema deve suportar dois operadores realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta (migration 0007) impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
 | **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RNF de suportabilidade e ao RF025 / RN36. |
 | **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A configuração de PWA (manifest e service worker) não está presente no código atual e constitui recurso opcional pendente de configuração. |
@@ -1997,7 +1997,6 @@ CREATE TABLE eventos (
     data_inicio    TIMESTAMP NOT NULL,
     data_fim       TIMESTAMP NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
-    deleted_at     BOOLEAN,
 
     CONSTRAINT ck_eventos_status
         CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
@@ -2015,7 +2014,6 @@ CREATE TABLE funcoes (
     nome           VARCHAR(100) NOT NULL,
     descricao      TEXT,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
-    deleted_at     BOOLEAN,
 
     CONSTRAINT uq_funcoes_nome
         UNIQUE (nome),
@@ -2034,7 +2032,6 @@ CREATE TABLE equipes (
     nome           VARCHAR(100) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
     km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
-    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_equipes_eventos
         FOREIGN KEY (id_evento)
@@ -2063,7 +2060,6 @@ CREATE TABLE atletas (
     id_equipe      INT NOT NULL,
     nome           VARCHAR(150) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
-    deleted_at     BOOLEAN,
 
     CONSTRAINT fk_atletas_equipes
         FOREIGN KEY (id_equipe)
@@ -2128,7 +2124,6 @@ CREATE TABLE sessoes_operacionais (
     inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
     fim_em                TIMESTAMP,
     status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
-    deleted_at            BOOLEAN,
 
     CONSTRAINT fk_sessoes_operacionais_eventos
         FOREIGN KEY (id_evento)
@@ -2407,7 +2402,7 @@ A lógica proposicional, vertente matemática que estuda as proposições e seus
 
 ## Consulta 1
 
-Essa consulta retorna todos os checkpoints não excluídos (soft delete) que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo e ainda não removidos sejam exibidos.
+Essa consulta retorna todos os checkpoints que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo sejam exibidos.
 
 **Expressão SQL** |
 ``` sql
@@ -2416,15 +2411,14 @@ cp.registrado_em
 FROM checkpoint cp
 INNER JOIN turno t
 ON cp.id_turno = t.id_turno 
-WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
-IS NULL; 
+WHERE t.id_equipe = 1 AND t.status = 'em_andamento';
 ```
 #1 | ---
 --- | ---
-**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento') <br> $C$: O checkpoint não foi removido (cp.deleted_at IS NULL)
+**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento')
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land C$
+<br> $A \land B$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B \land C)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
@@ -2441,9 +2435,7 @@ SELECT e.id_equipe, e.nome, e.km_total,
 FROM equipe e
 LEFT JOIN turno t
   ON t.id_equipe = e.id_equipe
-  AND t.deleted_at IS NULL
-WHERE e.deleted_at IS NULL
-  AND e.status = 'ativa'
+WHERE e.status = 'ativa'
   AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
 GROUP BY e.id_equipe, e.nome, e.km_total
 ORDER BY e.km_total DESC;
@@ -2452,10 +2444,10 @@ ORDER BY e.km_total DESC;
 
 #2 | ---
 --- | ---
-**Proposições lógicas** | $A$: Equipe não foi removida (e.deleted_at IS NULL) <br> $B$: Equipe está ativa (e.status = 'ativa') <br> $C$: Equipe já tem km acumulado (e.km_total > 0) <br> $D$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
+**Proposições lógicas** | $A$: Equipe está ativa (e.status = 'ativa') <br> $B$: Equipe já tem km acumulado (e.km_total > 0) <br> $C$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
+<br> $A \land (B \lor C)$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 
@@ -2470,8 +2462,7 @@ SELECT cp.id_checkpoint, cp.km_acumulado,
   cp.pace_medio, cp.velocidade_media, cp.registrado_em
 FROM checkpoint cp
 INNER JOIN turno t ON cp.id_turno = t.id_turno
-WHERE cp.deleted_at IS NULL
-  AND t.id_equipe = 1
+WHERE t.id_equipe = 1
   AND (
     cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
     OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
@@ -2480,10 +2471,10 @@ ORDER BY cp.registrado_em DESC;
 ```
 #3 | ---
 --- | ---
-**Proposições lógicas** | $A$: Checkpoint não foi removido (cp.deleted_at IS NULL) <br> $B$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $C$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $D$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
+**Proposições lógicas** | $A$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $C$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
 <br>
 **Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
+<br> $A \land (B \lor C)$
 <br>
 **Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
 

@@ -16,8 +16,7 @@ export class SessaoRepository {
           id_evento: input.id_evento,
           id_funcao: input.id_funcao,
           inicio_em: dataInicioFormatada,
-          status: 'ativa',
-          deleted_at: false
+          status: 'ativa'
         }
       ])
       .select()

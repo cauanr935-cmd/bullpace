@@ -7,10 +7,9 @@ export interface SessaoOperacional {
   inicio_em: string | Date;       
   fim_em?: string | Date;         
   status: string;                 
-  deleted_at?: boolean;           
 }
 
-type AbrirSessaoInput = Omit<SessaoOperacional, "id_sessao_operacional" | "fim_em" | "status" | "deleted_at">;
+type AbrirSessaoInput = Omit<SessaoOperacional, "id_sessao_operacional" | "fim_em" | "status">;
 
 /**
  * Validação prévia para garantir a integridade dos dados de auditoria antes de enviar ao banco
@@ -43,8 +42,7 @@ export async function abrirSessao(input: AbrirSessaoInput): Promise<SessaoOperac
         id_evento: input.id_evento,
         id_funcao: input.id_funcao,
         inicio_em: dataInicioFormatada,
-        status: 'ativa', // Corrigido de 'ABERTA' para 'ativa'
-        deleted_at: false
+        status: 'ativa' // Corrigido de 'ABERTA' para 'ativa'
       }
     ])
     .select()
@@ -93,7 +91,6 @@ export async function buscarSessoesPorEvento(idEvento: number): Promise<SessaoOp
     .from('sessoes_operacionais')
     .select('*')
     .eq('id_evento', idEvento)
-    .eq('deleted_at', false) 
     .order('inicio_em', { ascending: false }); 
 
   if (error) {
