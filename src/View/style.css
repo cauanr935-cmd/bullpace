@@ -2091,17 +2091,88 @@ body {
   white-space: nowrap;
 }
 
+/* Bloco que agrupa toda a captura de imagem do checkpoint (passo 1). */
+.checkpoint-capture {
+  margin: 6px 0 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fbfbfb;
+  box-shadow: inset 0 0 0 2px #ececec;
+  display: grid;
+  gap: 14px;
+}
+
+.checkpoint-capture-header {
+  display: grid;
+  gap: 4px;
+}
+
+.checkpoint-capture-header strong {
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.checkpoint-capture-header .capture-hint {
+  color: #707070;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Etiqueta pequena que numera os passos (PASSO 1 / PASSO 2). */
+.capture-step {
+  justify-self: start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--rb-red);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.step-field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-field-label .capture-step {
+  justify-self: auto;
+}
+
+/* Area de upload destacada como zona de toque/foto principal. */
 .checkpoint-image-picker {
-  min-height: 74px;
-  margin-bottom: 14px;
-  padding: 16px 18px;
-  border-radius: 14px;
+  min-height: 132px;
+  margin: 0;
+  padding: 22px 18px;
+  border-radius: 16px;
   background: #ffffff;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  box-shadow: inset 0 0 0 2px var(--rb-red);
   cursor: pointer;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  gap: 8px;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.checkpoint-image-picker:hover {
+  background: #fff5f6;
+}
+
+.checkpoint-image-picker .picker-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fdecee;
+  font-size: 26px;
+  line-height: 1;
 }
 
 .checkpoint-image-picker input {
@@ -2118,25 +2189,25 @@ body {
 }
 
 .checkpoint-image-picker strong {
-  color: #202124;
-  font-size: 17px;
+  color: var(--rb-red);
+  font-size: 18px;
   font-weight: 800;
 }
 
 .checkpoint-image-picker span {
   color: #707070;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
 
 .ocr-suggestion-panel {
   min-height: 76px;
-  margin: 14px 0;
-  padding: 18px 22px;
-  border-radius: 16px;
+  margin: 0;
+  padding: 16px 20px;
+  border-radius: 14px;
   background: #f4f4f4;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  box-shadow: none;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -2173,12 +2244,12 @@ body {
 }
 
 .manual-correction-toggle {
-  min-height: 58px;
-  margin: 0 0 18px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  min-height: 52px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
   display: grid;
   grid-template-columns: 26px 1fr;
   align-items: center;
@@ -2194,7 +2265,7 @@ body {
 
 .manual-correction-toggle span {
   color: #202124;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.25;
 }
@@ -3178,9 +3249,6 @@ body {
 .turn-summary,
 .checkpoint-input,
 .input-with-unit,
-.checkpoint-image-picker,
-.ocr-suggestion-panel,
-.manual-correction-toggle,
 .last-checkpoint,
 .finish-button,
 .panel-metrics article,

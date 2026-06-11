@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=12">
+  <link rel="stylesheet" href="/static/style.css?v=13">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -1340,27 +1340,35 @@
             </article>
           </section>
 
-          <label class="field-label" for="checkpointImage">IMAGEM DO CHECKPOINT *</label>
-          <label class="checkpoint-image-picker">
-            <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
-            <strong>Tirar foto da esteira</strong>
-            <span id="checkpointImageName">Nenhuma foto selecionada</span>
-          </label>
+          <section class="checkpoint-capture" aria-label="Imagem do checkpoint">
+            <header class="checkpoint-capture-header">
+              <span class="capture-step">PASSO 1</span>
+              <strong>IMAGEM DO CHECKPOINT *</strong>
+              <span class="capture-hint">Fotografe o visor da esteira para ler o KM automaticamente.</span>
+            </header>
 
-          <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
-            <div>
-              <strong>LEITURA DA IMAGEM</strong>
-              <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
-            </div>
-            <output id="ocrSuggestedKm">--</output>
+            <label class="checkpoint-image-picker" for="checkpointImage">
+              <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
+              <span class="picker-icon" aria-hidden="true">📷</span>
+              <strong>Tirar foto da esteira</strong>
+              <span id="checkpointImageName">Nenhuma foto selecionada</span>
+            </label>
+
+            <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
+              <div>
+                <strong>LEITURA DA IMAGEM</strong>
+                <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
+              </div>
+              <output id="ocrSuggestedKm">--</output>
+            </section>
+
+            <label class="manual-correction-toggle" for="manualKmCorrection">
+              <input id="manualKmCorrection" type="checkbox">
+              <span>Leitura da imagem está errada, informar KM manualmente</span>
+            </label>
           </section>
 
-          <label class="manual-correction-toggle" for="manualKmCorrection">
-            <input id="manualKmCorrection" type="checkbox">
-            <span>Leitura da imagem está errada, informar KM manualmente</span>
-          </label>
-
-          <label class="field-label" for="kmAcumulado">KM ACUMULADO OFICIAL *</label>
+          <label class="field-label step-field-label" for="kmAcumulado"><span class="capture-step">PASSO 2</span>KM ACUMULADO OFICIAL *</label>
           <div class="input-with-unit">
             <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="Aguardando leitura da imagem" required disabled>
             <span>km</span>
@@ -2469,9 +2477,11 @@
     </div>
   </div>
 
+  <div id="appData" data-tela="<%= tela %>" hidden></div>
+
   <script>
     let pendingOperatorSwitch = '';
-    const telaAtual = <%- JSON.stringify(tela) %>;
+    const telaAtual = document.getElementById('appData').dataset.tela;
 
     function obterIniciaisCliente(nome) {
       return String(nome || '')
