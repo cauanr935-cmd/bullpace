@@ -62,16 +62,46 @@ export class CheckpointRepository {
     const { data, error } = await supabase
       .from('checkpoints')
       .select(`
-        *,
-        turnos(id_sessao_operacional),
-        sessoes_operacionais(id_funcao)
+        id_checkpoint,
+        id_turno,
+        id_sessao_operacional,
+        km_acumulado,
+        pace_medio,
+        velocidade_media,
+        registrado_em,
+        is_ajuste,
+        operador(nome)
       `)
       .eq('id_turno', idTurno);
 
     if (error) {
-      throw new Error(`[CheckpointRepository.findByTurnoWithOperador] ${error.message}`);
+      // Tenta buscar sem relacionamento caso o join não exista no esquema atual.
+      const fallback = await supabase
+        .from('checkpoints')
+        .select('*')
+        .eq('id_turno', idTurno);
+      if (fallback.error) {
+        throw new Error(`[CheckpointRepository.findByTurnoWithOperador] ${error.message}`);
+      }
+      return fallback.data || [];
     }
     return data || [];
+  }
+
+  /**
+   * Conta o número total de checkpoints registrados na tabela.
+   * Regra 8: Usado para exibir no painel da prova.
+   */
+  public async countTotalCheckpoints(): Promise<number> {
+    const { count, error } = await supabase
+      .from('checkpoints')
+      .select('*', { count: 'exact', head: true });
+
+    if (error) {
+      throw new Error(`[CheckpointRepository.countTotalCheckpoints] ${error.message}`);
+    }
+
+    return count || 0;
   }
 
   /**

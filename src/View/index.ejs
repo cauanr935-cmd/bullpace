@@ -318,11 +318,11 @@
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
             <strong>TURNOS ATIVOS</strong>
-            <span>2</span>
+            <span><%= typeof turnosAtivos !== 'undefined' ? turnosAtivos : 0 %></span>
           </article>
           <article>
             <strong>CHECKPOINTS</strong>
-            <span>186</span>
+            <span><%= typeof totalCheckpoints !== 'undefined' ? totalCheckpoints : 0 %></span>
           </article>
           <article>
             <strong>ALERTAS</strong>
@@ -818,18 +818,112 @@
 
         <div class="checkpoint-record-list" aria-label="Checkpoints da equipe">
           <% checkpoints.forEach((checkpoint) => { %>
-            <article class="checkpoint-record">
+            <article class="checkpoint-record" data-checkpoint-id="<%= checkpoint.id_checkpoint %>">
               <span><%= checkpoint.horario %></span>
               <strong><%= checkpoint.atleta %></strong>
               <strong><%= checkpoint.km %></strong>
               <span><%= checkpoint.operador %></span>
+              <button type="button" class="edit-checkpoint-button" data-id="<%= checkpoint.id_checkpoint %>" data-km="<%= checkpoint.kmValor %>">Editar</button>
             </article>
           <% }) %>
+        </div>
+
+        <div id="checkpointEditModal" class="modal-overlay" hidden>
+          <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="editCheckpointTitle">
+            <h2 id="editCheckpointTitle">Editar Km do checkpoint</h2>
+            <form id="checkpointEditForm" class="checkpoint-edit-form">
+              <label class="field-label" for="checkpointEditKm">Km acumulado</label>
+              <input id="checkpointEditKm" name="checkpointEditKm" class="checkpoint-input" type="text" placeholder="12,480" required>
+              <input id="checkpointEditId" name="checkpointId" type="hidden" value="">
+              <p id="checkpointEditMessage" class="checkpoint-message" hidden></p>
+              <div class="modal-actions">
+                <button type="button" class="secondary-button" id="cancelEditCheckpoint">Cancelar</button>
+                <button type="submit" class="continue-button">Salvar alteração</button>
+              </div>
+            </form>
+          </section>
         </div>
 
         <button type="button" class="continue-button audit-button">
           Auditar registro selecionado
         </button>
+
+        <script>
+          (() => {
+            const editModal = document.getElementById('checkpointEditModal');
+            const editForm = document.getElementById('checkpointEditForm');
+            const editKmInput = document.getElementById('checkpointEditKm');
+            const editIdInput = document.getElementById('checkpointEditId');
+            const editMessage = document.getElementById('checkpointEditMessage');
+            const cancelEdit = document.getElementById('cancelEditCheckpoint');
+
+            const openEditModal = (checkpointId, kmValue) => {
+              editIdInput.value = checkpointId;
+              editKmInput.value = Number(kmValue).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+              editMessage.hidden = true;
+              editModal.hidden = false;
+            };
+
+            const closeEditModal = () => {
+              editModal.hidden = true;
+            };
+
+            document.querySelectorAll('.edit-checkpoint-button').forEach((button) => {
+              button.addEventListener('click', () => {
+                openEditModal(button.dataset.id, button.dataset.km);
+              });
+            });
+
+            cancelEdit.addEventListener('click', closeEditModal);
+
+            editForm.addEventListener('submit', async (event) => {
+              event.preventDefault();
+              const checkpointId = editIdInput.value;
+              const kmRaw = editKmInput.value.trim();
+              const kmNormalized = kmRaw.includes(',') ? kmRaw.replace(/\./g, '').replace(',', '.') : kmRaw;
+              const novoKm = Number(kmNormalized);
+
+              if (!checkpointId || !Number.isFinite(novoKm) || novoKm <= 0) {
+                editMessage.textContent = 'Informe um valor de Km válido para atualizar.';
+                editMessage.className = 'checkpoint-message error';
+                editMessage.hidden = false;
+                return;
+              }
+
+              try {
+                const response = await fetch('/atualizar-checkpoint-km', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    idCheckpoint: checkpointId,
+                    novoKm,
+                    perfilUsuario: '<%= perfilUsuario %>',
+                    coordenador: '<%= coordenadorSelecionado %>'
+                  })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                  throw new Error(data.error || 'Falha ao atualizar checkpoint.');
+                }
+
+                const checkpointRow = document.querySelector(`[data-checkpoint-id="${checkpointId}"] strong:nth-of-type(2)`);
+                if (checkpointRow) {
+                  checkpointRow.textContent = `${Number(novoKm).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`;
+                }
+
+                editMessage.textContent = 'Checkpoint atualizado com sucesso.';
+                editMessage.className = 'checkpoint-message success';
+                editMessage.hidden = false;
+                setTimeout(closeEditModal, 1200);
+              } catch (error) {
+                editMessage.textContent = error.message;
+                editMessage.className = 'checkpoint-message error';
+                editMessage.hidden = false;
+              }
+            });
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'historicoOperacoes') { %>
@@ -1339,6 +1433,19 @@
             const pageParams = new URLSearchParams(window.location.search);
             const turnStartedAt = Number(pageParams.get('inicioTurnoTimestamp') || '<%= inicioTurnoTimestamp %>') || Date.now();
             finishInicioTurnoTimestamp.value = String(turnStartedAt);
+            // Inicializa window.idTurno a partir do valor que o servidor pode ter enviado na renderização.
+            (function initServerTurno() {
+              try {
+                const serverId = '<%= typeof idTurno !== "undefined" && idTurno ? idTurno : "" %>';
+                if (serverId && !window.idTurno) {
+                  window.idTurno = Number(serverId);
+                  const hidden = document.getElementById('finishIdTurno');
+                  if (hidden) hidden.value = String(serverId);
+                }
+              } catch (e) {
+                // não bloquear se template não tiver idTurno
+              }
+            })();
             // Identifica os checkpoints do atleta ativo no armazenamento local da tela.
             const activeAthleteKey = [
               'checkpoints',
@@ -1513,6 +1620,16 @@
               // Le a quilometragem informada.
               const km = kmAcumuladoInput.value.trim();
               const checkpointTimestamp = Date.now();
+              const kmNormalized = km.includes(',') ? km.replace(/\./g, '').replace(',', '.') : km;
+              const kmValue = Number(kmNormalized);
+              const inicioTurnoTimestampValue = Number(turnStartedAt) || Date.now();
+              const turnoIdValue = window.idTurno ? Number(window.idTurno) : null;
+
+              if (!Number.isFinite(kmValue) || kmValue <= 0) {
+                showMessage('Informe um valor de quilometragem válido antes de registrar.', 'error');
+                kmAcumuladoInput.focus();
+                return;
+              }
 
               try {
                 const response = await fetch('/registrar-checkpoint', {
@@ -1523,9 +1640,9 @@
                     equipe: '<%= equipeSelecionada %>',
                     atleta: '<%= atletaSelecionado %>',
                     esteira: '<%= esteiraSelecionada %>',
-                    kmAcumulado: km,
-                    inicioTurnoTimestamp: turnStartedAt,
-                    idTurno: window.idTurno || '<%= typeof idTurno !== "undefined" ? idTurno : "" %>'
+                    kmAcumulado: kmValue,
+                    inicioTurnoTimestamp: inicioTurnoTimestampValue,
+                    idTurno: turnoIdValue
                   })
                 });
                 const resData = await response.json();
@@ -1539,7 +1656,7 @@
                     hiddenIdTurno.value = String(resData.idTurno);
                   }
                 }
-                
+
                 athleteCheckpoints.push({
                   atleta: '<%= atletaSelecionado %>',
                   equipe: '<%= equipeSelecionada %>',
@@ -1549,7 +1666,25 @@
                 });
                 saveAthleteCheckpoints();
                 updateAthleteCheckpointSummary();
-                showMessage('Checkpoint registrado com sucesso.', 'success');
+
+                const pace = resData.checkpoint?.pace_medio;
+                if (typeof pace === 'number' && (pace < 3 || pace > 10)) {
+                  const alertaResponse = await fetch('/validar-pace-alerta', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      idCheckpoint: resData.checkpoint.id,
+                      paceMedio: pace,
+                    coordenadorId: '<%= (typeof coordenadorSelecionado !== "undefined" && coordenadorSelecionado) ? coordenadorSelecionado : (typeof perfilUsuario !== "undefined" ? perfilUsuario : "") %>'                    })
+                  });
+                  const alertaData = await alertaResponse.json();
+                  if (alertaData?.alerta) {
+                    showMessage(alertaData.alerta.mensagem, 'warning');
+                  }
+                } else {
+                  showMessage('Checkpoint registrado com sucesso.', 'success');
+                }
+
                 modal.hidden = false;
                 startCooldown();
               } catch (err) {

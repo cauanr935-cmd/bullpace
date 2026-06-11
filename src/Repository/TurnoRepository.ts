@@ -70,12 +70,17 @@ export class TurnoRepository {
   /**
    * Regra 7: Conta turnos com status_ativo = true em uma sessão operacional
    */
-  public async contarTurnosAtivos(idSessao: number): Promise<number> {
-    const { count, error } = await supabase
+  public async contarTurnosAtivos(idSessao?: number): Promise<number> {
+    let query = supabase
       .from('turnos')
       .select('*', { count: 'exact', head: true })
-      .eq('id_sessao_operacional', idSessao)
       .eq('status', 'em_andamento');
+
+    if (idSessao) {
+      query = query.eq('id_sessao_operacional', idSessao);
+    }
+
+    const { count, error } = await query;
 
     if (error) {
       throw new Error(`[TurnoRepository.contarTurnosAtivos] ${error.message}`);
