@@ -6,6 +6,7 @@ export interface OperadorDB {
   login: string;
   senha: string;
   id_sessao_operacional: number | null;
+  foto_url?: string | null;
 }
 
 export class OperadorRepository {
@@ -13,7 +14,7 @@ export class OperadorRepository {
   async listar(): Promise<OperadorDB[]> {
     const { data, error } = await supabase
       .from('operador')
-      .select('id_operador, nome, login, id_sessao_operacional');
+      .select('id_operador, nome, login, id_sessao_operacional, foto_url');
 
     if (error) throw new Error(`[OperadorRepository.listar] ${error.message}`);
     return (data || []) as OperadorDB[];

@@ -5,6 +5,7 @@ export interface AtletaDB {
   id_equipe: number;
   nome: string;
   status: string;
+  foto_url?: string | null;
 }
 
 export class AtletaRepository {
@@ -12,7 +13,7 @@ export class AtletaRepository {
   async listarPorEquipe(idEquipe: number): Promise<AtletaDB[]> {
     const { data, error } = await supabase
       .from('atletas')
-      .select('id_atleta, id_equipe, nome, status')
+      .select('id_atleta, id_equipe, nome, status, foto_url')
       .eq('id_equipe', idEquipe);
 
     if (error) throw new Error(`[AtletaRepository.listarPorEquipe] ${error.message}`);

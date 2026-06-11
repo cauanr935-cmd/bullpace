@@ -304,12 +304,59 @@ const registrarHistoricoAdministrativo = async (
   });
 };
 
+// ────────────────────────────────────────────────────────────────────────────
+// Upload de fotos (Supabase Storage)
+// ────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Recebe uma imagem em data URL (base64), envia para um bucket publico do
+ * Supabase Storage e devolve a URL publica para salvar no banco.
+ *
+ * @param bucket   Nome do bucket publico (ex: "atletas", "operadores").
+ * @param prefixo  Prefixo do nome do arquivo (ex: "atleta", "operador").
+ * @param dataUrl  Imagem em formato "data:image/...;base64,....".
+ * @returns        URL publica da foto, ou null se nao houver imagem valida.
+ */
+const uploadFotoStorage = async (
+  bucket: string,
+  prefixo: string,
+  dataUrl: unknown
+): Promise<string | null> => {
+  if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+    return null;
+  }
+
+  // Separa o cabecalho ("data:image/jpeg;base64") do conteudo base64.
+  const [cabecalho, conteudoBase64] = dataUrl.split(',');
+  if (!conteudoBase64) return null;
+
+  const contentType = cabecalho.match(/data:(image\/[a-zA-Z+]+);base64/)?.[1] || 'image/jpeg';
+  const extensao = contentType.split('/')[1].replace('jpeg', 'jpg').replace('+xml', '');
+  const buffer = Buffer.from(conteudoBase64, 'base64');
+
+  // Nome unico e estavel por upload (sem depender de Math.random no servidor).
+  const nomeArquivo = `${prefixo}-${Date.now()}.${extensao}`;
+  const caminho = `fotos/${nomeArquivo}`;
+
+  const { error } = await supabase.storage
+    .from(bucket)
+    .upload(caminho, buffer, { contentType, upsert: true });
+
+  if (error) {
+    throw new Error(`[uploadFotoStorage:${bucket}] ${error.message}`);
+  }
+
+  const { data } = supabase.storage.from(bucket).getPublicUrl(caminho);
+  return data.publicUrl;
+};
+
 // Funções para carregar dados reais do Supabase estruturados para o EJS
 const obterOperadoresReal = async () => {
   const ops = await operadorRepo.listar();
   return ops.map(op => ({
     nome: op.nome,
-    iniciais: obterIniciais(op.nome)
+    iniciais: obterIniciais(op.nome),
+    foto_url: (op as any).foto_url || null
   }));
 };
 
@@ -341,7 +388,8 @@ const obterAtletasReal = async (nomeEquipe: string) => {
   return atletasDB.map(at => ({
     nome: at.nome,
     iniciais: obterIniciais(at.nome),
-    status: at.status || 'Disponível para revezamento'
+    status: at.status || 'Disponível para revezamento',
+    foto_url: at.foto_url || null
   }));
 };
 
@@ -574,7 +622,8 @@ const obterAtletasFiltroReal = async (nomeEquipe: string) => {
     return {
       nome: at.nome,
       iniciais: obterIniciais(at.nome),
-      status: statusText
+      status: statusText,
+      foto_url: at.foto_url || null
     };
   });
 };
@@ -1868,11 +1917,19 @@ app.patch('/api/:tabela/:id', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTR
 // Cadastro Rápido de Operadores
 app.post('/cadastro-rapido/operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { nome } = req.body;
+    const { nome, foto } = req.body;
     if (!nome) {
       return res.status(400).json({ error: 'Nome do operador é obrigatório.' });
     }
     const operador = await operadorRepo.criar(nome);
+
+    // Se veio foto, sobe para o Storage e atualiza o registro recem-criado.
+    const fotoUrl = await uploadFotoStorage('operadores', 'operador', foto);
+    if (fotoUrl) {
+      await supabase.from('operador').update({ foto_url: fotoUrl }).eq('id_operador', operador.id_operador);
+      operador.foto_url = fotoUrl;
+    }
+
     await registrarHistoricoAdministrativo(req, 'cadastrar_operador', 'operador', {
       id_operador: operador.id_operador,
       nome: operador.nome,
@@ -2036,7 +2093,7 @@ app.post('/cadastro-rapido/equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDE
 // Cadastro Rápido de Atletas
 app.post('/cadastro-rapido/atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { nome, id_equipe } = req.body;
+    const { nome, id_equipe, foto } = req.body;
     if (!nome || !String(nome).trim()) {
       return res.status(400).json({ error: 'Nome do atleta é obrigatório.' });
     }
@@ -2047,10 +2104,12 @@ app.post('/cadastro-rapido/atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDE
     if (!Number.isFinite(idEquipeNum) || idEquipeNum <= 0) {
       return res.status(400).json({ error: 'Equipe inválida.' });
     }
+    // Sobe a foto (se enviada) para o Storage e guarda a URL publica.
+    const fotoUrl = await uploadFotoStorage('atletas', 'atleta', foto);
     const { data, error } = await supabase
       .from('atletas')
-      .insert([{ nome: String(nome).trim(), id_equipe: idEquipeNum }])
-      .select('id_atleta, nome, id_equipe')
+      .insert([{ nome: String(nome).trim(), id_equipe: idEquipeNum, foto_url: fotoUrl }])
+      .select('id_atleta, nome, id_equipe, foto_url')
       .single();
     if (error) throw error;
     // Fire-and-forget: não bloqueia a resposta ao cliente.
