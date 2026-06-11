@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "<p align=\"center\"> <a href= \"https://www.inteli.edu.br/\"><img src=\"./assets/inteli.png\" alt=\"Inteli - Instituto de Tecnologia e Liderança\" border=\"0\"></a> </p>",
   "main": "index.js",
-"scripts": {
-  "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "test": "jest"
-},
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "https://git.inteli.edu.br/graduacao/2026-1b/t27/g03.git"
@@ -21,7 +21,8 @@
     "@supabase/supabase-js": "^2.106.2",
     "dotenv": "^17.4.2",
     "ejs": "^6.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

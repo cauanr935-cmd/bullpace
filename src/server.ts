@@ -17,6 +17,7 @@ import { EventoRepository } from './Repository/EventoRepository';
 import { SessaoRepository } from './Repository/SessaoRepository';
 import { HistoricoOperacaoService } from './Service/HistoricoOperacaoService';
 import { CriarHistoricoOperacaoInput, FiltrosHistoricoOperacao } from './Models/HistoricoOperacaoModels';
+import { processarImagemCheckpoint } from './Service/OcrService';
 
 const operadorRepo = new OperadorRepository();
 const equipeRepo = new EquipeRepository();
@@ -40,8 +41,8 @@ app.use('/static', express.static(path.join(__dirname, 'View')));
 // Serve os assets do projeto, incluindo a logo oficial Red Bull 24h.
 app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const ROLES = {
   OPERADOR: 'operador',
@@ -1306,6 +1307,62 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
   }
 });
 
+app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
+  const operador = String(req.body?.operador || req.body?.coordenador || 'Operador não informado');
+
+  try {
+    const imagemCheckpoint = req.body?.imagemCheckpoint;
+    const resultado = await processarImagemCheckpoint(imagemCheckpoint);
+    const operacaoPorStatus: Record<string, string> = {
+      processado: 'CHECKPOINT_OCR_PROCESSADO',
+      pendente_revisao: 'CHECKPOINT_OCR_PENDENTE_REVISAO',
+      erro: 'CHECKPOINT_OCR_ERRO',
+      nao_processado: 'CHECKPOINT_OCR_NAO_PROCESSADO',
+      processando: 'CHECKPOINT_OCR_PROCESSANDO'
+    };
+
+    await registrarHistoricoOperador(
+      operador,
+      operacaoPorStatus[resultado.status] || 'CHECKPOINT_OCR_PROCESSADO',
+      'checkpoint',
+      {
+        operador,
+        equipe: req.body?.equipe || null,
+        atleta: req.body?.atleta || null,
+        esteira: req.body?.esteira || null,
+        ocr_status: resultado.status,
+        ocr_texto_extraido: resultado.textoExtraido,
+        ocr_km_extraido: resultado.kmExtraido,
+        ocr_confianca: resultado.confianca
+      }
+    );
+
+    if (resultado.status === 'processado' && resultado.kmExtraido !== null) {
+      await registrarHistoricoOperador(
+        operador,
+        'CHECKPOINT_KM_SUGERIDO_OCR',
+        'checkpoint',
+        {
+          operador,
+          equipe: req.body?.equipe || null,
+          atleta: req.body?.atleta || null,
+          esteira: req.body?.esteira || null,
+          ocr_km_extraido: resultado.kmExtraido
+        }
+      );
+    }
+
+    return res.status(200).json({ ok: true, resultado });
+  } catch (err: any) {
+    console.error('[/processar-ocr-checkpoint] Erro:', err.message);
+    await registrarHistoricoOperador(operador, 'CHECKPOINT_OCR_ERRO', 'checkpoint', {
+      operador,
+      erro: err.message
+    });
+    return res.status(500).json({ error: err.message || 'Erro interno ao processar OCR.' });
+  }
+});
+
 // Registra um checkpoint de km acumulado no Supabase com cálculo de pace.
 // Recebe JSON via fetch do front-end: { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno }
 app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
@@ -1317,15 +1374,14 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       atleta,
       esteira,
       kmAcumulado,
-      km_acumulado,
       inicioTurnoTimestamp,
       idTurno,
-      id_turno
+      origemKm,
+      ocrStatus,
+      ocrTextoExtraido,
+      ocrKmExtraido,
+      ocrConfianca
     } = req.body;
-
-    // Aceita tanto camelCase quanto snake_case vindo do frontend
-    const kmIncomingRaw = kmAcumulado ?? km_acumulado ?? null;
-    const idTurnoIncoming = idTurno ?? id_turno ?? null;
 
     // --- Validação numérica do km acumulado ---
     const kmRaw = String(kmIncomingRaw ?? '').trim();
@@ -1479,6 +1535,25 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       is_ajuste: false
     });
 
+    const metadadosOcrRecebidos = Boolean(ocrStatus || ocrTextoExtraido || ocrKmExtraido || ocrConfianca);
+    if (metadadosOcrRecebidos) {
+      try {
+        await checkpointRepo.atualizarMetadadosOcr(checkpoint.id_checkpoint, {
+          ocr_status: String(ocrStatus || 'nao_processado'),
+          ocr_texto_extraido: ocrTextoExtraido ? String(ocrTextoExtraido) : null,
+          ocr_km_extraido: ocrKmExtraido !== undefined && ocrKmExtraido !== null && ocrKmExtraido !== ''
+            ? Number(ocrKmExtraido)
+            : null,
+          ocr_confianca: ocrConfianca !== undefined && ocrConfianca !== null && ocrConfianca !== ''
+            ? Number(ocrConfianca)
+            : null,
+          atualizado_em: new Date().toISOString()
+        });
+      } catch (error: any) {
+        console.error('[/registrar-checkpoint] Metadados OCR ignorados:', error.message);
+      }
+    }
+
     await registrarHistoricoOperador(operador, 'registrar_checkpoint', 'checkpoint', {
       operador,
       equipe,
@@ -1487,7 +1562,16 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
       km_acumulado: kmArredondado,
       pace_medio: paceArredondado,
       velocidade_media: velocidadeArredondada,
-      id_turno: turnoId
+      id_turno: turnoId,
+      origem_km: origemKm || 'manual',
+      ocr_status: ocrStatus || null,
+      ocr_texto_extraido: ocrTextoExtraido || null,
+      ocr_km_extraido: ocrKmExtraido !== undefined && ocrKmExtraido !== null && ocrKmExtraido !== ''
+        ? Number(ocrKmExtraido)
+        : null,
+      ocr_confianca: ocrConfianca !== undefined && ocrConfianca !== null && ocrConfianca !== ''
+        ? Number(ocrConfianca)
+        : null
     }, checkpoint.id_checkpoint, anterior ? {
       id_checkpoint: anterior.id_checkpoint,
       km_acumulado: kmAnterior

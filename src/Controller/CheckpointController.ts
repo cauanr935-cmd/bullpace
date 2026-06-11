@@ -9,6 +9,11 @@ export interface Checkpoint {
   velocidade_media: number;       
   registrado_em: string | Date;   
   is_ajuste: boolean;             
+  ocr_status?: string | null;
+  ocr_texto_extraido?: string | null;
+  ocr_km_extraido?: number | null;
+  ocr_confianca?: number | null;
+  atualizado_em?: string | Date | null;
 }
 
 type CheckpointInput = Omit<Checkpoint, "id_checkpoint">;

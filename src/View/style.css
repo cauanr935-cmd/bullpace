@@ -2091,6 +2091,114 @@ body {
   white-space: nowrap;
 }
 
+.checkpoint-image-picker {
+  min-height: 74px;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.checkpoint-image-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkpoint-image-picker strong,
+.checkpoint-image-picker span {
+  display: block;
+}
+
+.checkpoint-image-picker strong {
+  color: #202124;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.checkpoint-image-picker span {
+  color: #707070;
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.ocr-suggestion-panel {
+  min-height: 76px;
+  margin: 14px 0;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: #f4f4f4;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.ocr-suggestion-panel strong,
+.ocr-suggestion-panel span,
+.ocr-suggestion-panel output {
+  display: block;
+}
+
+.ocr-suggestion-panel strong {
+  color: #202124;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.ocr-suggestion-panel span {
+  margin-top: 5px;
+  color: #707070;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ocr-suggestion-panel output {
+  min-width: 108px;
+  color: #202124;
+  text-align: right;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.manual-correction-toggle {
+  min-height: 58px;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #d8d8d8;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.manual-correction-toggle input {
+  width: 22px;
+  height: 22px;
+  accent-color: #202124;
+}
+
+.manual-correction-toggle span {
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
 .computed-pace-panel {
   min-height: 76px;
   margin-top: 14px;
@@ -2895,19 +3003,31 @@ body {
   background: var(--rb-surface);
 }
 
+html,
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .function-page:not(.tv-public-page) {
+  min-height: 100vh;
+  max-height: none;
   padding: 0;
   background:
     linear-gradient(180deg, rgba(0, 30, 60, 0.04), rgba(0, 30, 60, 0) 32%),
     var(--rb-surface);
+  align-items: flex-start;
+  overflow: visible;
 }
 
 .function-frame:not(.tv-frame) {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   max-width: none;
-  height: 100vh;
+  height: auto;
   min-height: 100vh;
   padding-top: 116px;
   border-radius: 0;
@@ -3058,6 +3178,9 @@ body {
 .turn-summary,
 .checkpoint-input,
 .input-with-unit,
+.checkpoint-image-picker,
+.ocr-suggestion-panel,
+.manual-correction-toggle,
 .last-checkpoint,
 .finish-button,
 .panel-metrics article,
@@ -3211,6 +3334,10 @@ body {
 
 .checkpoint-input:focus,
 .input-with-unit:focus-within,
+.checkpoint-image-picker:focus-within,
+.checkpoint-image-picker:hover,
+.manual-correction-toggle:focus-within,
+.manual-correction-toggle:hover,
 .audit-filter-form input:focus,
 .audit-filter-form select:focus {
   border-color: var(--rb-red);

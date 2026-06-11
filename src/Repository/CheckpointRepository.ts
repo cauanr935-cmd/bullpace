@@ -153,4 +153,27 @@ export class CheckpointRepository {
     }
     return data || [];
   }
+
+  /**
+   * Atualiza metadados OCR quando as colunas opcionais existem no banco.
+   */
+  public async atualizarMetadadosOcr(
+    idCheckpoint: number,
+    metadados: {
+      ocr_status: string;
+      ocr_texto_extraido: string | null;
+      ocr_km_extraido: number | null;
+      ocr_confianca: number | null;
+      atualizado_em: string;
+    }
+  ): Promise<void> {
+    const { error } = await supabase
+      .from('checkpoints')
+      .update(metadados)
+      .eq('id_checkpoint', idCheckpoint);
+
+    if (error) {
+      throw new Error(`[CheckpointRepository.atualizarMetadadosOcr] Metadados OCR não persistidos: ${error.message}`);
+    }
+  }
 }
