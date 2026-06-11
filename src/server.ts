@@ -77,9 +77,32 @@ const estadoProva: {
   status: StatusProva;
   atualizadoPor?: string;
   atualizadoEm: Date;
+  // Horario em que a prova de 24h comecou a contar. Usado pelo cronometro da TV.
+  inicioEm: Date;
 } = {
   status: 'em_andamento',
-  atualizadoEm: new Date()
+  atualizadoEm: new Date(),
+  inicioEm: new Date()
+};
+
+// Duracao oficial da prova em milissegundos (24 horas).
+const DURACAO_PROVA_MS = 24 * 60 * 60 * 1000;
+
+// Monta os dados do placar publico (ranking real + diferenca) a partir das equipes.
+const montarPlacarTv = async () => {
+  const equipes = await obterEquipesPainelReal();
+  // Converte o km formatado de volta para numero para ordenar e calcular a diferenca.
+  const parseKm = (texto: string) => Number(String(texto).replace(' km', '').replace(/\./g, '').replace(',', '.')) || 0;
+  const ordenadas = equipes
+    .map((eq) => ({ ...eq, kmValor: parseKm(eq.km) }))
+    .sort((a, b) => b.kmValor - a.kmValor);
+
+  const lider = ordenadas[0];
+  const vice = ordenadas[1];
+  const diferencaValor = lider && vice ? Math.max(0, lider.kmValor - vice.kmValor) : 0;
+  const diferenca = `+ ${diferencaValor.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`;
+
+  return { equipes: ordenadas, diferenca };
 };
 
 const normalizarPapel = (papel: unknown): PapelUsuario | null => {
@@ -916,12 +939,17 @@ app.post('/voltar-resultado-oficial', async (req: Request, res: Response): Promi
 });
 
 app.get('/tv', async (req: Request, res: Response): Promise<void> => {
-  const equipesPainel = await obterEquipesPainelReal();
+  const placar = await montarPlacarTv();
   res.render('index', {
     // Tela publica somente leitura, pensada para abrir na TV ou projetor.
     tela: 'tvPublica',
     titulo: 'PLACAR AO VIVO',
-    equipesPainel
+    equipesPainel: placar.equipes,
+    diferencaTv: placar.diferenca,
+    // Timestamp do inicio da prova e duracao total para o cronometro rodar na TV.
+    inicioProvaTimestamp: estadoProva.inicioEm.getTime(),
+    duracaoProvaMs: DURACAO_PROVA_MS,
+    statusProvaTv: estadoProva.status
   });
 });
 

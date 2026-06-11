@@ -798,21 +798,23 @@ body {
 .tv-scoreboard {
   /* Layout principal do placar publico. */
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
-  padding: 48px 72px 44px;
+  padding: 40px clamp(24px, 5vw, 72px);
   border-radius: 0;
   background: #f2f2ef;
   color: #202124;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Espacamento uniforme entre os blocos, sem margens gigantes que estouram a tela. */
+  gap: clamp(20px, 3vh, 40px);
+  box-sizing: border-box;
 }
 
 .tv-header {
-  /* Cabecalho do placar com nome do evento e status. */
-  min-height: 106px;
-  padding: 26px 34px;
+  /* Cabecalho do placar com a logo do evento e o status. */
+  min-height: 96px;
+  padding: 20px 34px;
   border-radius: 28px;
   background: #202124;
   color: #ffffff;
@@ -821,27 +823,17 @@ body {
   justify-content: space-between;
 }
 
-.tv-header strong,
-.tv-header span,
+/* Logo Red Bull 24h no lugar do antigo texto BULLPACE. */
+.tv-brand-logo {
+  height: clamp(48px, 7vh, 72px);
+  width: auto;
+  object-fit: contain;
+}
+
 .tv-header em {
   display: block;
   font-style: normal;
   font-weight: 800;
-}
-
-.tv-header strong {
-  font-size: 32px;
-  letter-spacing: 1px;
-}
-
-.tv-header span {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #ffffff;
-  letter-spacing: 2px;
-}
-
-.tv-header em {
   min-width: 160px;
   padding: 15px 28px;
   border-radius: 999px;
@@ -852,34 +844,43 @@ body {
 
 .tv-event {
   width: min(100%, 1160px);
-  margin: 44px auto 0;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.tv-event h1 {
-  width: 100%;
+.tv-clock-label {
   margin: 0;
-  color: #202124;
-  font-size: 68px;
-  text-align: center;
-  letter-spacing: 2px;
+  color: #707070;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 800;
+  letter-spacing: 3px;
 }
 
-.tv-event p {
-  margin: 20px 0 0;
-  font-size: 28px;
-  text-align: center;
+.tv-clock {
+  margin: 8px 0 0;
+  color: #202124;
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.tv-clock-remaining {
+  margin-top: 10px;
+  color: #707070;
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 700;
 }
 
 .tv-paused-message {
   /* Mensagem exibida quando a coordenacao desativa o Modo TV. */
   width: min(100%, 980px);
-  min-height: 360px;
-  margin: 80px auto 0;
-  padding: 56px;
+  min-height: 320px;
+  margin: 24px auto 0;
+  padding: 48px;
   border-radius: 30px;
   background: #ffffff;
   color: #202124;
@@ -907,24 +908,23 @@ body {
 }
 
 .tv-ranking {
-  /* Grade com as duas equipes no placar publico. */
+  /* Grade com as equipes no placar publico. */
   width: min(100%, 1160px);
-  margin: 48px auto 0;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 36px;
 }
 
 .tv-ranking article {
-  min-height: 340px;
-  padding: 42px;
+  padding: clamp(24px, 3vw, 42px);
   border-radius: 28px;
   background: #ffffff;
   color: #202124;
   box-shadow: inset 0 0 0 4px #202124;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 20px;
 }
 
 .tv-ranking article span,
@@ -944,15 +944,15 @@ body {
 }
 
 .tv-ranking article strong {
-  margin-top: 32px;
-  font-size: 34px;
+  margin: 0;
+  font-size: clamp(26px, 3vw, 34px);
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .tv-ranking article p {
-  margin: 44px 0 0;
-  font-size: clamp(72px, 8vw, 116px);
+  margin: 0;
+  font-size: clamp(56px, 7vw, 104px);
   line-height: 1;
   font-weight: 800;
   letter-spacing: 1px;
@@ -982,40 +982,74 @@ body {
 
 .tv-difference {
   width: min(100%, 1160px);
-  min-height: 116px;
-  margin: 48px auto 0;
-  padding: 32px 46px;
+  margin: 0 auto;
+  padding: 28px 46px;
   border-radius: 28px;
   background: #202124;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
 .tv-difference strong {
-  font-size: 24px;
+  font-size: clamp(18px, 2vw, 24px);
   font-weight: 800;
   letter-spacing: 2px;
 }
 
 .tv-difference span {
-  font-size: 46px;
+  font-size: clamp(34px, 4vw, 46px);
+  font-weight: 800;
+}
+
+/* Bloco "Nome do atleta atual" (oculto por padrao; ligado pelo Modo TV). */
+.tv-current-athlete {
+  width: min(100%, 1160px);
+  margin: 0 auto;
+  padding: 24px 46px;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 4px #202124;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.tv-current-athlete strong {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.tv-current-athlete span {
+  font-size: clamp(24px, 3vw, 38px);
   font-weight: 800;
 }
 
 .tv-scoreboard footer {
   margin-top: auto;
+  padding-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: clamp(16px, 2vw, 22px);
   color: #707070;
 }
 
 .tv-scoreboard.is-paused .tv-event,
 .tv-scoreboard.is-paused .tv-ranking,
-.tv-scoreboard.is-paused .tv-difference {
-  /* Esconde os dados quando o placar esta pausado. */
+.tv-scoreboard.is-paused .tv-difference,
+.tv-scoreboard.is-paused .tv-current-athlete {
+  /* Esconde todos os dados quando o placar esta pausado. */
   display: none;
+}
+
+/* Garante que blocos ocultados pelo Modo TV (atributo hidden) realmente sumam,
+   mesmo tendo display: flex no estilo base. */
+.tv-scoreboard [data-tv-block][hidden] {
+  display: none !important;
 }
 
 .tv-scoreboard.is-paused .tv-paused-message {
@@ -3016,7 +3050,8 @@ body {
   }
 
   .tv-scoreboard {
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     margin: 0;
     border-radius: 0;
   }
@@ -3024,30 +3059,22 @@ body {
   .tv-header,
   .tv-event,
   .tv-ranking,
-  .tv-difference {
-    width: calc(100% - 48px);
+  .tv-difference,
+  .tv-current-athlete {
+    width: 100%;
   }
 
   .tv-header {
-    padding: 32px 24px;
-  }
-
-  .tv-event {
-    margin-top: 42px;
+    padding: 20px 24px;
   }
 
   .tv-ranking {
-    margin-top: 42px;
+    grid-template-columns: 1fr;
     gap: 24px;
   }
 
   .tv-ranking article {
-    min-height: 190px;
     padding: 28px;
-  }
-
-  .tv-ranking article p {
-    font-size: 54px;
   }
 }
 
@@ -3438,10 +3465,18 @@ body {
 }
 
 .tv-header,
-.tv-difference {
+.tv-difference,
+.tv-current-athlete {
   border-radius: 8px;
   background: var(--rb-navy);
   border-bottom: 3px solid var(--rb-red);
+  box-shadow: none;
+}
+
+/* No tema Red Bull os blocos navy usam texto branco. */
+.tv-current-athlete strong,
+.tv-current-athlete span {
+  color: #ffffff;
 }
 
 .tv-header em {
