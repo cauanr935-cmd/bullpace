@@ -438,7 +438,7 @@ const obterCheckpointsEquipeReal = async (nomeEquipe: string) => {
     .order('registrado_em', { ascending: false });
 
   if (error) {
-    console.error("Error fetching checkpoints:", error);
+    console.error('[obterCheckpointsEquipeReal] Erro fetching checkpoints:', error.message);
     return [];
   }
 
@@ -451,17 +451,46 @@ const obterCheckpointsEquipeReal = async (nomeEquipe: string) => {
     .map(r => {
       const op = (ops || []).find(o => o.id_sessao_operacional === r.id_sessao_registro_checkpoint);
       const operadorNome = op ? op.nome : 'Sistema';
-
+      const kmValor = Number(r.km_acumulado || 0);
       const dataReg = new Date(r.registrado_em);
       const horario = dataReg.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
       return {
+        id_checkpoint: r.id_checkpoint,
         horario,
         atleta: r.atleta_nome,
-        km: `${Number(r.km_acumulado).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+        km: `${kmValor.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+        kmValor,
         operador: operadorNome
       };
     });
+};
+
+const obterSessaoOperacionalAtiva = async (): Promise<number | null> => {
+  const { data, error } = await supabase
+    .from('sessoes_operacionais')
+    .select('id_sessao_operacional')
+    .eq('status', 'ativa')
+    .order('inicio_em', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[obterSessaoOperacionalAtiva] Erro:', error.message);
+    return null;
+  }
+
+  return data?.id_sessao_operacional ?? null;
+};
+
+const obterPainelMetricsReal = async () => {
+  const idSessaoAtiva = await obterSessaoOperacionalAtiva();
+  const turnosAtivos = await turnoRepo.contarTurnosAtivos(idSessaoAtiva || undefined);
+  const totalCheckpoints = idSessaoAtiva
+    ? await checkpointRepo.countBySessao(idSessaoAtiva)
+    : await checkpointRepo.countTotalCheckpoints();
+
+  return { idSessaoAtiva, turnosAtivos, totalCheckpoints };
 };
 
 const obterHistoricoOperacoesView = async (
@@ -675,11 +704,14 @@ app.post('/login-coordenador', async (req: Request, res: Response): Promise<void
 
     // Credenciais válidas: abre o painel com dados reais do banco.
     const equipesPainel = await obterEquipesPainelReal();
+    const painelMetrics = await obterPainelMetricsReal();
     res.render('index', {
       tela: 'painelCoordenador',
       titulo: 'PAINEL DA PROVA',
       coordenadorSelecionado: nomeAutenticado,
       equipesPainel,
+      turnosAtivos: painelMetrics.turnosAtivos,
+      totalCheckpoints: painelMetrics.totalCheckpoints,
       ...contextoAutorizacao(papel)
     });
 
@@ -714,12 +746,16 @@ app.post('/voltar-painel-coordenador', async (req: Request, res: Response): Prom
   const papel = obterPapelRenderizacao(req);
   const equipesPainel = await obterEquipesPainelReal();
 
+  const painelMetrics = await obterPainelMetricsReal();
+
   res.render('index', {
     // Retorna dos detalhes para a visao geral da coordenacao.
     tela: 'painelCoordenador',
     titulo: 'PAINEL DA PROVA',
     coordenadorSelecionado: coordenador,
     equipesPainel,
+    turnosAtivos: painelMetrics.turnosAtivos,
+    totalCheckpoints: painelMetrics.totalCheckpoints,
     ...contextoAutorizacao(papel)
   });
 });
@@ -909,6 +945,8 @@ app.post('/detalhes-equipe', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRA
   const equipesPainel = await obterEquipesPainelReal();
   const equipePainel = equipesPainel.find((item) => item.nome === equipe) || equipesPainel[0];
   const checkpoints = await obterCheckpointsEquipeReal(equipePainel.nome);
+  const kmTotalEquipe = checkpoints.reduce((sum, checkpoint) => sum + (checkpoint.kmValor || 0), 0);
+  equipePainel.km = `${kmTotalEquipe.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`;
 
   res.render('index', {
     // Abre os registros gerais da equipe para auditoria.
@@ -1329,6 +1367,7 @@ app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
 // Recebe JSON via fetch do front-end: { operador, equipe, atleta, esteira, kmAcumulado, inicioTurnoTimestamp, idTurno }
 app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
   try {
+    console.log('[POST /registrar-checkpoint] req.body:', JSON.stringify(req.body));
     const {
       operador,
       equipe,
@@ -1345,7 +1384,7 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
     } = req.body;
 
     // --- Validação numérica do km acumulado ---
-    const kmRaw = String(kmAcumulado || '').trim();
+    const kmRaw = String(kmIncomingRaw ?? '').trim();
     const kmNormalizado = kmRaw.includes(',')
       ? kmRaw.replace(/\./g, '').replace(',', '.')
       : kmRaw;
@@ -1362,7 +1401,9 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
     }
 
     // --- Resolve id_turno ---
-    let turnoId = idTurno ? Number(idTurno) : null;
+    let turnoId = (idTurnoIncoming !== null && idTurnoIncoming !== undefined && idTurnoIncoming !== '')
+      ? Number(idTurnoIncoming)
+      : null;
 
     // Se não veio idTurno, tenta achar o turno ativo do atleta no banco.
     if (!turnoId) {
@@ -1382,26 +1423,58 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
         }
       }
     }
-
+    // Caso ainda não tenha turnoId, tenta localizar um turno ativo pela equipe (lista de atletas).
     if (!turnoId) {
-      return res.status(400).json({ error: 'Turno ativo não encontrado. Inicie o turno antes de registrar checkpoints.' });
+      try {
+        const eq = await equipeRepo.buscarPorNome(equipe);
+        if (eq) {
+          const atletasEquipe = await atletaRepo.listarPorEquipe(eq.id_equipe);
+          const atletaIds = (atletasEquipe || []).map(a => a.id_atleta);
+          if (atletaIds.length > 0) {
+            const { data: turnoEquipe } = await supabase
+              .from('turnos')
+              .select('id_turno, id_sessao_operacional')
+              .in('id_atleta', atletaIds)
+              .eq('status', 'em_andamento')
+              .order('horario_inicio', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+            if (turnoEquipe) {
+              turnoId = turnoEquipe.id_turno;
+            }
+          }
+        }
+      } catch (e) {
+        const msg = (e && (e as any).message) ? (e as any).message : String(e);
+        console.warn('[POST /registrar-checkpoint] erro ao buscar turno por equipe:', msg);
+      }
     }
 
-    // --- Busca sessão operacional vinculada ao turno ---
-    const { data: turnoRow } = await supabase
-      .from('turnos')
-      .select('id_sessao_operacional, horario_inicio, km_turno')
-      .eq('id_turno', turnoId)
-      .single();
-
-    if (!turnoRow) {
-      return res.status(404).json({ error: `Turno #${turnoId} não encontrado no banco.` });
+    // Se ainda não encontrou um turno ativo, bloqueia o registro informando o problema.
+    if (!turnoId) {
+      return res.status(400).json({ error: 'Não é possível registrar um checkpoint sem um turno ativo iniciado no sistema. Por favor, inicie o turno da equipe primeiro.' });
     }
 
-    const idSessaoOperacional = turnoRow.id_sessao_operacional;
+    // --- Busca sessão operacional vinculada ao turno quando um id foi fornecido ---
+    let turnoRow: any = null;
+    if (turnoId) {
+      const { data } = await supabase
+        .from('turnos')
+        .select('id_sessao_operacional, horario_inicio, km_turno')
+        .eq('id_turno', turnoId)
+        .maybeSingle();
+
+      if (data) {
+        turnoRow = data;
+      } else {
+        console.warn(`[POST /registrar-checkpoint] Turno informado (#${turnoId}) não encontrado no banco; prosseguindo com turno=null.`);
+      }
+    }
+
+    const idSessaoOperacional = turnoRow ? turnoRow.id_sessao_operacional : null;
 
     // --- Busca checkpoint anterior para calcular pace ---
-    const checkpointsAnteriores = await checkpointRepo.findByTurno(turnoId);
+    const checkpointsAnteriores = turnoId ? await checkpointRepo.findByTurno(turnoId) : [];
     const anterior = checkpointsAnteriores.length > 0
       ? checkpointsAnteriores.reduce((a, b) =>
           new Date(a.registrado_em) > new Date(b.registrado_em) ? a : b)
@@ -1416,9 +1489,30 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
 
     // Calcula tempo decorrido desde o início do turno.
     const agora = Date.now();
-    const inicioTurno = turnoRow.horario_inicio
-      ? new Date(turnoRow.horario_inicio).getTime()
-      : Number(inicioTurnoTimestamp);
+    // Protege caso turnoRow seja null — use ordem de preferência:
+    // 1) horario_inicio do turno recuperado do banco
+    // 2) valor enviado pelo frontend em inicioTurnoTimestamp
+    // 3) fallback para 'agora'
+    let inicioTurno = agora;
+    try {
+      if (turnoRow && turnoRow.horario_inicio) {
+        const parsed = new Date(turnoRow.horario_inicio).getTime();
+        if (Number.isFinite(parsed) && parsed > 0) inicioTurno = parsed;
+      } else if (inicioTurnoTimestamp !== undefined && inicioTurnoTimestamp !== null && inicioTurnoTimestamp !== '') {
+        const asNumber = Number(inicioTurnoTimestamp);
+        if (Number.isFinite(asNumber) && asNumber > 0) {
+          inicioTurno = asNumber;
+        } else {
+          const parsedReq = Date.parse(String(inicioTurnoTimestamp));
+          if (!Number.isNaN(parsedReq)) inicioTurno = parsedReq;
+        }
+      }
+    } catch (e) {
+      // se algo falhar no parse, mantemos 'agora' como fallback
+      console.warn('[POST /registrar-checkpoint] falha ao parsear inicioTurno, usando agora:', e);
+      inicioTurno = agora;
+    }
+
     const referenciaTurno = Number.isFinite(inicioTurno) && inicioTurno > 0 ? inicioTurno : agora;
     const segundosDecorridos = Math.max(1, (agora - referenciaTurno) / 1000);
 
@@ -1496,8 +1590,17 @@ app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req:
     });
 
   } catch (err: any) {
-    console.error('[/registrar-checkpoint] Erro:', err.message);
-    return res.status(500).json({ error: err.message || 'Erro interno ao registrar checkpoint.' });
+    try {
+      console.error('[POST /registrar-checkpoint] req.body at error:', JSON.stringify(req.body));
+    } catch (e) {
+      console.error('[POST /registrar-checkpoint] erro ao serializar req.body:', e);
+    }
+    const e = err as any;
+    console.error('[/registrar-checkpoint] Erro:', e?.message ?? e);
+    if (e?.details) console.error('[/registrar-checkpoint] details:', e.details);
+    if (e?.hint) console.error('[/registrar-checkpoint] hint:', e.hint);
+    if (e?.stack) console.error(e.stack);
+    return res.status(500).json({ error: e?.message || 'Erro interno ao registrar checkpoint.' });
   }
 });
 

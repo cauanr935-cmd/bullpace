@@ -2,8 +2,8 @@ import { supabase } from "../database/supabase";
 
 export interface Checkpoint {
   id_checkpoint: number;          
-  id_turno: number;               
-  id_sessao_operacional: number;  
+  id_turno: number | null;               
+  id_sessao_operacional: number | null;  
   km_acumulado: number;            
   pace_medio: number;             
   velocidade_media: number;       
@@ -24,8 +24,6 @@ type CheckpointInput = Omit<Checkpoint, "id_checkpoint">;
 function validarCheckpoint(cp: CheckpointInput): void {
   const camposFaltando: string[] = [];
 
-  if (cp.id_turno === undefined || cp.id_turno === null) camposFaltando.push("id_turno");
-  if (cp.id_sessao_operacional === undefined || cp.id_sessao_operacional === null) camposFaltando.push("id_sessao_operacional");
   if (cp.km_acumulado === undefined || cp.km_acumulado === null) camposFaltando.push("km_acumulado");
   if (cp.velocidade_media === undefined || cp.velocidade_media === null) camposFaltando.push("velocidade_media");
   if (!cp.registrado_em) camposFaltando.push("registrado_em");

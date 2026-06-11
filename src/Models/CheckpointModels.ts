@@ -1,7 +1,7 @@
 export interface Checkpoint {
   id_checkpoint: number; // Mapeado de 'Long'
-  id_turno: number;
-  id_sessao_operacional: number;
+  id_turno: number | null;
+  id_sessao_operacional: number | null;
   km_acumulado: number;     // Mapeado de 'Decimal'
   pace_medio: number;       // Mapeado de 'Decimal'
   velocidade_media: number; // Mapeado de 'Decimal'
