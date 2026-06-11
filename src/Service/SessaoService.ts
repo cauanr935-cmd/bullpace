@@ -5,7 +5,7 @@ import {
 } from '../Controller/SessaoController';
 
 // Reaproveitando a tipagem estruturada de entrada para a abertura da sessão
-type AbrirSessaoInput = Omit<SessaoOperacional, "id_sessao_operacional" | "fim_em" | "status" | "deleted_at">;
+type AbrirSessaoInput = Omit<SessaoOperacional, "id_sessao_operacional" | "fim_em" | "status">;
 
 export class SessaoService {
 

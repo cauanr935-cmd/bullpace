@@ -1,4 +1,4 @@
-<img src="../assets/logointeli.png">
+﻿<img src="../assets/logointeli.png">
 
 
 # WAD - Web Application Document - Módulo 2 - Inteli
@@ -244,7 +244,9 @@ Caso seja viável, em uma etapa posterior, a solução poderá ser validada com 
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
-Esta seção detalha o alinhamento estratégico entre as necessidades operacionais de campo do parceiro Red Bull e as funcionalidades específicas da solução proposta, garantindo consistência entre as dores identificadas no monitoramento de atletas e o valor gerado para o ecossistema de Field Marketing. O Canva da proposta de valor é estruturado a partir de uma análise rigorosa do Perfil do Cliente, criando um Mapa de Valor que responde diretamente a cada desafio logístico e técnico do evento de 24 horas. [4](#ref-4).
+O Value Proposition Canvas é uma ferramenta que conecta dois lados: de um, o que o cliente precisa, suas tarefas, dores e ganhos; de outro, o que a solução entrega pra responder a isso. A análise é dividida em Pe  qrfil do Cliente e Mapa de Valor, e a ideia é checar se cada coisa que o sistema faz tem relação direta com uma necessidade real da operação [4](#ref-4).
+
+No caso do BullPace, o cliente é o time de Field Marketing da Red Bull, que opera o registro dos dados ao longo das 24 horas de prova. A Figura 3 mostra o canvas completo, e nas seções seguintes detalhamos cada bloco dos dois lados.
 
 <div align="center">
   <sub><b>Figura 3 – CANVA DA PROPOSTA DE VALOR</b></sub><br>
@@ -362,7 +364,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A primeira persona representa **Ricardo**, operador de campo responsável pelo registro dos dados durante o evento. Sua função é acompanhar a troca dos atletas, selecionar equipe, atleta e esteira, iniciar e encerrar turnos e registrar checkpoints no sistema ao longo da prova. Essa persona foi escolhida porque está diretamente ligada ao momento mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, Ricardo é o principal usuário operacional, utilizando a aplicação para substituir a prancheta e garantir que os registros fiquem vinculados corretamente a equipe, atleta, esteira, turno e checkpoint.
+A primeira persona é o **Ricardo**, operador de campo que registra os dados durante o evento. É ele quem acompanha a troca dos atletas, escolhe equipe, atleta e esteira, abre e encerra turnos e marca os checkpoints ao longo da prova. Essa persona foi escolhida porque está no ponto mais crítico da operação: a inserção manual dos dados sob pressão, cansaço e necessidade de rapidez. No sistema, o Ricardo é o usuário operacional principal. Ele usa a aplicação no lugar da prancheta e responde por manter cada registro ligado à equipe, ao atleta, à esteira, ao turno e ao checkpoint corretos.
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
@@ -370,15 +372,15 @@ A primeira persona representa **Ricardo**, operador de campo responsável pelo r
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A segunda persona representa **Camila**, coordenadora responsável pelo acompanhamento geral da competição e pela validação dos resultados. Sua função no evento é monitorar o andamento das equipes, conferir dados consolidados, tomar decisões em casos de inconsistência e garantir maior segurança na apuração final. Essa persona foi escolhida porque representa a necessidade de gestão, controle e confiabilidade dos dados ao longo das 24 horas. No sistema, Camila se relaciona principalmente com as telas de acompanhamento, Modo TV, resultados consolidados, comparação entre equipes e exportação dos dados para auditoria.
+A segunda persona é a **Camila**, coordenadora que acompanha a competição inteira e valida os resultados. No evento, ela monitora as duas equipes, confere os dados consolidados, decide o que fazer quando aparece alguma inconsistência e responde pela apuração final. Essa persona foi escolhida porque representa o lado de gestão e controle, que depende da confiabilidade dos dados ao longo das 24 horas. No sistema, a Camila usa principalmente as telas de acompanhamento, o Modo TV, os resultados consolidados, a comparação entre equipes e a exportação dos dados para auditoria.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-As User Stories são descrições objetivas das necessidades do usuário em relação ao sistema. Elas apresentam, de forma simples, quem utilizará a funcionalidade, qual ação deseja realizar e qual valor essa ação entrega para o produto. [8](#ref-8).
+As User Stories descrevem o que cada usuário precisa fazer no sistema. Cada uma segue o formato de quem usa, o que quer fazer e por quê, no padrão "Como [perfil], quero [ação] para [objetivo]" [8](#ref-8).
 
-Esse formato ajuda a equipe a transformar necessidades reais em entregas planejáveis, mantendo o desenvolvimento orientado ao usuário e não apenas à implementação técnica. Além disso, as User Stories facilitam a priorização do backlog, pois permitem identificar quais funcionalidades são essenciais para o funcionamento inicial da solução e quais podem ser desenvolvidas em etapas posteriores.
+Esse formato ajuda a equipe a partir de uma necessidade real e chegar em uma entrega que pode ser planejada. Também facilita priorizar o backlog, separando o que é essencial para o sistema funcionar do que pode ficar para depois.
 
-Cada User Story também é acompanhada por critérios de aceite, que definem as condições mínimas para que a entrega seja considerada concluída. Dessa forma, a equipe consegue validar se a funcionalidade atende ao comportamento esperado antes de avançar no desenvolvimento.
+Cada User Story vem acompanhada de critérios de aceite, que definem o mínimo para a entrega ser considerada pronta. São eles que permitem à equipe conferir se a funcionalidade faz o que deveria antes de seguir adiante.
 
 ---
 
@@ -1002,34 +1004,34 @@ Os Requisitos Funcionais (RF) descrevem as funcionalidades que o sistema deve of
 
 Neste projeto, os RFs foram definidos a partir do fluxo principal da operação: seleção de equipe e atleta, gestão de esteiras, controle de turnos, registro de checkpoints, consolidação de resultados e exportação dos dados. Assim, eles servem como base para orientar o desenvolvimento e validar se o sistema atende ao escopo planejado.
 
-| ID | Descrição | Prioridade | Status |
-|---|---|---|---|
-| **RF001** | **Seleção de Perfil de Acesso:** o sistema deve apresentar, na tela inicial, a seleção entre dois perfis de acesso — Promotor de Field Marketing e Gestora de Operações — direcionando o usuário ao fluxo de autenticação correspondente. | Alta | Planejado |
-| **RF002** | **Autenticação por Credenciais:** o sistema deve autenticar o usuário mediante validação de login e senha previamente cadastrados, considerando o perfil selecionado, e rejeitar tentativas com credenciais inválidas exibindo mensagem de erro. | Alta | Planejado |
-| **RF003** | **Encerramento de Sessão:** o sistema deve permitir que o usuário autenticado encerre sua sessão a qualquer momento, retornando à tela inicial de seleção de perfil. | Alta | Planejado |
-| **RF004** | **Seleção de Equipe:** o sistema deve permitir que o Promotor de Field Marketing selecione a equipe à qual os registros realizados naquela sessão serão vinculados. | Alta | Planejado |
-| **RF005** | **Seleção de Atleta:** o sistema deve permitir que o Promotor de Field Marketing selecione um atleta dentro da equipe previamente selecionada, listando os atletas associados àquela equipe. | Alta | Planejado |
-| **RF006** | **Exibição de Esteiras com Status:** o sistema deve exibir as esteiras associadas à equipe selecionada, indicando o status de cada esteira como “livre”, “em uso” ou “indisponível”. | Alta | Planejado |
-| **RF007** | **Associação de Turno a Esteira:** o sistema deve permitir que o Promotor de Field Marketing associe um turno a uma esteira cujo status esteja marcado como “livre” no momento da associação. | Alta | Planejado |
-| **RF008** | **Início de Turno:** o sistema deve permitir que o Promotor de Field Marketing inicie um turno para o atleta selecionado, em uma esteira previamente associada. | Alta | Planejado |
-| **RF009** | **Encerramento de Turno:** o sistema deve permitir que o Promotor de Field Marketing encerre um turno em andamento, atualizando o status da esteira utilizada para “livre”. | Alta | Planejado |
-| **RF010** | **Registro de Checkpoint:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e aceitando preenchimento opcional de pace médio e velocidade média. | Alta | Planejado |
-| **RF011** | **Cálculo Automático de Pace:** o sistema deve calcular automaticamente o pace médio do checkpoint a partir do KM acumulado e do tempo decorrido sempre que o Promotor de Field Marketing não preencher esse campo manualmente. | Alta | Planejado |
-| **RF012** | **Registro Automático de Timestamps:** o sistema deve gravar automaticamente o timestamp do servidor nas ações de início de turno, registro de checkpoint e encerramento de turno, sem permitir edição manual pelo usuário. | Alta | Planejado |
-| **RF013** | **Exibição de Timer Regressivo:** o sistema deve exibir, durante um turno ativo, um timer regressivo até o próximo registro de checkpoint, sinalizando visualmente quando o tempo restante chega a zero. | Alta | Planejado |
-| **RF014** | **Exibição de Resultados do Turno:** o sistema deve exibir, ao encerramento de um turno, os resultados daquela sessão contendo KM total, pace médio, velocidade média e duração. | Alta | Planejado |
-| **RF015** | **Consulta de Registros Históricos:** o sistema deve permitir à Gestora de Operações consultar registros de turnos e checkpoints já gravados no sistema, independentemente do estado do turno ou da equipe correspondente, com filtros por equipe, atleta, esteira e período. | Alta | Planejado |
-| **RF016** | **Correção de Registros Históricos:** o sistema deve permitir à Gestora de Operações alterar o valor de registros já existentes em turnos encerrados, inclusive os pertencentes a equipes já finalizadas, sobrescrevendo o dado anterior; não é permitida a criação de registros novos por meio dessa funcionalidade. | Alta | Planejado |
-| **RF017** | **Justificativa em Correções:** o sistema deve registrar, junto a cada correção realizada em registro histórico, a justificativa textual informada pela Gestora de Operações. | Alta | Planejado |
-| **RF018** | **Exibição de Autoria:** o sistema deve exibir, junto a cada registro de turno, checkpoint e finalização de equipe, a identidade do usuário responsável pela ação. | Alta | Planejado |
-| **RF019** | **Consulta de Histórico de Alterações:** o sistema deve permitir à Gestora de Operações consultar o histórico de alterações realizadas em um registro, incluindo valor anterior, valor novo, autora da correção, timestamp e justificativa. | Alta | Planejado |
-| **RF020** | **Finalização de Equipe:** o sistema deve permitir que a Gestora de Operações finalize uma equipe mediante confirmação explícita. | Alta | Planejado |
-| **RF021** | **Bloqueio de Edição Direta após Finalização:** o sistema deve bloquear a edição direta dos dados de uma equipe após sua finalização para usuários do perfil Promotor de Field Marketing, mantendo os registros disponíveis para correção auditável pela Gestora de Operações. | Alta | Planejado |
-| **RF022** | **Visualização de Resultados Consolidados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados pela equipe, KM acumulado por atleta e duração total. | Alta | Planejado |
-| **RF023** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | Alta | Planejado |
-| **RF024** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | Média | Planejado |
-| **RF025** | **Exportação de Dados em CSV:** o sistema deve permitir à Gestora de Operações exportar os dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados e histórico de correções com justificativas. | Média | Planejado |
-| **RF026** | **Resiliência a Indisponibilidade de Rede:** o sistema deve persistir localmente os registros de checkpoint criados durante períodos de indisponibilidade de rede e sincronizá-los automaticamente com o servidor quando a conexão for restabelecida, sem ação manual do Promotor de Field Marketing. | Alta | Planejado |
+| ID | Descrição | Critério de aceite | Prioridade | Status |
+|---|---|---|---|---|
+| **RF001** | **Seleção de Perfil de Acesso:** o sistema deve apresentar, na tela inicial, a seleção entre dois perfis de acesso — Promotor de Field Marketing e Gestora de Operações — direcionando o usuário ao fluxo de autenticação correspondente. | O sistema deve exibir os dois perfis na tela inicial e levar cada um ao fluxo certo: o promotor para a identificação e a gestora para a autenticação. | Alta | Planejado |
+| **RF002** | **Autenticação por Credenciais:** o sistema deve autenticar o usuário mediante validação de login e senha previamente cadastrados, considerando o perfil selecionado, e rejeitar tentativas com credenciais inválidas exibindo mensagem de erro. | O sistema deve liberar o acesso com login e senha válidos e bloquear com mensagem de erro quando as credenciais estiverem erradas. | Alta | Planejado |
+| **RF003** | **Encerramento de Sessão:** o sistema deve permitir que o usuário autenticado encerre sua sessão a qualquer momento, retornando à tela inicial de seleção de perfil. | O sistema deve encerrar a sessão quando o usuário pedir e voltar para a tela de seleção de perfil. | Alta | Planejado |
+| **RF004** | **Seleção de Equipe:** o sistema deve permitir que o Promotor de Field Marketing selecione a equipe à qual os registros realizados naquela sessão serão vinculados. | O sistema deve listar as equipes do evento e manter a equipe escolhida vinculada aos registros feitos na sequência. | Alta | Planejado |
+| **RF005** | **Seleção de Atleta:** o sistema deve permitir que o Promotor de Field Marketing selecione um atleta dentro da equipe previamente selecionada, listando os atletas associados àquela equipe. | O sistema deve mostrar apenas os atletas da equipe selecionada e vincular o atleta escolhido ao próximo turno. | Alta | Planejado |
+| **RF006** | **Exibição de Esteiras com Status:** o sistema deve exibir as esteiras associadas à equipe selecionada, indicando o status de cada esteira como "livre", "em uso" ou "indisponível". | O sistema deve exibir as esteiras da equipe com o status correto: livre, em uso ou indisponível. | Alta | Planejado |
+| **RF007** | **Associação de Turno a Esteira:** o sistema deve permitir que o Promotor de Field Marketing associe um turno a uma esteira cujo status esteja marcado como "livre" no momento da associação. | O sistema deve permitir associar o turno só a uma esteira livre e recusar esteira em uso ou indisponível. | Alta | Planejado |
+| **RF008** | **Início de Turno:** o sistema deve permitir que o Promotor de Field Marketing inicie um turno para o atleta selecionado, em uma esteira previamente associada. | O sistema deve criar o turno vinculado a atleta e esteira, marcar a esteira como em uso e impedir dois turnos ativos na mesma esteira. | Alta | Planejado |
+| **RF009** | **Encerramento de Turno:** o sistema deve permitir que o Promotor de Field Marketing encerre um turno em andamento, atualizando o status da esteira utilizada para "livre". | O sistema deve encerrar só turno ativo, validar que o KM final não é menor que o último checkpoint e devolver a esteira para livre. | Alta | Planejado |
+| **RF010** | **Registro de Checkpoint:** o sistema deve permitir o registro de checkpoints durante um turno ativo, exigindo o preenchimento do KM acumulado e aceitando preenchimento opcional de pace médio e velocidade média. | O sistema deve exigir o KM acumulado, recusar valor menor que o checkpoint anterior e salvar pace e velocidade como opcionais. | Alta | Planejado |
+| **RF011** | **Cálculo Automático de Pace:** o sistema deve calcular automaticamente o pace médio do checkpoint a partir do KM acumulado e do tempo decorrido sempre que o Promotor de Field Marketing não preencher esse campo manualmente. | O sistema deve calcular o pace médio sozinho quando o campo ficar vazio, usando tempo decorrido sobre KM acumulado. | Alta | Planejado |
+| **RF012** | **Registro Automático de Timestamps:** o sistema deve gravar automaticamente o timestamp do servidor nas ações de início de turno, registro de checkpoint e encerramento de turno, sem permitir edição manual pelo usuário. | O sistema deve gravar o horário do servidor em início, checkpoint e encerramento, sem aceitar horário enviado pelo usuário. | Alta | Planejado |
+| **RF013** | **Exibição de Timer Regressivo:** o sistema deve exibir, durante um turno ativo, um timer regressivo até o próximo registro de checkpoint, sinalizando visualmente quando o tempo restante chega a zero. | O sistema deve mostrar o timer de 5 minutos durante o turno e sinalizar quando o tempo zerar. | Alta | Planejado |
+| **RF014** | **Exibição de Resultados do Turno:** o sistema deve exibir, ao encerramento de um turno, os resultados daquela sessão contendo KM total, pace médio, velocidade média e duração. | O sistema deve mostrar, ao fim do turno, o KM total, o pace médio, a velocidade média e a duração da sessão. | Alta | Planejado |
+| **RF015** | **Consulta de Registros Históricos:** o sistema deve permitir à Gestora de Operações consultar registros de turnos e checkpoints já gravados no sistema, independentemente do estado do turno ou da equipe correspondente, com filtros por equipe, atleta, esteira e período. | O sistema deve deixar a gestora consultar turnos e checkpoints já gravados, com filtro por equipe, atleta, esteira e período. | Alta | Planejado |
+| **RF016** | **Correção de Registros Históricos:** o sistema deve permitir à Gestora de Operações alterar o valor de registros já existentes em turnos encerrados, inclusive os pertencentes a equipes já finalizadas, sobrescrevendo o dado anterior; não é permitida a criação de registros novos por meio dessa funcionalidade. | O sistema deve permitir só à gestora corrigir registros encerrados, sem criar registros novos e sem apagar o valor anterior do histórico. | Alta | Planejado |
+| **RF017** | **Justificativa em Correções:** o sistema deve registrar, junto a cada correção realizada em registro histórico, a justificativa textual informada pela Gestora de Operações. | O sistema deve exigir uma justificativa textual em toda correção e salvá-la junto ao registro alterado. | Alta | Planejado |
+| **RF018** | **Exibição de Autoria:** o sistema deve exibir, junto a cada registro de turno, checkpoint e finalização de equipe, a identidade do usuário responsável pela ação. | O sistema deve mostrar quem fez cada turno, checkpoint e finalização de equipe. | Alta | Planejado |
+| **RF019** | **Consulta de Histórico de Alterações:** o sistema deve permitir à Gestora de Operações consultar o histórico de alterações realizadas em um registro, incluindo valor anterior, valor novo, autora da correção, timestamp e justificativa. | O sistema deve mostrar à gestora o histórico de cada alteração com valor anterior, valor novo, autora, horário e justificativa. | Alta | Planejado |
+| **RF020** | **Finalização de Equipe:** o sistema deve permitir que a Gestora de Operações finalize uma equipe mediante confirmação explícita. | O sistema deve finalizar a equipe só com confirmação da gestora e só quando não houver turno ativo. | Alta | Planejado |
+| **RF021** | **Bloqueio de Edição Direta após Finalização:** o sistema deve bloquear a edição direta dos dados de uma equipe após sua finalização para usuários do perfil Promotor de Field Marketing, mantendo os registros disponíveis para correção auditável pela Gestora de Operações. | O sistema deve impedir o promotor de editar dados de equipe finalizada e liberar só a correção auditável da gestora. | Alta | Planejado |
+| **RF022** | **Visualização de Resultados Consolidados da Equipe:** o sistema deve apresentar os dados consolidados de uma equipe finalizada, incluindo total de quilômetros acumulados pela equipe, KM acumulado por atleta e duração total. | O sistema deve mostrar o KM total da equipe, o KM por atleta e a duração total quando a equipe estiver finalizada. | Alta | Planejado |
+| **RF023** | **Modo TV:** o sistema deve oferecer um painel de exibição em modo somente leitura, contendo a quilometragem total das duas equipes em destaque, sem permitir interação, edição ou navegação por parte do usuário. | O sistema deve exibir o KM das duas equipes em modo somente leitura, sem permitir edição nem navegação, e sem exigir login. | Alta | Planejado |
+| **RF024** | **Comparação Final entre Equipes:** o sistema deve exibir, após a finalização de ambas as equipes, uma tela de comparação contendo os resultados consolidados lado a lado e indicando a equipe vencedora ou o empate, conforme a maior quilometragem acumulada. | O sistema deve comparar as duas equipes finalizadas lado a lado e apontar a vencedora, ou empate quando o KM for igual. | Média | Planejado |
+| **RF025** | **Exportação de Dados em CSV:** o sistema deve permitir à Gestora de Operações exportar os dados consolidados em formato CSV, incluindo informações de equipes, atletas, esteiras, turnos, checkpoints, timestamps registrados e histórico de correções com justificativas. | O sistema deve gerar um CSV com equipes, atletas, esteiras, turnos, checkpoints, timestamps e o histórico de correções com justificativa. | Média | Planejado |
+| **RF026** | **Resiliência a Indisponibilidade de Rede:** o sistema deve persistir localmente os registros de checkpoint criados durante períodos de indisponibilidade de rede e sincronizá-los automaticamente com o servidor quando a conexão for restabelecida, sem ação manual do Promotor de Field Marketing. | O sistema deve guardar os checkpoints localmente quando a rede cair e sincronizar sozinho quando a conexão voltar, sem ação do promotor. | Alta | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
@@ -1079,28 +1081,28 @@ A tabela a seguir apresenta as Regras de Negócio do projeto, que definem os lim
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
-Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 25010:2011, que estrutura a qualidade de software em características como usabilidade, confiabilidade, eficiência de desempenho, segurança, compatibilidade, portabilidade e manutenibilidade. A tabela a seguir apresenta cada requisito, sua métrica verificável e a forma como o sistema o atende.
+Os Requisitos Não Funcionais (RNFs) foram organizados segundo a norma ISO/IEC 25010:2011, que estrutura a qualidade de software em características como usabilidade, confiabilidade, eficiência de desempenho, segurança, compatibilidade, portabilidade e manutenibilidade. A tabela a seguir apresenta cada requisito, seu critério de aceitação e a forma como foi atendido no sistema.
 
 | ID | Requisito | Métrica / Critério | Como atendido |
-| :--- | :--- | :--- | :--- |
-| **USAB01** | Um Promotor de Field Marketing sem treinamento prévio deve conseguir completar o fluxo principal (selecionar equipe, atleta, iniciar turno, registrar checkpoint e encerrar turno) sem auxílio externo. | Taxa de conclusão ≥ 90% em teste de primeiro uso com no mínimo 3 participantes; fluxo completo concluído em até 3 minutos sem erros críticos nem abandono de tela. | A interface foi projetada com hierarquia visual clara, affordance explícita nos elementos interativos e progressão linear de telas, reduzindo a carga cognitiva do operador. A lógica de fluxo espelha o processo já conhecido da prancheta para facilitar a curva de aprendizado. |
+|---|---|---|---|
+| **USAB01** | Um operador sem treinamento prévio deve conseguir completar o fluxo principal (selecionar equipe, atleta, iniciar turno, registrar checkpoint e encerrar turno) sem auxílio externo. | Taxa de conclusão ≥ 90% em teste de primeiro uso com no mínimo 3 participantes; fluxo completo concluído em até 3 minutos sem erros críticos nem abandono de tela. | A interface foi projetada com hierarquia visual clara, affordance explícita nos elementos interativos e progressão linear de telas, reduzindo a carga cognitiva do operador. A lógica de fluxo espelha o processo já conhecido da prancheta para facilitar a curva de aprendizado. |
 | **USAB02** | Todos os elementos interativos, como botões e campos de formulário, devem possuir área de toque mínima de 44×44pt, compatível com uso em iPad sob condições de fadiga ou movimento. | 100% dos elementos interativos com dimensão ≥ 44×44pt conforme Apple Human Interface Guidelines e WCAG 2.1 target size guideline; verificado por inspeção de CSS em todas as telas operacionais. | Os componentes de interface foram dimensionados com unidades relativas e restrições mínimas aplicadas globalmente via CSS, garantindo conformidade independentemente do tamanho de viewport. |
-| **USAB03** | O sistema deve bloquear ativamente entradas inválidas antes do envio ao banco, notificando o erro específico por campo sem necessidade de recarregamento de página. | 0 registros inválidos persistidos decorrentes de erro de digitação; o sistema deve notificar visualmente o erro após submissão inválida; testado com entradas intencionalmente incorretas, como KM regressivo, campo obrigatório vazio e turno inexistente. | As validações foram implementadas na camada Service (RN16, RN22, RN23) e replicadas como validação client-side no formulário de checkpoint, garantindo bloqueio duplo: no front-end para resposta imediata e no back-end como camada de segurança. |
-| **CONF01** | O sistema deve preservar checkpoints registrados em caso de queda momentânea de conectividade, sem perda de dados e sem intervenção do Promotor de Field Marketing. | 0% de perda de checkpoints em simulação de queda de rede durante turno ativo; dados sincronizados automaticamente após reconexão. | Foi implementado cache local no cliente para enfileirar registros durante indisponibilidade de rede, com reenvio automático ao restabelecer conexão. Alinhado ao RF026 e às RN37 e RN38, e ao plano de contingência do R01 (Matriz de Riscos). |
+| **USAB03** | O sistema deve bloquear ativamente entradas inválidas antes do envio ao banco, notificando o erro específico por campo sem necessidade de recarregamento de página. | 0 registros inválidos persistidos decorrentes de erro de digitação; o sistema deve notificar visualmente o erro após submissão inválida; testado com entradas intencionalmente incorretas, como KM regressivo, campo obrigatório vazio e turno inexistente. | As validações foram implementadas na camada Service (RN16, RN22, RN23), cobrindo progressão de quilometragem, obrigatoriedade do KM acumulado e vínculo a turno ativo. A validação client-side no formulário de checkpoint está prevista como camada adicional de resposta imediata, mas ainda não está presente no código atual. |
+| **CONF01** | O sistema deve preservar checkpoints registrados em caso de queda momentânea de conectividade, sem perda de dados e sem intervenção do operador. | 0% de perda de checkpoints em simulação de queda de rede durante turno ativo; dados sincronizados automaticamente após reconexão. | O comportamento está especificado em RF026 e RN37: registros de checkpoint criados durante turno ativo são persistidos localmente e sincronizados ao restabelecer conexão. A implementação do cache local não está presente no código atual e constitui requisito pendente de desenvolvimento. Alinhado ao plano de contingência do R01 (Matriz de Riscos). |
 | **CONF02** | O sistema deve manter operação contínua durante as 24 horas do evento, tolerando uma janela de indisponibilidade máxima acumulada de 30 minutos. | Uptime ≥ 97,9% durante a janela do evento, equivalente a ≤ 30 minutos de downtime acumulado em 24h; monitorado via Supabase e logs de aplicação. | O ambiente de produção foi configurado no Supabase com backups automáticos e monitoramento ativo. O plano de contingência documentado para R02 (indisponibilidade do banco) inclui fallback para registro local temporário. |
 | **CONF03** | Após qualquer falha técnica, como crash de browser ou queda de energia no dispositivo, o sistema deve retomar a operação com todos os dados confirmados previamente intactos. | 100% dos registros confirmados antes da falha recuperados após reinicialização, sem ação manual além de reabrir o browser; verificado em teste de kill de processo durante turno ativo. | A persistência de dados é garantida pelo Supabase (PostgreSQL) com confirmação transacional. O estado da sessão operacional é recuperável via consulta ao banco sem dependência de estado local volátil. |
-| **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | As consultas SQL foram otimizadas com índices definidos nas migrations para os campos de busca frequente (id_turno, id_atleta, status). As validações de negócio na camada Service evitam round-trips desnecessários ao banco antes da confirmação de dados válidos. |
-| **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado pela view vw_placar_parcial conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
-| **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo Promotor de Field Marketing ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado à RN21. |
-| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções realizadas pela Gestora de Operações devem preservar o histórico do valor anterior em log paralelo, com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; toda correção em registro histórico gera entrada na tabela paralela de log contendo valor anterior, valor novo, autora, timestamp e justificativa; verificado por query de auditoria após simulação de correção via interface. | A imutabilidade direta dos registros é garantida pela RN27. As correções pela Gestora seguem o modelo de "sobrescreve no registro principal + log paralelo de alterações", implementado via tabela dedicada de histórico de alterações. Alinhado às RN27, RN28 e RN29. |
-| **CAP** | O sistema deve suportar dois Promotores de Field Marketing realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
-| **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RF025 e à RN36. |
-| **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A compatibilidade com modo PWA está disponível como opção, sem obrigatoriedade. |
-| **MANUT01** | A arquitetura deve seguir o padrão MVC com separação estrita entre Controller, Service e Repository, de modo que alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência. | Cada camada possui responsabilidade única verificada em code review; nenhuma regra de negócio (RN16, RN22, RN23) implementada nas camadas Controller ou Repository; alteração de limiar de validação exige modificação apenas na camada Service. | A arquitetura em camadas verticais está documentada no Diagrama de Classes Arquitetural (Seção 3.2.3.1). As validações de domínio estão concentradas exclusivamente no Service, conforme padrão definido no Diagrama de Sequência (Seção 3.2.4). |
-| **MANUT02** | O código de back-end deve atingir cobertura mínima de testes automatizados que garanta rastreabilidade dos fluxos críticos da operação. | Cobertura ≥ 70% reportada pelo Jest (--coverage); cobertura de 100% nos testes dos fluxos de registro de checkpoint (RF010) e encerramento de turno (RF009), que concentram as validações de negócio mais sensíveis. | A suite de testes Jest foi estruturada com abordagem white-box nos Services (validações RN16, RN22, RN23) e black-box nos endpoints via Supertest (contratos HTTP). O relatório de cobertura é gerado automaticamente e está documentado na Seção 5.1. |
-| **REST** | O sistema não deve possuir dependência de integração automática com as esteiras Technogym, pulseiras ou qualquer hardware de terceiros para seu funcionamento completo. | 0% de dependência de integração via pulseiras, Bluetooth, API das esteiras ou captura automática de dados; sistema operável integralmente com apenas um browser e conexão à internet. | A interface foi projetada exclusivamente para entrada manual assistida, sem chamadas a APIs externas de hardware. Toda a operação depende apenas da leitura visual da esteira pelo Promotor de Field Marketing e da inserção manual no formulário. Alinhado à RN24. |
-
-A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com Promotores de Field Marketing em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
+| **DES01** | As ações do fluxo operacional principal (iniciar turno, registrar checkpoint e encerrar turno) devem responder dentro do limiar de percepção de fluidez do usuário. | p95 < 1.000 ms nos endpoints POST /turnos, POST /checkpoints e PATCH /turnos/{id}/encerrar, medido em teste de carga com 2 sessões simultâneas via k6 ou ferramenta equivalente. | Os índices nos campos de busca frequente (id_turno, id_atleta, status) estão previstos nas migrations. As validações de negócio na camada Service evitam round-trips desnecessários ao banco. O teste de carga via k6 ou ferramenta equivalente ainda não está configurado e constitui verificação pendente do critério. |
+| **DES02** | O Modo TV deve refletir o último checkpoint registrado em tempo hábil para acompanhamento gerencial da competição. | Latência de atualização do placar ≤ 5.000 ms medida desde a confirmação do POST /checkpoints até a atualização visual na tela do Modo TV; verificado em teste manual cronometrado com 2 checkpoints simultâneos. | O placar parcial é calculado conforme RN32, com polling ou atualização reativa configurada no front-end. O limiar de 5 segundos foi definido como adequado para uso gerencial, sem necessidade de websocket no MVP. |
+| **SEG01** | Todo registro de início de turno, checkpoint e encerramento deve armazenar timestamp gerado pelo servidor, sem possibilidade de edição manual pelo operador ou via API. | 100% dos registros auditáveis com created_at gerado por DEFAULT NOW() no banco; tentativa de envio de timestamp pelo cliente é rejeitada ou ignorada; verificado por teste de chamada direta à API com campo created_at no body. | Os campos de timestamp foram definidos com DEFAULT NOW() diretamente no schema PostgreSQL, tornando-os imunes a manipulação pela camada de aplicação. Alinhado ao RN21. |
+| **SEG02** | Nenhum registro confirmado pode ser deletado permanentemente do banco durante ou após o evento; correções devem seguir fluxo de ajuste com justificativa obrigatória. | 0 registros com hard delete identificados em auditoria pós-evento; campo is_ajuste presente nos checkpoints modificáveis; verificado por query de auditoria após simulação de correção via interface. | O campo is_ajuste na tabela checkpoints sinaliza correções sem sobrescrever o dado original. A auditoria completa — com valor anterior, valor novo, justificativa, responsável e timestamp da alteração — depende do log de alterações definido em RN29, cuja implementação constitui requisito pendente. Alinhado aos RN27, RN28 e RN29. |
+| **CAP** | O sistema deve suportar dois operadores realizando inputs simultâneos, um por equipe, sem conflito de escrita, sobrescrita de dados ou degradação de desempenho. | 0 conflitos de escrita em teste de concorrência com 2 sessões ativas simultâneas registrando checkpoints em equipes distintas ao mesmo tempo; isolamento de dados por equipe verificado em cada requisição. | O índice único condicional uq_turnos_ativo_esteira e uq_turnos_ativo_atleta (migration 0007) impede dois turnos ativos para a mesma esteira ou atleta simultaneamente. A arquitetura stateless da API garante que requisições paralelas sejam processadas de forma independente. |
+| **COMP** | O sistema deve operar corretamente nos quatro ambientes de uso previstos e o CSV exportado deve ser legível sem configuração adicional nas principais ferramentas de planilha. | 0 erros funcionais e 0 quebras de layout nos ambientes Safari iOS 16+, Chrome iOS, Chrome Android 10+ e Chrome Desktop; arquivo CSV aberto no Excel, Google Sheets e Numbers sem distorção de colunas e sem apresentar erros de caracteres; charset UTF-8 com BOM. | O desenvolvimento foi baseado em padrões web responsivos sem dependências de APIs proprietárias de browser. A exportação CSV foi gerada com charset UTF-8 com BOM para compatibilidade com Excel no Windows. Alinhado ao RNF de suportabilidade e ao RF025 / RN36. |
+| **PORT** | O sistema deve ser acessível via URL sem instalação de aplicativo nativo, eliminando dependência de App Store em iPads de terceiros durante o evento. | Acesso completo via browser sem prompt de instalação obrigatório; sistema carregado e operável em ≤ 3 segundos após abertura da URL em iPad com conexão de dados móveis ou rede local. | A aplicação web foi desenvolvida de forma responsiva sem camada nativa obrigatória. A estrutura de assets foi otimizada para carregamento rápido no primeiro acesso. A configuração de PWA (manifest e service worker) não está presente no código atual e constitui recurso opcional pendente de configuração. |
+| **MANUT01** | A arquitetura deve seguir o padrão MVC com separação estrita entre Controller, Service e Repository, de modo que alterações em regras de negócio não exijam modificação das camadas de apresentação ou persistência. | Cada camada possui responsabilidade única verificada em code review; nenhuma regra de negócio (RN16, RN18, RN19) implementada nas camadas Controller ou Repository; alteração de limiar de validação exige modificação apenas na camada Service. | A arquitetura em camadas verticais está documentada no Diagrama de Classes Arquitetural (Seção 3.2.3.1). As validações de domínio estão concentradas exclusivamente no Service, conforme padrão definido no Diagrama de Sequência (Seção 3.2.4). |
+| **MANUT02** | O código de back-end deve atingir cobertura mínima de testes automatizados que garanta rastreabilidade dos fluxos críticos da operação. | Cobertura ≥ 70% reportada pelo Jest (--coverage); cobertura de 100% nos testes dos fluxos de registro de checkpoint (RF010) e encerramento de turno (RF009), que concentram as validações de negócio mais sensíveis. | A suite de testes atual cobre o fluxo principal de integração (sessão, turno, checkpoint). Testes unitários white-box nos Services (RN16, RN18, RN19) e configuração de cobertura via Jest --coverage constituem requisitos pendentes de implementação; o relatório de cobertura ainda não está disponível. |
+| **REST** | O sistema não deve possuir dependência de integração automática com as esteiras Technogym, pulseiras ou qualquer hardware de terceiros para seu funcionamento completo. | 0% de dependência de integração via pulseiras, Bluetooth, API das esteiras ou captura automática de dados; sistema operável integralmente com apenas um browser e conexão à internet. | A interface foi projetada exclusivamente para entrada manual assistida, sem chamadas a APIs externas de hardware. Toda a operação depende apenas da leitura visual da esteira pelo operador e da inserção manual no formulário. Alinhado ao RN24. |
+--- 
+A definição desses requisitos foi orientada pelo contexto operacional do BullPace, que opera em ambiente de alta pressão, com operadores em campo utilizando iPads e sem integração automática com as esteiras. Dessa forma, qualquer falha não funcional representa risco direto ao resultado da competição, o que justifica os critérios estabelecidos para cada eixo.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
@@ -1368,93 +1370,99 @@ Para entender melhor o Diagrama, veja nos anexos [Diagrama de Classes Arquitetur
 
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
+---
 
-### Módulo: Coordenador
 
-
-#### Fluxo 1: Listar Coordenadores (Leitura)
+#### Fluxo 1: Login de Coordenadores (Autenticação)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar coordenadores</sub><br>
-  <img src="../assets/fluxo1.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo de login de coordenadores</sub><br>
+  <img src="../assets/LoginCoordenadorFluxo1.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-O cliente faz uma requisição HTTP GET para coletar todos os coordenadores registrados. O CoordenadorController aciona o método listar() do CoordenadorService, que por sua vez consulta a coleção de dados exposta pelo CoordenadorRepository para retornar o array com os objetos ao usuário final.
-
-
-
-#### Fluxo 2: Login do Coordenador (Autenticação)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo de login do coordenador</sub><br>
-  <img src="../assets/fluxo2.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-O usuário submete suas credenciais (email e senha) via corpo da requisição (POST). O CoordenadorController delega os parâmetros ao CoordenadorService, que realiza uma validação booleana em memória para certificar que ambos os campos foram preenchidos, retornando o status de autenticado e o e-mail do usuário.
+O Coordenador seleciona sua função na aplicação e informa suas credenciais na tela de acesso restrito. O sistema valida os dados recebidos e, caso estejam preenchidos corretamente, redireciona o usuário para o Painel da Prova com permissões de acompanhamento e consulta. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que coordenadores só possam visualizar informações sem permissão de controle operacional.
 
 ---
 
-### Módulo: Esteiras
+#### Fluxo 2: Login de Administradores (Autenticação)
 
-#### Fluxo 3: Listar Esteiras Disponíveis (Leitura)
+<div align="center">
+  <sub>Figura 7 - Fluxo de login de administradores</sub><br>
+  <img src="../assets/AdministraçãoFluxo2.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O Administrador Geral seleciona o perfil administrativo e envia suas credenciais para autenticação. Após a validação dos dados, o sistema libera o acesso ao Painel da Prova com permissões administrativas para consulta, criação e controle do estado da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que administradores possam realizar ações de configuração e controle operacional, como cadastrar eventos, operadores e alternar o bloqueio do Modo TV.
+
+---
+
+
+#### Fluxo 3: Listar Permissões dos Operadores (Consulta)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar permissões dos operadores</sub><br>
+  <img src="../assets/ListarPermissãoOperadoresFluxo3.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a consulta das permissões de um operador específico. O OperadorController recebe o identificador do operador, aciona o OperadorService e retorna o conjunto de permissões associadas ao perfil operacional. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores só possam realizar ações compatíveis com suas funções.
+
+---
+
+
+#### Fluxo 4: Listar Operadores (Leitura)
+
+<div align="center">
+  <sub>Figura 7 - Fluxo listar operadores</sub><br>
+  <img src="../assets/ListasOperadoresFluxo4.png" width="75%"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+O usuário autorizado solicita a listagem dos operadores cadastrados na aplicação. A API valida o perfil de acesso, consulta a tabela de operadores por meio do Supabase e retorna os registros encontrados em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que operadores possam ser visualizados e gerenciados apenas por usuários com permissão administrativa.
+
+#### Fluxo 5: Listar Esteiras Disponíveis (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo listar esteiras disponíveis</sub><br>
-  <img src="../assets/fluxo3.png" width="100%"><br>
+  <img src="../assets/ListarEsteirasFluxo5.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Requisição voltada para coletar as informações técnicas dos equipamentos do evento. O estímulo trafega do EsteiraController para o EsteiraService, que consome o método de listagem do EsteiraRepository, retornando a lista contendo as marcas, modelos, números de série e status de conectividade das esteiras registradas no banco.
+O usuário autorizado solicita a listagem das esteiras cadastradas no sistema. Após validar a permissão de acesso, a aplicação consulta a tabela de esteiras e retorna os equipamentos disponíveis para acompanhamento ou uso na operação da prova. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que as esteiras possam ser visualizadas e gerenciadas apenas por usuários com permissão administrativa.
 
 ---
 
-### Módulo: Eventos
 
-#### Fluxo 4: Listar Eventos (Leitura)
-
-<div align="center">
-  <sub>Figura 7 - Fluxo listar eventos</sub><br>
-  <img src="../assets/fluxo4.png" width="100%"><br>
-  <sup>Material produzido pelos autores (2026)</sup>
-</div>
-
-Fluxo síncrono para retornar todos os eventos agendados ou finalizados na plataforma. O EventoController intercepta a chamada de leitura e consome a camada EventoService, que extrai o conjunto completo de registros contidos na tabela correspondente através do EventoRepository.
-
-#### Fluxo 5: Cadastrar Novo Evento (Escrita/Criação)
+#### Fluxo 6: Cadastrar Novo Evento (Leitura)
 
 <div align="center">
   <sub>Figura 7 - Fluxo cadastrar novo evento</sub><br>
-  <img src="../assets/fluxo5.png" width="100%"><br>
+  <img src="../assets/CadastrarNovoEventoFluxo6.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Trata o fluxo de criação de uma nova competição/evento no ecossistema. O EventoController desestrutura o payload recebido e aciona o EventoService; a camada de serviço atribui um identificador único temporal ao objeto e invoca o método salvar() do EventoRepository, inserindo os dados estruturados de localidade, nome e período direto no banco de dados.
+O Administrador Geral envia os dados necessários para cadastrar um novo evento. A API valida se o perfil possui permissão de escrita, verifica se a prova não está finalizada, filtra os campos permitidos e registra o novo evento no banco de dados. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que apenas administradores possam criar novos eventos e que os dados sejam validados antes do registro.
 
----
-
-### Módulo: Operador
-
-#### Fluxo 6: Listar Operadores (Leitura)
+#### Fluxo 7: Listar Eventos (Leitura)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo listar Operadores</sub><br>
-  <img src="../assets/fluxo6.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo listar eventos</sub><br>
+  <img src="../assets/ListarEventoFluxo7.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Recupera a listagem de funcionários/operadores encarregados da telemetria do sistema. O OperadorController delega a chamada à função de alto nível do OperadorService, que executa internamente a consulta ao repositório especializado (OperadorRepository) para resgatar os perfis.
+O usuário autorizado solicita a listagem dos eventos cadastrados na aplicação. O sistema valida o perfil de acesso, consulta a tabela de eventos por meio do Supabase e retorna os registros disponíveis em formato JSON. O fluxo é utilizado para controle de acesso e verificação de privilégios na interface, garantindo que os eventos possam ser visualizados por usuários com permissão de leitura, como operadores e coordenadores, enquanto a criação de eventos fica restrita a administradores.
 
-#### Fluxo 7: Listar Permissões do Operador (Consulta)
+#### Fluxo 8: Tentativa de Cadastrar Evento sem Permissão (Escrita)
 
 <div align="center">
-  <sub>Figura 7 - Fluxo Permissões do operador</sub><br>
-  <img src="../assets/fluxo7.png" width="100%"><br>
+  <sub>Figura 7 - Fluxo tentativa de cadastrar evento sem permissão</sub><br>
+  <img src="../assets/TentativadeCadastrarEventoSemPermissãoFluxo8.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Acionado para inspecionar os privilégios de controle de um operador específico na interface através do seu identificador (id). O OperadorController extrai o parâmetro de rota e aciona a regra no OperadorService, que processa a tipagem do ID e gera de forma controlada o objeto com o escopo de acessos permitidos.
+Um usuário sem permissão de escrita tenta cadastrar um novo evento pela rota de criação. O middleware de autorização identifica que o perfil não possui acesso administrativo e bloqueia a requisição, retornando erro HTTP 403 antes de qualquer gravação no banco de dados.
 
 ---
 
@@ -1464,21 +1472,21 @@ Acionado para inspecionar os privilégios de controle de um operador específico
 
 <div align="center">
   <sub>Figura 7 - Fluxo obter placar</sub><br>
-  <img src="../assets/fluxo8.png" width="100%"><br>
+  <img src="../assets/fluxo8Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo crítico do painel visual (Modo TV). O PlacarService aciona a função de leitura que executa uma query no cliente do Supabase para extrair a flag de segurança (modo_tv_bloqueado). Caso esteja ativa, o fluxo intercepta o processamento e retorna uma classificação vazia; caso esteja livre, o sistema busca os turnos associados, calcula as somas de quilometragens em memória e devolve a classificação ranqueada do líder ao lanterna.
+O painel visual ou cliente requisita a classificação atualizada invocando o método obterPlacarGeralDoEvento() na camada PlacarService, que delega o processamento procedural à função obterDadosPlacar() do PlacarController. O controlador efetua uma consulta unária via cliente SDK do Supabase à tabela eventos para verificar o estado lógico da flag modo_tv_bloqueado. Caso a propriedade seja verdadeira, um bloco condicional interrompe a leitura da telemetria por segurança e retorna uma estrutura de classificação limpa ([]). Caso seja falsa, o controlador dispara uma nova requisição assíncrona para extrair os registros brutos da tabela turnos, processa o agrupamento e somatório das distâncias por esteira em memória, aplica formatação decimal fixa e ordena o vetor resultante de forma decrescente (do líder ao lanterna) antes de resolver a promessa.
 
 #### Fluxo 9: Alternar Bloqueio do Modo TV (Ação de Controle do Coordenador)
 
 <div align="center">
   <sub>Figura 7 - Fluxo Alternar bloqueio do modo tv</sub><br>
-  <img src="../assets/fluxo9.png" width="100%"><br>
+  <img src="../assets/fluxo9Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Fluxo administrativo em que o coordenador altera a experiência do público. A função no controlador dispara uma instrução direta de atualização (UPDATE) no cliente de configuração global do Supabase, modificando o estado lógico da coluna de suspense na tabela de eventos para o evento corrente.
+Fluxo de controle administrativo disparado pelo Coordenador diretamente na função alternarBloqueioModoTV() do PlacarController. O fluxo estabelece uma comunicação assíncrona síncrona com o cliente SDK do Supabase, invocando uma operação de mutação baseada no encadeamento dos métodos .from('eventos').update(). A instrução injeta o novo estado booleano de bloqueio na coluna correspondente, filtrando o registro alvo por meio da cláusula .eq() baseada no identificador do evento. Após a persistência bem-sucedida e a validação de ausência de erros de infraestrutura, um log de auditoria é registrado no console do servidor e a execução é encerrada.
 
 ---
 
@@ -1488,21 +1496,21 @@ Fluxo administrativo em que o coordenador altera a experiência do público. A f
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar nova sessão</sub><br>
-  <img src="../assets/fluxo10.png" width="100%"><br>
+  <img src="../assets/fluxo10Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Inicia o período de trabalho do operador registrando sua função e o evento associado para fins de auditoria. O SessaoService aciona o mecanismo que submete os dados à validação estrutural do controlador, e após a verificação de consistência, grava o registro no Supabase com o timestamp inicial e a marcação de status igual a 'ativa'.
+O operador inicia sua jornada por meio do método iniciarNovaSessao() na camada SessaoService, que repassa o payload de dados à função abrirSessao() do SessaoController. O controlador intercepta o processamento para executar a rotina interna validarAberturaSessao(). Caso sejam detectadas ausências de chaves obrigatórias como identificador do evento, função ou data de início, uma exceção é lançada imediatamente para tratamento na camada de rotas. Estando os dados íntegros, o controlador converte a instância cronológica em uma string padronizada ISO e comanda uma inserção assíncrona no cliente Supabase na tabela sessoes_operacionais, forçando o atributo de estado inicial do registro estritamente para o valor literal 'ativa'.
 
 #### Fluxo 11: Encerrar Sessão Existente (Auditoria/Fechamento)
 
 <div align="center">
   <sub>Figura 7 - Fluxo sessão existente</sub><br>
-  <img src="../assets/fluxo11.png" width="100%"><br>
+  <img src="../assets/fluxo11Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Registra a saída do operador do painel de controle. O SessaoService aciona o encerramento fornecendo o identificador da sessão; o sistema injeta o timestamp corrente do servidor (fim_em) e atualiza o estado do registro para 'encerrada', salvando e blindando o histórico de auditoria.
+O encerramento do período de trabalho do operador é processado ao acionar o método encerrarSessaoExistente() exposto pelo SessaoService, que encapsula a execução do método encerrarSessao() na estrutura do SessaoController. No momento da execução, o controlador gera dinamicamente em tempo de execução o timestamp de término através do construtor de data do servidor mapeado em formato ISO. Na sequência, é estruturada uma operação de atualização assíncrona utilizando os recursos fluentes .from().update().eq() do cliente Supabase para modificar o registro na tabela sessoes_operacionais, alterando seu status de forma definitiva para o valor literal 'encerrada'.
 
 ---
 
@@ -1512,31 +1520,34 @@ Registra a saída do operador do painel de controle. O SessaoService aciona o en
 
 <div align="center">
   <sub>Figura 7 - Fluxo Iniciar novo turno</sub><br>
-  <img src="../assets/fluxo12.png" width="100%"><br>
+  <img src="../assets/fluxo12Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Mapeia o momento exato em que um atleta assume uma determinada esteira dentro da sessão operacional. O TurnoService encaminha a requisição de inserção de turno, que valida os dados obrigatórios e insere o registro com status definido em 'em_andamento' e a quilometragem inicializada estritamente em 0.
+A troca e entrada de um atleta na área de corrida é mediada pela camada TurnoService através do método iniciarNovoTurno(), que consome o atributo funcional abstrato mapeado para o método iniciarTurno() do TurnoController. O controlador executa a verificação estrutural estrita validarDadosInicioTurno() para garantir a presença dos vínculos de integridade referencial. Após a validação, o controlador formata a estampa temporal de início e submete um comando de inserção assíncrona na tabela turnos por meio do Supabase, salvando o novo registro operacional com o estado de ciclo de vida definido para 'em_andamento' e inicializando o acumulador de distância física (km_turno) rigorosamente em zero.
 
 #### Fluxo 13: Finalizar Turno Existente (Saída do Atleta com Gravação de KM)
 
 <div align="center">
   <sub>Figura 7 - fluxo finalizar turno</sub><br>
-  <img src="../assets/fluxo13.png" width="100%"><br>
+  <img src="../assets/fluxo13Atualizado.png" width="100%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-Conclui o ciclo de corrida de um participante. O TurnoService repassa o identificador do turno e a marcação do odômetro final coletada; a camada controladora processa a requisição e realiza uma operação de atualização no banco de dados, imputando o horário final do revezamento, computando a quilometragem total acumulada e chaveando o status para 'encerrado'.
+O encerramento da corrida de um participante ocorre ao invocar o método finalizarTurnoExistente() no TurnoService, transmitindo o identificador exclusivo do turno e a medição final consolidada do odômetro. O serviço delega a persistência final para a função finalizarTurno() do TurnoController. O controlador captura o momento exato do fechamento por meio do relógio do servidor, gerando a variável local horarioFim. Por fim, o sistema realiza um comando de mutação via cliente Supabase, aplicando uma query de atualização parametrizada que armazena a marcação de tempo final, atualiza o status do turno para o valor estrito 'encerrado' e consolida a quilometragem total acumulada na tabela correspondente.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
 *Ao menos um fluxo relevante em UML ou BPMN. Use a notação da ferramenta escolhida de forma consistente (sem misturar convenções).*
 
 ### 3.2.6. Diagrama de Implantação (sprints 4 e 5)
+---
+
+Este diagrama representa, de forma simplificada, como a nossa aplicação funciona. Os usuários acessam o sistema pelo **browser**, onde a interface é exibida. A partir das ações realizadas na tela, a aplicação envia as informações para o **servidor**, que processa as regras do sistema e consulta o **banco de dados** quando necessário. Depois, os dados retornam pelo mesmo caminho até o navegador, permitindo que o usuário visualize as informações atualizadas na aplicação.
 
 <div align="center">
-  <sub><b>Figura 7 - fluxo finalizar turno</b></sub><br>
-  <img src="../assets/DiagramaImplantacao.png" width="75%"><br>
+  <sub><b>Figura 7 - Diagrama de Implantação</b></sub><br>
+  <img src="../assets/DiagramaImplantação.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -1978,6 +1989,1055 @@ A ordem das migrations respeita as dependências entre as tabelas. Tabelas indep
 - `0011_create_operador.sql`: depende de sessoes_operacionais;
 - `0012_create_coordenador.sql`: depende de sessoes_operacionais.
 
+Os scripts completos das migrations (0001 a 0012), incluindo as views, estão no anexo [Scripts das Migrations](#scripts-das-migrations).
+
+<<<<<<< HEAD
+**0001_create_eventos.sql**
+
+```sql
+CREATE TABLE eventos (
+    id_evento      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    cidade         VARCHAR(100) NOT NULL,
+    estado         VARCHAR(100) NOT NULL,
+    data_inicio    TIMESTAMP NOT NULL,
+    data_fim       TIMESTAMP NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'planejado',
+
+    CONSTRAINT ck_eventos_status
+        CHECK (status IN ('planejado', 'em_andamento', 'finalizado', 'cancelado')),
+
+    CONSTRAINT ck_eventos_datas
+        CHECK (data_fim > data_inicio)
+);
+```
+
+**0002_create_funcoes.sql**
+
+```sql
+CREATE TABLE funcoes (
+    id_funcao      SERIAL PRIMARY KEY,
+    nome           VARCHAR(100) NOT NULL,
+    descricao      TEXT,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT uq_funcoes_nome
+        UNIQUE (nome),
+
+    CONSTRAINT ck_funcoes_status
+        CHECK (status IN ('ativa', 'inativa'))
+);
+```
+
+**0003_create_equipes.sql**
+
+```sql
+CREATE TABLE equipes (
+    id_equipe      SERIAL PRIMARY KEY,
+    id_evento      INT NOT NULL,
+    nome           VARCHAR(100) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativa',
+    km_total       DECIMAL(10,3) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_equipes_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_equipes_nome_evento
+        UNIQUE (id_evento, nome),
+
+    CONSTRAINT ck_equipes_status
+        CHECK (status IN ('ativa', 'inativa', 'finalizada')),
+
+    CONSTRAINT ck_equipes_km_total
+        CHECK (km_total >= 0)
+);
+
+CREATE INDEX idx_equipes_evento
+    ON equipes(id_evento);
+```
+
+**0004_create_atletas.sql**
+
+```sql
+CREATE TABLE atletas (
+    id_atleta      SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    nome           VARCHAR(150) NOT NULL,
+    status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+
+    CONSTRAINT fk_atletas_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_atletas_nome_equipe
+        UNIQUE (id_equipe, nome),
+
+    CONSTRAINT ck_atletas_status
+        CHECK (status IN ('ativo', 'inativo'))
+);
+
+CREATE INDEX idx_atletas_equipe
+    ON atletas(id_equipe);
+```
+
+**0005_create_esteiras.sql**
+
+```sql
+CREATE TABLE esteiras (
+    id_esteira     SERIAL PRIMARY KEY,
+    id_equipe      INT NOT NULL,
+    id_evento      INT NOT NULL,
+    marca          VARCHAR(100) NOT NULL DEFAULT 'Technogym',
+    modelo         VARCHAR(100),
+    numero_serie   VARCHAR(100),
+    status         VARCHAR(50) NOT NULL DEFAULT 'livre',
+    delet_at       BOOLEAN,
+
+    CONSTRAINT fk_esteiras_equipes
+        FOREIGN KEY (id_equipe)
+        REFERENCES equipes(id_equipe)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_esteiras_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_esteiras_numero_serie
+        UNIQUE (numero_serie),
+
+    CONSTRAINT ck_esteiras_status
+        CHECK (status IN ('livre', 'em_uso', 'manutencao', 'indisponivel'))
+);
+
+CREATE INDEX idx_esteiras_equipe
+    ON esteiras(id_equipe);
+
+CREATE INDEX idx_esteiras_evento
+    ON esteiras(id_evento);
+```
+
+**0006_create_sessoes_operacionais.sql**
+
+```sql
+CREATE TABLE sessoes_operacionais (
+    id_sessao_operacional SERIAL PRIMARY KEY,
+    id_evento             INT NOT NULL,
+    id_funcao             INT NOT NULL,
+    inicio_em             TIMESTAMP NOT NULL DEFAULT NOW(),
+    fim_em                TIMESTAMP,
+    status                VARCHAR(50) NOT NULL DEFAULT 'ativa',
+
+    CONSTRAINT fk_sessoes_operacionais_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_sessoes_operacionais_funcoes
+        FOREIGN KEY (id_funcao)
+        REFERENCES funcoes(id_funcao)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_sessoes_operacionais_status
+        CHECK (status IN ('ativa', 'encerrada', 'cancelada')),
+
+    CONSTRAINT ck_sessoes_operacionais_datas
+        CHECK (fim_em IS NULL OR fim_em > inicio_em)
+);
+
+CREATE INDEX idx_sessoes_operacionais_evento
+    ON sessoes_operacionais(id_evento);
+
+CREATE INDEX idx_sessoes_operacionais_funcao
+    ON sessoes_operacionais(id_funcao);
+
+CREATE INDEX idx_sessoes_operacionais_status
+    ON sessoes_operacionais(status);
+```
+
+**0007_create_turnos.sql**
+
+```sql
+CREATE TABLE turnos (
+    id_turno               SERIAL PRIMARY KEY,
+    id_atleta              INT NOT NULL,
+    id_esteira             INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    horario_inicio         TIMESTAMP NOT NULL DEFAULT NOW(),
+    horario_fim            TIMESTAMP,
+    status                 VARCHAR(50) NOT NULL DEFAULT 'em_andamento',
+    km_turno               DECIMAL(10,3) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_turnos_atletas
+        FOREIGN KEY (id_atleta)
+        REFERENCES atletas(id_atleta)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_esteiras
+        FOREIGN KEY (id_esteira)
+        REFERENCES esteiras(id_esteira)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_turnos_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_turnos_status
+        CHECK (status IN ('em_andamento', 'encerrado', 'cancelado')),
+
+    CONSTRAINT ck_turnos_datas
+        CHECK (horario_fim IS NULL OR horario_fim > horario_inicio),
+
+    CONSTRAINT ck_turnos_km
+        CHECK (km_turno >= 0)
+);
+
+CREATE INDEX idx_turnos_atleta
+    ON turnos(id_atleta);
+
+CREATE INDEX idx_turnos_esteira
+    ON turnos(id_esteira);
+
+CREATE INDEX idx_turnos_sessao_operacional
+    ON turnos(id_sessao_operacional);
+
+CREATE INDEX idx_turnos_status
+    ON turnos(status);
+
+CREATE UNIQUE INDEX uq_turnos_ativo_esteira
+    ON turnos(id_esteira)
+    WHERE status = 'em_andamento';
+
+CREATE UNIQUE INDEX uq_turnos_ativo_atleta
+    ON turnos(id_atleta)
+    WHERE status = 'em_andamento';
+```
+
+**0008_create_checkpoints.sql**
+
+```sql
+CREATE TABLE checkpoints (
+    id_checkpoint          SERIAL PRIMARY KEY,
+    id_turno               INT NOT NULL,
+    id_sessao_operacional  INT NOT NULL,
+    km_acumulado           DECIMAL(10,3) NOT NULL,
+    pace_medio             DECIMAL(10,3),
+    velocidade_media       DECIMAL(10,3),
+    registrado_em          TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_ajuste              BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_checkpoints_turnos
+        FOREIGN KEY (id_turno)
+        REFERENCES turnos(id_turno)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_checkpoints_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT ck_checkpoints_km
+        CHECK (km_acumulado >= 0),
+
+    CONSTRAINT ck_checkpoints_pace
+        CHECK (pace_medio IS NULL OR pace_medio > 0),
+
+    CONSTRAINT ck_checkpoints_velocidade
+        CHECK (velocidade_media IS NULL OR velocidade_media > 0)
+);
+
+CREATE INDEX idx_checkpoints_turno
+    ON checkpoints(id_turno);
+
+CREATE INDEX idx_checkpoints_sessao_operacional
+    ON checkpoints(id_sessao_operacional);
+
+CREATE INDEX idx_checkpoints_registrado_em
+    ON checkpoints(registrado_em DESC);
+
+CREATE INDEX idx_checkpoints_turno_data
+    ON checkpoints(id_turno, registrado_em DESC);
+```
+
+**0009_insert_dados_iniciais.sql**
+
+```sql
+INSERT INTO funcoes (nome, descricao, status) VALUES
+    ('operador', 'Responsável por iniciar turnos e registrar checkpoints.', 'ativa'),
+    ('coordenador', 'Responsável por acompanhar a operação e validar dados consolidados.', 'ativa');
+```
+
+**0010_create_views.sql**
+
+```sql
+CREATE OR REPLACE VIEW vw_placar_parcial AS
+WITH ultimo_checkpoint_por_turno AS (
+    SELECT DISTINCT ON (id_turno)
+        id_turno,
+        km_acumulado,
+        registrado_em
+    FROM checkpoints
+    ORDER BY id_turno, registrado_em DESC
+)
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+    eq.status AS equipe_status,
+    eq.km_total AS equipe_km_total,
+    COUNT(DISTINCT t.id_turno) AS total_turnos,
+    COALESCE(SUM(uc.km_acumulado), 0) AS km_total_parcial
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+LEFT JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+LEFT JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+LEFT JOIN ultimo_checkpoint_por_turno uc
+    ON uc.id_turno = t.id_turno
+GROUP BY
+    ev.id_evento,
+    ev.nome,
+    eq.id_equipe,
+    eq.nome,
+    eq.status,
+    eq.km_total;
+
+CREATE OR REPLACE VIEW vw_historico_completo AS
+SELECT
+    ev.id_evento,
+    ev.nome AS evento_nome,
+
+    eq.id_equipe,
+    eq.nome AS equipe_nome,
+
+    a.id_atleta,
+    a.nome AS atleta_nome,
+
+    est.id_esteira,
+    est.marca AS esteira_marca,
+    est.modelo AS esteira_modelo,
+    est.numero_serie AS esteira_numero_serie,
+
+    t.id_turno,
+    t.horario_inicio,
+    t.horario_fim,
+    t.status AS turno_status,
+    t.km_turno,
+
+    so_turno.id_sessao_operacional AS id_sessao_inicio_turno,
+    f_turno.nome AS funcao_inicio_turno,
+
+    cp.id_checkpoint,
+    cp.km_acumulado,
+    cp.pace_medio,
+    cp.velocidade_media,
+    cp.registrado_em,
+    cp.is_ajuste,
+
+    so_cp.id_sessao_operacional AS id_sessao_registro_checkpoint,
+    f_cp.nome AS funcao_registro_checkpoint
+
+FROM eventos ev
+JOIN equipes eq
+    ON eq.id_evento = ev.id_evento
+JOIN atletas a
+    ON a.id_equipe = eq.id_equipe
+JOIN turnos t
+    ON t.id_atleta = a.id_atleta
+JOIN esteiras est
+    ON est.id_esteira = t.id_esteira
+JOIN sessoes_operacionais so_turno
+    ON so_turno.id_sessao_operacional = t.id_sessao_operacional
+JOIN funcoes f_turno
+    ON f_turno.id_funcao = so_turno.id_funcao
+LEFT JOIN checkpoints cp
+    ON cp.id_turno = t.id_turno
+LEFT JOIN sessoes_operacionais so_cp
+    ON so_cp.id_sessao_operacional = cp.id_sessao_operacional
+LEFT JOIN funcoes f_cp
+    ON f_cp.id_funcao = so_cp.id_funcao
+ORDER BY
+    ev.id_evento,
+    eq.id_equipe,
+    t.horario_inicio,
+    cp.registrado_em;
+```
+**0011_create_operador.sql**
+```sql
+CREATE TABLE operador (
+    id_operador            SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_operador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_operador_sessao_operacional
+    ON operador(id_sessao_operacional);
+```
+**0012_create_coordenador**
+```sql
+CREATE TABLE coordenador (
+    id_coordenador         SERIAL PRIMARY KEY,
+    id_sessao_operacional  INT NOT NULL,
+    nome                   VARCHAR(150),
+
+    CONSTRAINT fk_coordenador_sessoes_operacionais
+        FOREIGN KEY (id_sessao_operacional)
+        REFERENCES sessoes_operacionais(id_sessao_operacional)
+        ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_coordenador_sessao_operacional
+    ON coordenador(id_sessao_operacional);
+```
+=======
+>>>>>>> ae1afb419b1c56c83bfaf1a90e3ff1b76505433f
+### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
+
+A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
+
+
+## Consulta 1
+
+Essa consulta retorna todos os checkpoints que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo sejam exibidos.
+
+**Expressão SQL** |
+``` sql
+SELECT cp.id_checkpoint, cp.km_acumulado,
+cp.registrado_em
+FROM checkpoint cp
+INNER JOIN turno t
+ON cp.id_turno = t.id_turno 
+WHERE t.id_equipe = 1 AND t.status = 'em_andamento';
+```
+#1 | ---
+--- | ---
+**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento')
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B \land C)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## Consulta 2
+
+Essa consulta retorna o placar geral de todas as equipes ativas que já iniciaram a competição,ou seja, que possuem km registrado OU pelo menos um turno vinculado. Alimenta a tela de Modo TV (RF006) com ranking em tempo real.
+
+**Expressão SQL** |
+
+``` sql
+SELECT e.id_equipe, e.nome, e.km_total,
+  COUNT(DISTINCT t.id_turno) AS total_turnos,
+  COUNT(DISTINCT t.id_atleta) AS atletas_ativos
+FROM equipe e
+LEFT JOIN turno t
+  ON t.id_equipe = e.id_equipe
+WHERE e.status = 'ativa'
+  AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
+GROUP BY e.id_equipe, e.nome, e.km_total
+ORDER BY e.km_total DESC;
+
+```
+
+#2 | ---
+--- | ---
+**Proposições lógicas** | $A$: Equipe está ativa (e.status = 'ativa') <br> $B$: Equipe já tem km acumulado (e.km_total > 0) <br> $C$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land (B \lor C)$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## Consulta 3
+
+Essa consulta lista checkpoints da equipe 1 cujo pace médio foi menor que 4 min/km (velocidade muito alta) OU cuja velocidade média superou 20 km/h. Auxilia a coordenadora na detecção de registros possivelmente incorretos para eventual ajuste (RF005).
+
+**Expressão SQL** |
+
+``` sql
+SELECT cp.id_checkpoint, cp.km_acumulado,
+  cp.pace_medio, cp.velocidade_media, cp.registrado_em
+FROM checkpoint cp
+INNER JOIN turno t ON cp.id_turno = t.id_turno
+WHERE t.id_equipe = 1
+  AND (
+    cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
+    OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
+  )
+ORDER BY cp.registrado_em DESC;
+```
+#3 | ---
+--- | ---
+**Proposições lógicas** | $A$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $C$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land (B \lor C)$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## Consulta 4
+
+Essa consulta lista os turnos em andamento, vinculando atleta, equipe, esteira e sessão operacional ativa. Ela ajuda o sistema a identificar quais atletas estão correndo no momento e quais esteiras estão ocupadas.
+
+**Expressão SQL** |
+
+``` sql
+SELECT
+  t.id_turno,
+  a.nome AS atleta_nome,
+  eq.nome AS equipe_nome,
+  est.id_esteira,
+  est.status AS status_esteira,
+  t.horario_inicio,
+  t.status AS status_turno
+FROM turnos t
+INNER JOIN atletas a
+  ON a.id_atleta = t.id_atleta
+INNER JOIN equipes eq
+  ON eq.id_equipe = a.id_equipe
+INNER JOIN esteiras est
+  ON est.id_esteira = t.id_esteira
+INNER JOIN sessoes_operacionais so
+  ON so.id_sessao_operacional = t.id_sessao_operacional
+WHERE t.status = 'em_andamento'
+  AND so.status = 'ativa'
+  AND eq.status = 'ativa'
+  AND a.status = 'ativo'
+ORDER BY t.horario_inicio ASC;
+```
+
+#4 | ---
+--- | ---
+**Proposições lógicas** | $A$: O turno está em andamento (t.status = 'em_andamento') <br> $B$: A sessão operacional está ativa (so.status = 'ativa') <br> $C$: A equipe está ativa (eq.status = 'ativa') <br> $D$: O atleta está ativo (a.status = 'ativo')
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land C \land D$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$A \land B \land C \land D$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## Consulta 5
+
+Essa consulta retorna checkpoints válidos de turnos em andamento, considerando apenas registros com quilometragem acumulada válida, timestamp registrado e que não sejam ajustes. Ela pode ser usada para alimentar o acompanhamento parcial da prova sem misturar correções administrativas ao fluxo operacional principal.
+
+**Expressão SQL** |
+
+``` sql
+SELECT
+  cp.id_checkpoint,
+  cp.id_turno,
+  cp.km_acumulado,
+  cp.pace_medio,
+  cp.velocidade_media,
+  cp.registrado_em,
+  cp.is_ajuste
+FROM checkpoints cp
+INNER JOIN turnos t
+  ON t.id_turno = cp.id_turno
+WHERE t.status = 'em_andamento'
+  AND cp.km_acumulado >= 0
+  AND cp.registrado_em IS NOT NULL
+  AND cp.is_ajuste = FALSE
+ORDER BY cp.registrado_em DESC;
+```
+
+#5 | ---
+--- | ---
+**Proposições lógicas** | $A$: O turno está em andamento (t.status = 'em_andamento') <br> $B$: O KM acumulado é válido (cp.km_acumulado >= 0) <br> $C$: O checkpoint possui timestamp (cp.registrado_em IS NOT NULL) <br> $D$: O checkpoint não é ajuste (cp.is_ajuste = FALSE)
+<br>
+**Expressão lógica proposicional** |
+<br> $A \land B \land C \land D$
+<br>
+**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$A \land B \land C \land D$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
+
+## 3.7. WebAPI e endpoints (sprints 3 e 4)
+
+A documentação completa e navegável da WebAPI está disponível na página HTML [`documentos/webapi.html`](./webapi.html).
+
+Quando o backend estiver em execução, a mesma documentação pode ser acessada pela rota:
+
+`GET /docs/webapi`
+
+A página documenta os endpoints implementados no servidor, incluindo endereço, método HTTP, headers relevantes, parâmetros de entrada, body, formato de response, status codes possíveis e vinculação explícita aos requisitos funcionais correspondentes.
+
+## 3.8. Autenticação, Autorização e Resiliência (sprint 5)
+
+### 3.8.1. Autenticação
+
+*Descreva o fluxo de autenticação implementado: persistência de senha com hash bcrypt/argon2 (parâmetros de custo explícitos e justificados), validação de credenciais e criação de sessão. Senhas em texto plano no banco não são aceitas.*
+
+### 3.8.2. Controle de sessão
+
+*Descreva o controle de sessão baseado em `session id` persistido em tabela própria, com expiração. Se optar por JWT, justifique a escolha explicando os trade-offs (stateless, não revogável, payload exposto).*
+
+### 3.8.3. Autorização
+
+*Descreva as regras de autorização por rota e por operação, baseadas no perfil do usuário autenticado. A verificação deve ocorrer no backend — o frontend nunca é fonte de verdade para autorização.*
+
+### 3.8.4. Estratégias de Resiliência
+
+*Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
+
+## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
+
+A Matriz de Rastreabilidade de Requisitos (RTM) mapeia o ciclo de vida completo de cada funcionalidade, ligando os requisitos pedidos às regras de negócio, requisitos não funcionais, desenvolvimento (endpoints e telas) e testes correspondentes. Ela garante que tudo o que foi planejado foi efetivamente construído e testado, evitando pontas soltas ou entregas incompletas.
+
+A coluna **Status** indica o estado de implementação de cada RF na sprint atual: 
+
+- **Implementado** - RF com endpoint funcional acessível pela API e cobertura mínima de testes automatizados. Reflete entrega técnica utilizável pelo front-end, mesmo que a validação completa das regras de negócio associadas esteja prevista para sprints seguintes.
+- **Em desenvolvimento** - RF planejado e documentado, com endpoint e testes ainda a definir. A funcionalidade está prevista para entrega em sprints seguintes, conforme planejamento descrito na seção de evolução do projeto.
+
+Os RNFs **USAB02** (área de toque 44pt), **PORT** (acesso via URL sem instalação), **COMP** (compatibilidade Safari/Chrome iOS/Android/Desktop) e **MANUT01** (arquitetura MVC) são transversais a todos os RFs com interface e camada de aplicação, e não são repetidos linha a linha para evitar redundância.
+
+| Persona | RF | RN | RNFs Relacionados | Endpoint | Tela | Teste | Status | Evidência |
+|---|---|---|---|---|---|---|---|---|
+| Promotor / Gestora | RF001 | — | USAB01 | (em desenvolvimento) | Seleção de Perfil | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor / Gestora | RF002 | RN04, RN05, RN06 | USAB01, SEG01 | (em desenvolvimento) | Login | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor / Gestora | RF003 | RN07 | — | (em desenvolvimento) | Cabeçalho / Menu | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF004 | RN01, RN08 | USAB01 | `GET /api/equipes` | Seleção de Equipe | CT01 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF005 | RN02, RN08, RN11 | USAB01 | `GET /api/atletas` | Seleção de Atleta | CT02 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF006 | RN03 | USAB01 | `GET /api/esteiras` | Status de Esteiras | CT03 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF007 | RN08, RN12, RN13 | USAB01 | `POST /api/turnos` | Associação de Esteira | CT04 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF008 | RN08, RN14, RN15, RN23 | USAB01, DES01, SEG01, CAP, MANUT02 | `POST /api/turnos` | Início de Turno | CT05 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF009 | RN08, RN14, RN18, RN19, RN20 | USAB01, DES01, SEG01, MANUT02 | `PATCH /api/turnos/{id}/encerrar` | Encerramento de Turno | CT06 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF010 | RN08, RN16, RN20, RN22, RN23, RN24 | USAB01, USAB03, DES01, CONF01, SEG01, CAP, MANUT02, REST | `POST /api/checkpoints` | Painel de Checkpoint | CT07 | Implementado | print, log, relatório de cobertura |
+| Promotor de Field Marketing | RF011 | RN25 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF012 | RN21 | SEG01 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF013 | RN17 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Promotor de Field Marketing | RF014 | — | USAB01 | (em desenvolvimento) | Resultado do Turno | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF015 | RN26 | — | (em desenvolvimento) | Consulta de Histórico | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF016 | RN09, RN20, RN26, RN27 | USAB03, SEG02, MANUT02 | `PUT /api/checkpoints/{id}` | Correção de Registro | CT08 | Implementado | print, log, relatório de cobertura |
+| Gestora de Operações | RF017 | RN28, RN29 | SEG02 | (em desenvolvimento) | Correção de Registro | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF018 | RN10 | — | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF019 | RN09, RN29 | SEG02 | (em desenvolvimento) | Histórico de Alterações | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF020 | RN09, RN30 | — | (em desenvolvimento) | Finalização de Equipe | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| — | RF021 | RN27 | SEG02 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF022 | RN32, RN33 | — | `GET /api/placar/geral` | Resultados Consolidados | CT09 | Implementado | print, log, relatório de cobertura |
+| Promotor / Gestora | RF023 | RN31 | DES02 | `GET /api/placar/geral` | Modo TV | CT10 | Implementado | print, log, relatório de cobertura |
+| Gestora de Operações | RF024 | RN33, RN34, RN35 | DES02 | (em desenvolvimento) | Comparação Final | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+| Gestora de Operações | RF025 | RN36 | — | `GET /api/relatorios/exportar` | Exportação | CT11 | Implementado | print, log, arquivo CSV |
+| Promotor de Field Marketing | RF026 | RN37, RN38 | CONF01, CAP | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
+
+# <a name="c4"></a>4. Desenvolvimento da Aplicação Web
+
+## 4.1. Primeira versão da aplicação web (sprint 3)
+
+### 1. O que foi implementado
+ 
+Foi implementada a camada de back-end completa da aplicação, incluindo:
+ 
+- **Controllers:** gerenciam as requisições HTTP para cada entidade do sistema — `AtletaController`, `CheckpointController`, `CoordenadorController`, `EsteiraController`, `EventoController`, `OperadorController`, `PlacarController`, `SessaoController` e `TurnoController`.
+- **Models:** definem as estruturas de dados para todas as entidades do domínio — Atleta, Checkpoint, Coordenador, Equipe, Esteira, Evento, Operador, Placar, Sessão e Turno.
+- **Repositories:** responsáveis pelo acesso ao banco de dados para cada entidade.
+- **Services:** contêm a lógica de negócio da aplicação.
+- **Testes globais:** implementados para cobrir todos os fluxos principais da aplicação, buscando identificar erros de integração e lógica.
+- **Frontend básico (demonstração):** interface desenvolvida apenas para demonstração do fluxo, ainda **não integrada** ao back-end.
+- **Integração com banco de dados:** o back-end está conectado ao banco de dados hospedado no **Supabase**.
+- **Servidor TypeScript:** rodando localmente na porta 3000 via `ts-node-dev`.
+---
+ 
+### 2. O que não foi implementado
+ 
+- Integração entre o frontend e o back-end.
+- Input de dados via foto (leitura visual automatizada da esteira).
+---
+ 
+### 3. Dificuldades técnicas enfrentadas
+ 
+- **Curva de aprendizado acelerada:** a equipe precisou assimilar diversas tecnologias em pouco tempo, especialmente para a escrita e execução de testes automatizados.
+- **Deploy no GitLab Pages:** o GitLab Pages não suporta aplicações dinâmicas geradas com EJS — aceita apenas HTML e CSS estáticos. Isso exigiu refatoração do código e causou atraso na entrega.
+---
+ 
+### 4. Próximos passos
+ 
+- Entregar o sistema com o design alinhado ao **guia de estilos** e ao **protótipo de alta fidelidade** desenvolvido.
+- Realizar a **integração entre frontend e back-end**.
+- Implementar o **input via foto** para leitura da quilometragem diretamente da esteira.
+---
+ 
+### 5. Telas do sistema
+ 
+As telas a seguir fazem parte do frontend desenvolvido para demonstração do fluxo da aplicação. A navegação segue uma sequência de etapas numeradas (Etapa 00 a Etapa 06), cobrindo desde o acesso até o encerramento de um turno de corrida.
+ 
+---
+ 
+#### Etapa 00 · Acesso — Seleção de Função
+
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de função</b></sub><br>
+  <img src="../assets/tela1.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+A tela inicial do sistema solicita que o usuário escolha com qual função irá acessar: **Operador(a)** ou **Coordenador(a)**. Cada opção é apresentada como um card selecionável com rádio button. Esta etapa define o nível de acesso e o fluxo seguinte.
+ 
+---
+ 
+#### Etapa 01 · Operador(a) — Seleção de Operador(a)
+
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de operador</b></sub><br>
+  <img src="../assets/tela2.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+Após escolher a função de Operador(a), o usuário seleciona quem está operando o sistema naquele momento. A lista exibe todos os operadores cadastrados (Ana Martins, João Lima, Marina Souza, Pedro Alves). Ao selecionar um nome, um botão de confirmação aparece com a ação contextual, e o nome do operador passa a aparecer no canto superior direito em todas as etapas seguintes.
+ 
+---
+ 
+#### Etapa 01 · Coordenador(a) — Acesso Restrito
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de atutenticação do coordenador</b></sub><br>
+  <img src="../assets/tela3.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Se a função selecionada na Etapa 00 for **Coordenador(a)**, o sistema redireciona para uma tela de autenticação com nome e senha. O campo de permissões exibe as ações disponíveis para o coordenador: auditoria, correção, TV e encerramento. O botão de acesso só é habilitado após o preenchimento de ambos os campos.
+ 
+---
+ 
+#### Etapa 02 · Equipe — Seleção de Equipe
+
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de equipe</b></sub><br>
+  <img src="../assets/tela4.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+ 
+O operador escolhe qual equipe será acompanhada na operação da etapa atual. São exibidas as equipes cadastradas — **Equipe Vermelha** e **Equipe Azul** — com a quantidade de atletas em cada uma (16 atletas). Ao selecionar, o botão de confirmação exibe o nome da equipe escolhida, e a tela informa que ela ficará vinculada ao operador.
+ 
+---
+ 
+#### Etapa 03 · Atleta — Seleção de Atleta (lista sem seleção)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de seleção de atleta</b></sub><br>
+  <img src="../assets/tela6.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com a equipe definida, o operador seleciona o atleta que irá correr no próximo turno. A tela exibe os atletas disponíveis para revezamento. Atletas que correram no turno imediatamente anterior aparecem como **bloqueados**, com indicação visual e o rótulo "BLOQUEADO", impedindo seleção indevida. A tela também exibe uma mensagem de aviso contextual sobre o bloqueio.
+ 
+---
+ 
+#### Etapa 03 · Atleta — Seleção de Atleta (com atleta selecionado)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de atleta selecionado</b></sub><br>
+  <img src="../assets/tela5.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Após o usuário selecionar um atleta disponível (ex.: Rafael Luz), o card do atleta recebe destaque com borda, o rádio button é preenchido e o rótulo "SELECIONADO" aparece. Um botão preto de confirmação é exibido na parte inferior com o nome do atleta escolhido, e uma instrução informa que a próxima etapa será a definição da esteira.
+ 
+---
+ 
+#### Etapa 04 · Turno — Iniciar Turno (sem esteira selecionada)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de iniciar turno</b></sub><br>
+  <img src="../assets/tela7.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com atleta e equipe confirmados, o operador deve selecionar a esteira onde o turno ocorrerá. A tela exibe um resumo do turno com o nome e a equipe do atleta. As esteiras disponíveis são listadas com seu status: **Livre para iniciar turno** ou **Em manutenção** (indisponível para seleção). O horário de início é salvo automaticamente pelo sistema.
+ 
+---
+ 
+#### Etapa 04 · Turno — Iniciar Turno (com esteira selecionada)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de iniciar com esteira selecionada</b></sub><br>
+  <img src="../assets/tela8.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Ao selecionar a Esteira 01 (livre), o card recebe destaque visual, o rótulo "SELECIONADO" aparece e o resumo do turno é atualizado com o nome da esteira. O botão de confirmação é habilitado com a ação "Iniciar turno na Esteira 01".
+ 
+---
+ 
+#### Etapa 05 · Checkpoint — Turno Ativo (aguardando primeiro checkpoint)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de turno ativo</b></sub><br>
+  <img src="../assets/tela9.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Com o turno em andamento, a tela exibe o card do atleta em corrida com cronômetro em tempo real (ex.: `00:01:41`), status **EM CORRIDA** e os campos para inserção de dados: KM acumulado, pace médio e velocidade média. O último checkpoint indica "Nenhum checkpoint registrado" com status **AGUARDANDO**. O botão **Registrar checkpoint** está ativo, e o botão **Finalizar turno** aparece como opção secundária.
+ 
+---
+ 
+#### Etapa 05 · Checkpoint — Turno Ativo (após checkpoint registrado)
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de turno ativo com checkpoint registrado</b></sub><br>
+  <img src="../assets/tela10.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+Após o primeiro registro, o sistema exibe um **modal de confirmação** informando que o próximo checkpoint estará disponível em 5 minutos. Ao fechar o modal, a tela atualiza o status do último checkpoint para **SALVO** com o horário e quilometragem registrados, e o botão de novo checkpoint passa a exibir o tempo restante para o próximo registro (ex.: `Novo checkpoint em 04:51`), ficando desabilitado durante a espera.
+ 
+---
+ 
+#### Etapa 06 · Encerramento — Finalizar Turno
+ 
+<div align="center">
+  <sub><b>Figura 20 - Tela de finalizar turno</b></sub><br>
+  <img src="../assets/tela11.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
+  <sup>Fonte: Elaborado pelos autores (2026)</sup>
+</div>
+
+A tela de encerramento apresenta um resumo completo do turno antes da confirmação final: nome do atleta, esteira, equipe, horário de início, duração total e quilometragem final acumulada. Uma caixa informativa lista o que ocorre ao confirmar: checkpoint final salvo, esteira liberada para o próximo atleta e histórico preservado. O operador pode confirmar o encerramento ou retornar à tela de checkpoint.
+ 
+## 4.2. Segunda versão da aplicação web (sprint 4)
+
+*Descreva e ilustre aqui o desenvolvimento da segunda versão do sistema web, com foco no que foi consolidado entre a primeira versão funcional e o sistema operacional integrado. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi implementado, (b) o que não foi concluído, (c) dificuldades técnicas enfrentadas e próximos passos.*
+
+## 4.3. Versão final da aplicação web (sprint 5)
+
+*Descreva e ilustre aqui o desenvolvimento da versão final do sistema web, com foco em refatorações, correções finais e na camada de autenticação/autorização entregue. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi refinado ou adicionado desde a sprint 4, (b) pendências remanescentes, (c) dificuldades técnicas enfrentadas.*
+
+# <a name="c5"></a>5. Testes
+
+## 5.1. Relatório de testes de integração de endpoints automatizados (sprint 4)
+
+*Liste e descreva os testes automatizados dos endpoints criados e planejados para sua solução, implementados com **Jest**. Cubra as duas abordagens:*
+
+- ***White-box*** *— testes unitários de Service que exercitam ramos internos, exceções e regras de negócio (conhecimento da implementação).*
+- ***Black-box*** *— testes de integração dos endpoints via Jest + Supertest, verificando apenas o contrato HTTP (status, body, efeito observável), sem depender da implementação interna.*
+
+*Posicione aqui também o relatório de cobertura de testes Jest se houver (através de link ou transcrito para estrutura markdown).*
+
+## 5.2. Testes de usabilidade (sprint 5)
+
+### 5.2.1. Relatório de testes de guerrilha
+
+*Posicione aqui as tabelas com enunciados de tarefas, etapas e resultados de testes de usabilidade. Ou utilize um link para seu relatório de testes (mantenha o link sempre público para visualização).*
+
+### 5.2.2. Relatório de testes SUS (System Usability Scale)
+
+*Posicione aqui o relatório dos testes SUS realizados.*
+
+# <a name="c6"></a>6. Estudo de Mercado e Plano de Marketing (sprint 4)
+
+## 6.1 Resumo Executivo
+
+O BullPace é uma aplicação web desenvolvida para digitalizar a operação de registro e apuração do Red Bull 24 Horas, uma competição de corrida em esteira em que duas equipes de 16 atletas se revezam ao longo de 24 horas ininterruptas. O sistema nasce da seguinte necesside: substituir o processo manual de prancheta, que expõe o evento a erros de anotação, inconsistências entre operadores e dificuldade de auditoria, por um fluxo digital rastreável, padronizado e adequado às restrições do evento.
+
+A oportunidade endereçada pelo projeto está em um nicho específico: a digitalização operacional de eventos esportivos de marcas. Esse segmento se situa na interseção de três mercados em crescimento simultâneo no Brasil: o universo da corrida e dos esportes de resistência, que já reúne aproximadamente 15 milhões de praticantes ativos [17]; o setor de live marketing e ativação de marca, que movimentou US$ 22,2 bilhões em 2025 [18]; e o mercado fitness indoor, no qual o Brasil figura entre os quatro maiores do mundo [19]. O ponto de encontro desses três setores é justamente o perfil do Red Bull 24 Horas: um evento de resistência, realizado em esteiras e construído como ativação proprietária de marca.
+
+Nesse contexto, o BullPace se posiciona como uma ferramenta de apoio operacional especializada, projetada para a realidade do evento: uso em iPad, condições de fadiga e pressão, operadores de campo sem treinamento técnico, ausência de integração automática com as esteiras Technogym e necessidade de funcionamento contínuo por 24 horas. Sua proposta de valor central não é a automação, mas a qualificação do registro manual.
+
+Do ponto de vista dos diferenciais competitivos, o BullPace se distingue de ferramentas genéricas de registro, planilhas colaborativas e aplicativos de produtividade por um conjunto de características que respondem diretamente ao fluxo operacional do evento. O sistema vincula cada checkpoint a uma cadeia rastreável de equipe, atleta, esteira, turno e promotor responsável, garantindo que a quilometragem acumulada, dado central da apuração, não possa ser corrompida por regressão (RN16) nem registrada fora de um turno ativo (RN23). A diferenciação também se manifesta na separação de perfis entre Promotor de Field Marketing e Gestora de Operações, que permite que operações sensíveis, como correções históricas e finalização de equipes, sejam restritas à coordenação com autenticação obrigatória e justificativa auditável.
+
+Outros diferenciais operacionais incluem o timer regressivo de cinco minutos para orientar o ritmo dos checkpoints, o cálculo automático de pace médio, o Modo TV em tempo real para acompanhamento da competição, com possibilidade de desligar a exposição pública do placar, e a exportação em CSV estruturado para auditoria pós-evento. A resiliência a quedas momentâneas de conectividade, com enfileiramento local e sincronização automática, também compõe a proposta, considerando que a infraestrutura de rede do evento depende de solução externa como Starlink.
+
+Os objetivos estratégicos do projeto se organizam em três horizontes. No horizonte imediato, o objetivo é demonstrar valor operacional durante a edição atual do Red Bull 24 Horas, validando o sistema em condições reais: múltiplos operadores, turnos ininterruptos ao longo de 24 horas, pressão de madrugada e dados que determinam o resultado oficial da competição. A métrica de sucesso nesse horizonte é a ausência de falhas críticas na apuração e a percepção positiva do time de Field Marketing sobre a confiabilidade e a facilidade de uso em relação à prancheta.
+
+No horizonte de médio prazo, o objetivo é consolidar o BullPace como a solução padrão para futuras edições do Red Bull 24 Horas no Brasil, com base no histórico de dados estruturados gerados na edição atual. O conjunto de registros de equipes, atletas, turnos, checkpoints e métricas de performance produzido pela aplicação forma uma base reutilizável para planejamento de edições futuras, análise de desempenho por equipe e produção de conteúdo de marketing pós-evento.
+
+No horizonte de longo prazo, o BullPace tem potencial de adaptação para outras ativações esportivas da Red Bull com formato semelhante de revezamento e apuração manual, incluindo possíveis edições internacionais. Dado que a arquitetura foi desenhada de forma modular, com separação estrita entre camadas e entidades configuráveis como eventos, equipes, atletas e esteiras, a adaptação a novos contextos exigiria configuração de dados sem reescrita estrutural do sistema.
+
+Em resumo, o BullPace representa uma resposta a uma fragilidade operacional. As seções seguintes aprofundam a análise de mercado, a concorrência, o público-alvo, o posicionamento e as estratégias de marketing que sustentam essa proposta. 
+
+
+
+## 6.2 Análise de Mercado
+
+A aplicação BullPace está inserida no setor de tecnologia aplicada a eventos esportivos, com foco em gestão operacional, registro de desempenho e consolidação de dados em tempo real. Esse segmento combina elementos do mercado de eventos presenciais, da indústria fitness e da chamada sport tech, área que utiliza sistemas digitais, sensores, plataformas de dados e interfaces de acompanhamento para melhorar a organização, a experiência e a confiabilidade de atividades esportivas.
+
+No caso do Red Bull 24 Horas, o problema central não está na criação de um aplicativo fitness para o consumidor final, mas na digitalização de uma operação específica: registrar manualmente informações de atletas, esteiras, turnos e checkpoints ao longo de uma competição de resistência. A solução atua como uma camada de controle operacional, substituindo pranchetas e anotações dispersas por uma base de dados estruturada e auditável.
+
+Do ponto de vista econômico, o setor esportivo tem se mostrado relevante porque eventos, experiências de marca e conteúdos esportivos continuam atraindo investimento. A Ampere Analysis projeta que os gastos globais com direitos esportivos ultrapassem US$ 78 bilhões em 2030, crescimento de 20% em relação a 2025, indicando que o esporte permanece como um ativo estratégico para marcas, mídia e entretenimento. Embora o BullPace não atue diretamente em direitos de transmissão, esse dado demonstra a força econômica do ecossistema esportivo e a valorização de experiências esportivas bem organizadas.
+
+No aspecto tecnológico, há uma tendência de digitalização das experiências esportivas e fitness. O uso de wearables, aplicativos de exercício, plataformas de acompanhamento e dashboards de performance mostra que a coleta e interpretação de dados passaram a fazer parte da experiência esportiva. Segundo estimativa da Grand View Research citada pela Vogue Business, o mercado global de wearables deve atingir US$ 186 bilhões em 2030, com CAGR de 13,6% entre 2025 e 2030. Esse avanço reforça a importância de dados, rastreabilidade e acompanhamento em tempo real no universo esportivo, ainda que o BullPace opte por entrada manual assistida devido à ausência de integração com as esteiras Technogym.
+
+Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de Proteção de Dados Pessoais, já que armazena nomes de atletas, operadores e registros associados à participação no evento. A ANPD disponibiliza a LGPD como referência institucional para orientar o tratamento de dados pessoais no Brasil, o que reforça a necessidade de limitar dados coletados, manter rastreabilidade, controlar permissões e evitar exposição indevida de informações.
+
+## Tamanho e Crescimento do Mercado
+
+O BullPace está inserido em um nicho de tecnologia aplicada à operação de eventos esportivos, especialmente em soluções de registro, acompanhamento e auditoria de dados de performance. Como não há dados públicos específicos sobre “sistemas de apuração para revezamentos em esteira”, a análise considera mercados adjacentes, como economia do esporte, sport tech, eventos esportivos, wearables e infraestrutura digital para experiências presenciais.
+
+O setor esportivo possui grande relevância econômica. Segundo estudo da Oliver Wyman para o World Economic Forum, citado pela Reuters, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030, demonstrando crescimento significativo em atividades ligadas a eventos, turismo esportivo, mídia, produtos esportivos, tecnologia e experiências presenciais.
+
+Outro indicador importante é o mercado de direitos esportivos. A Ampere Analysis projeta que os gastos globais com direitos de mídia esportiva ultrapassem US$ 78 bilhões em 2030, crescimento de aproximadamente 20% em relação a 2025. Embora o BullPace não atue diretamente em mídia, esse dado reforça a valorização econômica do esporte como experiência, conteúdo e plataforma de relacionamento entre marcas e público.
+
+Além disso, o crescimento do mercado de wearables mostra a valorização de dados de desempenho no esporte e no fitness. Estimativas da Grand View Research, citadas pela Vogue Business, apontam que o mercado global de wearables pode chegar a US$ 186 bilhões em 2030, com crescimento anual composto de 13,6% entre 2025 e 2030.
+
+Assim, mesmo sendo uma solução específica para a operação do Red Bull 24 Horas, o BullPace acompanha uma tendência maior de digitalização, monitoramento e uso de dados em experiências esportivas.
+
+## Tendências de Mercado
+
+O setor em que o BullPace está inserido é influenciado por tendências tecnológicas, comportamentais e mercadológicas ligadas à digitalização de eventos esportivos, ao uso de dados de performance e à busca por experiências presenciais mais interativas.
+
+A primeira tendência é a digitalização da operação esportiva. Segundo a TechRadar, com base em estudo da SportsPro e da Sportradar, mais de 80% das organizações esportivas já utilizam inteligência artificial, enquanto 98% pretendem ampliar esse uso nos próximos 12 meses. Embora o BullPace não tenha como foco o uso de IA, esse dado mostra que o setor esportivo está cada vez mais orientado por tecnologia, dados e sistemas digitais de apoio à operação.
+
+A segunda tendência é a valorização dos dados de performance. Segundo a Reuters, a partir de estudo da Oliver Wyman para o World Economic Forum, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030. Esse crescimento reforça a importância de soluções que profissionalizem a gestão de eventos esportivos, especialmente em contextos nos quais a confiabilidade dos dados influencia diretamente a experiência e a validação dos resultados.
+
+A terceira tendência é a transformação dos eventos esportivos em experiências mais visuais e acompanháveis. Segundo a AVNetwork, arenas e eventos esportivos caminham para estruturas mais digitais, com telas, conteúdos em tempo real e recursos voltados ao engajamento do público. Nesse sentido, o Modo TV do BullPace acompanha essa tendência ao permitir a visualização clara do andamento da competição.
+
+Assim, o BullPace se conecta a uma movimentação maior do mercado: substituir processos manuais por fluxos digitais, rastreáveis e baseados em dados, sem ignorar as restrições reais do ambiente do evento.
+
+## 6.3 Análise da Concorrência
+
+*a) Principais Concorrentes (até 250 palavras)*
+*Liste os concorrentes diretos e indiretos, destacando suas principais características e posicionamento no mercado.*
+
+*b) Vantagens Competitivas da Aplicação Web (até 250 palavras)*
+*Descreva os diferenciais da sua aplicação em relação aos concorrentes, sem necessidade de citação de fontes.*
+
+
+## 6.4 Público-Alvo
+
+O BullPace se encaixa em 3 mercados em forte expansão no Brasil, que se cruzam justamente em eventos e situações como o Redbull 24 horas.
+
+O primeiro é o universo da corrida e dos esportes de resistência, que ultimamente vem crescendo e atigindo um publico cada vez maior, O país já reúne quase 15 milhões de corredores ativos e movimenta um mercado estimado em R$ 1,1 bilhão por ano, somando inscrições, assessorias, equipamentos e patrocínios[17]. É um público cada vez mais numeroso, engajado e habituado a provas cronometradas. 
+
+O segundo é o de live marketing e ativação de marca, em que empresas transformam experiências esportivas em ferramenta de relacionamento com o consumidor. Esse setor movimentou US$ 22,2 bilhões em 2025[18]. Nele estão as marcas patrocinadoras e as produtoras responsáveis por organizar competições desse tipo.
+
+O terceiro é o mercado fitness indoor. Como a disputa ocorre em esteiras, o contexto de uso se aproxima do de academias e redes, e o Brasil está entre os quatro maiores mercados do mundo, com mais de 41 mil academias ativas[19].
+
+
+O público-alvo do sistema reúne dois perfis complementares. O primeiro é o cliente contratante: gestores de marketing esportivo, agências e produtoras que organizam o evento e operam a aplicação. O segundo é o usuário final, aletas amadores que correm em equipe e o público que acompanha o placar, e é sobre ele que existem os dados mais consolidados. 
+
+No geral, é um público adulto jovem, concentrado na faixa dos 25 aos 45 anos [21] e na região Sudeste. Nos últimos anos a corrida ficou mais diversa e democrática, chegando a um equilíbrio entre homens e mulheres [20]. Mais do que um esporte, ela virou estilo de vida, as pessoas correm em busca de saúde, bem-estar mental e superação, e valorizam o sentimento de pertencer a uma comunidade. Boa parte começou a não muito tempo, cerca de 71% começaram a correr depois de 2021[21]. 
+
+Esse corredor também participa cada vez mais de provas oficiais [20] e está mais exigente, querem organização, segurança e cronometragem precisa [22]. É justamente aí que se concentram as necessidades atendidas pela aplicação, um placar e tempo real, apuração transparente e confiavel por equipe e turno, e uma vizualização clara para atletas e plateia. 
+
+
+## 6.5 Posicionamento
+
+A aplicação posiciona-se como uma solução especializada para o suporte operacional do evento Red Bull 24 Horas, com foco na organização e consolidação dos registros da competição. Seu diferencial está na adaptação ao fluxo específico do evento, oferecendo uma alternativa mais estruturada e confiável em comparação aos métodos tradicionais de registro.
+
+O sistema busca ser percebido como uma ferramenta de apoio à equipe operacional, priorizando praticidade, padronização e rastreabilidade dos dados. Dessa forma, o posicionamento da solução está associado à melhoria da eficiência do processo de apuração, contribuindo para uma gestão mais organizada e transparente da competição.
+
+## 6.6 Estratégia de Marketing 
+
+A estratégia de marketing representa um ponto de unificação de tudo o que foi analisado nas seções anteriores. Se a análise de mercado (6.2) mapeou o ambiente em que o BullPace opera, a análise da concorrência (6.3) revelou os diferenciais que precisam ser comunicados, o público-alvo (6.4) definiu para quem a solução foi construída e o posicionamento (6.5) estabeleceu o lugar que ela ocupa na mente do cliente, então a estratégia de marketing é a tradução de tudo isso em decisões sobre o produto, preço, distribuição e promoção.
+
+### a) Produto/Serviço
+
+O BullPace é uma aplicação web, focada no controle operacional desenvolvida exclusivamente para o Red Bull 24 Horas. Seu núcleo funcional gira em torno de quatro processos: cadastro e gestão de atletas/equipes, controle de turnos e esteiras em tempo real, registro de checkpoints com quilometragem acumulada e consolidação de resultados com exportação em CSV para auditoria pós-evento.
+
+Do ponto de vista de produto, o diferencial não está na complexidade técnica, mas na aderência ao contexto operacional, vindo principalmente das frequentes validações com o parceiro. A aplicação foi projetada para substituir a prancheta utilizada pelo time de Field Marketing sem exigir qualquer integração com as esteiras, assim como foi delimitado pelo parceiro por conta da capacidade técnica do evento, como descrito na introdução do projeto. Isso significa que o produto entrega valor precisamente dentro dos limites do que é possível fazer no ambiente do evento, sem criar dependências de infraestrutura que poderiam comprometer a operação.
+
+Todas as funcionalidades estão organizadas em camadas de acesso distintas para operadores, administradores e visualização pública dos resultados, descritas em detalhe na seção de distribuição (6.6c).
+
+Outro aspecto relevante do produto é a rastreabilidade. Cada registro carrega um timestamp automático, criando um histórico totalmente auditável da operação. Isso responde a uma necessidade explicitada pelo público-alvo (6.4): corredores e organizadores que exigem transparência e confiabilidade na apuração dos resultados. A rastreabilidade também atende à conformidade com a LGPD (6.2), ao manter o controle sobre quais dados são armazenados e por quem foram inseridos.
+
+Como serviço, o BullPace vai além de uma interface de registro: entrega confiança operacional para a equipe de Field Marketing ao longo das 24 horas de prova.
+
+### b) Preço
+
+O BullPace nasce de uma parceria acadêmica entre a Inteli e a Red Bull, o que afasta qualquer modelo comercial tradicional do escopo atual. Mas para que a estratégia de precificação faça sentido como parte de um plano de marketing real, é preciso projetá-la além do projeto acadêmico, considerando o que aconteceria se a solução fosse mantida, expandida ou replicada para outras edições e eventos.
+
+O ponto de partida para essa análise é o poder de barganha do cliente. Como identificado nas 5 Forças de Porter (2.1.1), o cenário configura um monopsônio: há apenas um comprador direto, com alto poder de negociação, que define escopo, prioridades e critérios de aceitação. Isso não significa que o produto não tem valor. Significa que esse valor precisa ser justificado de forma concreta, com base no problema que resolve e não no custo de desenvolvimento.
+
+A partir disso, é possível identificar três modelos de precificação coerentes com o perfil da solução. O primeiro, e mais imediato, é o modelo de projeto fechado por encomenda: o cliente paga um valor fixo pelo desenvolvimento e entrega da aplicação, tal como ocorre no contexto atual, mas formalizado como contrato comercial. Esse modelo funciona bem enquanto o escopo é específico e bem delimitado, como é o caso do Red Bull 24 Horas.
+
+O segundo é o licenciamento por evento, no qual a aplicação é disponibilizada a cada nova edição mediante um valor de licença anual ou por ocorrência. Esse modelo passa a fazer mais sentido conforme a solução amadurece e se torna parte da infraestrutura permanente do evento, sendo aprimorada a cada edição com base no feedback do time de Field Marketing.
+
+O terceiro, mais distante do cenário atual mas relevante como horizonte estratégico, é o modelo de plataforma configurável para eventos de resistência, no qual o BullPace seria adaptado para outros formatos de corrida coletiva e licenciado para produtoras e agências de eventos. Nesse caso, a estrutura de preço se aproximaria de um SaaS B2B (Software as a Service Business to Business), definido pelo porte do evento e pelo número de usuários ativos.
+
+Em todos os modelos, o referencial de valor é o mesmo: o problema que a solução resolve. Operar 24 horas com pranchetas expõe o evento a erros de registro e inconsistências de apuração, o que pode comprometer a credibilidade da Red Bull enquanto organizadora. Quando o preço é ancorado nesse risco evitado, a proposta de valor se fortalece.
+
+### c) Praça (Distribuição)
+
+Por ser uma aplicação web, a estratégia de distribuição do BullPace é direta: acesso via navegador, sem instalação, sem dependência de sistema operacional. Qualquer dispositivo com conexão à internet e um navegador atualizado funciona como ponto de acesso, o que elimina a necessidade de configuração por aparelho e reduz a chance de falhas de entrega no dia do evento.
+
+Na prática, o acesso se organiza em três pontos distintos, cada um correspondendo a um perfil de usuário. O primeiro é a estação do operador, onde um dispositivo dedicado fica posicionado ao lado de cada esteira. Por ali passam todos os registros do evento: início e encerramento de turnos, checkpoints e quilometragem. O acesso é autenticado e restrito ao perfil de operador, evitando que dados sejam alterados por quem não tem responsabilidade sobre aquela esteira.
+
+O segundo é o painel administrativo, acessado pela coordenação do evento. Ali ficam as funções de configuração global, como cadastro de atletas, equipes e turnos, e o monitoramento em tempo real de toda a operação. As permissões são mais amplas do que as do operador, refletindo a hierarquia de responsabilidades do evento.
+
+O terceiro é o placar público, acessível via URL aberta e projetado em telão durante o evento. Ele foi implementado sem autenticação a fim de facilitar o acesso imediato em caso de imprevistos de logística. É por ele que atletas e plateia acompanham os resultados em tempo real.
+
+Do ponto de vista de infraestrutura, a aplicação é hospedada em nuvem, garantindo disponibilidade ao longo das 24 horas sem depender de servidores locais do espaço do evento. Esse detalhe é mais estratégico do que técnico: uma falha de infraestrutura local no meio da madrugada seria muito mais difícil de contornar do que um eventual problema de conectividade com um serviço de nuvem.
+
+A praça, portanto, não é um canal de distribuição no sentido tradicional. Não há loja virtual, marketplace ou campanha de aquisição. O BullPace chega ao usuário já operacional no dia do evento, como parte da infraestrutura montada pela organização. Isso desloca a responsabilidade de "distribuição" para o momento de setup antes do evento, com testes, validações de acesso e configuração de dispositivos, que compõem o processo de entrega da solução.
+
+### d) Promoção
+
+A estratégia de promoção do BullPace não segue os padrões de uma campanha de marketing convencional, porque a solução não compete por atenção num mercado aberto. O cliente é a Red Bull, o canal de venda é o relacionamento, e a prova de valor é operacional. Isso muda completamente a lógica do que significa promover o produto.
+
+A principal forma de promoção é o próprio desempenho da aplicação durante o evento. Cada turno registrado com precisão, cada checkpoint sem inconsistência e cada resultado consolidado em tempo real funciona como argumento para que a Red Bull confie na solução nas próximas edições. Nesse sentido, o Red Bull 24 Horas não é apenas o contexto de uso; é o palco de validação da ferramenta. Uma operação bem executada vale mais do que qualquer material de divulgação.
+
+O segundo momento de promoção ocorre depois do evento, com o relatório pós-operação. A exportação em CSV, combinada com o histórico auditável de registros, permite que a coordenação produza um dossiê completo com quilometragem por atleta, por turno e por equipe. Apresentado internamente na Red Bull, esse relatório demonstra na prática o que a digitalização entrega e o que seria perdido numa eventual regressão ao método manual com pranchetas.
+
+Uma terceira frente, mais relevante no horizonte de expansão da solução, é a documentação técnica do projeto. O WAD, o código e o histórico de decisões de desenvolvimento constroem a credibilidade da equipe como fornecedora de soluções para eventos esportivos. Em relações B2B (Business to Business), a reputação técnica precede qualquer negociação.
+
+Por fim, em um cenário de expansão para outras marcas e eventos, as estratégias poderiam incluir presença em encontros do setor de eventos esportivos e produção de conteúdo técnico sobre digitalização de operações de competição. O posicionamento de nicho definido em 6.5 favorece esse tipo de promoção segmentada: não é preciso alcançar um público amplo, mas sim ser reconhecida pelo grupo restrito de profissionais que organiza eventos com as características do Red Bull 24 Horas.
+
+# <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
+
+*Escreva de que formas a solução da aplicação web atingiu os objetivos descritos na seção 2 deste documento. Indique pontos fortes e pontos a melhorar de maneira geral.*
+
+*Relacione os pontos de melhorias evidenciados nos testes com planos de ações para serem implementadas. O grupo não precisa implementá-las, pode deixar registrado aqui o plano para ações futuras*
+
+*Relacione também quaisquer outras ideias que o grupo tenha para melhorias futuras*
+
+# <a name="c8"></a>8. Referências (sprints 1 a 5)
+
+<a name="ref-1"></a>[1] RED BULL. **TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
+
+[2] PORTER, Michael E. Estratégia Competitiva: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
+
+[3] CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
+
+[4] OSTERWALDER, Alexander et al. Value Proposition Design: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
+
+[5] PMI - PROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia: PMI, 2017.
+
+[6] COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
+
+[7] NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
+
+[8] COHN, Mike. User Stories Applied: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
+
+[9] SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
+
+[10] PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
+
+[11] ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
+
+[12] COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
+
+[13] WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013.
+
+[14] BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
+
+[15] KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
+
+[16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
+
+[17] CORRIDA de rua cresce no Brasil: já são 15 milhões de praticantes, a maioria mulheres. **IstoÉ**, [s. l.], 1 fev. 2026. Disponível em: https://istoe.com.br/corrida-de-rua-15-milhoes-corredores-maioria-mulheres.
+
+[18] SETOR de eventos no Brasil inicia 2026 com recorde de consumo e geração de empregos. **Transamerica Expo Center**, São Paulo, 7 abr. 2026. Disponível em: https://www.transamericaexpo.com.br/setor-de-eventos-no-brasil-inicia-2026-com-recorde-de-consumo-e-geracao-de-empregos/. 
+
+[19] MERCADO fitness latino-americano em 2026: dados, tendências e o que muda pro Brasil. **Blog da Pacto**, [s. l.], 29 abr. 2026. Disponível em: https://blog.sistemapacto.com.br/mercado-fitness-latino-americano-brasil-2026/.
+
+[20] PESQUISA: com impulso de mulheres, jovens e Classe C, corrida de rua alcança 15 milhões de praticantes no Brasil. **Máquina do Esporte**, [s. l.], 31 jan. 2026. Disponível em: https://maquinadoesporte.com.br/running/pesquisa-com-impulso-de-mulheres-jovens-e-classe-c-corrida-de-rua-alcanca-15-milhoes-de-praticantes-no-brasil/.
+
+[21] CORRIDA de rua se torna fenômeno social no Brasil com 13 milhões de praticantes. **Portal Tela**, [s. l.], 2 fev. 2025. Disponível em: https://www.portaltela.com/esportes/geral/2025/02/02/corrida-de-rua-se-torna-fenomeno-social-no-brasil-com-13-milhoes-de-praticantes.
+
+[22] CORRIDAS de rua crescem 85% e viram fenômeno esportivo. **Terra**, [s. l.], 28 jan. 2026. Disponível em: https://www.terra.com.br/vida-e-estilo/saude/corridas-de-rua-crescem-85-e-viram-fenomeno-esportivo.
+
+# <a name="c9"></a>Anexos
+<a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)
+
+<a name="scripts-das-migrations"></a>
+
 ### Scripts das Migrations
 
 **0001_create_eventos.sql**
@@ -2394,582 +3454,3 @@ CREATE TABLE coordenador (
 CREATE INDEX idx_coordenador_sessao_operacional
     ON coordenador(id_sessao_operacional);
 ```
-### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
-
-A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
-
-
-## Consulta 1
-
-Essa consulta retorna todos os checkpoints não excluídos (soft delete) que pertencem a turnos atualmente em andamento da equipe de id 1. Essa consulta alimenta o placar em tempo real (RF006 / RN10), garantindo que apenas dados do turno ativo e ainda não removidos sejam exibidos.
-
-**Expressão SQL** |
-``` sql
-SELECT cp.id_checkpoint, cp.km_acumulado,
-cp.registrado_em
-FROM checkpoint cp
-INNER JOIN turno t
-ON cp.id_turno = t.id_turno 
-WHERE t.id_equipe = 1 AND t.status = 'em_andamento' AND cp.deleted_at
-IS NULL; 
-```
-#1 | ---
---- | ---
-**Proposições lógicas** | $A$: A: O turno pertence à equipe 1 (t.id_equipe = 1) <br> $B$: O turno está em andamento (t.status = 'em_andamento') <br> $C$: O checkpoint não foi removido (cp.deleted_at IS NULL)
-<br>
-**Expressão lógica proposicional** |
-<br> $A \land B \land C$
-<br>
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$(A \land B)$</th> <th>$(A \land B \land C)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
-
-## Consulta 2
-
-Essa consulta retorna o placar geral de todas as equipes ativas que já iniciaram a competição,ou seja, que possuem km registrado OU pelo menos um turno vinculado. Alimenta a tela de Modo TV (RF006) com ranking em tempo real.
-
-**Expressão SQL** |
-
-``` sql
-SELECT e.id_equipe, e.nome, e.km_total,
-  COUNT(DISTINCT t.id_turno) AS total_turnos,
-  COUNT(DISTINCT t.id_atleta) AS atletas_ativos
-FROM equipe e
-LEFT JOIN turno t
-  ON t.id_equipe = e.id_equipe
-  AND t.deleted_at IS NULL
-WHERE e.deleted_at IS NULL
-  AND e.status = 'ativa'
-  AND (e.km_total > 0 OR t.id_turno IS NOT NULL)
-GROUP BY e.id_equipe, e.nome, e.km_total
-ORDER BY e.km_total DESC;
-
-```
-
-#2 | ---
---- | ---
-**Proposições lógicas** | $A$: Equipe não foi removida (e.deleted_at IS NULL) <br> $B$: Equipe está ativa (e.status = 'ativa') <br> $C$: Equipe já tem km acumulado (e.km_total > 0) <br> $D$: Equipe tem pelo menos um turno vinculado (t.id_turno IS NOT NULL)
-<br>
-**Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
-<br>
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
-
-## Consulta 3
-
-Essa consulta lista checkpoints da equipe 1 cujo pace médio foi menor que 4 min/km (velocidade muito alta) OU cuja velocidade média superou 20 km/h. Auxilia a coordenadora na detecção de registros possivelmente incorretos para eventual ajuste (RF005).
-
-**Expressão SQL** |
-
-``` sql
-SELECT cp.id_checkpoint, cp.km_acumulado,
-  cp.pace_medio, cp.velocidade_media, cp.registrado_em
-FROM checkpoint cp
-INNER JOIN turno t ON cp.id_turno = t.id_turno
-WHERE cp.deleted_at IS NULL
-  AND t.id_equipe = 1
-  AND (
-    cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0
-    OR cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0
-  )
-ORDER BY cp.registrado_em DESC;
-```
-#3 | ---
---- | ---
-**Proposições lógicas** | $A$: Checkpoint não foi removido (cp.deleted_at IS NULL) <br> $B$: Turno pertence à equipe 1 (t.id_equipe = 1) <br> $C$: Pace foi preenchido e está abaixo de 4 min/km (cp.pace_medio IS NOT NULL AND cp.pace_medio < 4.0) <br> $D$: Velocidade foi preenchida e supera 20 km/h (cp.velocidade_media IS NOT NULL AND cp.velocidade_media > 20.0)
-<br>
-**Expressão lógica proposicional** |
-<br> $A \land B \land (C \lor D)$
-<br>
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$(C \lor D)$</th> <th>$A \land B \land (C \lor D)$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>V</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
-
-## Consulta 4
-
-Essa consulta lista os turnos em andamento, vinculando atleta, equipe, esteira e sessão operacional ativa. Ela ajuda o sistema a identificar quais atletas estão correndo no momento e quais esteiras estão ocupadas.
-
-**Expressão SQL** |
-
-``` sql
-SELECT
-  t.id_turno,
-  a.nome AS atleta_nome,
-  eq.nome AS equipe_nome,
-  est.id_esteira,
-  est.status AS status_esteira,
-  t.horario_inicio,
-  t.status AS status_turno
-FROM turnos t
-INNER JOIN atletas a
-  ON a.id_atleta = t.id_atleta
-INNER JOIN equipes eq
-  ON eq.id_equipe = a.id_equipe
-INNER JOIN esteiras est
-  ON est.id_esteira = t.id_esteira
-INNER JOIN sessoes_operacionais so
-  ON so.id_sessao_operacional = t.id_sessao_operacional
-WHERE t.status = 'em_andamento'
-  AND so.status = 'ativa'
-  AND eq.status = 'ativa'
-  AND a.status = 'ativo'
-ORDER BY t.horario_inicio ASC;
-```
-
-#4 | ---
---- | ---
-**Proposições lógicas** | $A$: O turno está em andamento (t.status = 'em_andamento') <br> $B$: A sessão operacional está ativa (so.status = 'ativa') <br> $C$: A equipe está ativa (eq.status = 'ativa') <br> $D$: O atleta está ativo (a.status = 'ativo')
-<br>
-**Expressão lógica proposicional** |
-<br> $A \land B \land C \land D$
-<br>
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$A \land B \land C \land D$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
-
-## Consulta 5
-
-Essa consulta retorna checkpoints válidos de turnos em andamento, considerando apenas registros com quilometragem acumulada válida, timestamp registrado e que não sejam ajustes. Ela pode ser usada para alimentar o acompanhamento parcial da prova sem misturar correções administrativas ao fluxo operacional principal.
-
-**Expressão SQL** |
-
-``` sql
-SELECT
-  cp.id_checkpoint,
-  cp.id_turno,
-  cp.km_acumulado,
-  cp.pace_medio,
-  cp.velocidade_media,
-  cp.registrado_em,
-  cp.is_ajuste
-FROM checkpoints cp
-INNER JOIN turnos t
-  ON t.id_turno = cp.id_turno
-WHERE t.status = 'em_andamento'
-  AND cp.km_acumulado >= 0
-  AND cp.registrado_em IS NOT NULL
-  AND cp.is_ajuste = FALSE
-ORDER BY cp.registrado_em DESC;
-```
-
-#5 | ---
---- | ---
-**Proposições lógicas** | $A$: O turno está em andamento (t.status = 'em_andamento') <br> $B$: O KM acumulado é válido (cp.km_acumulado >= 0) <br> $C$: O checkpoint possui timestamp (cp.registrado_em IS NOT NULL) <br> $D$: O checkpoint não é ajuste (cp.is_ajuste = FALSE)
-<br>
-**Expressão lógica proposicional** |
-<br> $A \land B \land C \land D$
-<br>
-**Tabela Verdade** | <table> <thead> <tr> <th>$A$</th> <th>$B$</th> <th>$C$</th> <th>$D$</th> <th>$A \land B \land C \land D$</th> </tr> </thead> <tbody> <tr> <td>F</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>F</td> <td>V</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>F</td> <td>V</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>F</td> <td>V</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>F</td> <td>F</td> </tr> <tr> <td>V</td> <td>V</td> <td>V</td> <td>V</td> <td>V</td> </tr> </tbody> </table>
-
-## 3.7. WebAPI e endpoints (sprints 3 e 4)
-
-A documentação completa e navegável da WebAPI está disponível na página HTML [`documentos/webapi.html`](./webapi.html).
-
-Quando o backend estiver em execução, a mesma documentação pode ser acessada pela rota:
-
-`GET /docs/webapi`
-
-A página documenta os endpoints implementados no servidor, incluindo endereço, método HTTP, headers relevantes, parâmetros de entrada, body, formato de response, status codes possíveis e vinculação explícita aos requisitos funcionais correspondentes.
-
-## 3.8. Autenticação, Autorização e Resiliência (sprint 5)
-
-### 3.8.1. Autenticação
-
-*Descreva o fluxo de autenticação implementado: persistência de senha com hash bcrypt/argon2 (parâmetros de custo explícitos e justificados), validação de credenciais e criação de sessão. Senhas em texto plano no banco não são aceitas.*
-
-### 3.8.2. Controle de sessão
-
-*Descreva o controle de sessão baseado em `session id` persistido em tabela própria, com expiração. Se optar por JWT, justifique a escolha explicando os trade-offs (stateless, não revogável, payload exposto).*
-
-### 3.8.3. Autorização
-
-*Descreva as regras de autorização por rota e por operação, baseadas no perfil do usuário autenticado. A verificação deve ocorrer no backend — o frontend nunca é fonte de verdade para autorização.*
-
-### 3.8.4. Estratégias de Resiliência
-
-*Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
-
-## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
-
-A Matriz de Rastreabilidade de Requisitos (RTM) mapeia o ciclo de vida completo de cada funcionalidade, ligando os requisitos pedidos às regras de negócio, requisitos não funcionais, desenvolvimento (endpoints e telas) e testes correspondentes. Ela garante que tudo o que foi planejado foi efetivamente construído e testado, evitando pontas soltas ou entregas incompletas.
-
-A coluna **Status** indica o estado de implementação de cada RF na sprint atual: 
-
-- **Implementado** - RF com endpoint funcional acessível pela API e cobertura mínima de testes automatizados. Reflete entrega técnica utilizável pelo front-end, mesmo que a validação completa das regras de negócio associadas esteja prevista para sprints seguintes.
-- **Em desenvolvimento** - RF planejado e documentado, com endpoint e testes ainda a definir. A funcionalidade está prevista para entrega em sprints seguintes, conforme planejamento descrito na seção de evolução do projeto.
-
-Os RNFs **USAB02** (área de toque 44pt), **PORT** (acesso via URL sem instalação), **COMP** (compatibilidade Safari/Chrome iOS/Android/Desktop) e **MANUT01** (arquitetura MVC) são transversais a todos os RFs com interface e camada de aplicação, e não são repetidos linha a linha para evitar redundância.
-
-| Persona | RF | RN | RNFs Relacionados | Endpoint | Tela | Teste | Status | Evidência |
-|---|---|---|---|---|---|---|---|---|
-| Promotor / Gestora | RF001 | — | USAB01 | (em desenvolvimento) | Seleção de Perfil | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Promotor / Gestora | RF002 | RN04, RN05, RN06 | USAB01, SEG01 | (em desenvolvimento) | Login | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Promotor / Gestora | RF003 | RN07 | — | (em desenvolvimento) | Cabeçalho / Menu | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Promotor de Field Marketing | RF004 | RN01, RN08 | USAB01 | `GET /api/equipes` | Seleção de Equipe | CT01 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF005 | RN02, RN08, RN11 | USAB01 | `GET /api/atletas` | Seleção de Atleta | CT02 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF006 | RN03 | USAB01 | `GET /api/esteiras` | Status de Esteiras | CT03 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF007 | RN08, RN12, RN13 | USAB01 | `POST /api/turnos` | Associação de Esteira | CT04 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF008 | RN08, RN14, RN15, RN23 | USAB01, DES01, SEG01, CAP, MANUT02 | `POST /api/turnos` | Início de Turno | CT05 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF009 | RN08, RN14, RN18, RN19, RN20 | USAB01, DES01, SEG01, MANUT02 | `PATCH /api/turnos/{id}/encerrar` | Encerramento de Turno | CT06 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF010 | RN08, RN16, RN20, RN22, RN23, RN24 | USAB01, USAB03, DES01, CONF01, SEG01, CAP, MANUT02, REST | `POST /api/checkpoints` | Painel de Checkpoint | CT07 | Implementado | print, log, relatório de cobertura |
-| Promotor de Field Marketing | RF011 | RN25 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| — | RF012 | RN21 | SEG01 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Promotor de Field Marketing | RF013 | RN17 | — | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Promotor de Field Marketing | RF014 | — | USAB01 | (em desenvolvimento) | Resultado do Turno | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF015 | RN26 | — | (em desenvolvimento) | Consulta de Histórico | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF016 | RN09, RN20, RN26, RN27 | USAB03, SEG02, MANUT02 | `PUT /api/checkpoints/{id}` | Correção de Registro | CT08 | Implementado | print, log, relatório de cobertura |
-| Gestora de Operações | RF017 | RN28, RN29 | SEG02 | (em desenvolvimento) | Correção de Registro | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| — | RF018 | RN10 | — | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF019 | RN09, RN29 | SEG02 | (em desenvolvimento) | Histórico de Alterações | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF020 | RN09, RN30 | — | (em desenvolvimento) | Finalização de Equipe | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| — | RF021 | RN27 | SEG02 | (em desenvolvimento) | (transversal) | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF022 | RN32, RN33 | — | `GET /api/placar/geral` | Resultados Consolidados | CT09 | Implementado | print, log, relatório de cobertura |
-| Promotor / Gestora | RF023 | RN31 | DES02 | `GET /api/placar/geral` | Modo TV | CT10 | Implementado | print, log, relatório de cobertura |
-| Gestora de Operações | RF024 | RN33, RN34, RN35 | DES02 | (em desenvolvimento) | Comparação Final | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-| Gestora de Operações | RF025 | RN36 | — | `GET /api/relatorios/exportar` | Exportação | CT11 | Implementado | print, log, arquivo CSV |
-| Promotor de Field Marketing | RF026 | RN37, RN38 | CONF01, CAP | (em desenvolvimento) | Painel de Checkpoint | (em desenvolvimento) | Em desenvolvimento | (em desenvolvimento) |
-
-# <a name="c4"></a>4. Desenvolvimento da Aplicação Web
-
-## 4.1. Primeira versão da aplicação web (sprint 3)
-
-### 1. O que foi implementado
- 
-Foi implementada a camada de back-end completa da aplicação, incluindo:
- 
-- **Controllers:** gerenciam as requisições HTTP para cada entidade do sistema — `AtletaController`, `CheckpointController`, `CoordenadorController`, `EsteiraController`, `EventoController`, `OperadorController`, `PlacarController`, `SessaoController` e `TurnoController`.
-- **Models:** definem as estruturas de dados para todas as entidades do domínio — Atleta, Checkpoint, Coordenador, Equipe, Esteira, Evento, Operador, Placar, Sessão e Turno.
-- **Repositories:** responsáveis pelo acesso ao banco de dados para cada entidade.
-- **Services:** contêm a lógica de negócio da aplicação.
-- **Testes globais:** implementados para cobrir todos os fluxos principais da aplicação, buscando identificar erros de integração e lógica.
-- **Frontend básico (demonstração):** interface desenvolvida apenas para demonstração do fluxo, ainda **não integrada** ao back-end.
-- **Integração com banco de dados:** o back-end está conectado ao banco de dados hospedado no **Supabase**.
-- **Servidor TypeScript:** rodando localmente na porta 3000 via `ts-node-dev`.
----
- 
-### 2. O que não foi implementado
- 
-- Integração entre o frontend e o back-end.
-- Input de dados via foto (leitura visual automatizada da esteira).
----
- 
-### 3. Dificuldades técnicas enfrentadas
- 
-- **Curva de aprendizado acelerada:** a equipe precisou assimilar diversas tecnologias em pouco tempo, especialmente para a escrita e execução de testes automatizados.
-- **Deploy no GitLab Pages:** o GitLab Pages não suporta aplicações dinâmicas geradas com EJS — aceita apenas HTML e CSS estáticos. Isso exigiu refatoração do código e causou atraso na entrega.
----
- 
-### 4. Próximos passos
- 
-- Entregar o sistema com o design alinhado ao **guia de estilos** e ao **protótipo de alta fidelidade** desenvolvido.
-- Realizar a **integração entre frontend e back-end**.
-- Implementar o **input via foto** para leitura da quilometragem diretamente da esteira.
----
- 
-### 5. Telas do sistema
- 
-As telas a seguir fazem parte do frontend desenvolvido para demonstração do fluxo da aplicação. A navegação segue uma sequência de etapas numeradas (Etapa 00 a Etapa 06), cobrindo desde o acesso até o encerramento de um turno de corrida.
- 
----
- 
-#### Etapa 00 · Acesso — Seleção de Função
-
-<div align="center">
-  <sub><b>Figura 20 - Tela de seleção de função</b></sub><br>
-  <img src="../assets/tela1.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
- 
-A tela inicial do sistema solicita que o usuário escolha com qual função irá acessar: **Operador(a)** ou **Coordenador(a)**. Cada opção é apresentada como um card selecionável com rádio button. Esta etapa define o nível de acesso e o fluxo seguinte.
- 
----
- 
-#### Etapa 01 · Operador(a) — Seleção de Operador(a)
-
-<div align="center">
-  <sub><b>Figura 20 - Tela de seleção de operador</b></sub><br>
-  <img src="../assets/tela2.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
- 
-Após escolher a função de Operador(a), o usuário seleciona quem está operando o sistema naquele momento. A lista exibe todos os operadores cadastrados (Ana Martins, João Lima, Marina Souza, Pedro Alves). Ao selecionar um nome, um botão de confirmação aparece com a ação contextual, e o nome do operador passa a aparecer no canto superior direito em todas as etapas seguintes.
- 
----
- 
-#### Etapa 01 · Coordenador(a) — Acesso Restrito
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de atutenticação do coordenador</b></sub><br>
-  <img src="../assets/tela3.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Se a função selecionada na Etapa 00 for **Coordenador(a)**, o sistema redireciona para uma tela de autenticação com nome e senha. O campo de permissões exibe as ações disponíveis para o coordenador: auditoria, correção, TV e encerramento. O botão de acesso só é habilitado após o preenchimento de ambos os campos.
- 
----
- 
-#### Etapa 02 · Equipe — Seleção de Equipe
-
-<div align="center">
-  <sub><b>Figura 20 - Tela de seleção de equipe</b></sub><br>
-  <img src="../assets/tela4.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
- 
-O operador escolhe qual equipe será acompanhada na operação da etapa atual. São exibidas as equipes cadastradas — **Equipe Vermelha** e **Equipe Azul** — com a quantidade de atletas em cada uma (16 atletas). Ao selecionar, o botão de confirmação exibe o nome da equipe escolhida, e a tela informa que ela ficará vinculada ao operador.
- 
----
- 
-#### Etapa 03 · Atleta — Seleção de Atleta (lista sem seleção)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de seleção de atleta</b></sub><br>
-  <img src="../assets/tela6.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Com a equipe definida, o operador seleciona o atleta que irá correr no próximo turno. A tela exibe os atletas disponíveis para revezamento. Atletas que correram no turno imediatamente anterior aparecem como **bloqueados**, com indicação visual e o rótulo "BLOQUEADO", impedindo seleção indevida. A tela também exibe uma mensagem de aviso contextual sobre o bloqueio.
- 
----
- 
-#### Etapa 03 · Atleta — Seleção de Atleta (com atleta selecionado)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de atleta selecionado</b></sub><br>
-  <img src="../assets/tela5.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Após o usuário selecionar um atleta disponível (ex.: Rafael Luz), o card do atleta recebe destaque com borda, o rádio button é preenchido e o rótulo "SELECIONADO" aparece. Um botão preto de confirmação é exibido na parte inferior com o nome do atleta escolhido, e uma instrução informa que a próxima etapa será a definição da esteira.
- 
----
- 
-#### Etapa 04 · Turno — Iniciar Turno (sem esteira selecionada)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de iniciar turno</b></sub><br>
-  <img src="../assets/tela7.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Com atleta e equipe confirmados, o operador deve selecionar a esteira onde o turno ocorrerá. A tela exibe um resumo do turno com o nome e a equipe do atleta. As esteiras disponíveis são listadas com seu status: **Livre para iniciar turno** ou **Em manutenção** (indisponível para seleção). O horário de início é salvo automaticamente pelo sistema.
- 
----
- 
-#### Etapa 04 · Turno — Iniciar Turno (com esteira selecionada)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de iniciar com esteira selecionada</b></sub><br>
-  <img src="../assets/tela8.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Ao selecionar a Esteira 01 (livre), o card recebe destaque visual, o rótulo "SELECIONADO" aparece e o resumo do turno é atualizado com o nome da esteira. O botão de confirmação é habilitado com a ação "Iniciar turno na Esteira 01".
- 
----
- 
-#### Etapa 05 · Checkpoint — Turno Ativo (aguardando primeiro checkpoint)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de turno ativo</b></sub><br>
-  <img src="../assets/tela9.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Com o turno em andamento, a tela exibe o card do atleta em corrida com cronômetro em tempo real (ex.: `00:01:41`), status **EM CORRIDA** e os campos para inserção de dados: KM acumulado, pace médio e velocidade média. O último checkpoint indica "Nenhum checkpoint registrado" com status **AGUARDANDO**. O botão **Registrar checkpoint** está ativo, e o botão **Finalizar turno** aparece como opção secundária.
- 
----
- 
-#### Etapa 05 · Checkpoint — Turno Ativo (após checkpoint registrado)
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de turno ativo com checkpoint registrado</b></sub><br>
-  <img src="../assets/tela10.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-Após o primeiro registro, o sistema exibe um **modal de confirmação** informando que o próximo checkpoint estará disponível em 5 minutos. Ao fechar o modal, a tela atualiza o status do último checkpoint para **SALVO** com o horário e quilometragem registrados, e o botão de novo checkpoint passa a exibir o tempo restante para o próximo registro (ex.: `Novo checkpoint em 04:51`), ficando desabilitado durante a espera.
- 
----
- 
-#### Etapa 06 · Encerramento — Finalizar Turno
- 
-<div align="center">
-  <sub><b>Figura 20 - Tela de finalizar turno</b></sub><br>
-  <img src="../assets/tela11.png" width="100%" alt="Diagrama Entidade-Relacionamento com cardinalidades, chaves primárias e chaves estrangeiras"><br>
-  <sup>Fonte: Elaborado pelos autores (2026)</sup>
-</div>
-
-A tela de encerramento apresenta um resumo completo do turno antes da confirmação final: nome do atleta, esteira, equipe, horário de início, duração total e quilometragem final acumulada. Uma caixa informativa lista o que ocorre ao confirmar: checkpoint final salvo, esteira liberada para o próximo atleta e histórico preservado. O operador pode confirmar o encerramento ou retornar à tela de checkpoint.
- 
-## 4.2. Segunda versão da aplicação web (sprint 4)
-
-*Descreva e ilustre aqui o desenvolvimento da segunda versão do sistema web, com foco no que foi consolidado entre a primeira versão funcional e o sistema operacional integrado. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi implementado, (b) o que não foi concluído, (c) dificuldades técnicas enfrentadas e próximos passos.*
-
-## 4.3. Versão final da aplicação web (sprint 5)
-
-*Descreva e ilustre aqui o desenvolvimento da versão final do sistema web, com foco em refatorações, correções finais e na camada de autenticação/autorização entregue. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi refinado ou adicionado desde a sprint 4, (b) pendências remanescentes, (c) dificuldades técnicas enfrentadas.*
-
-# <a name="c5"></a>5. Testes
-
-## 5.1. Relatório de testes de integração de endpoints automatizados (sprint 4)
-
-*Liste e descreva os testes automatizados dos endpoints criados e planejados para sua solução, implementados com **Jest**. Cubra as duas abordagens:*
-
-- ***White-box*** *— testes unitários de Service que exercitam ramos internos, exceções e regras de negócio (conhecimento da implementação).*
-- ***Black-box*** *— testes de integração dos endpoints via Jest + Supertest, verificando apenas o contrato HTTP (status, body, efeito observável), sem depender da implementação interna.*
-
-*Posicione aqui também o relatório de cobertura de testes Jest se houver (através de link ou transcrito para estrutura markdown).*
-
-## 5.2. Testes de usabilidade (sprint 5)
-
-### 5.2.1. Relatório de testes de guerrilha
-
-*Posicione aqui as tabelas com enunciados de tarefas, etapas e resultados de testes de usabilidade. Ou utilize um link para seu relatório de testes (mantenha o link sempre público para visualização).*
-
-### 5.2.2. Relatório de testes SUS (System Usability Scale)
-
-*Posicione aqui o relatório dos testes SUS realizados.*
-
-# <a name="c6"></a>6. Estudo de Mercado e Plano de Marketing (sprint 4)
-
-## 6.1 Resumo Executivo
-
-*Preencher com até 300 palavras, sem necessidade de fonte*
-
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
-
-## 6.2 Análise de Mercado
-
-A aplicação BullPace está inserida no setor de tecnologia aplicada a eventos esportivos, com foco em gestão operacional, registro de desempenho e consolidação de dados em tempo real. Esse segmento combina elementos do mercado de eventos presenciais, da indústria fitness e da chamada sport tech, área que utiliza sistemas digitais, sensores, plataformas de dados e interfaces de acompanhamento para melhorar a organização, a experiência e a confiabilidade de atividades esportivas.
-
-No caso do Red Bull 24 Horas, o problema central não está na criação de um aplicativo fitness para o consumidor final, mas na digitalização de uma operação específica: registrar manualmente informações de atletas, esteiras, turnos e checkpoints ao longo de uma competição de resistência. A solução atua como uma camada de controle operacional, substituindo pranchetas e anotações dispersas por uma base de dados estruturada e auditável.
-
-Do ponto de vista econômico, o setor esportivo tem se mostrado relevante porque eventos, experiências de marca e conteúdos esportivos continuam atraindo investimento. A Ampere Analysis projeta que os gastos globais com direitos esportivos ultrapassem US$ 78 bilhões em 2030, crescimento de 20% em relação a 2025, indicando que o esporte permanece como um ativo estratégico para marcas, mídia e entretenimento. Embora o BullPace não atue diretamente em direitos de transmissão, esse dado demonstra a força econômica do ecossistema esportivo e a valorização de experiências esportivas bem organizadas.
-
-No aspecto tecnológico, há uma tendência de digitalização das experiências esportivas e fitness. O uso de wearables, aplicativos de exercício, plataformas de acompanhamento e dashboards de performance mostra que a coleta e interpretação de dados passaram a fazer parte da experiência esportiva. Segundo estimativa da Grand View Research citada pela Vogue Business, o mercado global de wearables deve atingir US$ 186 bilhões em 2030, com CAGR de 13,6% entre 2025 e 2030. Esse avanço reforça a importância de dados, rastreabilidade e acompanhamento em tempo real no universo esportivo, ainda que o BullPace opte por entrada manual assistida devido à ausência de integração com as esteiras Technogym.
-
-Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de Proteção de Dados Pessoais, já que armazena nomes de atletas, operadores e registros associados à participação no evento. A ANPD disponibiliza a LGPD como referência institucional para orientar o tratamento de dados pessoais no Brasil, o que reforça a necessidade de limitar dados coletados, manter rastreabilidade, controlar permissões e evitar exposição indevida de informações.
-
-## Tamanho e Crescimento do Mercado
-
-O BullPace está inserido em um nicho de tecnologia aplicada à operação de eventos esportivos, especialmente em soluções de registro, acompanhamento e auditoria de dados de performance. Como não há dados públicos específicos sobre “sistemas de apuração para revezamentos em esteira”, a análise considera mercados adjacentes, como economia do esporte, sport tech, eventos esportivos, wearables e infraestrutura digital para experiências presenciais.
-
-O setor esportivo possui grande relevância econômica. Segundo estudo da Oliver Wyman para o World Economic Forum, citado pela Reuters, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030, demonstrando crescimento significativo em atividades ligadas a eventos, turismo esportivo, mídia, produtos esportivos, tecnologia e experiências presenciais.
-
-Outro indicador importante é o mercado de direitos esportivos. A Ampere Analysis projeta que os gastos globais com direitos de mídia esportiva ultrapassem US$ 78 bilhões em 2030, crescimento de aproximadamente 20% em relação a 2025. Embora o BullPace não atue diretamente em mídia, esse dado reforça a valorização econômica do esporte como experiência, conteúdo e plataforma de relacionamento entre marcas e público.
-
-Além disso, o crescimento do mercado de wearables mostra a valorização de dados de desempenho no esporte e no fitness. Estimativas da Grand View Research, citadas pela Vogue Business, apontam que o mercado global de wearables pode chegar a US$ 186 bilhões em 2030, com crescimento anual composto de 13,6% entre 2025 e 2030.
-
-Assim, mesmo sendo uma solução específica para a operação do Red Bull 24 Horas, o BullPace acompanha uma tendência maior de digitalização, monitoramento e uso de dados em experiências esportivas.
-
-## Tendências de Mercado
-
-O setor em que o BullPace está inserido é influenciado por tendências tecnológicas, comportamentais e mercadológicas ligadas à digitalização de eventos esportivos, ao uso de dados de performance e à busca por experiências presenciais mais interativas.
-
-A primeira tendência é a digitalização da operação esportiva. Segundo a TechRadar, com base em estudo da SportsPro e da Sportradar, mais de 80% das organizações esportivas já utilizam inteligência artificial, enquanto 98% pretendem ampliar esse uso nos próximos 12 meses. Embora o BullPace não tenha como foco o uso de IA, esse dado mostra que o setor esportivo está cada vez mais orientado por tecnologia, dados e sistemas digitais de apoio à operação.
-
-A segunda tendência é a valorização dos dados de performance. Segundo a Reuters, a partir de estudo da Oliver Wyman para o World Economic Forum, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030. Esse crescimento reforça a importância de soluções que profissionalizem a gestão de eventos esportivos, especialmente em contextos nos quais a confiabilidade dos dados influencia diretamente a experiência e a validação dos resultados.
-
-A terceira tendência é a transformação dos eventos esportivos em experiências mais visuais e acompanháveis. Segundo a AVNetwork, arenas e eventos esportivos caminham para estruturas mais digitais, com telas, conteúdos em tempo real e recursos voltados ao engajamento do público. Nesse sentido, o Modo TV do BullPace acompanha essa tendência ao permitir a visualização clara do andamento da competição.
-
-Assim, o BullPace se conecta a uma movimentação maior do mercado: substituir processos manuais por fluxos digitais, rastreáveis e baseados em dados, sem ignorar as restrições reais do ambiente do evento.
-
-## 6.3 Análise da Concorrência
-
-*a) Principais Concorrentes (até 250 palavras)*
-*Liste os concorrentes diretos e indiretos, destacando suas principais características e posicionamento no mercado.*
-
-*b) Vantagens Competitivas da Aplicação Web (até 250 palavras)*
-*Descreva os diferenciais da sua aplicação em relação aos concorrentes, sem necessidade de citação de fontes.*
-
-
-## 6.4 Público-Alvo
-
-O BullPace se encaixa em 3 mercados em forte expansão no Brasil, que se cruzam justamente em eventos e situações como o Redbull 24 horas.
-
-O primeiro é o universo da corrida e dos esportes de resistência, que ultimamente vem crescendo e atigindo um publico cada vez maior, O país já reúne quase 15 milhões de corredores ativos e movimenta um mercado estimado em R$ 1,1 bilhão por ano, somando inscrições, assessorias, equipamentos e patrocínios[17]. É um público cada vez mais numeroso, engajado e habituado a provas cronometradas. 
-
-O segundo é o de live marketing e ativação de marca, em que empresas transformam experiências esportivas em ferramenta de relacionamento com o consumidor. Esse setor movimentou US$ 22,2 bilhões em 2025[18]. Nele estão as marcas patrocinadoras e as produtoras responsáveis por organizar competições desse tipo.
-
-O terceiro é o mercado fitness indoor. Como a disputa ocorre em esteiras, o contexto de uso se aproxima do de academias e redes, e o Brasil está entre os quatro maiores mercados do mundo, com mais de 41 mil academias ativas[19].
-
-
-O público-alvo do sistema reúne dois perfis complementares. O primeiro é o cliente contratante: gestores de marketing esportivo, agências e produtoras que organizam o evento e operam a aplicação. O segundo é o usuário final, aletas amadores que correm em equipe e o público que acompanha o placar, e é sobre ele que existem os dados mais consolidados. 
-
-No geral, é um público adulto jovem, concentrado na faixa dos 25 aos 45 anos [21] e na região Sudeste. Nos últimos anos a corrida ficou mais diversa e democrática, chegando a um equilíbrio entre homens e mulheres [20]. Mais do que um esporte, ela virou estilo de vida, as pessoas correm em busca de saúde, bem-estar mental e superação, e valorizam o sentimento de pertencer a uma comunidade. Boa parte começou a não muito tempo, cerca de 71% começaram a correr depois de 2021[21]. 
-
-Esse corredor também participa cada vez mais de provas oficiais [20] e está mais exigente, querem organização, segurança e cronometragem precisa [22]. É justamente aí que se concentram as necessidades atendidas pela aplicação, um placar e tempo real, apuração transparente e confiavel por equipe e turno, e uma vizualização clara para atletas e plateia. 
-
-
-## 6.5 Posicionamento
-
-A aplicação posiciona-se como uma solução especializada para o suporte operacional do evento Red Bull 24 Horas, com foco na organização e consolidação dos registros da competição. Seu diferencial está na adaptação ao fluxo específico do evento, oferecendo uma alternativa mais estruturada e confiável em comparação aos métodos tradicionais de registro.
-
-O sistema busca ser percebido como uma ferramenta de apoio à equipe operacional, priorizando praticidade, padronização e rastreabilidade dos dados. Dessa forma, o posicionamento da solução está associado à melhoria da eficiência do processo de apuração, contribuindo para uma gestão mais organizada e transparente da competição.
-
-## 6.6 Estratégia de Marketing 
-
-*a) Produto/Serviço (até 200 palavras)*
-*Descreva as funcionalidades, benefícios e diferenciais da aplicação*
-
-*b) Preço (até 200 palavras)*
-*Explique o modelo de precificação adotado e justifique com base nas análises anteriores.*
-
-*c) Praça (Distribuição) (até 200 palavras)*
-*Apresente os canais digitais utilizados para distribuir e entregar a aplicação ao público.*
-
-*d) Promoção (até 200 palavras)*
-*Descreva as estratégias digitais planejadas, como SEO, redes sociais, marketing de conteúdo e campanhas pagas.*
-
-# <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
-
-*Escreva de que formas a solução da aplicação web atingiu os objetivos descritos na seção 2 deste documento. Indique pontos fortes e pontos a melhorar de maneira geral.*
-
-*Relacione os pontos de melhorias evidenciados nos testes com planos de ações para serem implementadas. O grupo não precisa implementá-las, pode deixar registrado aqui o plano para ações futuras*
-
-*Relacione também quaisquer outras ideias que o grupo tenha para melhorias futuras*
-
-# <a name="c8"></a>8. Referências (sprints 1 a 5)
-
-<a name="ref-1"></a>[1] RED BULL. **TAPI 1AMD2 – Aplicação Web**: RED BULL 24 HORAS. São Paulo: Inteli, 2026.
-
-[2] PORTER, Michael E. Estratégia Competitiva: Técnicas para Análise de Indústrias e da Concorrência. 2. ed. Rio de Janeiro: Elsevier, 2004.
-
-[3] CHIAVENATO, Idalberto. Planejamento Estratégico: Fundamentos e Aplicações. 3. ed. Rio de Janeiro: Elsevier, 2017.
-
-[4] OSTERWALDER, Alexander et al. Value Proposition Design: Como construir propostas de valor inovadoras. São Paulo: HSM Editora, 2015.
-
-[5] PMI - PROJECT MANAGEMENT INSTITUTE. Um Guia do Conhecimento em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Pensilvânia: PMI, 2017.
-
-[6] COOPER, Alan. The inmates are running the asylum: why high tech products drive us crazy and how to restore the sanity. Indianapolis: Sams Publishing, 2004.
-
-[7] NIELSEN, Lene. Personas - User Focused Design. London: Springer Science & Business Media, 2012.
-
-[8] COHN, Mike. User Stories Applied: For Agile Software Development. Boston: Addison-Wesley Professional, 2004.
-
-[9] SOMMERVILLE, Ian. Engenharia de Software. 10. ed. São Paulo: Pearson Education do Brasil, 2019.
-
-[10] PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.
-
-[11] ROSS, Ronald G. Business Rule Concepts: Getting to the Point of Knowledge. 4. ed. Houston: Business Rule Solutions, 2013.
-
-[12] COOPER, Alan et al. About Face: The Essentials of Interaction Design. 4. ed. Indianápolis: John Wiley & Sons, 2014.
-
-[13] WIEGERS, Karl; BEATTY, Joy. Software Requirements. 3. ed. Redmond: Microsoft Press, 2013.
-
-[14] BRASIL. Ministério do Planejamento, Desenvolvimento e Gestão. Guia prático de gerenciamento de riscos. Brasília: Ministério do Planejamento, Desenvolvimento e Gestão, 2017.
-
-[15] KOTLER, Philip; KELLER, Kevin Lane. Administração de Marketing. 14. ed. São Paulo: Pearson Education do Brasil, 2012.
-
-[16] COOPER, Alan. The Inmates Are Running the Asylum: Why High Tech Products Drive Us Crazy and How to Restore the Sanity. Indianápolis: Sams Publishing, 1999.
-
-[17] CORRIDA de rua cresce no Brasil: já são 15 milhões de praticantes, a maioria mulheres. **IstoÉ**, [s. l.], 1 fev. 2026. Disponível em: https://istoe.com.br/corrida-de-rua-15-milhoes-corredores-maioria-mulheres.
-
-[18] SETOR de eventos no Brasil inicia 2026 com recorde de consumo e geração de empregos. **Transamerica Expo Center**, São Paulo, 7 abr. 2026. Disponível em: https://www.transamericaexpo.com.br/setor-de-eventos-no-brasil-inicia-2026-com-recorde-de-consumo-e-geracao-de-empregos/. 
-
-[19] MERCADO fitness latino-americano em 2026: dados, tendências e o que muda pro Brasil. **Blog da Pacto**, [s. l.], 29 abr. 2026. Disponível em: https://blog.sistemapacto.com.br/mercado-fitness-latino-americano-brasil-2026/.
-
-[20] PESQUISA: com impulso de mulheres, jovens e Classe C, corrida de rua alcança 15 milhões de praticantes no Brasil. **Máquina do Esporte**, [s. l.], 31 jan. 2026. Disponível em: https://maquinadoesporte.com.br/running/pesquisa-com-impulso-de-mulheres-jovens-e-classe-c-corrida-de-rua-alcanca-15-milhoes-de-praticantes-no-brasil/.
-
-[21] CORRIDA de rua se torna fenômeno social no Brasil com 13 milhões de praticantes. **Portal Tela**, [s. l.], 2 fev. 2025. Disponível em: https://www.portaltela.com/esportes/geral/2025/02/02/corrida-de-rua-se-torna-fenomeno-social-no-brasil-com-13-milhoes-de-praticantes.
-
-[22] CORRIDAS de rua crescem 85% e viram fenômeno esportivo. **Terra**, [s. l.], 28 jan. 2026. Disponível em: https://www.terra.com.br/vida-e-estilo/saude/corridas-de-rua-crescem-85-e-viram-fenomeno-esportivo.
-
-# <a name="c9"></a>Anexos
-
-<a name="diagrama-de-classes-arquitetural"></a> Diagrama de Classes Arquitetural [Clique aqui para abrir no Google Drive](https://drive.google.com/file/d/1TP7QIwON1gvU5n3oMtH9J_TV2MQFYRuI/view?usp=sharing)

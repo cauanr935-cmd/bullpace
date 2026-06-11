@@ -5,14 +5,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=10">
+  <link rel="stylesheet" href="/static/style.css?v=12">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
-  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'modoTv' || tela === 'fechamento' || tela === 'confirmacaoFechamento' || tela === 'resultadoOficial' || tela === 'publicarResultado' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
+  <main class="function-page <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-public-page' : '' %> <%= tela === 'operador' || tela === 'loginCoordenador' || tela === 'painelCoordenador' || tela === 'historicoOperacoes' || tela === 'modoTv' || tela === 'fechamento' || tela === 'confirmacaoFechamento' || tela === 'resultadoOficial' || tela === 'publicarResultado' || tela === 'detalheEquipe' || tela === 'filtroAtletasEquipe' || tela === 'equipe' || tela === 'atleta' || tela === 'esteira' || tela === 'checkpoint' || tela === 'encerramento' ? 'operator-screen' : '' %>" aria-labelledby="page-title">
     <% /* O frame tambem muda quando o conteudo deve ocupar a tela inteira da TV. */ %>
     <section class="function-frame <%= tela === 'tvPublica' || tela === 'tvResultado' ? 'tv-frame' : '' %>">
       <% /* Nota: esta view renderiza mais de uma etapa do fluxo usando a variavel "tela". */ %>
+      <% if (tela !== 'tvPublica' && tela !== 'tvResultado') { %>
+        <div class="app-brand" aria-label="Red Bull 24h">
+          <img src="/assets/LogoRedBull24h.png" alt="Red Bull 24h">
+        </div>
+        <div class="nav-actions">
+          <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+            <button class="current-operator-btn" type="button" onclick="openOperatorSwitchModal()">
+              <span>Operador atual</span>
+              <strong data-current-operator-name><%= operadorSelecionado %></strong>
+            </button>
+          <% } %>
+          <button class="floating-cad-btn" type="button" onclick="toggleCadModal(true, 'operador')">
+            <span>+</span>
+            <span>Cadastro Rápido</span>
+          </button>
+        </div>
+      <% } %>
+
       <% if (tela === 'operador' || tela === 'loginCoordenador') { %>
         <% /* Link para voltar ao inicio do fluxo. */ %>
         <a href="/" class="back-link">VOLTAR</a>
@@ -21,6 +39,15 @@
       <% if (tela === 'painelCoordenador') { %>
         <% /* Volta para a autenticacao do coordenador(a). */ %>
         <form action="/voltar-login-coordenador" method="post" class="back-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+          <button type="submit" class="back-link">VOLTAR</button>
+        </form>
+      <% } %>
+
+      <% if (tela === 'historicoOperacoes') { %>
+        <% /* Volta da auditoria para o painel da coordenacao. */ %>
+        <form action="/voltar-painel-coordenador" method="post" class="back-form">
           <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
           <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
           <button type="submit" class="back-link">VOLTAR</button>
@@ -118,14 +145,6 @@
         </form>
       <% } %>
 
-      <% if (tela === 'equipe' || tela === 'atleta' || tela === 'esteira') { %>
-        <% /* Mostra qual operador esta autenticado nesta etapa. */ %>
-        <div class="selected-user">
-          <span>OPERADOR(A)</span>
-          <strong><%= operadorSelecionado %></strong>
-        </div>
-      <% } %>
-
       <%
         /* Mapa central que liga cada tela ao texto da etapa exibida no topo. */
         const etapas = {
@@ -133,6 +152,7 @@
           operador: 'ETAPA 01 · OPERADOR(A)',
           loginCoordenador: 'ETAPA 01 · AUTENTICAÇÃO',
           painelCoordenador: 'ETAPA 02 · VISÃO GERAL',
+          historicoOperacoes: 'ETAPA 03 · AUDITORIA',
           modoTv: 'RAMO A · EXIBIÇÃO',
           fechamento: 'RAMO B · FECHAMENTO',
           confirmacaoFechamento: 'RAMO B · CONFIRMAÇÃO',
@@ -298,11 +318,11 @@
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
             <strong>TURNOS ATIVOS</strong>
-            <span>2</span>
+            <span><%= typeof turnosAtivos !== 'undefined' ? turnosAtivos : 0 %></span>
           </article>
           <article>
             <strong>CHECKPOINTS</strong>
-            <span>186</span>
+            <span><%= typeof totalCheckpoints !== 'undefined' ? totalCheckpoints : 0 %></span>
           </article>
           <article>
             <strong>ALERTAS</strong>
@@ -333,7 +353,11 @@
         <p class="operator-list-title">AÇÕES DA COORDENAÇÃO</p>
 
         <section class="panel-actions">
-          <button type="button" class="is-active">Auditoria</button>
+          <form action="/historico-operacoes" method="post">
+            <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+            <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+            <button type="submit" class="is-active">Auditoria</button>
+          </form>
           <form action="/modo-tv" method="post">
             <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
             <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
@@ -794,18 +818,204 @@
 
         <div class="checkpoint-record-list" aria-label="Checkpoints da equipe">
           <% checkpoints.forEach((checkpoint) => { %>
-            <article class="checkpoint-record">
+            <article class="checkpoint-record" data-checkpoint-id="<%= checkpoint.id_checkpoint %>">
               <span><%= checkpoint.horario %></span>
               <strong><%= checkpoint.atleta %></strong>
               <strong><%= checkpoint.km %></strong>
               <span><%= checkpoint.operador %></span>
+              <button type="button" class="edit-checkpoint-button" data-id="<%= checkpoint.id_checkpoint %>" data-km="<%= checkpoint.kmValor %>">Editar</button>
             </article>
           <% }) %>
+        </div>
+
+        <div id="checkpointEditModal" class="modal-overlay" hidden>
+          <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="editCheckpointTitle">
+            <h2 id="editCheckpointTitle">Editar Km do checkpoint</h2>
+            <form id="checkpointEditForm" class="checkpoint-edit-form">
+              <label class="field-label" for="checkpointEditKm">Km acumulado</label>
+              <input id="checkpointEditKm" name="checkpointEditKm" class="checkpoint-input" type="text" placeholder="12,480" required>
+              <input id="checkpointEditId" name="checkpointId" type="hidden" value="">
+              <p id="checkpointEditMessage" class="checkpoint-message" hidden></p>
+              <div class="modal-actions">
+                <button type="button" class="secondary-button" id="cancelEditCheckpoint">Cancelar</button>
+                <button type="submit" class="continue-button">Salvar alteração</button>
+              </div>
+            </form>
+          </section>
         </div>
 
         <button type="button" class="continue-button audit-button">
           Auditar registro selecionado
         </button>
+
+        <script>
+          (() => {
+            const editModal = document.getElementById('checkpointEditModal');
+            const editForm = document.getElementById('checkpointEditForm');
+            const editKmInput = document.getElementById('checkpointEditKm');
+            const editIdInput = document.getElementById('checkpointEditId');
+            const editMessage = document.getElementById('checkpointEditMessage');
+            const cancelEdit = document.getElementById('cancelEditCheckpoint');
+
+            const openEditModal = (checkpointId, kmValue) => {
+              editIdInput.value = checkpointId;
+              editKmInput.value = Number(kmValue).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+              editMessage.hidden = true;
+              editModal.hidden = false;
+            };
+
+            const closeEditModal = () => {
+              editModal.hidden = true;
+            };
+
+            document.querySelectorAll('.edit-checkpoint-button').forEach((button) => {
+              button.addEventListener('click', () => {
+                openEditModal(button.dataset.id, button.dataset.km);
+              });
+            });
+
+            cancelEdit.addEventListener('click', closeEditModal);
+
+            editForm.addEventListener('submit', async (event) => {
+              event.preventDefault();
+              const checkpointId = editIdInput.value;
+              const kmRaw = editKmInput.value.trim();
+              const kmNormalized = kmRaw.includes(',') ? kmRaw.replace(/\./g, '').replace(',', '.') : kmRaw;
+              const novoKm = Number(kmNormalized);
+
+              if (!checkpointId || !Number.isFinite(novoKm) || novoKm <= 0) {
+                editMessage.textContent = 'Informe um valor de Km válido para atualizar.';
+                editMessage.className = 'checkpoint-message error';
+                editMessage.hidden = false;
+                return;
+              }
+
+              try {
+                const response = await fetch('/atualizar-checkpoint-km', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    idCheckpoint: checkpointId,
+                    novoKm,
+                    perfilUsuario: '<%= perfilUsuario %>',
+                    coordenador: '<%= coordenadorSelecionado %>'
+                  })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                  throw new Error(data.error || 'Falha ao atualizar checkpoint.');
+                }
+
+                const checkpointRow = document.querySelector(`[data-checkpoint-id="${checkpointId}"] strong:nth-of-type(2)`);
+                if (checkpointRow) {
+                  checkpointRow.textContent = `${Number(novoKm).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`;
+                }
+
+                editMessage.textContent = 'Checkpoint atualizado com sucesso.';
+                editMessage.className = 'checkpoint-message success';
+                editMessage.hidden = false;
+                setTimeout(closeEditModal, 1200);
+              } catch (error) {
+                editMessage.textContent = error.message;
+                editMessage.className = 'checkpoint-message error';
+                editMessage.hidden = false;
+              }
+            });
+          })();
+        </script>
+      <% } %>
+
+      <% if (tela === 'historicoOperacoes') { %>
+        <% /* Nota: historico auditavel de operacoes do sistema. */ %>
+        <p class="operator-description">
+          Consulte ações registradas automaticamente durante a prova.
+        </p>
+
+        <section class="audit-visibility-card">
+          <strong><%= perfilUsuario === 'administrador_geral' ? 'ACESSO COMPLETO' : 'VISÃO DO COORDENADOR' %></strong>
+          <span>
+            <%= perfilUsuario === 'administrador_geral'
+              ? 'Exibindo operações de operadores, coordenadores e administradores.'
+              : 'Exibindo somente ações realizadas por operadores.' %>
+          </span>
+        </section>
+
+        <% if (typeof historicoMensagem !== 'undefined') { %>
+          <p class="checkpoint-message error"><%= historicoMensagem %></p>
+        <% } %>
+
+        <form action="/historico-operacoes" method="post" class="audit-filter-form">
+          <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+          <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+
+          <label>
+            <span>USUÁRIO</span>
+            <input name="nomeUsuario" type="text" value="<%= filtrosHistorico.nomeUsuario %>" placeholder="Nome do usuário">
+          </label>
+
+          <% if (perfilUsuario === 'administrador_geral') { %>
+            <label>
+              <span>PERFIL</span>
+              <select name="perfilFiltro">
+                <option value="" <%= !filtrosHistorico.perfilFiltro ? 'selected' : '' %>>Todos</option>
+                <option value="operador" <%= filtrosHistorico.perfilFiltro === 'operador' ? 'selected' : '' %>>Operador</option>
+                <option value="coordenador" <%= filtrosHistorico.perfilFiltro === 'coordenador' ? 'selected' : '' %>>Coordenador</option>
+                <option value="administrador_geral" <%= filtrosHistorico.perfilFiltro === 'administrador_geral' ? 'selected' : '' %>>Administrador</option>
+              </select>
+            </label>
+          <% } else { %>
+            <input type="hidden" name="perfilFiltro" value="operador">
+          <% } %>
+
+          <label>
+            <span>TIPO DE AÇÃO</span>
+            <input name="tipoOperacao" type="text" value="<%= filtrosHistorico.tipoOperacao %>" placeholder="Ex: registrar_checkpoint">
+          </label>
+
+          <label>
+            <span>DATA INICIAL</span>
+            <input name="dataInicio" type="date" value="<%= filtrosHistorico.dataInicio %>">
+          </label>
+
+          <label>
+            <span>DATA FINAL</span>
+            <input name="dataFim" type="date" value="<%= filtrosHistorico.dataFim %>">
+          </label>
+
+          <button type="submit">FILTRAR</button>
+        </form>
+
+        <p class="operator-list-title audit-section-title">REGISTROS DE AUDITORIA</p>
+
+        <div class="audit-record audit-record-header" aria-hidden="true">
+          <span>DATA</span>
+          <span>USUÁRIO</span>
+          <span>AÇÃO</span>
+          <span>ATLETA</span>
+          <span>ANTES</span>
+          <span>DEPOIS</span>
+        </div>
+
+        <div class="audit-record-list" aria-label="Histórico de operações">
+          <% if (historicoOperacoes.length === 0) { %>
+            <article class="audit-empty-state">
+              <strong>Nenhum registro encontrado</strong>
+              <span>Ajuste os filtros ou registre novas ações para alimentar o histórico.</span>
+            </article>
+          <% } %>
+
+          <% historicoOperacoes.forEach((registro) => { %>
+            <article class="audit-record">
+              <span><%= registro.dataHora %></span>
+              <strong><%= registro.nomeUsuario %> <small><%= registro.perfilUsuario %></small></strong>
+              <span><%= registro.tipoOperacao %></span>
+              <span><%= registro.entidade %> #<%= registro.entidadeId %></span>
+              <code><%= registro.valorAnterior %></code>
+              <code><%= registro.valorNovo %></code>
+            </article>
+          <% }) %>
+        </div>
       <% } %>
 
       <% if (tela === 'filtroAtletasEquipe') { %>
@@ -1130,18 +1340,39 @@
             </article>
           </section>
 
-          <label class="field-label" for="kmAcumulado">KM ACUMULADO *</label>
+          <label class="field-label" for="checkpointImage">IMAGEM DO CHECKPOINT *</label>
+          <label class="checkpoint-image-picker">
+            <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
+            <strong>Tirar foto da esteira</strong>
+            <span id="checkpointImageName">Nenhuma foto selecionada</span>
+          </label>
+
+          <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
+            <div>
+              <strong>LEITURA DA IMAGEM</strong>
+              <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
+            </div>
+            <output id="ocrSuggestedKm">--</output>
+          </section>
+
+          <label class="manual-correction-toggle" for="manualKmCorrection">
+            <input id="manualKmCorrection" type="checkbox">
+            <span>Leitura da imagem está errada, informar KM manualmente</span>
+          </label>
+
+          <label class="field-label" for="kmAcumulado">KM ACUMULADO OFICIAL *</label>
           <div class="input-with-unit">
-            <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="12,480" required>
+            <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="Aguardando leitura da imagem" required disabled>
             <span>km</span>
           </div>
 
-          <section class="last-checkpoint">
+          <section class="computed-pace-panel" aria-live="polite" aria-label="Pace calculado automaticamente">
             <div>
-              <strong>ÚLTIMO CHECKPOINT</strong>
-              <span id="lastCheckpointText">Nenhum checkpoint registrado</span>
+              <strong>PACE CALCULADO</strong>
+              <span>Tempo do turno / KM acumulado</span>
             </div>
-            <small id="checkpointStatus">AGUARDANDO</small>
+            <output id="computedPace" for="kmAcumulado">--</output>
+            <small>min/km</small>
           </section>
 
           <p id="checkpointMessage" class="checkpoint-message" hidden></p>
@@ -1180,10 +1411,6 @@
             const button = document.getElementById('registerCheckpointButton');
             // Busca a area onde aparecem mensagens de erro ou sucesso.
             const message = document.getElementById('checkpointMessage');
-            // Busca o texto que mostra o ultimo checkpoint salvo.
-            const lastCheckpointText = document.getElementById('lastCheckpointText');
-            // Busca o selo de status do ultimo checkpoint.
-            const checkpointStatus = document.getElementById('checkpointStatus');
             // Busca os indicadores consolidados do atleta ativo.
             const athleteTotalKm = document.getElementById('athleteTotalKm');
             const athleteLastCheckpoint = document.getElementById('athleteLastCheckpoint');
@@ -1202,6 +1429,17 @@
             const finishDuracaoTurno = document.getElementById('finishDuracaoTurno');
             // Campo escondido que preserva o horario de inicio entre telas.
             const finishInicioTurnoTimestamp = document.getElementById('finishInicioTurnoTimestamp');
+            // Campo de leitura que exibe o pace calculado automaticamente.
+            const computedPace = document.getElementById('computedPace');
+            // Campo editavel de quilometragem acumulada.
+            const kmAcumuladoInput = document.getElementById('kmAcumulado');
+            // Campo usado para anexar a imagem da esteira ao checkpoint.
+            const checkpointImageInput = document.getElementById('checkpointImage');
+            const checkpointImageName = document.getElementById('checkpointImageName');
+            const ocrSuggestionPanel = document.getElementById('ocrSuggestionPanel');
+            const ocrSuggestionText = document.getElementById('ocrSuggestionText');
+            const ocrSuggestedKm = document.getElementById('ocrSuggestedKm');
+            const manualKmCorrection = document.getElementById('manualKmCorrection');
             // Define o intervalo de 5 minutos entre checkpoints.
             const cooldownMilliseconds = 5 * 60 * 1000;
             // Guarda o id do intervalo que atualiza o contador do botao.
@@ -1210,6 +1448,19 @@
             const pageParams = new URLSearchParams(window.location.search);
             const turnStartedAt = Number(pageParams.get('inicioTurnoTimestamp') || '<%= inicioTurnoTimestamp %>') || Date.now();
             finishInicioTurnoTimestamp.value = String(turnStartedAt);
+            // Inicializa window.idTurno a partir do valor que o servidor pode ter enviado na renderização.
+            (function initServerTurno() {
+              try {
+                const serverId = '<%= typeof idTurno !== "undefined" && idTurno ? idTurno : "" %>';
+                if (serverId && !window.idTurno) {
+                  window.idTurno = Number(serverId);
+                  const hidden = document.getElementById('finishIdTurno');
+                  if (hidden) hidden.value = String(serverId);
+                }
+              } catch (e) {
+                // não bloquear se template não tiver idTurno
+              }
+            })();
             // Identifica os checkpoints do atleta ativo no armazenamento local da tela.
             const activeAthleteKey = [
               'checkpoints',
@@ -1218,6 +1469,8 @@
             ].join(':');
             // Lista em memoria dos checkpoints vinculados ao atleta ativo.
             let athleteCheckpoints = [];
+            let latestOcrResult = null;
+            let acceptedOcrKm = null;
 
             // Formata segundos no padrao HH:MM:SS.
             const formatTime = (seconds) => {
@@ -1229,10 +1482,10 @@
 
             // Converte a quilometragem informada em numero, aceitando virgula decimal.
             const parseKilometers = (value) => {
-              const normalizedValue = String(value)
-                .trim()
-                .replace(/\./g, '')
-                .replace(',', '.');
+              const rawValue = String(value).trim();
+              const normalizedValue = rawValue.includes(',')
+                ? rawValue.replace(/\./g, '').replace(',', '.')
+                : rawValue;
               const kilometers = Number(normalizedValue);
               return Number.isFinite(kilometers) ? kilometers : 0;
             };
@@ -1242,6 +1495,54 @@
               minimumFractionDigits: 3,
               maximumFractionDigits: 3
             });
+
+            const getOfficialKilometers = () => {
+              if (!manualKmCorrection.checked && acceptedOcrKm !== null) {
+                return acceptedOcrKm;
+              }
+
+              return parseKilometers(kmAcumuladoInput.value);
+            };
+
+            const getOfficialKilometersRaw = () => {
+              if (!manualKmCorrection.checked && acceptedOcrKm !== null) {
+                return String(acceptedOcrKm).replace('.', ',');
+              }
+
+              return kmAcumuladoInput.value.trim();
+            };
+
+            const updateManualCorrectionState = () => {
+              const isManual = manualKmCorrection.checked;
+              kmAcumuladoInput.disabled = !isManual;
+              kmAcumuladoInput.placeholder = isManual ? '12,480' : 'Aguardando leitura da imagem';
+
+              if (!isManual && acceptedOcrKm !== null) {
+                kmAcumuladoInput.value = String(acceptedOcrKm).replace('.', ',');
+              }
+
+              updateComputedPace();
+            };
+
+            // Formata pace em min/km no padrao M:SS.
+            const formatPace = (secondsPerKilometer) => {
+              const roundedSeconds = Math.round(secondsPerKilometer);
+              const minutes = Math.floor(roundedSeconds / 60);
+              const seconds = String(roundedSeconds % 60).padStart(2, '0');
+              return `${minutes}:${seconds}`;
+            };
+
+            // Calcula o pace do turno com base no tempo decorrido e no KM informado.
+            const updateComputedPace = () => {
+              const kilometers = getOfficialKilometers();
+              if (kilometers <= 0) {
+                computedPace.textContent = '--';
+                return;
+              }
+
+              const turnSeconds = Math.max(0, Math.floor((Date.now() - turnStartedAt) / 1000));
+              computedPace.textContent = formatPace(turnSeconds / kilometers);
+            };
 
             // Formata data e hora do checkpoint mais recente.
             const formatCheckpointDate = (timestamp) => new Date(timestamp).toLocaleString('pt-BR', {
@@ -1279,17 +1580,13 @@
 
               if (!lastCheckpoint) {
                 athleteLastCheckpoint.textContent = 'Nenhum registro';
-                lastCheckpointText.textContent = 'Nenhum checkpoint registrado';
-                checkpointStatus.textContent = 'AGUARDANDO';
                 finishKmFinal.value = '';
                 return;
               }
 
               const formattedDate = formatCheckpointDate(lastCheckpoint.registeredAt);
               athleteLastCheckpoint.textContent = formattedDate;
-              lastCheckpointText.textContent = `${formatKilometers(lastCheckpoint.km)} km · ${formattedDate}`;
               finishKmFinal.value = lastCheckpoint.rawKm;
-              checkpointStatus.textContent = 'SALVO';
             };
 
             // Calcula quanto falta para o proximo checkpoint obrigatorio.
@@ -1309,12 +1606,14 @@
               const turnSeconds = Math.max(0, Math.floor((Date.now() - turnStartedAt) / 1000));
               turnTimer.textContent = formatTime(turnSeconds);
               finishDuracaoTurno.value = turnTimer.textContent;
+              updateComputedPace();
             };
 
             loadAthleteCheckpoints();
             updateAthleteCheckpointSummary();
             updateTurnTimer();
             setInterval(updateTurnTimer, 1000);
+            kmAcumuladoInput.addEventListener('input', updateComputedPace);
 
             // Mostra uma mensagem padronizada abaixo do ultimo checkpoint.
             const showMessage = (text, type) => {
@@ -1322,6 +1621,91 @@
               message.className = `checkpoint-message ${type}`;
               message.hidden = false;
             };
+
+            const setOcrPanel = (status, text, kmValue = null) => {
+              ocrSuggestionPanel.dataset.status = status;
+              ocrSuggestionText.textContent = text;
+              ocrSuggestedKm.textContent = kmValue === null ? '--' : `${formatKilometers(kmValue)} km`;
+            };
+
+            const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(String(reader.result || ''));
+              reader.onerror = () => reject(new Error('Não foi possível ler a imagem selecionada.'));
+              reader.readAsDataURL(file);
+            });
+
+            checkpointImageInput.addEventListener('change', async () => {
+              const file = checkpointImageInput.files && checkpointImageInput.files[0];
+              latestOcrResult = null;
+              acceptedOcrKm = null;
+              manualKmCorrection.checked = false;
+              kmAcumuladoInput.value = '';
+              updateManualCorrectionState();
+
+              if (!file) {
+                checkpointImageName.textContent = 'Nenhuma foto selecionada';
+                setOcrPanel('nao_processado', 'Envie uma imagem para tentar identificar o KM automaticamente.');
+                return;
+              }
+
+              checkpointImageName.textContent = file.name;
+              setOcrPanel('processando', 'Lendo imagem e buscando o KM...');
+              button.disabled = true;
+
+              try {
+                const imagemCheckpoint = await readFileAsDataUrl(file);
+                const response = await fetch('/processar-ocr-checkpoint', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    operador: '<%= operadorSelecionado %>',
+                    perfilUsuario: 'operador',
+                    equipe: '<%= equipeSelecionada %>',
+                    atleta: '<%= atletaSelecionado %>',
+                    esteira: '<%= esteiraSelecionada %>',
+                    imagemCheckpoint
+                  })
+                });
+                const resData = await response.json();
+                if (!response.ok) {
+                  throw new Error(resData.error || 'Erro ao processar OCR.');
+                }
+
+                latestOcrResult = resData.resultado;
+                if (latestOcrResult.status === 'processado' && latestOcrResult.kmExtraido !== null) {
+                  acceptedOcrKm = Number(latestOcrResult.kmExtraido);
+                  manualKmCorrection.checked = false;
+                  updateManualCorrectionState();
+                  setOcrPanel('processado', latestOcrResult.mensagem, acceptedOcrKm);
+                  showMessage('Leitura concluída. Confira a sugestão antes de registrar.', 'success');
+                  return;
+                }
+
+                manualKmCorrection.checked = true;
+                updateManualCorrectionState();
+                kmAcumuladoInput.focus();
+                setOcrPanel(latestOcrResult.status, latestOcrResult.mensagem);
+                showMessage('Não foi possível obter um KM confiável. Informe o valor manualmente.', 'error');
+              } catch (err) {
+                latestOcrResult = {
+                  status: 'erro',
+                  textoExtraido: '',
+                  kmExtraido: null,
+                  confianca: null,
+                  mensagem: err.message
+                };
+                manualKmCorrection.checked = true;
+                updateManualCorrectionState();
+                kmAcumuladoInput.focus();
+                setOcrPanel('erro', err.message);
+                showMessage('OCR indisponível. Informe o valor manualmente após conferir a imagem.', 'error');
+              } finally {
+                button.disabled = false;
+              }
+            });
+
+            manualKmCorrection.addEventListener('change', updateManualCorrectionState);
 
             // Bloqueia o botao por 5 minutos depois de um checkpoint.
             const startCooldown = () => {
@@ -1347,21 +1731,39 @@
             form.addEventListener('submit', async (event) => {
               // Evita recarregar a pagina ao registrar checkpoint.
               event.preventDefault();
-              // Busca todos os campos obrigatorios do formulario.
-              const requiredFields = Array.from(form.querySelectorAll('[required]'));
-              // Filtra campos obrigatorios que ainda estao vazios.
-              const missingFields = requiredFields.filter((field) => !field.value.trim());
 
-              // Se houver campo vazio, foca no primeiro e mostra erro.
-              if (missingFields.length > 0) {
-                missingFields[0].focus();
-                showMessage('Preencha todos os campos obrigatórios antes de registrar.', 'error');
+              if (!checkpointImageInput.files || checkpointImageInput.files.length === 0) {
+                checkpointImageInput.focus();
+                showMessage('Selecione a imagem do checkpoint antes de registrar.', 'error');
+                return;
+              }
+
+              if (!manualKmCorrection.checked && acceptedOcrKm === null) {
+                showMessage('Aguarde a leitura da imagem ou marque a correção manual.', 'error');
                 return;
               }
 
               // Le a quilometragem informada.
-              const km = document.getElementById('kmAcumulado').value.trim();
+              const km = getOfficialKilometersRaw();
+              const kmNumerico = getOfficialKilometers();
+
+              if (manualKmCorrection.checked && (!km || kmNumerico <= 0)) {
+                kmAcumuladoInput.focus();
+                showMessage('Informe o KM manual apenas quando a leitura da imagem estiver errada.', 'error');
+                return;
+              }
+
               const checkpointTimestamp = Date.now();
+              const kmNormalized = km.includes(',') ? km.replace(/\./g, '').replace(',', '.') : km;
+              const kmValue = Number(kmNormalized);
+              const inicioTurnoTimestampValue = Number(turnStartedAt) || Date.now();
+              const turnoIdValue = window.idTurno ? Number(window.idTurno) : null;
+
+              if (!Number.isFinite(kmValue) || kmValue <= 0) {
+                showMessage('Informe um valor de quilometragem válido antes de registrar.', 'error');
+                kmAcumuladoInput.focus();
+                return;
+              }
 
               try {
                 const response = await fetch('/registrar-checkpoint', {
@@ -1373,6 +1775,11 @@
                     atleta: '<%= atletaSelecionado %>',
                     esteira: '<%= esteiraSelecionada %>',
                     kmAcumulado: km,
+                    origemKm: manualKmCorrection.checked ? 'manual_correcao_operador' : 'ocr_validado_operador',
+                    ocrStatus: latestOcrResult ? latestOcrResult.status : 'nao_processado',
+                    ocrTextoExtraido: latestOcrResult ? latestOcrResult.textoExtraido : null,
+                    ocrKmExtraido: latestOcrResult ? latestOcrResult.kmExtraido : null,
+                    ocrConfianca: latestOcrResult ? latestOcrResult.confianca : null,
                     inicioTurnoTimestamp: turnStartedAt,
                     idTurno: window.idTurno || '<%= typeof idTurno !== "undefined" ? idTurno : "" %>'
                   })
@@ -1388,17 +1795,35 @@
                     hiddenIdTurno.value = String(resData.idTurno);
                   }
                 }
-                
+
                 athleteCheckpoints.push({
                   atleta: '<%= atletaSelecionado %>',
                   equipe: '<%= equipeSelecionada %>',
-                  km: parseKilometers(km),
+                  km: kmNumerico,
                   rawKm: km,
                   registeredAt: checkpointTimestamp
                 });
                 saveAthleteCheckpoints();
                 updateAthleteCheckpointSummary();
-                showMessage('Checkpoint registrado com sucesso.', 'success');
+
+                const pace = resData.checkpoint?.pace_medio;
+                if (typeof pace === 'number' && (pace < 3 || pace > 10)) {
+                  const alertaResponse = await fetch('/validar-pace-alerta', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      idCheckpoint: resData.checkpoint.id,
+                      paceMedio: pace,
+                    coordenadorId: '<%= (typeof coordenadorSelecionado !== "undefined" && coordenadorSelecionado) ? coordenadorSelecionado : (typeof perfilUsuario !== "undefined" ? perfilUsuario : "") %>'                    })
+                  });
+                  const alertaData = await alertaResponse.json();
+                  if (alertaData?.alerta) {
+                    showMessage(alertaData.alerta.mensagem, 'warning');
+                  }
+                } else {
+                  showMessage('Checkpoint registrado com sucesso.', 'success');
+                }
+
                 modal.hidden = false;
                 startCooldown();
               } catch (err) {
@@ -1414,12 +1839,17 @@
             // Antes de encerrar o turno, garante que existe km final informado.
             finishForm.addEventListener('submit', (event) => {
               // Le a quilometragem final do campo visivel.
-              const km = document.getElementById('kmAcumulado').value.trim();
+              const km = getOfficialKilometersRaw();
+              const kmNumerico = getOfficialKilometers();
 
               // Bloqueia encerramento sem quilometragem.
-              if (!km) {
+              if (!km || kmNumerico <= 0) {
                 event.preventDefault();
-                document.getElementById('kmAcumulado').focus();
+                if (manualKmCorrection.checked) {
+                  kmAcumuladoInput.focus();
+                } else {
+                  checkpointImageInput.focus();
+                }
                 showMessage('Informe a quilometragem final antes de encerrar o turno.', 'error');
                 return;
               }
@@ -1525,29 +1955,82 @@
     </section>
   </main>
 
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+
+  <script id="vlibras-script" src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    (() => {
+      const initVLibras = () => {
+        if (window.__vlibrasWidgetLoaded || !window.VLibras?.Widget) return;
+        window.__vlibrasWidgetLoaded = true;
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+      };
+
+      document.getElementById('vlibras-script')?.addEventListener('load', initVLibras, { once: true });
+      initVLibras();
+    })();
+  </script>
+
   <!-- Componente de Cadastro Rápido -->
   <style>
-    .floating-cad-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #ff6b00;
+    .nav-actions {
+      position: absolute;
+      top: 14px;
+      right: 24px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .function-frame:not(.tv-frame) > .nav-actions {
+      position: absolute;
+    }
+    .floating-cad-btn,
+    .current-operator-btn {
+      min-height: 44px;
+      background-color: #db0840;
       color: #fff;
       border: none;
-      border-radius: 50px;
-      padding: 12px 24px;
+      border-radius: 8px;
+      padding: 10px 18px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 1000;
+      box-shadow: none;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .floating-cad-btn:hover {
-      background-color: #e05300;
+    .current-operator-btn {
+      min-width: 168px;
+      background-color: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 2px;
+      text-align: left;
+    }
+    .current-operator-btn span {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 10px;
+      line-height: 1;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .current-operator-btn strong {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.15;
+    }
+    .floating-cad-btn:hover,
+    .current-operator-btn:hover {
+      background-color: #f30b47;
       transform: translateY(-2px);
     }
     .cad-modal-overlay {
@@ -1556,7 +2039,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0, 30, 60, 0.82);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1570,34 +2053,42 @@
       pointer-events: auto;
     }
     .cad-modal-box {
-      background-color: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
+      background-color: #fff;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
       width: 90%;
-      max-width: 450px;
-      padding: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      color: #fff;
+      max-width: 640px;
+      max-height: calc(100vh - 80px);
+      padding: 0;
+      box-shadow: 0 18px 44px rgba(0, 30, 60, 0.28);
+      color: #151827;
       position: relative;
+      overflow: hidden;
     }
     .cad-modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 12px;
+      margin-bottom: 0;
+      padding: 24px 32px;
+      background: #001e3c;
+      border-bottom: 3px solid #db0840;
     }
     .cad-modal-header h3 {
       margin: 0;
-      font-size: 18px;
-      color: #ff6b00;
+      font-size: 24px;
+      color: #fff;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-decoration-color: #4bb3ff;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 4px;
     }
     .cad-modal-close {
       background: none;
       border: none;
-      color: #aaa;
-      font-size: 20px;
+      color: #fff;
+      font-size: 18px;
       cursor: pointer;
     }
     .cad-modal-close:hover {
@@ -1605,24 +2096,32 @@
     }
     .cad-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 8px;
+      margin: 0;
+      padding: 18px 32px 0;
+      border-bottom: 0;
+      background: #fff;
     }
     .cad-tab-btn {
-      background: none;
-      border: none;
-      color: #888;
-      padding: 6px 12px;
+      background: #f3f5f8;
+      border: 1px solid #dfe4ec;
+      border-radius: 999px;
+      color: #657084;
+      padding: 8px 14px;
       cursor: pointer;
       font-weight: bold;
       font-size: 13px;
       transition: color 0.2s;
     }
     .cad-tab-btn.active {
-      color: #ff6b00;
-      border-bottom: 2px solid #ff6b00;
+      color: #db0840;
+      border-color: #db0840;
+      background: #fff7fa;
+    }
+    .cad-form,
+    .operator-switch-panel {
+      padding: 24px 32px 32px;
     }
     .cad-form-group {
       margin-bottom: 16px;
@@ -1630,41 +2129,52 @@
     .cad-form-group label {
       display: block;
       font-size: 12px;
-      color: #aaa;
+      color: #657084;
       margin-bottom: 6px;
       text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
     .cad-input {
       width: 100%;
-      background-color: #2b2b2b;
-      border: 1px solid #444;
-      border-radius: 6px;
-      padding: 10px;
-      color: #fff;
+      min-height: 52px;
+      background-color: #fff;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #151827;
       box-sizing: border-box;
     }
     .cad-input:focus {
-      border-color: #ff6b00;
+      border-color: #db0840;
       outline: none;
+      box-shadow: 0 0 0 3px rgba(219, 8, 64, 0.12);
     }
     .cad-submit-btn {
       width: 100%;
-      background-color: #ff6b00;
+      min-height: 58px;
+      background-color: #db0840;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
+      font-size: 16px;
     }
     .cad-submit-btn:hover {
-      background-color: #e05300;
+      background-color: #f30b47;
+    }
+    .cad-submit-btn:disabled {
+      background: #e5e9f0;
+      color: #7b8494;
+      cursor: not-allowed;
     }
     .cad-message {
-      margin-top: 12px;
+      margin: 0 32px 24px;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
       display: none;
     }
@@ -1680,67 +2190,207 @@
       color: #e74c3c;
       display: block;
     }
+    .operator-switch-kicker {
+      color: #657084;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .operator-switch-panel h4 {
+      margin: 18px 0 22px;
+      color: #151827;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+    .operator-switch-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .operator-switch-option {
+      width: 100%;
+      min-height: 86px;
+      padding: 18px 22px;
+      border: 1px solid #dfe4ec;
+      border-radius: 8px;
+      background: #fff;
+      color: #151827;
+      font: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      text-align: left;
+    }
+    .operator-switch-option strong,
+    .operator-switch-option small {
+      display: block;
+    }
+    .operator-switch-option strong {
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .operator-switch-option small {
+      margin-top: 8px;
+      color: #657084;
+      font-size: 15px;
+    }
+    .operator-switch-option.is-current,
+    .operator-switch-option.is-selected {
+      border-color: #db0840;
+      background: #fff7fa;
+      box-shadow: inset 4px 0 0 #db0840;
+    }
+    .operator-switch-option.is-current small,
+    .operator-switch-option.is-selected small {
+      color: #db0840;
+    }
+    .operator-switch-option.is-current .operator-radio,
+    .operator-switch-option.is-selected .operator-radio {
+      border-color: #db0840;
+    }
+    .operator-switch-option.is-current .operator-radio::after,
+    .operator-switch-option.is-selected .operator-radio::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #db0840;
+    }
+    .operator-switch-note {
+      margin: 20px 0 18px;
+      padding: 16px 18px;
+      border-radius: 8px;
+      background: #eef6fb;
+      color: #00557d;
+      box-shadow: inset 0 0 0 1px #cad8e2;
+    }
+    @media (max-width: 760px) {
+      .nav-actions {
+        top: 12px;
+        right: 14px;
+        gap: 8px;
+      }
+      .current-operator-btn {
+        min-width: 0;
+        max-width: 150px;
+        padding: 8px 10px;
+      }
+      .floating-cad-btn {
+        padding: 10px 12px;
+      }
+      .floating-cad-btn span:last-child {
+        display: none;
+      }
+      .cad-modal-box {
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 24px);
+      }
+      .cad-modal-header,
+      .cad-tabs,
+      .cad-form,
+      .operator-switch-panel {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
   </style>
 
   <%
     const roleCad = typeof perfilUsuario !== 'undefined' ? perfilUsuario : 'operador';
     const showAdminTab = roleCad === 'administrador_geral';
     const showCoordTab = roleCad === 'coordenador' || roleCad === 'administrador_geral';
+    const showAtletaEquipeTab = roleCad === 'operador' || roleCad === 'coordenador' || roleCad === 'administrador_geral';
   %>
 
-  <button class="floating-cad-btn" onclick="toggleCadModal(true)">
-    <span>+</span>
-    <span>Cadastro Rápido</span>
-  </button>
-
-  <div id="cadModalOverlay" class="cad-modal-overlay" onclick="handleOverlayClick(event)">
-    <div class="cad-modal-box">
+  <div id="cadModalOverlay" class="cad-modal-overlay" aria-hidden="true" onclick="handleOverlayClick(event)">
+    <div class="cad-modal-box" role="dialog" aria-modal="true" aria-labelledby="cadModalTitle">
       <div class="cad-modal-header">
-        <h3>Cadastro Rápido</h3>
-        <button class="cad-modal-close" onclick="toggleCadModal(false)">&times;</button>
+        <h3 id="cadModalTitle">Cadastro Rápido</h3>
+        <button class="cad-modal-close" type="button" aria-label="Fechar cadastro rápido" onclick="toggleCadModal(false)">&times;</button>
       </div>
 
       <div class="cad-tabs">
-        <button id="tabBtnOperador" class="cad-tab-btn active" onclick="switchCadTab('operador')">Operador</button>
+        <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+          <button id="tabBtnTroca" class="cad-tab-btn active" type="button" onclick="switchCadTab('troca')">Trocar operador</button>
+        <% } %>
+        <button id="tabBtnOperador" class="cad-tab-btn <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? '' : 'active' %>" onclick="switchCadTab('operador')">Operador</button>
         <% if (showCoordTab) { %>
           <button id="tabBtnCoordenador" class="cad-tab-btn" onclick="switchCadTab('coordenador')">Coordenador</button>
         <% } %>
         <% if (showAdminTab) { %>
           <button id="tabBtnAdmin" class="cad-tab-btn" onclick="switchCadTab('admin')">Admin Principal</button>
         <% } %>
+        <% if (showAtletaEquipeTab) { %>
+          <button id="tabBtnEquipe" class="cad-tab-btn" onclick="switchCadTab('equipe')">Equipe</button>
+          <button id="tabBtnAtleta" class="cad-tab-btn" onclick="switchCadTab('atleta')">Atleta</button>
+        <% } %>
       </div>
 
+      <% if (typeof operadorSelecionado !== 'undefined' && operadorSelecionado) { %>
+        <section id="cadFormTroca" class="operator-switch-panel">
+          <span class="operator-switch-kicker">OPERADOR ATIVO</span>
+          <h4 data-current-operator-name><%= operadorSelecionado %></h4>
+          <div class="operator-switch-list" aria-label="Trocar operador">
+            <% const listaOperadoresTroca = typeof operadoresQuick !== 'undefined' && operadoresQuick.length ? operadoresQuick : (typeof operadores !== 'undefined' ? operadores : []); %>
+            <% listaOperadoresTroca.forEach((operador) => { %>
+              <% const isCurrentOperator = operador.nome === operadorSelecionado; %>
+              <button
+                type="button"
+                class="operator-switch-option <%= isCurrentOperator ? 'is-current' : '' %>"
+                data-switch-operator="<%= operador.nome %>"
+                onclick="selectOperatorForSwitch(this.dataset.switchOperator)"
+              >
+                <span class="operator-radio" aria-hidden="true"></span>
+                <span>
+                  <strong><%= operador.nome %></strong>
+                  <small><%= isCurrentOperator ? 'Operador atual' : 'Selecionar' %></small>
+                </span>
+              </button>
+            <% }) %>
+          </div>
+          <p class="operator-switch-note">Atleta, esteira e checkpoints permanecem inalterados.</p>
+          <button id="confirmOperatorSwitchBtn" class="cad-submit-btn" type="button" disabled onclick="confirmOperatorSwitch()">
+            Selecione outro operador
+          </button>
+        </section>
+      <% } %>
+
       <!-- Formulário Operador -->
-      <form id="cadFormOperador" onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
+      <form id="cadFormOperador" class="cad-form" <%= typeof operadorSelecionado !== 'undefined' && operadorSelecionado ? 'style="display: none;"' : '' %> onsubmit="submitCadForm(event, '/cadastro-rapido/operador')">
         <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
         <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
         <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
         
         <div class="cad-form-group">
-          <label>Nome do Operador</label>
-          <input type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+          <label for="cadOperadorNome">Nome do Operador</label>
+          <input id="cadOperadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
         </div>
         <button type="submit" class="cad-submit-btn">Cadastrar Operador</button>
       </form>
 
       <!-- Formulário Coordenador -->
       <% if (showCoordTab) { %>
-        <form id="cadFormCoordenador" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
+        <form id="cadFormCoordenador" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/coordenador')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
+            <label for="cadCoordenadorNome">Nome</label>
+            <input id="cadCoordenadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Maria Souza">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
+            <label for="cadCoordenadorLogin">Login</label>
+            <input id="cadCoordenadorLogin" type="text" name="login" class="cad-input" required placeholder="Ex: maria.coordenadora">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadCoordenadorSenha">Senha</label>
+            <input id="cadCoordenadorSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Coordenador</button>
         </form>
@@ -1748,24 +2398,58 @@
 
       <!-- Formulário Admin -->
       <% if (showAdminTab) { %>
-        <form id="cadFormAdmin" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
+        <form id="cadFormAdmin" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/admin')">
           <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
           <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
           <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
 
           <div class="cad-form-group">
-            <label>Nome</label>
-            <input type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
+            <label for="cadAdminNome">Nome</label>
+            <input id="cadAdminNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Admin Geral">
           </div>
           <div class="cad-form-group">
-            <label>Login</label>
-            <input type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
+            <label for="cadAdminLogin">Login</label>
+            <input id="cadAdminLogin" type="text" name="login" class="cad-input" required placeholder="Ex: admin.principal">
           </div>
           <div class="cad-form-group">
-            <label>Senha</label>
-            <input type="password" name="senha" class="cad-input" required placeholder="••••••••">
+            <label for="cadAdminSenha">Senha</label>
+            <input id="cadAdminSenha" type="password" name="senha" class="cad-input" required placeholder="••••••••">
           </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Admin</button>
+        </form>
+      <% } %>
+
+      <!-- Formulário Equipe -->
+      <% if (showAtletaEquipeTab) { %>
+        <form id="cadFormEquipe" class="cad-form" style="display: none;" onsubmit="submitCadForm(event, '/cadastro-rapido/equipe')">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label for="cadEquipeNome">Nome da Equipe</label>
+            <input id="cadEquipeNome" type="text" name="nome" class="cad-input" required placeholder="Ex: Equipe Alpha">
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Equipe</button>
+        </form>
+
+        <!-- Formulário Atleta -->
+        <form id="cadFormAtleta" class="cad-form" style="display: none;" onsubmit="submitCadAtleta(event)">
+          <input type="hidden" name="perfilUsuario" value="<%= roleCad %>">
+          <input type="hidden" name="operador" value="<%= typeof operadorSelecionado !== 'undefined' ? operadorSelecionado : '' %>">
+          <input type="hidden" name="coordenador" value="<%= typeof coordenadorSelecionado !== 'undefined' ? coordenadorSelecionado : '' %>">
+
+          <div class="cad-form-group">
+            <label for="cadAtletaNome">Nome do Atleta</label>
+            <input id="cadAtletaNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
+          </div>
+          <div class="cad-form-group">
+            <label for="cadAtletaEquipeSelect">Equipe</label>
+            <select name="id_equipe" id="cadAtletaEquipeSelect" class="cad-input" required>
+              <option value="">Selecione uma equipe...</option>
+            </select>
+          </div>
+          <button type="submit" class="cad-submit-btn">Cadastrar Atleta</button>
         </form>
       <% } %>
 
@@ -1774,14 +2458,37 @@
   </div>
 
   <script>
-    function toggleCadModal(show) {
+    let pendingOperatorSwitch = '';
+    const telaAtual = <%- JSON.stringify(tela) %>;
+
+    function obterIniciaisCliente(nome) {
+      return String(nome || '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(parte => parte[0].toUpperCase())
+        .join('') || '--';
+    }
+
+    function toggleCadModal(show, initialTab) {
       const overlay = document.getElementById('cadModalOverlay');
       if (show) {
         overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+        switchCadTab(initialTab || (document.getElementById('cadFormTroca') ? 'troca' : 'operador'));
+        setTimeout(() => {
+          overlay.querySelector('.cad-tab-btn.active, input:not([type="hidden"]), select, button')?.focus();
+        }, 0);
       } else {
         overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
         resetCadModal();
       }
+    }
+
+    function openOperatorSwitchModal() {
+      toggleCadModal(true, 'troca');
     }
 
     function handleOverlayClick(event) {
@@ -1791,11 +2498,11 @@
     }
 
     function switchCadTab(tab) {
-      const forms = ['Operador', 'Coordenador', 'Admin'];
+      const forms = ['Troca', 'Operador', 'Coordenador', 'Admin', 'Equipe', 'Atleta'];
       forms.forEach(f => {
         const el = document.getElementById('cadForm' + f);
         if (el) el.style.display = 'none';
-        const btn = document.getElementById('tabBtn' + (f === 'Admin' ? 'Admin' : f));
+        const btn = document.getElementById('tabBtn' + f);
         if (btn) btn.classList.remove('active');
       });
 
@@ -1803,14 +2510,83 @@
       if (activeForm) activeForm.style.display = 'block';
       const activeBtn = document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1));
       if (activeBtn) activeBtn.classList.add('active');
+      document.querySelectorAll('.cad-tab-btn').forEach((button) => {
+        button.setAttribute('aria-selected', String(button.classList.contains('active')));
+      });
 
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
+
+      if (tab === 'atleta') {
+        carregarEquipesSelect();
+      }
+    }
+
+    function selectOperatorForSwitch(nome) {
+      const currentOperator = document.querySelector('[data-current-operator-name]')?.textContent.trim() || '';
+      pendingOperatorSwitch = nome === currentOperator ? '' : nome;
+
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isSelected = button.dataset.switchOperator === nome;
+        const isCurrent = button.dataset.switchOperator === currentOperator;
+        button.classList.toggle('is-selected', isSelected && !isCurrent);
+        button.classList.toggle('is-current', isCurrent && !pendingOperatorSwitch);
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : (isSelected ? 'Selecionado' : 'Selecionar');
+        }
+      });
+
+      const confirmButton = document.getElementById('confirmOperatorSwitchBtn');
+      if (confirmButton) {
+        confirmButton.disabled = !pendingOperatorSwitch;
+        confirmButton.textContent = pendingOperatorSwitch
+          ? `Confirmar troca para ${pendingOperatorSwitch}`
+          : 'Selecione outro operador';
+      }
+    }
+
+    function confirmOperatorSwitch() {
+      if (!pendingOperatorSwitch) return;
+
+      document.querySelectorAll('input[name="operador"]').forEach((input) => {
+        input.value = pendingOperatorSwitch;
+      });
+
+      document.querySelectorAll('[data-current-operator-name]').forEach((element) => {
+        element.textContent = pendingOperatorSwitch;
+      });
+
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isCurrent = button.dataset.switchOperator === pendingOperatorSwitch;
+        button.classList.toggle('is-current', isCurrent);
+        button.classList.remove('is-selected');
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : 'Selecionar';
+        }
+      });
+
+      pendingOperatorSwitch = '';
+      toggleCadModal(false);
+    }
+
+    function resetOperatorSwitchOptions() {
+      const currentOperator = document.querySelector('[data-current-operator-name]')?.textContent.trim() || '';
+      document.querySelectorAll('.operator-switch-option').forEach((button) => {
+        const isCurrent = button.dataset.switchOperator === currentOperator;
+        button.classList.toggle('is-current', isCurrent);
+        button.classList.remove('is-selected');
+        const helper = button.querySelector('small');
+        if (helper) {
+          helper.textContent = isCurrent ? 'Operador atual' : 'Selecionar';
+        }
+      });
     }
 
     function resetCadModal() {
-      const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin'];
+      const forms = ['cadFormOperador', 'cadFormCoordenador', 'cadFormAdmin', 'cadFormEquipe', 'cadFormAtleta'];
       forms.forEach(f => {
         const el = document.getElementById(f);
         if (el) el.reset();
@@ -1818,25 +2594,218 @@
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
-      switchCadTab('operador');
+      pendingOperatorSwitch = '';
+      const confirmButton = document.getElementById('confirmOperatorSwitchBtn');
+      if (confirmButton) {
+        confirmButton.disabled = true;
+        confirmButton.textContent = 'Selecione outro operador';
+      }
+      resetOperatorSwitchOptions();
+      switchCadTab(document.getElementById('cadFormTroca') ? 'troca' : 'operador');
     }
 
-    async function submitCadForm(event, url) {
+    async function carregarEquipesSelect() {
+      const select = document.getElementById('cadAtletaEquipeSelect');
+      if (!select) return;
+      const perfilUsuario = document.querySelector('#cadFormAtleta input[name="perfilUsuario"]')?.value || 'operador';
+      try {
+        const response = await fetch('/cadastro-rapido/equipes?perfilUsuario=' + encodeURIComponent(perfilUsuario), {
+          method: 'GET'
+        });
+        if (!response.ok) throw new Error('Erro ao carregar equipes.');
+        const equipes = await response.json();
+        console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes retornadas pela API:', equipes.length);
+        console.log('[AUDIT CADASTRO EQUIPE] Equipes retornadas pela API:', equipes.map(eq => ({
+          id: eq.id_equipe,
+          nome: eq.nome
+        })));
+        select.innerHTML = '<option value="">Selecione uma equipe...</option>';
+        equipes.forEach(eq => {
+          const opt = document.createElement('option');
+          opt.value = eq.id_equipe;
+          opt.textContent = eq.nome;
+          select.appendChild(opt);
+        });
+        console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas no select:', select.options.length - 1);
+      } catch (err) {
+        select.innerHTML = '<option value="">Erro ao carregar equipes</option>';
+      }
+    }
+
+    function renderizarEquipeNaSelecao(equipe) {
+      if (telaAtual !== 'equipe') return;
+
+      const lista = document.querySelector('.operator-list[aria-label="Seleção de equipe"]');
+      if (!lista || !equipe?.nome) return;
+
+      const jaExiste = Array.from(lista.querySelectorAll('input[name="equipe"]'))
+        .some(input => input.value === equipe.nome);
+      if (jaExiste) return;
+
+      const operador = document.querySelector('#cadFormEquipe input[name="operador"]')?.value || '';
+      const form = document.createElement('form');
+      form.action = '/selecionar-equipe';
+      form.method = 'post';
+      form.className = 'function-form';
+
+      const inputOperador = document.createElement('input');
+      inputOperador.type = 'hidden';
+      inputOperador.name = 'operador';
+      inputOperador.value = operador;
+
+      const inputEquipe = document.createElement('input');
+      inputEquipe.type = 'hidden';
+      inputEquipe.name = 'equipe';
+      inputEquipe.value = equipe.nome;
+
+      const button = document.createElement('button');
+      button.type = 'submit';
+      button.className = 'operator-row';
+
+      const avatar = document.createElement('span');
+      avatar.className = 'operator-photo';
+      avatar.setAttribute('aria-hidden', 'true');
+      avatar.textContent = obterIniciaisCliente(equipe.nome);
+
+      const nome = document.createElement('span');
+      nome.className = 'operator-name';
+      nome.append(document.createTextNode(equipe.nome));
+
+      const detalhe = document.createElement('small');
+      detalhe.textContent = '0 atletas';
+      nome.appendChild(detalhe);
+
+      const radio = document.createElement('span');
+      radio.className = 'operator-radio';
+      radio.setAttribute('aria-hidden', 'true');
+
+      button.append(avatar, nome, radio);
+      form.append(inputOperador, inputEquipe, button);
+      lista.appendChild(form);
+
+      console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas na tela:', lista.querySelectorAll('form').length);
+    }
+
+    function renderizarEquipeNoPainel(equipe) {
+      if (telaAtual !== 'painelCoordenador') return;
+
+      const lista = document.querySelector('.panel-team-list[aria-label="Equipes monitoradas"]');
+      if (!lista || !equipe?.nome) return;
+
+      const jaExiste = Array.from(lista.querySelectorAll('input[name="equipe"]'))
+        .some(input => input.value === equipe.nome);
+      if (jaExiste) return;
+
+      const coordenador = document.querySelector('#cadFormEquipe input[name="coordenador"]')?.value || '';
+      const perfilUsuario = document.querySelector('#cadFormEquipe input[name="perfilUsuario"]')?.value || 'operador';
+      const article = document.createElement('article');
+      article.className = 'panel-team-card';
+
+      const dot = document.createElement('span');
+      dot.className = 'status-dot';
+      dot.setAttribute('aria-hidden', 'true');
+
+      const info = document.createElement('div');
+      const nome = document.createElement('strong');
+      nome.textContent = equipe.nome;
+      const detalhe = document.createElement('small');
+      detalhe.textContent = '0,000 km · Nenhum atleta em turno';
+      info.append(nome, detalhe);
+
+      const form = document.createElement('form');
+      form.action = '/detalhes-equipe';
+      form.method = 'post';
+      form.className = 'details-form';
+
+      [
+        ['coordenador', coordenador],
+        ['perfilUsuario', perfilUsuario],
+        ['equipe', equipe.nome]
+      ].forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      const button = document.createElement('button');
+      button.type = 'submit';
+      button.textContent = 'DETALHES';
+      form.appendChild(button);
+
+      article.append(dot, info, form);
+      lista.appendChild(article);
+
+      console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas no painel:', lista.querySelectorAll('.panel-team-card').length);
+    }
+
+    async function submitCadAtleta(event) {
       event.preventDefault();
       const form = event.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const nome = form.querySelector('input[name="nome"]').value.trim();
+      const id_equipe = form.querySelector('select[name="id_equipe"]').value;
+      const perfilUsuario = form.querySelector('input[name="perfilUsuario"]').value;
+      const operador = form.querySelector('input[name="operador"]').value;
+      const coordenador = form.querySelector('input[name="coordenador"]').value;
 
       const msg = document.getElementById('cadFeedbackMsg');
       msg.className = 'cad-message';
       msg.style.display = 'none';
 
+      if (!nome) {
+        msg.textContent = 'Nome do atleta é obrigatório.';
+        msg.className = 'cad-message error';
+        return;
+      }
+      if (!id_equipe) {
+        msg.textContent = 'Selecione uma equipe para o atleta.';
+        msg.className = 'cad-message error';
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
+      try {
+        const response = await fetch('/cadastro-rapido/atleta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, id_equipe: Number(id_equipe), perfilUsuario, operador, coordenador })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Erro ao cadastrar atleta.');
+        msg.textContent = 'Atleta cadastrado com sucesso!';
+        msg.className = 'cad-message success';
+        form.reset();
+        carregarEquipesSelect();
+      } catch (error) {
+        msg.textContent = error.message;
+        msg.className = 'cad-message error';
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Cadastrar Atleta'; }
+      }
+    }
+
+    async function submitCadForm(event, url) {
+      event.preventDefault();
+      const form = event.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.textContent : '';
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      if (url === '/cadastro-rapido/equipe') {
+        console.log('[AUDIT CADASTRO EQUIPE] payload frontend:', data);
+      }
+
+      const msg = document.getElementById('cadFeedbackMsg');
+      msg.className = 'cad-message';
+      msg.style.display = 'none';
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
       try {
         const response = await fetch(url, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
@@ -1849,15 +2818,22 @@
         msg.className = 'cad-message success';
         form.reset();
 
-        setTimeout(() => {
-          if (window.location.pathname === '/' || window.location.pathname === '/operador') {
-            window.location.reload();
-          }
-        }, 1500);
+        // Após cadastrar equipe, recarrega o SELECT de equipes imediatamente.
+        if (url === '/cadastro-rapido/equipe') {
+          carregarEquipesSelect();
+          renderizarEquipeNaSelecao(result);
+          renderizarEquipeNoPainel(result);
+        }
+
+        if (window.location.pathname === '/' || window.location.pathname === '/operador') {
+          setTimeout(() => window.location.reload(), 1500);
+        }
 
       } catch (error) {
         msg.textContent = error.message;
         msg.className = 'cad-message error';
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
       }
     }
   </script>
