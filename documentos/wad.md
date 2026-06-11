@@ -1541,10 +1541,13 @@ O encerramento da corrida de um participante ocorre ao invocar o método finaliz
 *Ao menos um fluxo relevante em UML ou BPMN. Use a notação da ferramenta escolhida de forma consistente (sem misturar convenções).*
 
 ### 3.2.6. Diagrama de Implantação (sprints 4 e 5)
+---
+
+Este diagrama representa, de forma simplificada, como a nossa aplicação funciona. Os usuários acessam o sistema pelo **browser**, onde a interface é exibida. A partir das ações realizadas na tela, a aplicação envia as informações para o **servidor**, que processa as regras do sistema e consulta o **banco de dados** quando necessário. Depois, os dados retornam pelo mesmo caminho até o navegador, permitindo que o usuário visualize as informações atualizadas na aplicação.
 
 <div align="center">
-  <sub><b>Figura 7 - fluxo finalizar turno</b></sub><br>
-  <img src="../assets/DiagramaImplantacao.png" width="75%"><br>
+  <sub><b>Figura 7 - Diagrama de Implantação</b></sub><br>
+  <img src="../assets/DiagramaImplantação.png" width="75%"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
