@@ -2856,6 +2856,8 @@ Em resumo, o BullPace representa uma resposta a uma fragilidade operacional. As 
 
 ## 6.2 Análise de Mercado
 
+## Visão geral Do Mercado
+
 A aplicação BullPace está inserida no setor de tecnologia aplicada a eventos esportivos, com foco em gestão operacional, registro de desempenho e consolidação de dados em tempo real. Esse segmento combina elementos do mercado de eventos presenciais, da indústria fitness e da chamada sport tech, área que utiliza sistemas digitais, sensores, plataformas de dados e interfaces de acompanhamento para melhorar a organização, a experiência e a confiabilidade de atividades esportivas.
 
 No caso do Red Bull 24 Horas, o problema central não está na criação de um aplicativo fitness para o consumidor final, mas na digitalização de uma operação específica: registrar manualmente informações de atletas, esteiras, turnos e checkpoints ao longo de uma competição de resistência. A solução atua como uma camada de controle operacional, substituindo pranchetas e anotações dispersas por uma base de dados estruturada e auditável.
@@ -2890,13 +2892,22 @@ A terceira tendência é a transformação dos eventos esportivos em experiênci
 
 Assim, o BullPace se conecta a uma movimentação maior do mercado: substituir processos manuais por fluxos digitais, rastreáveis e baseados em dados, sem ignorar as restrições reais do ambiente do evento.
 
+
 ## 6.3 Análise da Concorrência
 
-*a) Principais Concorrentes (até 250 palavras)*
-*Liste os concorrentes diretos e indiretos, destacando suas principais características e posicionamento no mercado.*
+## Principais Concorrentes
+No contexto do BullPace, os principais concorrentes não são necessariamente aplicações especializadas, mas métodos substitutos utilizados para resolver o mesmo problema operacional. O concorrente direto mais relevante é o processo manual com prancheta, atualmente utilizado para registrar entradas, checkpoints e encerramentos dos turnos. Apesar de simples e conhecido pela equipe, esse método apresenta limitações relacionadas à rasura, perda de informações, divergência entre operadores e dificuldade de auditoria posterior.
 
-*b) Vantagens Competitivas da Aplicação Web (até 250 palavras)*
-*Descreva os diferenciais da sua aplicação em relação aos concorrentes, sem necessidade de citação de fontes.*
+Também foram identificados substitutos digitais simples, como planilhas colaborativas, formulários online, aplicativos de anotação e ferramentas genéricas de produtividade. Essas alternativas podem reduzir parte do uso de papel, mas não foram desenvolvidas para a dinâmica específica do Red Bull 24 Horas, pois não estruturam naturalmente a relação entre equipe, atleta, esteira, turno e checkpoint.
+
+Além disso, existem plataformas genéricas de gestão de eventos e aplicativos fitness, mas essas soluções atuam em escopos diferentes. Plataformas de eventos costumam focar em inscrição, credenciamento ou comunicação com participantes, enquanto apps fitness e wearables dependem de sensores, integrações ou uso individual, o que não se ajusta às restrições operacionais do evento.
+
+## Vantagens Competitivas da Aplicação Web
+A principal vantagem competitiva do BullPace está na aderência ao contexto real do Red Bull 24 Horas. Diferentemente da prancheta, o sistema permite que os dados sejam registrados de forma estruturada, com vínculo entre equipe, atleta, esteira, turno e checkpoint. Isso reduz a dispersão das informações e facilita a conferência posterior.
+
+Em comparação com planilhas e formulários genéricos, a aplicação se diferencia por ter sido desenhada especificamente para o fluxo operacional da prova. O sistema considera a existência de duas equipes, múltiplos atletas, esteiras em uso, turnos sucessivos, checkpoints periódicos e necessidade de consolidação da quilometragem.
+
+Outro diferencial é que o BullPace não depende de integração automática com as esteiras Technogym nem de pulseiras sincronizadas. A solução reconhece essa limitação técnica e atua sobre o ponto viável da operação: a qualificação da entrada manual de dados. Dessa forma, a aplicação busca ser simples para o operador, confiável para a gestão e útil para auditoria pós-evento.
 
 
 ## 6.4 Público-Alvo
