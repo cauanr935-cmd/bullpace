@@ -1655,7 +1655,7 @@
 
               try {
                 const imagemCheckpoint = await readFileAsDataUrl(file);
-                const response = await fetch('/processar-ocr-checkpoint', {
+                const response = await fetch('/registrar-checkpoint', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
@@ -1672,12 +1672,24 @@
                   throw new Error(resData.error || 'Erro ao processar OCR.');
                 }
 
-                latestOcrResult = resData.resultado;
-                if (latestOcrResult.status === 'processado' && latestOcrResult.kmExtraido !== null) {
+                const ocrStatus = String(resData.status || '').trim().toLowerCase();
+                const ocrKm = Number(resData.km);
+                latestOcrResult = {
+                  status: ocrStatus === 'sucesso' ? 'processado' : 'pendente_revisao',
+                  textoExtraido: JSON.stringify(resData),
+                  kmExtraido: Number.isFinite(ocrKm) ? ocrKm : null,
+                  confianca: null,
+                  mensagem: ocrStatus === 'sucesso'
+                    ? 'Leitura automática obtida pelo OCR local.'
+                    : 'Nenhum KM confiável detectado na imagem.'
+                };
+
+                if (ocrStatus === 'sucesso' && latestOcrResult.kmExtraido !== null) {
                   acceptedOcrKm = Number(latestOcrResult.kmExtraido);
                   manualKmCorrection.checked = false;
                   updateManualCorrectionState();
                   setOcrPanel('processado', latestOcrResult.mensagem, acceptedOcrKm);
+                  kmAcumuladoInput.value = String(acceptedOcrKm);
                   showMessage('Leitura concluída. Confira a sugestão antes de registrar.', 'success');
                   return;
                 }
