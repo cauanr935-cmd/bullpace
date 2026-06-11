@@ -2870,44 +2870,13 @@ Do ponto de vista regulatório, a aplicação precisa considerar a Lei Geral de 
 
 ## Tamanho e Crescimento do Mercado
 
-O BullPace está inserido em um nicho de tecnologia aplicada à operação de eventos esportivos, especialmente em soluções de registro, acompanhamento e auditoria de dados de performance. Como não há dados públicos específicos sobre “sistemas de apuração para revezamentos em esteira”, a análise considera mercados adjacentes, como economia do esporte, sport tech, eventos esportivos, wearables e infraestrutura digital para experiências presenciais.
+O setor em que o BullPace está inserido é influenciado por tendências tecnológicas, comportamentais e mercadológicas ligadas à digitalização de eventos esportivos, ao uso de dados de performance e à busca por experiências presenciais mais transparentes e acompanháveis.
 
-O setor esportivo possui grande relevância econômica. Segundo estudo da Oliver Wyman para o World Economic Forum, citado pela Reuters, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030, demonstrando crescimento significativo em atividades ligadas a eventos, turismo esportivo, mídia, produtos esportivos, tecnologia e experiências presenciais.
+A primeira tendência é a digitalização da operação esportiva. Segundo a TechRadar, com base em estudo da SportsPro e da Sportradar, mais de 80% das organizações esportivas já utilizam inteligência artificial, enquanto 98% pretendem ampliar esse uso nos próximos 12 meses. Embora o BullPace não tenha como foco o uso de IA, esse dado indica que o setor esportivo está cada vez mais orientado por tecnologia, dados e sistemas digitais de apoio à operação.
 
-Outro indicador importante é o mercado de direitos esportivos. A Ampere Analysis projeta que os gastos globais com direitos de mídia esportiva ultrapassem US$ 78 bilhões em 2030, crescimento de aproximadamente 20% em relação a 2025. Embora o BullPace não atue diretamente em mídia, esse dado reforça a valorização econômica do esporte como experiência, conteúdo e plataforma de relacionamento entre marcas e público.
+A segunda tendência é a valorização dos dados de performance. A expansão do mercado de wearables, estimada pela Grand View Research em US$ 186 bilhões até 2030, reforça o interesse crescente por métricas como distância, ritmo, velocidade e evolução de desempenho. Nesse sentido, o BullPace acompanha essa tendência ao estruturar dados de quilometragem, pace, velocidade média, turnos e checkpoints em uma base organizada e auditável.
 
-Além disso, o crescimento do mercado de wearables mostra a valorização de dados de desempenho no esporte e no fitness. Estimativas da Grand View Research, citadas pela Vogue Business, apontam que o mercado global de wearables pode chegar a US$ 186 bilhões em 2030, com crescimento anual composto de 13,6% entre 2025 e 2030.
-
-Assim, mesmo sendo uma solução específica para a operação do Red Bull 24 Horas, o BullPace acompanha uma tendência maior de digitalização, monitoramento e uso de dados em experiências esportivas.
-
-## Tendências de Mercado
-
-O setor em que o BullPace está inserido é influenciado por tendências tecnológicas, comportamentais e mercadológicas ligadas à digitalização de eventos esportivos, ao uso de dados de performance e à busca por experiências presenciais mais interativas.
-
-A primeira tendência é a digitalização da operação esportiva. Segundo a TechRadar, com base em estudo da SportsPro e da Sportradar, mais de 80% das organizações esportivas já utilizam inteligência artificial, enquanto 98% pretendem ampliar esse uso nos próximos 12 meses. Embora o BullPace não tenha como foco o uso de IA, esse dado mostra que o setor esportivo está cada vez mais orientado por tecnologia, dados e sistemas digitais de apoio à operação.
-
-A segunda tendência é a valorização dos dados de performance. Segundo a Reuters, a partir de estudo da Oliver Wyman para o World Economic Forum, a economia global do esporte movimenta cerca de US$ 2,3 trilhões e pode atingir US$ 3,7 trilhões até 2030. Esse crescimento reforça a importância de soluções que profissionalizem a gestão de eventos esportivos, especialmente em contextos nos quais a confiabilidade dos dados influencia diretamente a experiência e a validação dos resultados.
-
-A terceira tendência é a transformação dos eventos esportivos em experiências mais visuais e acompanháveis. Segundo a AVNetwork, arenas e eventos esportivos caminham para estruturas mais digitais, com telas, conteúdos em tempo real e recursos voltados ao engajamento do público. Nesse sentido, o Modo TV do BullPace acompanha essa tendência ao permitir a visualização clara do andamento da competição.
-
-Assim, o BullPace se conecta a uma movimentação maior do mercado: substituir processos manuais por fluxos digitais, rastreáveis e baseados em dados, sem ignorar as restrições reais do ambiente do evento.
-
-
-## 6.3 Análise da Concorrência
-
-## Principais Concorrentes
-No contexto do BullPace, os principais concorrentes não são necessariamente aplicações especializadas, mas métodos substitutos utilizados para resolver o mesmo problema operacional. O concorrente direto mais relevante é o processo manual com prancheta, atualmente utilizado para registrar entradas, checkpoints e encerramentos dos turnos. Apesar de simples e conhecido pela equipe, esse método apresenta limitações relacionadas à rasura, perda de informações, divergência entre operadores e dificuldade de auditoria posterior.
-
-Também foram identificados substitutos digitais simples, como planilhas colaborativas, formulários online, aplicativos de anotação e ferramentas genéricas de produtividade. Essas alternativas podem reduzir parte do uso de papel, mas não foram desenvolvidas para a dinâmica específica do Red Bull 24 Horas, pois não estruturam naturalmente a relação entre equipe, atleta, esteira, turno e checkpoint.
-
-Além disso, existem plataformas genéricas de gestão de eventos e aplicativos fitness, mas essas soluções atuam em escopos diferentes. Plataformas de eventos costumam focar em inscrição, credenciamento ou comunicação com participantes, enquanto apps fitness e wearables dependem de sensores, integrações ou uso individual, o que não se ajusta às restrições operacionais do evento.
-
-## Vantagens Competitivas da Aplicação Web
-A principal vantagem competitiva do BullPace está na aderência ao contexto real do Red Bull 24 Horas. Diferentemente da prancheta, o sistema permite que os dados sejam registrados de forma estruturada, com vínculo entre equipe, atleta, esteira, turno e checkpoint. Isso reduz a dispersão das informações e facilita a conferência posterior.
-
-Em comparação com planilhas e formulários genéricos, a aplicação se diferencia por ter sido desenhada especificamente para o fluxo operacional da prova. O sistema considera a existência de duas equipes, múltiplos atletas, esteiras em uso, turnos sucessivos, checkpoints periódicos e necessidade de consolidação da quilometragem.
-
-Outro diferencial é que o BullPace não depende de integração automática com as esteiras Technogym nem de pulseiras sincronizadas. A solução reconhece essa limitação técnica e atua sobre o ponto viável da operação: a qualificação da entrada manual de dados. Dessa forma, a aplicação busca ser simples para o operador, confiável para a gestão e útil para auditoria pós-evento.
+A terceira tendência é a transformação dos eventos esportivos em experiências mais visuais e acompanháveis. Recursos como placares digitais, dashboards e relatórios pós-evento contribuem para aumentar a transparência da operação e a confiança nos resultados. Assim, o Modo TV e a exportação CSV do BullPace respondem à demanda por acompanhamento claro, rastreabilidade e profissionalização da apuração em eventos presenciais.
 
 
 ## 6.4 Público-Alvo
