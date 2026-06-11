@@ -17,7 +17,7 @@ import { EventoRepository } from './Repository/EventoRepository';
 import { SessaoRepository } from './Repository/SessaoRepository';
 import { HistoricoOperacaoService } from './Service/HistoricoOperacaoService';
 import { CriarHistoricoOperacaoInput, FiltrosHistoricoOperacao } from './Models/HistoricoOperacaoModels';
-import { processarImagemCheckpoint } from './Service/OcrService';
+import { extrairQuilometragem } from './Service/OcrService';
 
 const operadorRepo = new OperadorRepository();
 const equipeRepo = new EquipeRepository();
@@ -1312,13 +1312,11 @@ app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
 
   try {
     const imagemCheckpoint = req.body?.imagemCheckpoint;
-    const resultado = await processarImagemCheckpoint(imagemCheckpoint);
+    const resultado = await extrairQuilometragem(imagemCheckpoint);
     const operacaoPorStatus: Record<string, string> = {
-      processado: 'CHECKPOINT_OCR_PROCESSADO',
-      pendente_revisao: 'CHECKPOINT_OCR_PENDENTE_REVISAO',
-      erro: 'CHECKPOINT_OCR_ERRO',
-      nao_processado: 'CHECKPOINT_OCR_NAO_PROCESSADO',
-      processando: 'CHECKPOINT_OCR_PROCESSANDO'
+      sucesso: 'CHECKPOINT_OCR_PROCESSADO',
+      'valor não identificado': 'CHECKPOINT_OCR_NAO_PROCESSADO',
+      'erro de identificação': 'CHECKPOINT_OCR_ERRO'
     };
 
     await registrarHistoricoOperador(
@@ -1331,13 +1329,13 @@ app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
         atleta: req.body?.atleta || null,
         esteira: req.body?.esteira || null,
         ocr_status: resultado.status,
-        ocr_texto_extraido: resultado.textoExtraido,
-        ocr_km_extraido: resultado.kmExtraido,
-        ocr_confianca: resultado.confianca
+        ocr_texto_extraido: JSON.stringify(resultado),
+        ocr_km_extraido: resultado.km ?? null,
+        ocr_confianca: null
       }
     );
 
-    if (resultado.status === 'processado' && resultado.kmExtraido !== null) {
+    if (resultado.status === 'sucesso' && resultado.km !== null) {
       await registrarHistoricoOperador(
         operador,
         'CHECKPOINT_KM_SUGERIDO_OCR',
@@ -1347,7 +1345,7 @@ app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
           equipe: req.body?.equipe || null,
           atleta: req.body?.atleta || null,
           esteira: req.body?.esteira || null,
-          ocr_km_extraido: resultado.kmExtraido
+          ocr_km_extraido: resultado.km
         }
       );
     }
@@ -1368,20 +1366,40 @@ app.post('/processar-ocr-checkpoint', autorizarPapeis(ROLES.OPERADOR, ROLES.COOR
 app.post('/registrar-checkpoint', bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<Response> => {
   try {
     console.log('[POST /registrar-checkpoint] req.body:', JSON.stringify(req.body));
-    const {
+    let {
       operador,
       equipe,
       atleta,
       esteira,
       kmAcumulado,
+      km_acumulado,
       inicioTurnoTimestamp,
       idTurno,
+      id_turno,
       origemKm,
       ocrStatus,
       ocrTextoExtraido,
       ocrKmExtraido,
       ocrConfianca
     } = req.body;
+
+    const imagemCheckpoint = String(req.body?.imagemCheckpoint || '').trim();
+    const kmIncomingRaw = kmAcumulado ?? km_acumulado ?? null;
+    const idTurnoIncoming = idTurno ?? id_turno ?? null;
+    const temKmNoBody = kmIncomingRaw !== null && String(kmIncomingRaw).trim() !== '';
+
+    if (imagemCheckpoint && !temKmNoBody) {
+      const resultadoOcr = await extrairQuilometragem(imagemCheckpoint);
+      return res.status(200).json({ status: resultadoOcr.status || 'valor não identificado', km: resultadoOcr.km ?? null });
+    }
+
+    if (imagemCheckpoint) {
+      const resultadoOcr = await extrairQuilometragem(imagemCheckpoint);
+      ocrStatus = resultadoOcr.status || 'valor não identificado';
+      ocrKmExtraido = resultadoOcr.km ?? null;
+      ocrTextoExtraido = JSON.stringify(resultadoOcr);
+      ocrConfianca = null;
+    }
 
     // --- Validação numérica do km acumulado ---
     const kmRaw = String(kmIncomingRaw ?? '').trim();
