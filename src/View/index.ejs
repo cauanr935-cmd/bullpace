@@ -1246,9 +1246,29 @@
             </article>
           </section>
 
-          <label class="field-label" for="kmAcumulado">KM ACUMULADO *</label>
+          <label class="field-label" for="checkpointImage">IMAGEM DO CHECKPOINT *</label>
+          <label class="checkpoint-image-picker">
+            <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
+            <strong>Tirar foto da esteira</strong>
+            <span id="checkpointImageName">Nenhuma foto selecionada</span>
+          </label>
+
+          <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
+            <div>
+              <strong>LEITURA DA IMAGEM</strong>
+              <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
+            </div>
+            <output id="ocrSuggestedKm">--</output>
+          </section>
+
+          <label class="manual-correction-toggle" for="manualKmCorrection">
+            <input id="manualKmCorrection" type="checkbox">
+            <span>Leitura da imagem está errada, informar KM manualmente</span>
+          </label>
+
+          <label class="field-label" for="kmAcumulado">KM ACUMULADO OFICIAL *</label>
           <div class="input-with-unit">
-            <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="12,480" required>
+            <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="Aguardando leitura da imagem" required disabled>
             <span>km</span>
           </div>
 
@@ -1259,14 +1279,6 @@
             </div>
             <output id="computedPace" for="kmAcumulado">--</output>
             <small>min/km</small>
-          </section>
-
-          <section class="last-checkpoint">
-            <div>
-              <strong>ÚLTIMO CHECKPOINT</strong>
-              <span id="lastCheckpointText">Nenhum checkpoint registrado</span>
-            </div>
-            <small id="checkpointStatus">AGUARDANDO</small>
           </section>
 
           <p id="checkpointMessage" class="checkpoint-message" hidden></p>
@@ -1305,10 +1317,6 @@
             const button = document.getElementById('registerCheckpointButton');
             // Busca a area onde aparecem mensagens de erro ou sucesso.
             const message = document.getElementById('checkpointMessage');
-            // Busca o texto que mostra o ultimo checkpoint salvo.
-            const lastCheckpointText = document.getElementById('lastCheckpointText');
-            // Busca o selo de status do ultimo checkpoint.
-            const checkpointStatus = document.getElementById('checkpointStatus');
             // Busca os indicadores consolidados do atleta ativo.
             const athleteTotalKm = document.getElementById('athleteTotalKm');
             const athleteLastCheckpoint = document.getElementById('athleteLastCheckpoint');
@@ -1331,6 +1339,13 @@
             const computedPace = document.getElementById('computedPace');
             // Campo editavel de quilometragem acumulada.
             const kmAcumuladoInput = document.getElementById('kmAcumulado');
+            // Campo usado para anexar a imagem da esteira ao checkpoint.
+            const checkpointImageInput = document.getElementById('checkpointImage');
+            const checkpointImageName = document.getElementById('checkpointImageName');
+            const ocrSuggestionPanel = document.getElementById('ocrSuggestionPanel');
+            const ocrSuggestionText = document.getElementById('ocrSuggestionText');
+            const ocrSuggestedKm = document.getElementById('ocrSuggestedKm');
+            const manualKmCorrection = document.getElementById('manualKmCorrection');
             // Define o intervalo de 5 minutos entre checkpoints.
             const cooldownMilliseconds = 5 * 60 * 1000;
             // Guarda o id do intervalo que atualiza o contador do botao.
@@ -1347,6 +1362,8 @@
             ].join(':');
             // Lista em memoria dos checkpoints vinculados ao atleta ativo.
             let athleteCheckpoints = [];
+            let latestOcrResult = null;
+            let acceptedOcrKm = null;
 
             // Formata segundos no padrao HH:MM:SS.
             const formatTime = (seconds) => {
@@ -1372,6 +1389,34 @@
               maximumFractionDigits: 3
             });
 
+            const getOfficialKilometers = () => {
+              if (!manualKmCorrection.checked && acceptedOcrKm !== null) {
+                return acceptedOcrKm;
+              }
+
+              return parseKilometers(kmAcumuladoInput.value);
+            };
+
+            const getOfficialKilometersRaw = () => {
+              if (!manualKmCorrection.checked && acceptedOcrKm !== null) {
+                return String(acceptedOcrKm).replace('.', ',');
+              }
+
+              return kmAcumuladoInput.value.trim();
+            };
+
+            const updateManualCorrectionState = () => {
+              const isManual = manualKmCorrection.checked;
+              kmAcumuladoInput.disabled = !isManual;
+              kmAcumuladoInput.placeholder = isManual ? '12,480' : 'Aguardando leitura da imagem';
+
+              if (!isManual && acceptedOcrKm !== null) {
+                kmAcumuladoInput.value = String(acceptedOcrKm).replace('.', ',');
+              }
+
+              updateComputedPace();
+            };
+
             // Formata pace em min/km no padrao M:SS.
             const formatPace = (secondsPerKilometer) => {
               const roundedSeconds = Math.round(secondsPerKilometer);
@@ -1382,7 +1427,7 @@
 
             // Calcula o pace do turno com base no tempo decorrido e no KM informado.
             const updateComputedPace = () => {
-              const kilometers = parseKilometers(kmAcumuladoInput.value);
+              const kilometers = getOfficialKilometers();
               if (kilometers <= 0) {
                 computedPace.textContent = '--';
                 return;
@@ -1428,17 +1473,13 @@
 
               if (!lastCheckpoint) {
                 athleteLastCheckpoint.textContent = 'Nenhum registro';
-                lastCheckpointText.textContent = 'Nenhum checkpoint registrado';
-                checkpointStatus.textContent = 'AGUARDANDO';
                 finishKmFinal.value = '';
                 return;
               }
 
               const formattedDate = formatCheckpointDate(lastCheckpoint.registeredAt);
               athleteLastCheckpoint.textContent = formattedDate;
-              lastCheckpointText.textContent = `${formatKilometers(lastCheckpoint.km)} km · ${formattedDate}`;
               finishKmFinal.value = lastCheckpoint.rawKm;
-              checkpointStatus.textContent = 'SALVO';
             };
 
             // Calcula quanto falta para o proximo checkpoint obrigatorio.
@@ -1474,6 +1515,91 @@
               message.hidden = false;
             };
 
+            const setOcrPanel = (status, text, kmValue = null) => {
+              ocrSuggestionPanel.dataset.status = status;
+              ocrSuggestionText.textContent = text;
+              ocrSuggestedKm.textContent = kmValue === null ? '--' : `${formatKilometers(kmValue)} km`;
+            };
+
+            const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(String(reader.result || ''));
+              reader.onerror = () => reject(new Error('Não foi possível ler a imagem selecionada.'));
+              reader.readAsDataURL(file);
+            });
+
+            checkpointImageInput.addEventListener('change', async () => {
+              const file = checkpointImageInput.files && checkpointImageInput.files[0];
+              latestOcrResult = null;
+              acceptedOcrKm = null;
+              manualKmCorrection.checked = false;
+              kmAcumuladoInput.value = '';
+              updateManualCorrectionState();
+
+              if (!file) {
+                checkpointImageName.textContent = 'Nenhuma foto selecionada';
+                setOcrPanel('nao_processado', 'Envie uma imagem para tentar identificar o KM automaticamente.');
+                return;
+              }
+
+              checkpointImageName.textContent = file.name;
+              setOcrPanel('processando', 'Lendo imagem e buscando o KM...');
+              button.disabled = true;
+
+              try {
+                const imagemCheckpoint = await readFileAsDataUrl(file);
+                const response = await fetch('/processar-ocr-checkpoint', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    operador: '<%= operadorSelecionado %>',
+                    perfilUsuario: 'operador',
+                    equipe: '<%= equipeSelecionada %>',
+                    atleta: '<%= atletaSelecionado %>',
+                    esteira: '<%= esteiraSelecionada %>',
+                    imagemCheckpoint
+                  })
+                });
+                const resData = await response.json();
+                if (!response.ok) {
+                  throw new Error(resData.error || 'Erro ao processar OCR.');
+                }
+
+                latestOcrResult = resData.resultado;
+                if (latestOcrResult.status === 'processado' && latestOcrResult.kmExtraido !== null) {
+                  acceptedOcrKm = Number(latestOcrResult.kmExtraido);
+                  manualKmCorrection.checked = false;
+                  updateManualCorrectionState();
+                  setOcrPanel('processado', latestOcrResult.mensagem, acceptedOcrKm);
+                  showMessage('Leitura concluída. Confira a sugestão antes de registrar.', 'success');
+                  return;
+                }
+
+                manualKmCorrection.checked = true;
+                updateManualCorrectionState();
+                kmAcumuladoInput.focus();
+                setOcrPanel(latestOcrResult.status, latestOcrResult.mensagem);
+                showMessage('Não foi possível obter um KM confiável. Informe o valor manualmente.', 'error');
+              } catch (err) {
+                latestOcrResult = {
+                  status: 'erro',
+                  textoExtraido: '',
+                  kmExtraido: null,
+                  confianca: null,
+                  mensagem: err.message
+                };
+                manualKmCorrection.checked = true;
+                updateManualCorrectionState();
+                kmAcumuladoInput.focus();
+                setOcrPanel('erro', err.message);
+                showMessage('OCR indisponível. Informe o valor manualmente após conferir a imagem.', 'error');
+              } finally {
+                button.disabled = false;
+              }
+            });
+
+            manualKmCorrection.addEventListener('change', updateManualCorrectionState);
+
             // Bloqueia o botao por 5 minutos depois de um checkpoint.
             const startCooldown = () => {
               // Calcula o horario em que o botao sera liberado novamente.
@@ -1498,20 +1624,28 @@
             form.addEventListener('submit', async (event) => {
               // Evita recarregar a pagina ao registrar checkpoint.
               event.preventDefault();
-              // Busca todos os campos obrigatorios do formulario.
-              const requiredFields = Array.from(form.querySelectorAll('[required]'));
-              // Filtra campos obrigatorios que ainda estao vazios.
-              const missingFields = requiredFields.filter((field) => !field.value.trim());
 
-              // Se houver campo vazio, foca no primeiro e mostra erro.
-              if (missingFields.length > 0) {
-                missingFields[0].focus();
-                showMessage('Preencha todos os campos obrigatórios antes de registrar.', 'error');
+              if (!checkpointImageInput.files || checkpointImageInput.files.length === 0) {
+                checkpointImageInput.focus();
+                showMessage('Selecione a imagem do checkpoint antes de registrar.', 'error');
+                return;
+              }
+
+              if (!manualKmCorrection.checked && acceptedOcrKm === null) {
+                showMessage('Aguarde a leitura da imagem ou marque a correção manual.', 'error');
                 return;
               }
 
               // Le a quilometragem informada.
-              const km = kmAcumuladoInput.value.trim();
+              const km = getOfficialKilometersRaw();
+              const kmNumerico = getOfficialKilometers();
+
+              if (manualKmCorrection.checked && (!km || kmNumerico <= 0)) {
+                kmAcumuladoInput.focus();
+                showMessage('Informe o KM manual apenas quando a leitura da imagem estiver errada.', 'error');
+                return;
+              }
+
               const checkpointTimestamp = Date.now();
 
               try {
@@ -1524,6 +1658,11 @@
                     atleta: '<%= atletaSelecionado %>',
                     esteira: '<%= esteiraSelecionada %>',
                     kmAcumulado: km,
+                    origemKm: manualKmCorrection.checked ? 'manual_correcao_operador' : 'ocr_validado_operador',
+                    ocrStatus: latestOcrResult ? latestOcrResult.status : 'nao_processado',
+                    ocrTextoExtraido: latestOcrResult ? latestOcrResult.textoExtraido : null,
+                    ocrKmExtraido: latestOcrResult ? latestOcrResult.kmExtraido : null,
+                    ocrConfianca: latestOcrResult ? latestOcrResult.confianca : null,
                     inicioTurnoTimestamp: turnStartedAt,
                     idTurno: window.idTurno || '<%= typeof idTurno !== "undefined" ? idTurno : "" %>'
                   })
@@ -1543,7 +1682,7 @@
                 athleteCheckpoints.push({
                   atleta: '<%= atletaSelecionado %>',
                   equipe: '<%= equipeSelecionada %>',
-                  km: parseKilometers(km),
+                  km: kmNumerico,
                   rawKm: km,
                   registeredAt: checkpointTimestamp
                 });
@@ -1565,12 +1704,17 @@
             // Antes de encerrar o turno, garante que existe km final informado.
             finishForm.addEventListener('submit', (event) => {
               // Le a quilometragem final do campo visivel.
-              const km = kmAcumuladoInput.value.trim();
+              const km = getOfficialKilometersRaw();
+              const kmNumerico = getOfficialKilometers();
 
               // Bloqueia encerramento sem quilometragem.
-              if (!km) {
+              if (!km || kmNumerico <= 0) {
                 event.preventDefault();
-                kmAcumuladoInput.focus();
+                if (manualKmCorrection.checked) {
+                  kmAcumuladoInput.focus();
+                } else {
+                  checkpointImageInput.focus();
+                }
                 showMessage('Informe a quilometragem final antes de encerrar o turno.', 'error');
                 return;
               }
