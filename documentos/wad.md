@@ -360,7 +360,7 @@ As personas auxiliam no projeto ao humanizar dados técnicos, permitindo que a e
 
 <div align="center">
   <sub><b>Figura 5 - Primeira persona</b></sub><br>
-  <img src="../assets/personaUm.jpg" width="100%" alt="Matriz de risco"><br>
+  <img src="../assets/personaUm.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
@@ -368,11 +368,21 @@ A primeira persona é o **Ricardo**, operador de campo que registra os dados dur
 
 <div align="center">
   <sub><b>Figura 6 - Segunda persona</b></sub><br>
-  <img src="../assets/personaDois.jpg" width="100%" alt="Matriz de risco"><br>
+  <img src="../assets/personaDois.png" width="100%" alt="Matriz de risco"><br>
   <sup>Material produzido pelos autores (2026)</sup>
 </div>
 
-A segunda persona é a **Camila**, coordenadora que acompanha a competição inteira e valida os resultados. No evento, ela monitora as duas equipes, confere os dados consolidados, decide o que fazer quando aparece alguma inconsistência e responde pela apuração final. Essa persona foi escolhida porque representa o lado de gestão e controle, que depende da confiabilidade dos dados ao longo das 24 horas. No sistema, a Camila usa principalmente as telas de acompanhamento, o Modo TV, os resultados consolidados, a comparação entre equipes e a exportação dos dados para auditoria.
+A segunda persona é a **Camila**, coordenadora responsável por acompanhar a competição e garantir a confiabilidade dos dados registrados ao longo das 24 horas. Durante o evento, ela monitora os resultados consolidados, consulta registros anteriores, identifica possíveis inconsistências e realiza correções quando necessário, sempre preservando a rastreabilidade das informações. Essa persona foi escolhida porque representa a necessidade de auditoria e controle da operação, garantindo que os resultados finais sejam transparentes e confiáveis. No sistema, a Camila utiliza principalmente as funcionalidades de acompanhamento da prova, visualização de registros históricos, correção de dados e validação da apuração final.
+
+<div align="center">
+  <sub><b>Figura 7 - Terceira persona</b></sub><br>
+  <img src="../assets/personaTres.png" width="100%" alt="Matriz de risco"><br>
+  <sup>Material produzido pelos autores (2026)</sup>
+</div>
+
+A terceira persona é a **Beatrice**, administradora responsável pela gestão geral da competição e pelas decisões críticas da operação. É ela quem possui autoridade para iniciar e encerrar oficialmente o evento, além de intervir em situações excepcionais que possam comprometer o andamento da prova ou a integridade dos resultados. Essa persona foi escolhida porque representa o papel de supervisão estratégica e governança do sistema, concentrando ações que exigem maior nível de responsabilidade e permissão. No sistema, a Beatrice utiliza funcionalidades administrativas relacionadas ao controle do ciclo de vida do evento e à realização de intervenções emergenciais quando necessário.
+
+
 
 ## 2.3. User Stories (sprints 1 a 5)
 
