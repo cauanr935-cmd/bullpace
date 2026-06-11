@@ -515,6 +515,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 .panel-team-card {
@@ -2744,6 +2747,12 @@ body {
 
   .athlete-scroll {
     max-height: 330px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .panel-team-list {
+    max-height: 420px;
     overflow-y: auto;
     padding-right: 8px;
   }
