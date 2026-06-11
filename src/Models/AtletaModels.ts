@@ -6,3 +6,5 @@ export interface Atleta {
 }
 
 export type CriarAtletaInput = Omit<Atleta, "id_atleta">;
+
+
