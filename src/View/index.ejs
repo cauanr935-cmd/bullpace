@@ -1959,7 +1959,7 @@
                 </label>
                 <label>
                   <strong>TEMPO TOTAL CORRIDO</strong>
-                  <input name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" required>
+                  <input id="duracaoTurnoInput" name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" maxlength="8" required>
                 </label>
               </section>
 
@@ -1971,6 +1971,46 @@
             </form>
           </section>
         </div>
+
+        <script>
+          (() => {
+            // Campo de tempo total corrido do modal de encerramento.
+            const tempoInput = document.getElementById('duracaoTurnoInput');
+            if (!tempoInput) return;
+
+            // Recebe o que o operador digitou, mantém só os dígitos (máx. 6 = HHMMSS)
+            // e reinsere os dois pontos automaticamente no padrão HH:MM:SS.
+            const aplicarMascaraTempo = (valor) => {
+              const digitos = valor.replace(/\D/g, '').slice(0, 6);
+              const partes = [];
+              for (let i = 0; i < digitos.length; i += 2) {
+                partes.push(digitos.slice(i, i + 2));
+              }
+              return partes.join(':');
+            };
+
+            // Formata enquanto o operador digita, sem precisar colocar os ":" na mão.
+            tempoInput.addEventListener('input', () => {
+              const posicaoFinal = tempoInput.selectionStart === tempoInput.value.length;
+              tempoInput.value = aplicarMascaraTempo(tempoInput.value);
+              // Mantém o cursor no fim quando o operador está digitando normalmente.
+              if (posicaoFinal) {
+                tempoInput.setSelectionRange(tempoInput.value.length, tempoInput.value.length);
+              }
+            });
+
+            // Ao sair do campo, completa com zeros para garantir o formato HH:MM:SS.
+            tempoInput.addEventListener('blur', () => {
+              const digitos = tempoInput.value.replace(/\D/g, '');
+              if (!digitos) return;
+              const completo = digitos.padStart(6, '0').slice(0, 6);
+              tempoInput.value = `${completo.slice(0, 2)}:${completo.slice(2, 4)}:${completo.slice(4, 6)}`;
+            });
+
+            // Já normaliza o valor que veio renderizado pelo servidor.
+            tempoInput.value = aplicarMascaraTempo(tempoInput.value);
+          })();
+        </script>
       <% } %>
     </section>
   </main>
