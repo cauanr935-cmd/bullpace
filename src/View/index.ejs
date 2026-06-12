@@ -1510,6 +1510,23 @@
 
         <% if (typeof esteiraSelecionada !== 'undefined') { %>
           <% /* Inicia o turno e abre a tela de checkpoint. */ %>
+          <%
+            const statusProvaTurno = (typeof estadoProva !== 'undefined' && estadoProva) ? estadoProva.status : 'em_andamento';
+            const provaLiberada = statusProvaTurno === 'em_andamento';
+            const avisoProvaTurno = statusProvaTurno === 'nao_iniciada'
+              ? 'A prova ainda não foi iniciada pelo administrador. Aguarde a liberação para iniciar o turno.'
+              : statusProvaTurno === 'pausada'
+                ? 'A prova está pausada pelo administrador. Aguarde a retomada para iniciar o turno.'
+                : statusProvaTurno === 'finalizada'
+                  ? 'A prova foi finalizada. Não é possível iniciar novos turnos.'
+                  : '';
+          %>
+          <% if (!provaLiberada) { %>
+            <div class="prova-aviso-turno status-<%= statusProvaTurno %>" role="status">
+              <strong>Turno indisponível no momento</strong>
+              <span><%= avisoProvaTurno %></span>
+            </div>
+          <% } %>
           <form action="/iniciar-turno" method="post" class="continue-form">
             <input type="hidden" name="operador" value="<%= operadorSelecionado %>">
             <input type="hidden" name="equipe" value="<%= equipeSelecionada %>">
@@ -1518,8 +1535,8 @@
             <% if (typeof esteiraEmManutencaoSelecionada !== 'undefined' && esteiraEmManutencaoSelecionada) { %>
               <input type="hidden" name="bypassManutencao" value="sim">
             <% } %>
-            <button type="submit" class="continue-button">
-              Iniciar turno na <%= esteiraSelecionada %>
+            <button type="submit" class="continue-button" <%= provaLiberada ? '' : 'disabled' %>>
+              <%= provaLiberada ? 'Iniciar turno na ' + esteiraSelecionada : 'Aguardando início da prova' %>
             </button>
           </form>
         <% } %>
