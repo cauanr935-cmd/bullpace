@@ -72,7 +72,9 @@ type HistoricoViewItem = {
   motivo: string;
 };
 
-// Mantido em memória apenas o estado da prova (será integrado à tabela eventos na Fase 5)
+// Cache em memoria do estado da prova. A FONTE DE VERDADE e a tabela eventos:
+// hidratamos este cache no boot e re-persistimos a cada mudanca, para o estado
+// sobreviver a reinicio do servidor e ser consistente entre dispositivos.
 const estadoProva: {
   status: StatusProva;
   atualizadoPor?: string;
@@ -80,14 +82,61 @@ const estadoProva: {
   // Horario em que a prova de 24h comecou a contar (definido ao Iniciar prova).
   // null enquanto a prova nao foi iniciada pelo administrador.
   inicioEm: Date | null;
+  // Id do evento ao qual o estado esta vinculado (para persistir).
+  idEvento: number | null;
 } = {
   status: 'nao_iniciada',
   atualizadoEm: new Date(),
-  inicioEm: null
+  inicioEm: null,
+  idEvento: null
 };
 
 // Duracao oficial da prova em milissegundos (24 horas).
 const DURACAO_PROVA_MS = 24 * 60 * 60 * 1000;
+
+// Persiste o estado atual da prova na tabela eventos (best-effort: nao derruba a
+// requisicao se a coluna ainda nao existir, apenas loga).
+const persistirEstadoProva = async (): Promise<void> => {
+  try {
+    if (estadoProva.idEvento === null) {
+      const evento = await eventoRepo.buscarAtivo();
+      estadoProva.idEvento = evento?.id_evento ?? null;
+    }
+    if (estadoProva.idEvento === null) return;
+    await eventoRepo.salvarEstadoProva(estadoProva.idEvento, {
+      status: estadoProva.status,
+      inicioEm: estadoProva.inicioEm ? estadoProva.inicioEm.toISOString() : null,
+      atualizadoPor: estadoProva.atualizadoPor ?? null
+    });
+  } catch (err: any) {
+    console.error('[persistirEstadoProva] Nao foi possivel persistir (coluna ausente?):', err.message);
+  }
+};
+
+// Hidrata o cache em memoria a partir do banco no boot do servidor.
+const hidratarEstadoProva = async (): Promise<void> => {
+  try {
+    const persistido = await eventoRepo.lerEstadoProva();
+    estadoProva.idEvento = persistido.idEvento;
+    if (persistido.status) estadoProva.status = persistido.status as StatusProva;
+    estadoProva.inicioEm = persistido.inicioEm ? new Date(persistido.inicioEm) : null;
+    estadoProva.atualizadoPor = persistido.atualizadoPor ?? undefined;
+    console.log('[hidratarEstadoProva] Estado carregado do banco:', estadoProva.status, estadoProva.inicioEm);
+  } catch (err: any) {
+    console.error('[hidratarEstadoProva] Falha ao carregar do banco:', err.message);
+  }
+};
+
+// Estado de exibicao do Modo TV, mantido no servidor para ser compartilhado entre
+// dispositivos diferentes (o controle roda num aparelho e a /tv noutro). A /tv faz
+// polling deste estado. Preferencia de exibicao efemera, nao precisa persistir no banco.
+const estadoModoTv: {
+  ativo: boolean;
+  blocos: { distancia: boolean; diferenca: boolean; tempo: boolean; atleta: boolean };
+} = {
+  ativo: true,
+  blocos: { distancia: true, diferenca: true, tempo: true, atleta: false }
+};
 
 // Monta os dados do placar publico (ranking real + diferenca) a partir das equipes.
 const montarPlacarTv = async () => {
@@ -565,6 +614,44 @@ const obterResultadoOficialReal = async (coordenador: string) => {
   };
 };
 
+// Resumo real do atleta (KM total acumulado e ultimo checkpoint) lido do banco,
+// para a tela de checkpoint nao depender do localStorage (que e por dispositivo).
+const obterResumoAtletaReal = async (nomeEquipe: string, nomeAtleta: string) => {
+  const vazio = { kmTotal: 0, kmTotalFmt: '0,000', ultimoCheckpoint: 'Nenhum registro' };
+  try {
+    const eq = await equipeRepo.buscarPorNome(nomeEquipe);
+    if (!eq) return vazio;
+
+    const { data, error } = await supabase
+      .from('vw_historico_completo')
+      .select('km_acumulado, registrado_em, id_checkpoint, atleta_nome')
+      .eq('id_equipe', eq.id_equipe)
+      .eq('atleta_nome', nomeAtleta)
+      .not('id_checkpoint', 'is', null)
+      .order('registrado_em', { ascending: false });
+
+    if (error || !data || data.length === 0) return vazio;
+
+    const kmTotal = data.reduce((soma, r) => soma + Number(r.km_acumulado || 0), 0);
+    const ultimo = data[0];
+    const ultimoCheckpoint = ultimo.registrado_em
+      ? new Date(ultimo.registrado_em).toLocaleString('pt-BR', {
+          day: '2-digit', month: '2-digit', year: '2-digit',
+          hour: '2-digit', minute: '2-digit', second: '2-digit'
+        })
+      : 'Nenhum registro';
+
+    return {
+      kmTotal,
+      kmTotalFmt: kmTotal.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      ultimoCheckpoint
+    };
+  } catch (err: any) {
+    console.error('[obterResumoAtletaReal] Erro:', err.message);
+    return vazio;
+  }
+};
+
 const obterCheckpointsEquipeReal = async (nomeEquipe: string) => {
   const eq = await equipeRepo.buscarPorNome(nomeEquipe);
   if (!eq) return [];
@@ -917,8 +1004,26 @@ app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERA
     titulo: 'MODO TV',
     coordenadorSelecionado: coordenador,
     equipesPainel,
+    estadoModoTv,
     ...contextoAutorizacao(papel)
   });
+});
+
+// Estado do Modo TV consultado pela /tv (polling) para sincronizar entre dispositivos.
+app.get('/api/modo-tv', (_req: Request, res: Response): void => {
+  res.json(estadoModoTv);
+});
+
+// Atualiza o estado do Modo TV a partir do controle (tablet da coordenacao).
+app.post('/api/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), (req: Request, res: Response): void => {
+  const { ativo, blocos } = req.body || {};
+  if (typeof ativo === 'boolean') estadoModoTv.ativo = ativo;
+  if (blocos && typeof blocos === 'object') {
+    for (const chave of ['distancia', 'diferenca', 'tempo', 'atleta'] as const) {
+      if (typeof blocos[chave] === 'boolean') estadoModoTv.blocos[chave] = blocos[chave];
+    }
+  }
+  res.json(estadoModoTv);
 });
 
 app.post('/fechamento', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
@@ -976,6 +1081,7 @@ app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), a
   estadoProva.status = 'finalizada';
   estadoProva.atualizadoPor = coordenador;
   estadoProva.atualizadoEm = new Date();
+  await persistirEstadoProva();
 
   // Interrompe todos os turnos que ainda estavam em andamento ao fechar a prova.
   let turnosEncerrados = 0;
@@ -1432,6 +1538,7 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
       idTurno
     }, idTurno);
 
+    const resumoAtleta = await obterResumoAtletaReal(equipe, atleta);
     res.render('index', {
       // Abre a tela de checkpoint com o turno em andamento.
       tela: 'checkpoint',
@@ -1441,7 +1548,8 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
       atletaSelecionado: atleta,
       esteiraSelecionada: esteira,
       inicioTurnoTimestamp,
-      idTurno
+      idTurno,
+      resumoAtleta
     });
   } catch (err: any) {
     console.error('[/iniciar-turno] Erro ao persistir turno:', err.message);
@@ -1462,7 +1570,8 @@ app.post('/iniciar-turno', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, RO
       atletaSelecionado: atleta,
       esteiraSelecionada: esteira,
       inicioTurnoTimestamp,
-      idTurno: null
+      idTurno: null,
+      resumoAtleta: { kmTotal: 0, kmTotalFmt: '0,000', ultimoCheckpoint: 'Nenhum registro' }
     });
   }
 });
@@ -1870,6 +1979,7 @@ app.post('/iniciar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (re
   estadoProva.inicioEm = new Date();
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  await persistirEstadoProva();
   await registrarHistoricoAdministrativo(req, 'iniciar_prova', 'estado_prova', {
     status: estadoProva.status,
     inicioEm: estadoProva.inicioEm,
@@ -1898,6 +2008,7 @@ app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req
   estadoProva.status = 'pausada';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  await persistirEstadoProva();
   await registrarHistoricoAdministrativo(req, 'pausar_prova', 'estado_prova', {
     status: estadoProva.status,
     atualizadoPor: estadoProva.atualizadoPor,
@@ -1916,6 +2027,7 @@ app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (re
   estadoProva.status = 'em_andamento';
   estadoProva.atualizadoPor = req.body.coordenador;
   estadoProva.atualizadoEm = new Date();
+  await persistirEstadoProva();
   await registrarHistoricoAdministrativo(req, 'retomar_prova', 'estado_prova', {
     status: estadoProva.status,
     atualizadoPor: estadoProva.atualizadoPor,
@@ -2492,4 +2604,6 @@ app.post('/validar-pace-alerta', async (req: Request, res: Response): Promise<Re
 // Inicia o servidor e mostra no terminal a porta usada.
 app.listen(PORT, () => {
   console.log(`Servidor TypeScript ativo na porta ${PORT}`);
+  // Carrega o estado da prova persistido para sobreviver a reinicios do servidor.
+  void hidratarEstadoProva();
 });
