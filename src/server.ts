@@ -1448,6 +1448,7 @@ app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR,
 
   res.render('index', {
     // Confirma atleta e permite escolher a esteira para iniciar o turno.
+    ...contextoAutorizacao(obterPapelRenderizacao(req)),
     tela: 'esteira',
     titulo: 'INICIAR TURNO',
     operadorSelecionado: operador,
@@ -1471,6 +1472,7 @@ app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADO
 
   res.render('index', {
     // Mantem a tela de esteiras e destaca a esteira escolhida.
+    ...contextoAutorizacao(obterPapelRenderizacao(req)),
     tela: 'esteira',
     titulo: 'INICIAR TURNO',
     operadorSelecionado: operador,
