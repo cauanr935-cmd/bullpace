@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=12">
+  <link rel="stylesheet" href="/static/style.css?v=22">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -277,7 +277,13 @@
             <form action="/selecionar-operador" method="post" class="function-form">
               <input type="hidden" name="operador" value="<%= operador.nome %>">
               <button type="submit" class="operator-row <%= selecionado ? 'is-selected' : '' %>">
-                <span class="operator-photo" aria-hidden="true"><%= operador.iniciais %></span>
+                <span class="operator-photo" aria-hidden="true">
+                  <% if (operador.foto_url) { %>
+                    <img class="operator-photo-img" src="<%= operador.foto_url %>" alt="">
+                  <% } else { %>
+                    <%= operador.iniciais %>
+                  <% } %>
+                </span>
                 <span class="operator-name"><%= operador.nome %></span>
                 <% if (selecionado) { %>
                   <span class="selected-badge">SELECIONADO</span>
@@ -306,15 +312,28 @@
           Acompanhe a operação em tempo real.
         </p>
 
-        <section class="panel-progress">
-          <strong>08h 42min de 24h</strong>
-          <span><%= estadoProva.status === 'finalizada' ? 'FINALIZADA' : estadoProva.status === 'pausada' ? 'PAUSADA' : 'EM ANDAMENTO' %></span>
+        <%
+          const statusProva = estadoProva.status;
+          const statusLabel = statusProva === 'finalizada' ? 'FINALIZADA'
+            : statusProva === 'pausada' ? 'PAUSADA'
+            : statusProva === 'nao_iniciada' ? 'NÃO INICIADA'
+            : 'EM ANDAMENTO';
+          const ehAdmin = perfilUsuario === 'administrador_geral';
+        %>
+        <section class="panel-progress"
+          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' && inicioProvaTimestamp ? inicioProvaTimestamp : '' %>"
+          data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>"
+          data-status-prova="<%= statusProva %>"
+          data-is-admin="<%= ehAdmin ? 'true' : 'false' %>">
+          <strong id="panelProvaTimer"><%= statusProva === 'nao_iniciada' ? 'Aguardando início' : '00h 00min de 24h' %></strong>
+          <span class="status-prova-badge status-<%= statusProva %>"><%= statusLabel %></span>
         </section>
 
         <% if (typeof painelMensagem !== 'undefined') { %>
           <p class="checkpoint-message success"><%= painelMensagem %></p>
         <% } %>
 
+        <% const listaAlertas = typeof alertas !== 'undefined' ? alertas : []; %>
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
             <strong>TURNOS ATIVOS</strong>
@@ -324,11 +343,40 @@
             <strong>CHECKPOINTS</strong>
             <span><%= typeof totalCheckpoints !== 'undefined' ? totalCheckpoints : 0 %></span>
           </article>
-          <article>
+          <button type="button" class="panel-alert-card" id="panelAlertButton" aria-haspopup="dialog">
             <strong>ALERTAS</strong>
-            <span>2</span>
-          </article>
+            <span><%= listaAlertas.length %></span>
+          </button>
         </section>
+
+        <div id="panelAlertModal" class="modal-overlay" hidden>
+          <section class="modal-box panel-alert-modal" role="dialog" aria-modal="true" aria-labelledby="panelAlertTitle">
+            <h2 id="panelAlertTitle">Turnos com alerta de pace</h2>
+            <% if (listaAlertas.length === 0) { %>
+              <p class="panel-alert-empty">Nenhum turno fora da faixa de pace no momento.</p>
+            <% } else { %>
+              <div class="panel-alert-list">
+                <div class="panel-alert-row panel-alert-row-header" aria-hidden="true">
+                  <span>EQUIPE</span>
+                  <span>ATLETA</span>
+                  <span>PACE</span>
+                  <span>QUANDO</span>
+                </div>
+                <% listaAlertas.forEach((alerta) => { %>
+                  <article class="panel-alert-row">
+                    <span><%= alerta.equipe %></span>
+                    <span><%= alerta.atleta %></span>
+                    <strong><%= alerta.pace %></strong>
+                    <span><%= alerta.horario %></span>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+            <div class="modal-actions">
+              <button type="button" class="continue-button" id="panelAlertClose">Fechar</button>
+            </div>
+          </section>
+        </div>
 
         <p class="operator-list-title">EQUIPES</p>
 
@@ -364,13 +412,19 @@
             <button type="submit">Modo TV</button>
           </form>
           <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="panel-action-link">Exportar CSV</a>
-          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
-            <form action="/pausar-prova" method="post">
+
+          <% if (pode('iniciar_prova') && estadoProva.status === 'nao_iniciada') { %>
+            <form action="/iniciar-prova" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
               <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
-              <button type="submit">Pausar prova</button>
+              <button type="submit" class="panel-start-button">Iniciar prova</button>
             </form>
           <% } %>
+
+          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+            <button type="button" id="panelPauseButton">Pausar prova</button>
+          <% } %>
+
           <% if (pode('retomar_prova') && estadoProva.status === 'pausada') { %>
             <form action="/retomar-prova" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
@@ -378,7 +432,8 @@
               <button type="submit">Retomar prova</button>
             </form>
           <% } %>
-          <% if (pode('finalizar_prova')) { %>
+
+          <% if (pode('finalizar_prova') && estadoProva.status !== 'nao_iniciada') { %>
             <form action="/fechamento" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
               <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
@@ -386,6 +441,154 @@
             </form>
           <% } %>
         </section>
+
+        <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+          <% /* Modal de confirmacao da pausa (pausa todos os turnos). */ %>
+          <div id="panelPauseModal" class="modal-overlay" hidden>
+            <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="panelPauseTitle">
+              <h2 id="panelPauseTitle">Pausar a prova?</h2>
+              <p>Isto vai <strong>pausar todos os turnos</strong> e bloquear as operações de operadores e coordenadores até a prova ser retomada.</p>
+              <form action="/pausar-prova" method="post">
+                <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+                <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+                <input type="hidden" name="confirmaPausa" value="sim">
+                <label class="confirmation-check-card" for="panelPauseConfirm">
+                  <input id="panelPauseConfirm" type="checkbox" required>
+                  <span>Tenho certeza de que desejo pausar a prova agora.</span>
+                </label>
+                <div class="modal-actions modal-actions-split">
+                  <button type="button" class="modal-secondary-button" id="panelPauseCancel">Cancelar</button>
+                  <button type="submit" class="continue-button" id="panelPauseConfirmBtn" disabled>Confirmar pausa</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        <% } %>
+
+        <% /* Avisos de fim de prova (somente administrador). */ %>
+        <% if (ehAdmin && statusProva === 'em_andamento') { %>
+          <div id="endWarningModal" class="modal-overlay" hidden>
+            <section class="modal-box end-warning-modal" role="dialog" aria-modal="true" aria-labelledby="endWarningTitle">
+              <h2 id="endWarningTitle">Atenção: fim da prova se aproximando</h2>
+              <p id="endWarningText">Faltam poucos minutos para o fim da prova.</p>
+              <div class="modal-actions">
+                <button type="button" class="continue-button" id="endWarningClose">Entendi</button>
+              </div>
+            </section>
+          </div>
+          <div id="endCountdownBanner" class="end-countdown-banner" hidden>
+            <strong>⏰ Encerre os turnos!</strong>
+            <span>Fim da prova em <time id="endCountdownTime">--:--</time></span>
+          </div>
+        <% } %>
+
+        <script>
+          (() => {
+            // ── Cronometro da prova no painel + avisos de fim ──────────────
+            const progresso = document.querySelector('.panel-progress');
+            const timerEl = document.getElementById('panelProvaTimer');
+            const statusProva = progresso ? progresso.dataset.statusProva : '';
+            const ehAdmin = progresso && progresso.dataset.isAdmin === 'true';
+            const temInicio = progresso && progresso.dataset.inicioProva !== '';
+
+            // Elementos dos avisos de fim (existem somente para o admin com prova em andamento).
+            const endModal = document.getElementById('endWarningModal');
+            const endText = document.getElementById('endWarningText');
+            const endClose = document.getElementById('endWarningClose');
+            const endBanner = document.getElementById('endCountdownBanner');
+            const endCountdown = document.getElementById('endCountdownTime');
+            // Marca quais avisos pontuais ja foram exibidos para nao repetir.
+            const avisosMostrados = {};
+
+            if (progresso && timerEl && statusProva !== 'nao_iniciada' && temInicio) {
+              const inicio = Number(progresso.dataset.inicioProva);
+              const duracao = Number(progresso.dataset.duracaoProva) || 86400000;
+              const totalHoras = Math.round(duracao / 3600000);
+
+              const formatar = (ms) => {
+                const totalMin = Math.floor(Math.max(0, ms) / 60000);
+                const h = String(Math.floor(totalMin / 60)).padStart(2, '0');
+                const m = String(totalMin % 60).padStart(2, '0');
+                return `${h}h ${m}min`;
+              };
+
+              const formatarMmSs = (ms) => {
+                const totalSeg = Math.max(0, Math.floor(ms / 1000));
+                const m = String(Math.floor(totalSeg / 60)).padStart(2, '0');
+                const s = String(totalSeg % 60).padStart(2, '0');
+                return `${m}:${s}`;
+              };
+
+              const abrirAviso = (texto) => {
+                if (!endModal || !endText) return;
+                endText.textContent = texto;
+                endModal.hidden = false;
+              };
+
+              const tick = () => {
+                const agora = Date.now();
+                const decorrido = Math.min(duracao, agora - inicio);
+                const restante = Math.max(0, duracao - decorrido);
+                timerEl.textContent = `${formatar(decorrido)} de ${totalHoras}h`;
+
+                // Avisos de fim de prova, apenas para o administrador.
+                if (ehAdmin && restante > 0) {
+                  const minRestantes = restante / 60000;
+
+                  // Pop-up unico aos 20 e aos 15 minutos restantes.
+                  if (minRestantes <= 20 && minRestantes > 15 && !avisosMostrados['20']) {
+                    avisosMostrados['20'] = true;
+                    abrirAviso('Faltam cerca de 20 minutos para o fim da prova. Comece a organizar o encerramento dos turnos.');
+                  }
+                  if (minRestantes <= 15 && minRestantes > 10 && !avisosMostrados['15']) {
+                    avisosMostrados['15'] = true;
+                    abrirAviso('Faltam cerca de 15 minutos para o fim da prova. Prepare o fechamento.');
+                  }
+
+                  // A partir de 10 minutos, cronometro fixo de aviso.
+                  if (minRestantes <= 10 && endBanner && endCountdown) {
+                    endBanner.hidden = false;
+                    endCountdown.textContent = formatarMmSs(restante);
+                  }
+                }
+              };
+              tick();
+              setInterval(tick, 1000);
+
+              endClose?.addEventListener('click', () => { if (endModal) endModal.hidden = true; });
+            }
+
+            // ── Pop-up de alertas ──────────────────────────────────────────
+            const alertButton = document.getElementById('panelAlertButton');
+            const alertModal = document.getElementById('panelAlertModal');
+            const alertClose = document.getElementById('panelAlertClose');
+            if (alertButton && alertModal) {
+              alertButton.addEventListener('click', () => { alertModal.hidden = false; });
+              alertClose?.addEventListener('click', () => { alertModal.hidden = true; });
+              alertModal.addEventListener('click', (event) => {
+                if (event.target === alertModal) alertModal.hidden = true;
+              });
+            }
+
+            // ── Modal de confirmacao da pausa ──────────────────────────────
+            const pauseButton = document.getElementById('panelPauseButton');
+            const pauseModal = document.getElementById('panelPauseModal');
+            const pauseCancel = document.getElementById('panelPauseCancel');
+            const pauseConfirm = document.getElementById('panelPauseConfirm');
+            const pauseConfirmBtn = document.getElementById('panelPauseConfirmBtn');
+            if (pauseButton && pauseModal) {
+              pauseButton.addEventListener('click', () => { pauseModal.hidden = false; });
+              pauseCancel?.addEventListener('click', () => { pauseModal.hidden = true; });
+              pauseModal.addEventListener('click', (event) => {
+                if (event.target === pauseModal) pauseModal.hidden = true;
+              });
+              // O botao de confirmar so habilita quando o checkbox e marcado.
+              pauseConfirm?.addEventListener('change', () => {
+                if (pauseConfirmBtn) pauseConfirmBtn.disabled = !pauseConfirm.checked;
+              });
+            }
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'modoTv') { %>
@@ -396,32 +599,34 @@
 
         <p class="operator-list-title">ESTADO ATUAL</p>
 
-        <section class="tv-control-card is-active" id="tvControlCard">
+        <% const tvAtivoInicial = typeof estadoModoTv !== 'undefined' ? estadoModoTv.ativo : true; %>
+        <section class="tv-control-card <%= tvAtivoInicial ? 'is-active' : 'is-inactive' %>" id="tvControlCard">
           <div>
             <strong>PLACAR EXTERNO</strong>
             <span>Atualização automática dos dados válidos</span>
           </div>
-          <span class="tv-active-pill" id="tvStateLabel">ATIVO</span>
-          <button type="button" class="toggle-switch" id="tvToggle" aria-pressed="true" aria-label="Ativar ou desativar Modo TV"></button>
+          <span class="tv-active-pill" id="tvStateLabel"><%= tvAtivoInicial ? 'ATIVO' : 'INATIVO' %></span>
+          <button type="button" class="toggle-switch" id="tvToggle" aria-pressed="<%= tvAtivoInicial %>" aria-label="Ativar ou desativar Modo TV"></button>
         </section>
 
         <p class="operator-list-title">INFORMAÇÕES VISÍVEIS</p>
 
+        <% const cfgTv = typeof estadoModoTv !== 'undefined' ? estadoModoTv : { ativo: true, blocos: { distancia: true, diferenca: true, tempo: true, atleta: false } }; %>
         <section class="visible-info-list" aria-label="Informações visíveis no placar">
           <label class="check-option">
-            <input type="checkbox" checked>
+            <input type="checkbox" data-tv-key="distancia" <%= cfgTv.blocos.distancia ? 'checked' : '' %>>
             <span>Distância total por equipe</span>
           </label>
           <label class="check-option">
-            <input type="checkbox" checked>
+            <input type="checkbox" data-tv-key="diferenca" <%= cfgTv.blocos.diferenca ? 'checked' : '' %>>
             <span>Diferença entre equipes</span>
           </label>
           <label class="check-option">
-            <input type="checkbox" checked>
+            <input type="checkbox" data-tv-key="tempo" <%= cfgTv.blocos.tempo ? 'checked' : '' %>>
             <span>Tempo restante da prova</span>
           </label>
           <label class="check-option">
-            <input type="checkbox">
+            <input type="checkbox" data-tv-key="atleta" <%= cfgTv.blocos.atleta ? 'checked' : '' %>>
             <span>Nome do atleta atual</span>
           </label>
         </section>
@@ -434,70 +639,79 @@
 
         <script>
           (() => {
-            // Card principal do controle do Modo TV.
             const card = document.getElementById('tvControlCard');
-            // Botao estilo chave liga/desliga.
             const toggle = document.getElementById('tvToggle');
-            // Texto que mostra ATIVO ou INATIVO.
             const label = document.getElementById('tvStateLabel');
-            // Link que abre a tela externa da TV.
             const externalButton = document.getElementById('externalScreenButton');
-            // Recupera do navegador se o Modo TV estava ativo na ultima interacao.
-            let enabled = localStorage.getItem('bullpace-tv-active') !== 'false';
+            const infoCheckboxes = Array.from(document.querySelectorAll('[data-tv-key]'));
+            // Estado inicial vem do servidor (atributos checked + estado do card).
+            let enabled = card.classList.contains('is-active');
 
-            // Aplica visualmente o estado atual do Modo TV.
-            const updateState = () => {
-              // Marca o card como ativo quando o placar deve aparecer.
-              card.classList.toggle('is-active', enabled);
-              // Marca o card como inativo quando o placar deve ficar pausado.
-              card.classList.toggle('is-inactive', !enabled);
-              // Atualiza atributo de acessibilidade do botao.
-              toggle.setAttribute('aria-pressed', String(enabled));
-              // Atualiza o texto do selo.
-              label.textContent = enabled ? 'ATIVO' : 'INATIVO';
-              // Mostra o link como indisponivel quando o modo esta inativo.
-              externalButton.classList.toggle('is-disabled', !enabled);
-              // Informa leitores de tela sobre o estado do link.
-              externalButton.setAttribute('aria-disabled', String(!enabled));
-              // Troca a chamada principal conforme o estado.
-              externalButton.textContent = enabled ? 'Abrir tela externa' : 'Ative o Modo TV para abrir';
-              // Salva o estado no navegador para a tela /tv conseguir ler.
-              localStorage.setItem('bullpace-tv-active', enabled ? 'true' : 'false');
+            // Envia o estado atual do Modo TV ao servidor (sincroniza outros dispositivos).
+            const salvarNoServidor = () => {
+              const blocos = {};
+              infoCheckboxes.forEach((cb) => { blocos[cb.dataset.tvKey] = cb.checked; });
+              fetch('/api/modo-tv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ativo: enabled, blocos, perfilUsuario: '<%= perfilUsuario %>' })
+              }).catch(() => {});
             };
 
-            // Ao clicar na chave, inverte ativo/inativo.
+            // Aplica visualmente o estado do liga/desliga.
+            const updateState = () => {
+              card.classList.toggle('is-active', enabled);
+              card.classList.toggle('is-inactive', !enabled);
+              toggle.setAttribute('aria-pressed', String(enabled));
+              label.textContent = enabled ? 'ATIVO' : 'INATIVO';
+              externalButton.classList.toggle('is-disabled', !enabled);
+              externalButton.setAttribute('aria-disabled', String(!enabled));
+              externalButton.textContent = enabled ? 'Abrir tela externa' : 'Ative o Modo TV para abrir';
+            };
+
             toggle.addEventListener('click', () => {
               enabled = !enabled;
               updateState();
+              salvarNoServidor();
             });
 
-            // Impede abrir a TV externa quando o modo esta inativo.
             externalButton.addEventListener('click', (event) => {
-              if (!enabled) {
-                event.preventDefault();
-              }
+              if (!enabled) event.preventDefault();
             });
 
-            // Inicializa a tela with o estado salvo.
+            // Cada checkbox de "Informacoes visiveis" salva no servidor ao mudar.
+            infoCheckboxes.forEach((checkbox) => {
+              checkbox.addEventListener('change', salvarNoServidor);
+            });
+
             updateState();
           })();
         </script>
       <% } %>
 
       <% if (tela === 'tvPublica') { %>
-        <% /* Nota: placar publico para TV/projetor. */ %>
-        <section class="tv-scoreboard">
+        <% /* Nota: placar publico para TV/projetor. Os dados vem reais do servidor. */ %>
+        <%
+          // Diferenca real entre lider e vice, calculada no servidor.
+          const diferencaTexto = typeof diferencaTv !== 'undefined' ? diferencaTv : '+ 0,000 km';
+          // Atleta atualmente em turno (primeiro encontrado), para a opcao "Nome do atleta atual".
+          const atletaAtualTv = (equipesPainel || [])
+            .map((eq) => eq.atleta)
+            .find((texto) => texto && texto !== 'Nenhum atleta em turno') || 'Sem atleta em turno';
+        %>
+        <section class="tv-scoreboard"
+          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' && inicioProvaTimestamp ? inicioProvaTimestamp : '' %>"
+          data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>"
+          data-status-prova="<%= typeof statusProvaTv !== 'undefined' ? statusProvaTv : 'em_andamento' %>">
           <header class="tv-header">
-            <div>
-              <strong>BULLPACE</strong>
-              <span>PLACAR AO VIVO</span>
-            </div>
+            <img class="tv-brand-logo" src="/assets/LogoRedBull24h.png" alt="Red Bull 24h">
             <em>AO VIVO</em>
           </header>
 
-          <section class="tv-event">
-            <h1>24 HORAS</h1>
-            <p>08h 42min de prova · 15h 18min restantes</p>
+          <section class="tv-event" data-tv-block="tempo">
+            <p class="tv-clock-label">TEMPO DE PROVA</p>
+            <strong class="tv-clock" id="tvProvaDecorrido">00h 00min</strong>
+            <span class="tv-clock-remaining" id="tvProvaRestante">24h 00min restantes</span>
           </section>
 
           <section class="tv-paused-message">
@@ -505,22 +719,24 @@
             <span>Os dados públicos foram ocultados pela coordenação.</span>
           </section>
 
-          <section class="tv-ranking">
-            <article>
-              <span>EQUIPE</span>
-              <strong>Equipe Vermelha</strong>
-              <p>124,480 <small>km</small></p>
-            </article>
-            <article>
-              <span>EQUIPE</span>
-              <strong>Equipe Azul</strong>
-              <p>121,930 <small>km</small></p>
-            </article>
+          <section class="tv-ranking" data-tv-block="distancia">
+            <% (equipesPainel || []).forEach((equipe) => { %>
+              <article>
+                <span>EQUIPE</span>
+                <strong><%= equipe.nome %></strong>
+                <p><%= equipe.km.replace(' km', '') %> <small>km</small></p>
+              </article>
+            <% }) %>
           </section>
 
-          <section class="tv-difference">
+          <section class="tv-difference" data-tv-block="diferenca">
             <strong>DIFERENÇA</strong>
-            <span>+ 2,550 km</span>
+            <span><%= diferencaTexto %></span>
+          </section>
+
+          <section class="tv-current-athlete" data-tv-block="atleta">
+            <strong>ATLETA ATUAL</strong>
+            <span><%= atletaAtualTv %></span>
           </section>
 
           <footer>Visualização pública · sem comandos operacionais</footer>
@@ -533,20 +749,64 @@
             // Busca o selo de status do cabecalho da TV.
             const statusLabel = scoreboard.querySelector('.tv-header em');
 
-            // Aplica na TV o estado salvo pelo controle do Modo TV.
-            const applyTvState = () => {
-              // Quando o valor salvo for "false", a TV deve ocultar os dados.
-              const active = localStorage.getItem('bullpace-tv-active') !== 'false';
-              // Classe usada no CSS para mostrar ou esconder o placar.
-              scoreboard.classList.toggle('is-paused', !active);
-              // Atualiza o texto do selo da TV.
-              statusLabel.textContent = active ? 'AO VIVO' : 'PAUSADO';
+            // ── Cronometro real da prova ───────────────────────────────────
+            const temInicioProva = scoreboard.dataset.inicioProva !== '';
+            const inicioProva = Number(scoreboard.dataset.inicioProva);
+            const duracaoProva = Number(scoreboard.dataset.duracaoProva) || 86400000;
+            const decorridoEl = document.getElementById('tvProvaDecorrido');
+            const restanteEl = document.getElementById('tvProvaRestante');
+
+            // Formata milissegundos em "08h 42min".
+            const formatarHm = (ms) => {
+              const totalMin = Math.floor(Math.max(0, ms) / 60000);
+              const horas = String(Math.floor(totalMin / 60)).padStart(2, '0');
+              const min = String(totalMin % 60).padStart(2, '0');
+              return `${horas}h ${min}min`;
             };
 
-            // Escuta mudancas vindas de outra aba/janela do mesmo navegador.
-            window.addEventListener('storage', applyTvState);
-            // Aplica o estado assim que a TV abre.
-            applyTvState();
+            // Atualiza o relogio com base no horario real de inicio (roda mesmo apos reabrir).
+            const atualizarCronometro = () => {
+              if (!temInicioProva) {
+                // Prova ainda nao iniciada pelo administrador.
+                decorridoEl.textContent = 'Aguardando início';
+                restanteEl.textContent = 'A prova ainda não começou';
+                return;
+              }
+              const decorrido = Math.min(duracaoProva, Date.now() - inicioProva);
+              const restante = Math.max(0, duracaoProva - decorrido);
+              decorridoEl.textContent = formatarHm(decorrido);
+              restanteEl.textContent = `${formatarHm(restante)} restantes`;
+            };
+            atualizarCronometro();
+            if (temInicioProva) setInterval(atualizarCronometro, 1000);
+
+            // ── Sincronizacao com o Modo TV via servidor (cross-device) ────
+            // A /tv consulta /api/modo-tv periodicamente, entao o controle feito
+            // num aparelho reflete nesta TV mesmo em outro dispositivo/rede.
+            const blocosKeys = ['distancia', 'diferenca', 'tempo', 'atleta'];
+
+            const aplicarEstado = (estado) => {
+              // Liga/desliga geral do placar.
+              const active = estado.ativo !== false;
+              scoreboard.classList.toggle('is-paused', !active);
+              statusLabel.textContent = active ? 'AO VIVO' : 'PAUSADO';
+              // Mostra/esconde cada bloco conforme a configuracao.
+              blocosKeys.forEach((bloco) => {
+                const el = scoreboard.querySelector(`[data-tv-block="${bloco}"]`);
+                if (el) el.hidden = estado.blocos ? estado.blocos[bloco] === false : false;
+              });
+            };
+
+            const buscarEstadoTv = async () => {
+              try {
+                const resp = await fetch('/api/modo-tv', { cache: 'no-store' });
+                if (resp.ok) aplicarEstado(await resp.json());
+              } catch (e) { /* mantem o ultimo estado em caso de falha de rede */ }
+            };
+
+            buscarEstadoTv();
+            // Poll a cada 3s para refletir mudancas feitas no controle.
+            setInterval(buscarEstadoTv, 3000);
           })();
         </script>
       <% } %>
@@ -1051,7 +1311,13 @@
               <input type="hidden" name="equipe" value="<%= equipePainel.nome %>">
               <input type="hidden" name="atleta" value="<%= atleta.nome %>">
               <button type="submit" class="operator-row filter-athlete-row <%= atletaAtual ? 'is-selected' : '' %>">
-                <span class="operator-photo" aria-hidden="true"><%= atleta.iniciais %></span>
+                <span class="operator-photo" aria-hidden="true">
+                  <% if (atleta.foto_url) { %>
+                    <img class="operator-photo-img" src="<%= atleta.foto_url %>" alt="">
+                  <% } else { %>
+                    <%= atleta.iniciais %>
+                  <% } %>
+                </span>
                 <span class="operator-name">
                   <%= atleta.nome %>
                   <small><%= atleta.status %></small>
@@ -1145,7 +1411,13 @@
                 <input type="hidden" name="ultimoAtleta" value="<%= ultimoAtleta %>">
               <% } %>
               <button type="submit" class="operator-row athlete-row <%= atletaAtual ? 'is-selected' : '' %> <%= atletaBloqueado ? 'is-disabled' : '' %>" <%= atletaBloqueado ? 'disabled' : '' %>>
-                <span class="operator-photo" aria-hidden="true"><%= atleta.iniciais %></span>
+                <span class="operator-photo" aria-hidden="true">
+                  <% if (atleta.foto_url) { %>
+                    <img class="operator-photo-img" src="<%= atleta.foto_url %>" alt="">
+                  <% } else { %>
+                    <%= atleta.iniciais %>
+                  <% } %>
+                </span>
                 <span class="operator-name">
                   <%= atleta.nome %>
                   <small><%= atletaBloqueado ? 'Indisponível: correu no último turno' : atleta.status %></small>
@@ -1325,14 +1597,16 @@
         </section>
 
         <form id="checkpointForm" class="checkpoint-form" novalidate>
-          <section class="athlete-checkpoint-summary" aria-label="Resumo de checkpoints do atleta ativo">
+          <% const resumo = typeof resumoAtleta !== 'undefined' ? resumoAtleta : { kmTotalFmt: '0,000', ultimoCheckpoint: 'Nenhum registro' }; %>
+          <section class="athlete-checkpoint-summary" aria-label="Resumo de checkpoints do atleta ativo"
+            data-km-total="<%= typeof resumoAtleta !== 'undefined' ? resumoAtleta.kmTotal : 0 %>">
             <article>
               <span>KM TOTAL DO ATLETA</span>
-              <strong><span id="athleteTotalKm">0,000</span> km</strong>
+              <strong><span id="athleteTotalKm"><%= resumo.kmTotalFmt %></span> km</strong>
             </article>
             <article>
               <span>ÚLTIMO CHECKPOINT</span>
-              <strong id="athleteLastCheckpoint">Nenhum registro</strong>
+              <strong id="athleteLastCheckpoint"><%= resumo.ultimoCheckpoint %></strong>
             </article>
             <article>
               <span>PRÓXIMO CHECKPOINT</span>
@@ -1340,27 +1614,35 @@
             </article>
           </section>
 
-          <label class="field-label" for="checkpointImage">IMAGEM DO CHECKPOINT *</label>
-          <label class="checkpoint-image-picker">
-            <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
-            <strong>Tirar foto da esteira</strong>
-            <span id="checkpointImageName">Nenhuma foto selecionada</span>
-          </label>
+          <section class="checkpoint-capture" aria-label="Imagem do checkpoint">
+            <header class="checkpoint-capture-header">
+              <span class="capture-step">PASSO 1</span>
+              <strong>IMAGEM DO CHECKPOINT *</strong>
+              <span class="capture-hint">Fotografe o visor da esteira para ler o KM automaticamente.</span>
+            </header>
 
-          <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
-            <div>
-              <strong>LEITURA DA IMAGEM</strong>
-              <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
-            </div>
-            <output id="ocrSuggestedKm">--</output>
+            <label class="checkpoint-image-picker" for="checkpointImage">
+              <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
+              <span class="picker-icon" aria-hidden="true">📷</span>
+              <strong>Abrir câmera e fotografar a esteira</strong>
+              <span id="checkpointImageName">Toque para abrir a câmera</span>
+            </label>
+
+            <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
+              <div>
+                <strong>LEITURA DA IMAGEM</strong>
+                <span id="ocrSuggestionText">Envie uma imagem para tentar identificar o KM automaticamente.</span>
+              </div>
+              <output id="ocrSuggestedKm">--</output>
+            </section>
+
+            <label class="manual-correction-toggle" for="manualKmCorrection">
+              <input id="manualKmCorrection" type="checkbox">
+              <span>Leitura da imagem está errada, informar KM manualmente</span>
+            </label>
           </section>
 
-          <label class="manual-correction-toggle" for="manualKmCorrection">
-            <input id="manualKmCorrection" type="checkbox">
-            <span>Leitura da imagem está errada, informar KM manualmente</span>
-          </label>
-
-          <label class="field-label" for="kmAcumulado">KM ACUMULADO OFICIAL *</label>
+          <label class="field-label step-field-label" for="kmAcumulado"><span class="capture-step">PASSO 2</span>KM ACUMULADO OFICIAL *</label>
           <div class="input-with-unit">
             <input id="kmAcumulado" name="kmAcumulado" class="checkpoint-input" type="text" inputmode="decimal" placeholder="Aguardando leitura da imagem" required disabled>
             <span>km</span>
@@ -1403,6 +1685,15 @@
           </section>
         </div>
 
+        <% /* Pop-up exibido quando o servidor recusa a operacao (divergencia do esperado). */ %>
+        <div id="divergenceModal" class="modal-overlay" hidden>
+          <section class="modal-box divergence-modal" role="dialog" aria-modal="true" aria-labelledby="divergenceTitle">
+            <h2 id="divergenceTitle">Operação não permitida</h2>
+            <p id="divergenceText">Houve uma divergência com o esperado.</p>
+            <button id="closeDivergenceModal" type="button" class="continue-button">Entendi</button>
+          </section>
+        </div>
+
         <script>
           (() => {
             // Busca o formulario de checkpoint.
@@ -1419,6 +1710,20 @@
             const modal = document.getElementById('checkpointModal');
             // Busca o botao que fecha o modal.
             const closeModal = document.getElementById('closeCheckpointModal');
+            // Pop-up de divergencia (operacao recusada pelo servidor).
+            const divergenceModal = document.getElementById('divergenceModal');
+            const divergenceText = document.getElementById('divergenceText');
+            const closeDivergence = document.getElementById('closeDivergenceModal');
+            // Exibe o pop-up de divergencia com a mensagem vinda do servidor.
+            const showDivergence = (texto) => {
+              if (!divergenceModal) return;
+              if (divergenceText) divergenceText.textContent = texto || 'Houve uma divergência com o esperado.';
+              divergenceModal.hidden = false;
+            };
+            closeDivergence?.addEventListener('click', () => { divergenceModal.hidden = true; });
+            divergenceModal?.addEventListener('click', (event) => {
+              if (event.target === divergenceModal) divergenceModal.hidden = true;
+            });
             // Busca o relogio do turno ativo.
             const turnTimer = document.getElementById('turnTimer');
             // Busca o formulario que finaliza o turno.
@@ -1461,14 +1766,6 @@
                 // não bloquear se template não tiver idTurno
               }
             })();
-            // Identifica os checkpoints do atleta ativo no armazenamento local da tela.
-            const activeAthleteKey = [
-              'checkpoints',
-              '<%= equipeSelecionada %>',
-              '<%= atletaSelecionado %>'
-            ].join(':');
-            // Lista em memoria dos checkpoints vinculados ao atleta ativo.
-            let athleteCheckpoints = [];
             let latestOcrResult = null;
             let acceptedOcrKm = null;
 
@@ -1554,32 +1851,26 @@
               second: '2-digit'
             });
 
-            // Carrega registros anteriores do atleta ativo quando existirem.
-            const loadAthleteCheckpoints = () => {
-              try {
-                const storedCheckpoints = JSON.parse(localStorage.getItem(activeAthleteKey) || '[]');
-                athleteCheckpoints = Array.isArray(storedCheckpoints) ? storedCheckpoints : [];
-              } catch (error) {
-                athleteCheckpoints = [];
-              }
-            };
-
-            // Persiste a lista atualizada para manter o vinculo com o atleta ativo.
-            const saveAthleteCheckpoints = () => {
-              localStorage.setItem(activeAthleteKey, JSON.stringify(athleteCheckpoints));
-            };
+            // Baseline real vindo do banco (KM total ja persistido para este atleta),
+            // independente do dispositivo. As adicoes desta sessao somam por cima.
+            const summaryEl = document.querySelector('.athlete-checkpoint-summary');
+            const serverKmBaseline = Number(summaryEl?.dataset.kmTotal) || 0;
+            // So contam aqui os checkpoints registrados DEPOIS que esta tela abriu,
+            // pois o baseline ja inclui tudo que estava no banco.
+            const sessionCheckpoints = [];
 
             // Atualiza KM total do atleta, ultimo checkpoint e valor levado ao encerramento.
             const updateAthleteCheckpointSummary = () => {
-              const totalKm = athleteCheckpoints.reduce((total, checkpoint) => total + checkpoint.km, 0);
-              const lastCheckpoint = athleteCheckpoints
+              const totalSessao = sessionCheckpoints.reduce((total, cp) => total + cp.km, 0);
+              const totalKm = serverKmBaseline + totalSessao;
+              athleteTotalKm.textContent = formatKilometers(totalKm);
+
+              const lastCheckpoint = sessionCheckpoints
                 .slice()
                 .sort((a, b) => b.registeredAt - a.registeredAt)[0];
 
-              athleteTotalKm.textContent = formatKilometers(totalKm);
-
               if (!lastCheckpoint) {
-                athleteLastCheckpoint.textContent = 'Nenhum registro';
+                // Sem checkpoint nesta sessao: mantem o ultimo registro vindo do servidor.
                 finishKmFinal.value = '';
                 return;
               }
@@ -1609,7 +1900,6 @@
               updateComputedPace();
             };
 
-            loadAthleteCheckpoints();
             updateAthleteCheckpointSummary();
             updateTurnTimer();
             setInterval(updateTurnTimer, 1000);
@@ -1644,7 +1934,7 @@
               updateManualCorrectionState();
 
               if (!file) {
-                checkpointImageName.textContent = 'Nenhuma foto selecionada';
+                checkpointImageName.textContent = 'Toque para abrir a câmera';
                 setOcrPanel('nao_processado', 'Envie uma imagem para tentar identificar o KM automaticamente.');
                 return;
               }
@@ -1669,6 +1959,11 @@
                 });
                 const resData = await response.json();
                 if (!response.ok) {
+                  if (response.status === 403) {
+                    button.disabled = false;
+                    showDivergence(resData.error || 'Operação não permitida neste momento.');
+                    return;
+                  }
                   throw new Error(resData.error || 'Erro ao processar OCR.');
                 }
 
@@ -1798,6 +2093,11 @@
                 });
                 const resData = await response.json();
                 if (!response.ok) {
+                  // Operacao recusada (prova nao iniciada/pausada/finalizada): pop-up de divergencia.
+                  if (response.status === 403) {
+                    showDivergence(resData.error || 'Operação não permitida neste momento.');
+                    return;
+                  }
                   throw new Error(resData.error || 'Erro ao registrar checkpoint.');
                 }
                 if (resData.idTurno) {
@@ -1808,14 +2108,14 @@
                   }
                 }
 
-                athleteCheckpoints.push({
+                // Soma apenas nesta sessao (o baseline do servidor ja tem o resto).
+                sessionCheckpoints.push({
                   atleta: '<%= atletaSelecionado %>',
                   equipe: '<%= equipeSelecionada %>',
                   km: kmNumerico,
                   rawKm: km,
                   registeredAt: checkpointTimestamp
                 });
-                saveAthleteCheckpoints();
                 updateAthleteCheckpointSummary();
 
                 const pace = resData.checkpoint?.pace_medio;
@@ -1951,7 +2251,7 @@
                 </label>
                 <label>
                   <strong>TEMPO TOTAL CORRIDO</strong>
-                  <input name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" required>
+                  <input id="duracaoTurnoInput" name="duracaoTurno" type="text" inputmode="numeric" value="<%= duracaoTurno %>" aria-label="Tempo total corrido" placeholder="00:00:00" maxlength="8" required>
                 </label>
               </section>
 
@@ -1963,6 +2263,46 @@
             </form>
           </section>
         </div>
+
+        <script>
+          (() => {
+            // Campo de tempo total corrido do modal de encerramento.
+            const tempoInput = document.getElementById('duracaoTurnoInput');
+            if (!tempoInput) return;
+
+            // Recebe o que o operador digitou, mantém só os dígitos (máx. 6 = HHMMSS)
+            // e reinsere os dois pontos automaticamente no padrão HH:MM:SS.
+            const aplicarMascaraTempo = (valor) => {
+              const digitos = valor.replace(/\D/g, '').slice(0, 6);
+              const partes = [];
+              for (let i = 0; i < digitos.length; i += 2) {
+                partes.push(digitos.slice(i, i + 2));
+              }
+              return partes.join(':');
+            };
+
+            // Formata enquanto o operador digita, sem precisar colocar os ":" na mão.
+            tempoInput.addEventListener('input', () => {
+              const posicaoFinal = tempoInput.selectionStart === tempoInput.value.length;
+              tempoInput.value = aplicarMascaraTempo(tempoInput.value);
+              // Mantém o cursor no fim quando o operador está digitando normalmente.
+              if (posicaoFinal) {
+                tempoInput.setSelectionRange(tempoInput.value.length, tempoInput.value.length);
+              }
+            });
+
+            // Ao sair do campo, completa com zeros para garantir o formato HH:MM:SS.
+            tempoInput.addEventListener('blur', () => {
+              const digitos = tempoInput.value.replace(/\D/g, '');
+              if (!digitos) return;
+              const completo = digitos.padStart(6, '0').slice(0, 6);
+              tempoInput.value = `${completo.slice(0, 2)}:${completo.slice(2, 4)}:${completo.slice(4, 6)}`;
+            });
+
+            // Já normaliza o valor que veio renderizado pelo servidor.
+            tempoInput.value = aplicarMascaraTempo(tempoInput.value);
+          })();
+        </script>
       <% } %>
     </section>
   </main>
@@ -2382,6 +2722,14 @@
           <label for="cadOperadorNome">Nome do Operador</label>
           <input id="cadOperadorNome" type="text" name="nome" class="cad-input" required placeholder="Ex: João Silva">
         </div>
+        <div class="cad-form-group">
+          <label for="cadOperadorFoto">Foto (opcional)</label>
+          <label class="cad-photo-picker" for="cadOperadorFoto">
+            <img class="cad-photo-preview" id="cadOperadorFotoPreview" alt="" hidden>
+            <span class="cad-photo-placeholder" id="cadOperadorFotoPlaceholder">Selecionar foto</span>
+            <input id="cadOperadorFoto" type="file" name="foto" accept="image/*" data-preview="cadOperadorFotoPreview" data-placeholder="cadOperadorFotoPlaceholder">
+          </label>
+        </div>
         <button type="submit" class="cad-submit-btn">Cadastrar Operador</button>
       </form>
 
@@ -2461,6 +2809,14 @@
               <option value="">Selecione uma equipe...</option>
             </select>
           </div>
+          <div class="cad-form-group">
+            <label for="cadAtletaFoto">Foto (opcional)</label>
+            <label class="cad-photo-picker" for="cadAtletaFoto">
+              <img class="cad-photo-preview" id="cadAtletaFotoPreview" alt="" hidden>
+              <span class="cad-photo-placeholder" id="cadAtletaFotoPlaceholder">Selecionar foto</span>
+              <input id="cadAtletaFoto" type="file" name="foto" accept="image/*" data-preview="cadAtletaFotoPreview" data-placeholder="cadAtletaFotoPlaceholder">
+            </label>
+          </div>
           <button type="submit" class="cad-submit-btn">Cadastrar Atleta</button>
         </form>
       <% } %>
@@ -2469,9 +2825,11 @@
     </div>
   </div>
 
+  <div id="appData" data-tela="<%= tela %>" hidden></div>
+
   <script>
     let pendingOperatorSwitch = '';
-    const telaAtual = <%- JSON.stringify(tela) %>;
+    const telaAtual = document.getElementById('appData').dataset.tela;
 
     function obterIniciaisCliente(nome) {
       return String(nome || '')
@@ -2752,6 +3110,54 @@
       console.log('[AUDIT CADASTRO EQUIPE] Quantidade de equipes renderizadas no painel:', lista.querySelectorAll('.panel-team-card').length);
     }
 
+    // Comprime/redimensiona a imagem no navegador antes do upload (limite de 1GB
+    // do Storage). Reduz para no maximo ~800px e qualidade 0.8, devolvendo data URL.
+    function comprimirImagem(file, maxLado = 800, qualidade = 0.8) {
+      return new Promise((resolve, reject) => {
+        if (!file) { resolve(null); return; }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > height && width > maxLado) {
+              height = Math.round((height * maxLado) / width);
+              width = maxLado;
+            } else if (height > maxLado) {
+              width = Math.round((width * maxLado) / height);
+              height = maxLado;
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', qualidade));
+          };
+          img.onerror = () => reject(new Error('Não foi possível ler a imagem.'));
+          img.src = String(reader.result || '');
+        };
+        reader.onerror = () => reject(new Error('Não foi possível ler o arquivo.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Mostra um preview da foto escolhida em cada seletor de foto do cadastro.
+    document.querySelectorAll('.cad-photo-picker input[type="file"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const preview = document.getElementById(input.dataset.preview);
+        const placeholder = document.getElementById(input.dataset.placeholder);
+        const file = input.files && input.files[0];
+        if (file && preview) {
+          preview.src = URL.createObjectURL(file);
+          preview.hidden = false;
+          if (placeholder) placeholder.hidden = true;
+        } else if (preview) {
+          preview.hidden = true;
+          if (placeholder) placeholder.hidden = false;
+        }
+      });
+    });
+
     async function submitCadAtleta(event) {
       event.preventDefault();
       const form = event.target;
@@ -2779,10 +3185,13 @@
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
       try {
+        // Comprime a foto (se houver) antes de enviar.
+        const fotoInput = form.querySelector('input[name="foto"]');
+        const foto = await comprimirImagem(fotoInput && fotoInput.files ? fotoInput.files[0] : null);
         const response = await fetch('/cadastro-rapido/atleta', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome, id_equipe: Number(id_equipe), perfilUsuario, operador, coordenador })
+          body: JSON.stringify({ nome, id_equipe: Number(id_equipe), perfilUsuario, operador, coordenador, foto })
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Erro ao cadastrar atleta.');
@@ -2804,6 +3213,8 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn ? submitBtn.textContent : '';
       const formData = new FormData(form);
+      // O arquivo de foto nao vai como texto; tratamos separadamente abaixo.
+      formData.delete('foto');
       const data = Object.fromEntries(formData.entries());
       if (url === '/cadastro-rapido/equipe') {
         console.log('[AUDIT CADASTRO EQUIPE] payload frontend:', data);
@@ -2815,6 +3226,11 @@
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
       try {
+        // Se o formulario tiver seletor de foto, comprime e anexa ao payload.
+        const fotoInput = form.querySelector('input[name="foto"]');
+        if (fotoInput && fotoInput.files && fotoInput.files[0]) {
+          data.foto = await comprimirImagem(fotoInput.files[0]);
+        }
         const response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

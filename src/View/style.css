@@ -292,6 +292,44 @@ body {
   background: #f4f4f4;
 }
 
+/* Foto real do operador/atleta preenchendo o circulo (cobre as iniciais). */
+.operator-photo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Seletor de foto nos modais de cadastro. */
+.cad-photo-picker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px dashed var(--rb-line, #d8d8d8);
+  cursor: pointer;
+}
+
+.cad-photo-picker input[type="file"] {
+  display: none;
+}
+
+.cad-photo-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.cad-photo-placeholder {
+  color: var(--rb-muted, #707070);
+  font-weight: 700;
+  font-size: 15px;
+}
+
 .operator-name {
   flex: 1;
   font-size: 23px;
@@ -507,6 +545,148 @@ body {
   margin-top: 26px;
   font-size: 32px;
   font-weight: 800;
+}
+
+/* Card de ALERTAS clicavel (abre o pop-up de turnos com pace fora da faixa). */
+.panel-alert-card {
+  min-height: 106px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 3px var(--rb-red, #db0840);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.panel-alert-card:hover {
+  background: #fff5f6;
+  transform: translateY(-1px);
+}
+
+.panel-alert-card strong {
+  display: block;
+  color: var(--rb-red, #db0840);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.panel-alert-card span {
+  display: block;
+  margin-top: 22px;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+/* Pop-up de alertas. */
+.panel-alert-modal {
+  width: min(560px, 92vw);
+  text-align: left;
+}
+
+.panel-alert-empty {
+  margin: 18px 0;
+  color: var(--rb-muted, #707070);
+  font-weight: 700;
+}
+
+.panel-alert-list {
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.panel-alert-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.9fr 0.9fr;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.panel-alert-row strong {
+  color: var(--rb-red, #db0840);
+  font-weight: 800;
+}
+
+.panel-alert-row-header {
+  background: transparent;
+  color: var(--rb-muted, #707070);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* Selo de status da prova no painel. */
+.status-prova-badge.status-nao_iniciada {
+  background: #fff5cf;
+  color: #7a5b00;
+}
+.status-prova-badge.status-pausada {
+  background: #ffe1c2;
+  color: #8a4b00;
+}
+.status-prova-badge.status-finalizada {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Botao de iniciar a prova (destaque verde). */
+.panel-start-button {
+  background: var(--rb-green, #7ed32c) !important;
+  color: #0f2d00 !important;
+}
+
+/* Modal de aviso de fim de prova. */
+.end-warning-modal h2 {
+  color: var(--rb-red, #db0840);
+}
+
+/* Pop-up de divergencia (operacao recusada pelo servidor). */
+.divergence-modal h2 {
+  color: var(--rb-red, #db0840);
+}
+
+.divergence-modal p {
+  margin: 14px 0 20px;
+  color: var(--rb-ink, #202124);
+  line-height: 1.4;
+}
+
+/* Banner fixo de contagem regressiva (ultimos 10 min). */
+.end-countdown-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  background: var(--rb-red, #db0840);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  font-weight: 800;
+}
+
+.end-countdown-banner time {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Garante que o banner respeite o atributo hidden (display:flex sobrescreveria). */
+.end-countdown-banner[hidden] {
+  display: none;
 }
 
 .panel-team-list {
@@ -798,21 +978,23 @@ body {
 .tv-scoreboard {
   /* Layout principal do placar publico. */
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
-  padding: 48px 72px 44px;
+  padding: 40px clamp(24px, 5vw, 72px);
   border-radius: 0;
   background: #f2f2ef;
   color: #202124;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Espacamento uniforme entre os blocos, sem margens gigantes que estouram a tela. */
+  gap: clamp(20px, 3vh, 40px);
+  box-sizing: border-box;
 }
 
 .tv-header {
-  /* Cabecalho do placar com nome do evento e status. */
-  min-height: 106px;
-  padding: 26px 34px;
+  /* Cabecalho do placar com a logo do evento e o status. */
+  min-height: 96px;
+  padding: 20px 34px;
   border-radius: 28px;
   background: #202124;
   color: #ffffff;
@@ -821,27 +1003,17 @@ body {
   justify-content: space-between;
 }
 
-.tv-header strong,
-.tv-header span,
+/* Logo Red Bull 24h no lugar do antigo texto BULLPACE. */
+.tv-brand-logo {
+  height: clamp(48px, 7vh, 72px);
+  width: auto;
+  object-fit: contain;
+}
+
 .tv-header em {
   display: block;
   font-style: normal;
   font-weight: 800;
-}
-
-.tv-header strong {
-  font-size: 32px;
-  letter-spacing: 1px;
-}
-
-.tv-header span {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #ffffff;
-  letter-spacing: 2px;
-}
-
-.tv-header em {
   min-width: 160px;
   padding: 15px 28px;
   border-radius: 999px;
@@ -852,34 +1024,43 @@ body {
 
 .tv-event {
   width: min(100%, 1160px);
-  margin: 44px auto 0;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.tv-event h1 {
-  width: 100%;
+.tv-clock-label {
   margin: 0;
-  color: #202124;
-  font-size: 68px;
-  text-align: center;
-  letter-spacing: 2px;
+  color: #707070;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 800;
+  letter-spacing: 3px;
 }
 
-.tv-event p {
-  margin: 20px 0 0;
-  font-size: 28px;
-  text-align: center;
+.tv-clock {
+  margin: 8px 0 0;
+  color: #202124;
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.tv-clock-remaining {
+  margin-top: 10px;
+  color: #707070;
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 700;
 }
 
 .tv-paused-message {
   /* Mensagem exibida quando a coordenacao desativa o Modo TV. */
   width: min(100%, 980px);
-  min-height: 360px;
-  margin: 80px auto 0;
-  padding: 56px;
+  min-height: 320px;
+  margin: 24px auto 0;
+  padding: 48px;
   border-radius: 30px;
   background: #ffffff;
   color: #202124;
@@ -907,24 +1088,23 @@ body {
 }
 
 .tv-ranking {
-  /* Grade com as duas equipes no placar publico. */
+  /* Grade com as equipes no placar publico. */
   width: min(100%, 1160px);
-  margin: 48px auto 0;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 36px;
 }
 
 .tv-ranking article {
-  min-height: 340px;
-  padding: 42px;
+  padding: clamp(24px, 3vw, 42px);
   border-radius: 28px;
   background: #ffffff;
   color: #202124;
   box-shadow: inset 0 0 0 4px #202124;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 20px;
 }
 
 .tv-ranking article span,
@@ -944,15 +1124,15 @@ body {
 }
 
 .tv-ranking article strong {
-  margin-top: 32px;
-  font-size: 34px;
+  margin: 0;
+  font-size: clamp(26px, 3vw, 34px);
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .tv-ranking article p {
-  margin: 44px 0 0;
-  font-size: clamp(72px, 8vw, 116px);
+  margin: 0;
+  font-size: clamp(56px, 7vw, 104px);
   line-height: 1;
   font-weight: 800;
   letter-spacing: 1px;
@@ -982,40 +1162,74 @@ body {
 
 .tv-difference {
   width: min(100%, 1160px);
-  min-height: 116px;
-  margin: 48px auto 0;
-  padding: 32px 46px;
+  margin: 0 auto;
+  padding: 28px 46px;
   border-radius: 28px;
   background: #202124;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
 .tv-difference strong {
-  font-size: 24px;
+  font-size: clamp(18px, 2vw, 24px);
   font-weight: 800;
   letter-spacing: 2px;
 }
 
 .tv-difference span {
-  font-size: 46px;
+  font-size: clamp(34px, 4vw, 46px);
+  font-weight: 800;
+}
+
+/* Bloco "Nome do atleta atual" (oculto por padrao; ligado pelo Modo TV). */
+.tv-current-athlete {
+  width: min(100%, 1160px);
+  margin: 0 auto;
+  padding: 24px 46px;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #202124;
+  box-shadow: inset 0 0 0 4px #202124;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.tv-current-athlete strong {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.tv-current-athlete span {
+  font-size: clamp(24px, 3vw, 38px);
   font-weight: 800;
 }
 
 .tv-scoreboard footer {
   margin-top: auto;
+  padding-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: clamp(16px, 2vw, 22px);
   color: #707070;
 }
 
 .tv-scoreboard.is-paused .tv-event,
 .tv-scoreboard.is-paused .tv-ranking,
-.tv-scoreboard.is-paused .tv-difference {
-  /* Esconde os dados quando o placar esta pausado. */
+.tv-scoreboard.is-paused .tv-difference,
+.tv-scoreboard.is-paused .tv-current-athlete {
+  /* Esconde todos os dados quando o placar esta pausado. */
   display: none;
+}
+
+/* Garante que blocos ocultados pelo Modo TV (atributo hidden) realmente sumam,
+   mesmo tendo display: flex no estilo base. */
+.tv-scoreboard [data-tv-block][hidden] {
+  display: none !important;
 }
 
 .tv-scoreboard.is-paused .tv-paused-message {
@@ -2091,25 +2305,104 @@ body {
   white-space: nowrap;
 }
 
+/* Bloco que agrupa toda a captura de imagem do checkpoint (passo 1). */
+.checkpoint-capture {
+  margin: 6px 0 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fbfbfb;
+  box-shadow: inset 0 0 0 2px #ececec;
+  display: grid;
+  gap: 14px;
+}
+
+.checkpoint-capture-header {
+  display: grid;
+  gap: 4px;
+}
+
+.checkpoint-capture-header strong {
+  color: #202124;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.checkpoint-capture-header .capture-hint {
+  color: #707070;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Etiqueta pequena que numera os passos (PASSO 1 / PASSO 2). */
+.capture-step {
+  justify-self: start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--rb-red);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.step-field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-field-label .capture-step {
+  justify-self: auto;
+}
+
+/* Area de upload destacada como zona de toque/foto principal. */
 .checkpoint-image-picker {
-  min-height: 74px;
-  margin-bottom: 14px;
-  padding: 16px 18px;
-  border-radius: 14px;
+  min-height: 132px;
+  margin: 0;
+  padding: 22px 18px;
+  border-radius: 16px;
   background: #ffffff;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  box-shadow: inset 0 0 0 2px var(--rb-red);
   cursor: pointer;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  gap: 8px;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.checkpoint-image-picker:hover {
+  background: #fff5f6;
+}
+
+.checkpoint-image-picker .picker-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fdecee;
+  font-size: 26px;
+  line-height: 1;
 }
 
 .checkpoint-image-picker input {
+  /* Esconde o input visualmente mas o mantem acessivel ao clique do label.
+     Evitamos pointer-events:none / display:none porque alguns navegadores
+     moveis (iOS Safari) deixam de abrir a camera quando o input some por completo. */
   position: absolute;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
   opacity: 0;
-  pointer-events: none;
 }
 
 .checkpoint-image-picker strong,
@@ -2118,25 +2411,25 @@ body {
 }
 
 .checkpoint-image-picker strong {
-  color: #202124;
-  font-size: 17px;
+  color: var(--rb-red);
+  font-size: 18px;
   font-weight: 800;
 }
 
 .checkpoint-image-picker span {
   color: #707070;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
 
 .ocr-suggestion-panel {
   min-height: 76px;
-  margin: 14px 0;
-  padding: 18px 22px;
-  border-radius: 16px;
+  margin: 0;
+  padding: 16px 20px;
+  border-radius: 14px;
   background: #f4f4f4;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  box-shadow: none;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -2173,12 +2466,12 @@ body {
 }
 
 .manual-correction-toggle {
-  min-height: 58px;
-  margin: 0 0 18px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px #d8d8d8;
+  min-height: 52px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
   display: grid;
   grid-template-columns: 26px 1fr;
   align-items: center;
@@ -2194,7 +2487,7 @@ body {
 
 .manual-correction-toggle span {
   color: #202124;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.25;
 }
@@ -2405,6 +2698,17 @@ body {
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+/* Duas acoes lado a lado (Cancelar | Confirmar), largura igual, sem quebrar linha. */
+.modal-actions-split {
+  flex-wrap: nowrap;
+  margin-top: 18px;
+}
+
+.modal-actions-split > button {
+  flex: 1 1 0;
+  margin: 0;
 }
 
 .modal-box .modal-secondary-button {
@@ -2945,7 +3249,8 @@ body {
   }
 
   .tv-scoreboard {
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     margin: 0;
     border-radius: 0;
   }
@@ -2953,30 +3258,22 @@ body {
   .tv-header,
   .tv-event,
   .tv-ranking,
-  .tv-difference {
-    width: calc(100% - 48px);
+  .tv-difference,
+  .tv-current-athlete {
+    width: 100%;
   }
 
   .tv-header {
-    padding: 32px 24px;
-  }
-
-  .tv-event {
-    margin-top: 42px;
+    padding: 20px 24px;
   }
 
   .tv-ranking {
-    margin-top: 42px;
+    grid-template-columns: 1fr;
     gap: 24px;
   }
 
   .tv-ranking article {
-    min-height: 190px;
     padding: 28px;
-  }
-
-  .tv-ranking article p {
-    font-size: 54px;
   }
 }
 
@@ -3178,9 +3475,6 @@ body {
 .turn-summary,
 .checkpoint-input,
 .input-with-unit,
-.checkpoint-image-picker,
-.ocr-suggestion-panel,
-.manual-correction-toggle,
 .last-checkpoint,
 .finish-button,
 .panel-metrics article,
@@ -3370,10 +3664,18 @@ body {
 }
 
 .tv-header,
-.tv-difference {
+.tv-difference,
+.tv-current-athlete {
   border-radius: 8px;
   background: var(--rb-navy);
   border-bottom: 3px solid var(--rb-red);
+  box-shadow: none;
+}
+
+/* No tema Red Bull os blocos navy usam texto branco. */
+.tv-current-athlete strong,
+.tv-current-athlete span {
+  color: #ffffff;
 }
 
 .tv-header em {
@@ -3424,15 +3726,20 @@ body {
     height: 46px;
   }
 
-  .back-link {
-    top: 82px;
-    left: 24px;
-  }
-
+  /* No mobile o VOLTAR sai do posicionamento absoluto e entra no fluxo,
+     no topo do frame, para nao sobrepor a etiqueta de etapa centralizada. */
   .function-frame:not(.tv-frame) > .back-link,
   .function-frame:not(.tv-frame) > .back-form {
-    top: 82px;
-    left: 24px;
+    position: static;
+    top: auto;
+    left: auto;
+    align-self: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .back-link {
+    top: auto;
+    left: auto;
   }
 
   .selected-user {

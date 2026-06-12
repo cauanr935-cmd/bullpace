@@ -52,6 +52,27 @@ export class TurnoRepository {
   }
 
   /**
+   * Encerra de uma vez todos os turnos que ainda estao em andamento.
+   * Usado no fechamento da prova para interromper qualquer turno aberto.
+   * Retorna a quantidade de turnos encerrados.
+   */
+  public async encerrarTurnosEmAndamento(): Promise<number> {
+    const { data, error } = await supabase
+      .from('turnos')
+      .update({
+        horario_fim: new Date().toISOString(),
+        status: 'encerrado'
+      })
+      .eq('status', 'em_andamento')
+      .select('id_turno');
+
+    if (error) {
+      throw new Error(`[TurnoRepository.encerrarTurnosEmAndamento] ${error.message}`);
+    }
+    return (data || []).length;
+  }
+
+  /**
    * Coleta dados brutos de quilometragem de turnos vinculados à sessão operacional.
    * Utilizado pela camada de serviço para montagem matemática de placares.
    */
