@@ -3726,15 +3726,20 @@ body {
     height: 46px;
   }
 
-  .back-link {
-    top: 82px;
-    left: 24px;
-  }
-
+  /* No mobile o VOLTAR sai do posicionamento absoluto e entra no fluxo,
+     no topo do frame, para nao sobrepor a etiqueta de etapa centralizada. */
   .function-frame:not(.tv-frame) > .back-link,
   .function-frame:not(.tv-frame) > .back-form {
-    top: 82px;
-    left: 24px;
+    position: static;
+    top: auto;
+    left: auto;
+    align-self: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .back-link {
+    top: auto;
+    left: auto;
   }
 
   .selected-user {
