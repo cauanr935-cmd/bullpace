@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=19">
+  <link rel="stylesheet" href="/static/style.css?v=20">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -1657,8 +1657,8 @@
             <label class="checkpoint-image-picker" for="checkpointImage">
               <input id="checkpointImage" name="checkpointImage" type="file" accept="image/*" capture="environment">
               <span class="picker-icon" aria-hidden="true">📷</span>
-              <strong>Tirar foto da esteira</strong>
-              <span id="checkpointImageName">Nenhuma foto selecionada</span>
+              <strong>Abrir câmera e fotografar a esteira</strong>
+              <span id="checkpointImageName">Toque para abrir a câmera</span>
             </label>
 
             <section id="ocrSuggestionPanel" class="ocr-suggestion-panel" aria-live="polite">
@@ -1982,7 +1982,7 @@
               updateManualCorrectionState();
 
               if (!file) {
-                checkpointImageName.textContent = 'Nenhuma foto selecionada';
+                checkpointImageName.textContent = 'Toque para abrir a câmera';
                 setOcrPanel('nao_processado', 'Envie uma imagem para tentar identificar o KM automaticamente.');
                 return;
               }

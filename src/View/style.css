@@ -2390,11 +2390,19 @@ body {
 }
 
 .checkpoint-image-picker input {
+  /* Esconde o input visualmente mas o mantem acessivel ao clique do label.
+     Evitamos pointer-events:none / display:none porque alguns navegadores
+     moveis (iOS Safari) deixam de abrir a camera quando o input some por completo. */
   position: absolute;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
   opacity: 0;
-  pointer-events: none;
 }
 
 .checkpoint-image-picker strong,
