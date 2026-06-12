@@ -625,6 +625,70 @@ body {
   letter-spacing: 1px;
 }
 
+/* Selo de status da prova no painel. */
+.status-prova-badge.status-nao_iniciada {
+  background: #fff5cf;
+  color: #7a5b00;
+}
+.status-prova-badge.status-pausada {
+  background: #ffe1c2;
+  color: #8a4b00;
+}
+.status-prova-badge.status-finalizada {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Botao de iniciar a prova (destaque verde). */
+.panel-start-button {
+  background: var(--rb-green, #7ed32c) !important;
+  color: #0f2d00 !important;
+}
+
+/* Modal de aviso de fim de prova. */
+.end-warning-modal h2 {
+  color: var(--rb-red, #db0840);
+}
+
+/* Pop-up de divergencia (operacao recusada pelo servidor). */
+.divergence-modal h2 {
+  color: var(--rb-red, #db0840);
+}
+
+.divergence-modal p {
+  margin: 14px 0 20px;
+  color: var(--rb-ink, #202124);
+  line-height: 1.4;
+}
+
+/* Banner fixo de contagem regressiva (ultimos 10 min). */
+.end-countdown-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  background: var(--rb-red, #db0840);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  font-weight: 800;
+}
+
+.end-countdown-banner time {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Garante que o banner respeite o atributo hidden (display:flex sobrescreveria). */
+.end-countdown-banner[hidden] {
+  display: none;
+}
+
 .panel-team-list {
   width: min(100%, 760px);
   margin-top: 14px;
@@ -2626,6 +2690,17 @@ body {
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+/* Duas acoes lado a lado (Cancelar | Confirmar), largura igual, sem quebrar linha. */
+.modal-actions-split {
+  flex-wrap: nowrap;
+  margin-top: 18px;
+}
+
+.modal-actions-split > button {
+  flex: 1 1 0;
+  margin: 0;
 }
 
 .modal-box .modal-secondary-button {

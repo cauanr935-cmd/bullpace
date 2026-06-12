@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=16">
+  <link rel="stylesheet" href="/static/style.css?v=19">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -312,11 +312,21 @@
           Acompanhe a operação em tempo real.
         </p>
 
+        <%
+          const statusProva = estadoProva.status;
+          const statusLabel = statusProva === 'finalizada' ? 'FINALIZADA'
+            : statusProva === 'pausada' ? 'PAUSADA'
+            : statusProva === 'nao_iniciada' ? 'NÃO INICIADA'
+            : 'EM ANDAMENTO';
+          const ehAdmin = perfilUsuario === 'administrador_geral';
+        %>
         <section class="panel-progress"
-          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' ? inicioProvaTimestamp : '' %>"
-          data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>">
-          <strong id="panelProvaTimer">00h 00min de 24h</strong>
-          <span><%= estadoProva.status === 'finalizada' ? 'FINALIZADA' : estadoProva.status === 'pausada' ? 'PAUSADA' : 'EM ANDAMENTO' %></span>
+          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' && inicioProvaTimestamp ? inicioProvaTimestamp : '' %>"
+          data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>"
+          data-status-prova="<%= statusProva %>"
+          data-is-admin="<%= ehAdmin ? 'true' : 'false' %>">
+          <strong id="panelProvaTimer"><%= statusProva === 'nao_iniciada' ? 'Aguardando início' : '00h 00min de 24h' %></strong>
+          <span class="status-prova-badge status-<%= statusProva %>"><%= statusLabel %></span>
         </section>
 
         <% if (typeof painelMensagem !== 'undefined') { %>
@@ -402,13 +412,19 @@
             <button type="submit">Modo TV</button>
           </form>
           <a href="/exportar-dados?perfilUsuario=<%= perfilUsuario %>" class="panel-action-link">Exportar CSV</a>
-          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
-            <form action="/pausar-prova" method="post">
+
+          <% if (pode('iniciar_prova') && estadoProva.status === 'nao_iniciada') { %>
+            <form action="/iniciar-prova" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
               <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
-              <button type="submit">Pausar prova</button>
+              <button type="submit" class="panel-start-button">Iniciar prova</button>
             </form>
           <% } %>
+
+          <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+            <button type="button" id="panelPauseButton">Pausar prova</button>
+          <% } %>
+
           <% if (pode('retomar_prova') && estadoProva.status === 'pausada') { %>
             <form action="/retomar-prova" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
@@ -416,7 +432,8 @@
               <button type="submit">Retomar prova</button>
             </form>
           <% } %>
-          <% if (pode('finalizar_prova')) { %>
+
+          <% if (pode('finalizar_prova') && estadoProva.status !== 'nao_iniciada') { %>
             <form action="/fechamento" method="post">
               <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
               <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
@@ -425,13 +442,66 @@
           <% } %>
         </section>
 
+        <% if (pode('pausar_prova') && estadoProva.status === 'em_andamento') { %>
+          <% /* Modal de confirmacao da pausa (pausa todos os turnos). */ %>
+          <div id="panelPauseModal" class="modal-overlay" hidden>
+            <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="panelPauseTitle">
+              <h2 id="panelPauseTitle">Pausar a prova?</h2>
+              <p>Isto vai <strong>pausar todos os turnos</strong> e bloquear as operações de operadores e coordenadores até a prova ser retomada.</p>
+              <form action="/pausar-prova" method="post">
+                <input type="hidden" name="coordenador" value="<%= coordenadorSelecionado %>">
+                <input type="hidden" name="perfilUsuario" value="<%= perfilUsuario %>">
+                <input type="hidden" name="confirmaPausa" value="sim">
+                <label class="confirmation-check-card" for="panelPauseConfirm">
+                  <input id="panelPauseConfirm" type="checkbox" required>
+                  <span>Tenho certeza de que desejo pausar a prova agora.</span>
+                </label>
+                <div class="modal-actions modal-actions-split">
+                  <button type="button" class="modal-secondary-button" id="panelPauseCancel">Cancelar</button>
+                  <button type="submit" class="continue-button" id="panelPauseConfirmBtn" disabled>Confirmar pausa</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        <% } %>
+
+        <% /* Avisos de fim de prova (somente administrador). */ %>
+        <% if (ehAdmin && statusProva === 'em_andamento') { %>
+          <div id="endWarningModal" class="modal-overlay" hidden>
+            <section class="modal-box end-warning-modal" role="dialog" aria-modal="true" aria-labelledby="endWarningTitle">
+              <h2 id="endWarningTitle">Atenção: fim da prova se aproximando</h2>
+              <p id="endWarningText">Faltam poucos minutos para o fim da prova.</p>
+              <div class="modal-actions">
+                <button type="button" class="continue-button" id="endWarningClose">Entendi</button>
+              </div>
+            </section>
+          </div>
+          <div id="endCountdownBanner" class="end-countdown-banner" hidden>
+            <strong>⏰ Encerre os turnos!</strong>
+            <span>Fim da prova em <time id="endCountdownTime">--:--</time></span>
+          </div>
+        <% } %>
+
         <script>
           (() => {
-            // ── Cronometro da prova no painel ──────────────────────────────
+            // ── Cronometro da prova no painel + avisos de fim ──────────────
             const progresso = document.querySelector('.panel-progress');
             const timerEl = document.getElementById('panelProvaTimer');
-            if (progresso && timerEl) {
-              const inicio = Number(progresso.dataset.inicioProva) || Date.now();
+            const statusProva = progresso ? progresso.dataset.statusProva : '';
+            const ehAdmin = progresso && progresso.dataset.isAdmin === 'true';
+            const temInicio = progresso && progresso.dataset.inicioProva !== '';
+
+            // Elementos dos avisos de fim (existem somente para o admin com prova em andamento).
+            const endModal = document.getElementById('endWarningModal');
+            const endText = document.getElementById('endWarningText');
+            const endClose = document.getElementById('endWarningClose');
+            const endBanner = document.getElementById('endCountdownBanner');
+            const endCountdown = document.getElementById('endCountdownTime');
+            // Marca quais avisos pontuais ja foram exibidos para nao repetir.
+            const avisosMostrados = {};
+
+            if (progresso && timerEl && statusProva !== 'nao_iniciada' && temInicio) {
+              const inicio = Number(progresso.dataset.inicioProva);
               const duracao = Number(progresso.dataset.duracaoProva) || 86400000;
               const totalHoras = Math.round(duracao / 3600000);
 
@@ -442,12 +512,50 @@
                 return `${h}h ${m}min`;
               };
 
+              const formatarMmSs = (ms) => {
+                const totalSeg = Math.max(0, Math.floor(ms / 1000));
+                const m = String(Math.floor(totalSeg / 60)).padStart(2, '0');
+                const s = String(totalSeg % 60).padStart(2, '0');
+                return `${m}:${s}`;
+              };
+
+              const abrirAviso = (texto) => {
+                if (!endModal || !endText) return;
+                endText.textContent = texto;
+                endModal.hidden = false;
+              };
+
               const tick = () => {
-                const decorrido = Math.min(duracao, Date.now() - inicio);
+                const agora = Date.now();
+                const decorrido = Math.min(duracao, agora - inicio);
+                const restante = Math.max(0, duracao - decorrido);
                 timerEl.textContent = `${formatar(decorrido)} de ${totalHoras}h`;
+
+                // Avisos de fim de prova, apenas para o administrador.
+                if (ehAdmin && restante > 0) {
+                  const minRestantes = restante / 60000;
+
+                  // Pop-up unico aos 20 e aos 15 minutos restantes.
+                  if (minRestantes <= 20 && minRestantes > 15 && !avisosMostrados['20']) {
+                    avisosMostrados['20'] = true;
+                    abrirAviso('Faltam cerca de 20 minutos para o fim da prova. Comece a organizar o encerramento dos turnos.');
+                  }
+                  if (minRestantes <= 15 && minRestantes > 10 && !avisosMostrados['15']) {
+                    avisosMostrados['15'] = true;
+                    abrirAviso('Faltam cerca de 15 minutos para o fim da prova. Prepare o fechamento.');
+                  }
+
+                  // A partir de 10 minutos, cronometro fixo de aviso.
+                  if (minRestantes <= 10 && endBanner && endCountdown) {
+                    endBanner.hidden = false;
+                    endCountdown.textContent = formatarMmSs(restante);
+                  }
+                }
               };
               tick();
               setInterval(tick, 1000);
+
+              endClose?.addEventListener('click', () => { if (endModal) endModal.hidden = true; });
             }
 
             // ── Pop-up de alertas ──────────────────────────────────────────
@@ -459,6 +567,24 @@
               alertClose?.addEventListener('click', () => { alertModal.hidden = true; });
               alertModal.addEventListener('click', (event) => {
                 if (event.target === alertModal) alertModal.hidden = true;
+              });
+            }
+
+            // ── Modal de confirmacao da pausa ──────────────────────────────
+            const pauseButton = document.getElementById('panelPauseButton');
+            const pauseModal = document.getElementById('panelPauseModal');
+            const pauseCancel = document.getElementById('panelPauseCancel');
+            const pauseConfirm = document.getElementById('panelPauseConfirm');
+            const pauseConfirmBtn = document.getElementById('panelPauseConfirmBtn');
+            if (pauseButton && pauseModal) {
+              pauseButton.addEventListener('click', () => { pauseModal.hidden = false; });
+              pauseCancel?.addEventListener('click', () => { pauseModal.hidden = true; });
+              pauseModal.addEventListener('click', (event) => {
+                if (event.target === pauseModal) pauseModal.hidden = true;
+              });
+              // O botao de confirmar so habilita quando o checkbox e marcado.
+              pauseConfirm?.addEventListener('change', () => {
+                if (pauseConfirmBtn) pauseConfirmBtn.disabled = !pauseConfirm.checked;
               });
             }
           })();
@@ -594,7 +720,7 @@
             .find((texto) => texto && texto !== 'Nenhum atleta em turno') || 'Sem atleta em turno';
         %>
         <section class="tv-scoreboard"
-          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' ? inicioProvaTimestamp : '' %>"
+          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' && inicioProvaTimestamp ? inicioProvaTimestamp : '' %>"
           data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>"
           data-status-prova="<%= typeof statusProvaTv !== 'undefined' ? statusProvaTv : 'em_andamento' %>">
           <header class="tv-header">
@@ -644,7 +770,8 @@
             const statusLabel = scoreboard.querySelector('.tv-header em');
 
             // ── Cronometro real da prova ───────────────────────────────────
-            const inicioProva = Number(scoreboard.dataset.inicioProva) || Date.now();
+            const temInicioProva = scoreboard.dataset.inicioProva !== '';
+            const inicioProva = Number(scoreboard.dataset.inicioProva);
             const duracaoProva = Number(scoreboard.dataset.duracaoProva) || 86400000;
             const decorridoEl = document.getElementById('tvProvaDecorrido');
             const restanteEl = document.getElementById('tvProvaRestante');
@@ -659,13 +786,19 @@
 
             // Atualiza o relogio com base no horario real de inicio (roda mesmo apos reabrir).
             const atualizarCronometro = () => {
+              if (!temInicioProva) {
+                // Prova ainda nao iniciada pelo administrador.
+                decorridoEl.textContent = 'Aguardando início';
+                restanteEl.textContent = 'A prova ainda não começou';
+                return;
+              }
               const decorrido = Math.min(duracaoProva, Date.now() - inicioProva);
               const restante = Math.max(0, duracaoProva - decorrido);
               decorridoEl.textContent = formatarHm(decorrido);
               restanteEl.textContent = `${formatarHm(restante)} restantes`;
             };
             atualizarCronometro();
-            setInterval(atualizarCronometro, 1000);
+            if (temInicioProva) setInterval(atualizarCronometro, 1000);
 
             // ── Visibilidade dos blocos controlada pelo Modo TV ────────────
             // Mapa: chave salva no localStorage -> data-tv-block correspondente.
@@ -1585,6 +1718,15 @@
           </section>
         </div>
 
+        <% /* Pop-up exibido quando o servidor recusa a operacao (divergencia do esperado). */ %>
+        <div id="divergenceModal" class="modal-overlay" hidden>
+          <section class="modal-box divergence-modal" role="dialog" aria-modal="true" aria-labelledby="divergenceTitle">
+            <h2 id="divergenceTitle">Operação não permitida</h2>
+            <p id="divergenceText">Houve uma divergência com o esperado.</p>
+            <button id="closeDivergenceModal" type="button" class="continue-button">Entendi</button>
+          </section>
+        </div>
+
         <script>
           (() => {
             // Busca o formulario de checkpoint.
@@ -1601,6 +1743,20 @@
             const modal = document.getElementById('checkpointModal');
             // Busca o botao que fecha o modal.
             const closeModal = document.getElementById('closeCheckpointModal');
+            // Pop-up de divergencia (operacao recusada pelo servidor).
+            const divergenceModal = document.getElementById('divergenceModal');
+            const divergenceText = document.getElementById('divergenceText');
+            const closeDivergence = document.getElementById('closeDivergenceModal');
+            // Exibe o pop-up de divergencia com a mensagem vinda do servidor.
+            const showDivergence = (texto) => {
+              if (!divergenceModal) return;
+              if (divergenceText) divergenceText.textContent = texto || 'Houve uma divergência com o esperado.';
+              divergenceModal.hidden = false;
+            };
+            closeDivergence?.addEventListener('click', () => { divergenceModal.hidden = true; });
+            divergenceModal?.addEventListener('click', (event) => {
+              if (event.target === divergenceModal) divergenceModal.hidden = true;
+            });
             // Busca o relogio do turno ativo.
             const turnTimer = document.getElementById('turnTimer');
             // Busca o formulario que finaliza o turno.
@@ -1851,6 +2007,11 @@
                 });
                 const resData = await response.json();
                 if (!response.ok) {
+                  if (response.status === 403) {
+                    button.disabled = false;
+                    showDivergence(resData.error || 'Operação não permitida neste momento.');
+                    return;
+                  }
                   throw new Error(resData.error || 'Erro ao processar OCR.');
                 }
 
@@ -1980,6 +2141,11 @@
                 });
                 const resData = await response.json();
                 if (!response.ok) {
+                  // Operacao recusada (prova nao iniciada/pausada/finalizada): pop-up de divergencia.
+                  if (response.status === 403) {
+                    showDivergence(resData.error || 'Operação não permitida neste momento.');
+                    return;
+                  }
                   throw new Error(resData.error || 'Erro ao registrar checkpoint.');
                 }
                 if (resData.idTurno) {

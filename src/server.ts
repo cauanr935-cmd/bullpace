@@ -51,7 +51,7 @@ const ROLES = {
 } as const;
 
 type PapelUsuario = typeof ROLES[keyof typeof ROLES];
-type StatusProva = 'em_andamento' | 'pausada' | 'finalizada';
+type StatusProva = 'nao_iniciada' | 'em_andamento' | 'pausada' | 'finalizada';
 type UsuarioRequisicao = {
   nome?: string;
   papel: PapelUsuario;
@@ -77,12 +77,13 @@ const estadoProva: {
   status: StatusProva;
   atualizadoPor?: string;
   atualizadoEm: Date;
-  // Horario em que a prova de 24h comecou a contar. Usado pelo cronometro da TV.
-  inicioEm: Date;
+  // Horario em que a prova de 24h comecou a contar (definido ao Iniciar prova).
+  // null enquanto a prova nao foi iniciada pelo administrador.
+  inicioEm: Date | null;
 } = {
-  status: 'em_andamento',
+  status: 'nao_iniciada',
   atualizadoEm: new Date(),
-  inicioEm: new Date()
+  inicioEm: null
 };
 
 // Duracao oficial da prova em milissegundos (24 horas).
@@ -176,10 +177,18 @@ const podeControlarProva = (papel: PapelUsuario): boolean => {
 };
 
 const bloquearOperacaoSeProvaFinalizada = (req: Request, res: Response, next: NextFunction): void => {
-  if (estadoProva.status === 'finalizada') {
-    res.status(403).json({
-      error: 'Prova finalizada. Alterações operacionais não são permitidas.'
-    });
+  // Bloqueia gravacoes quando a prova nao esta em andamento.
+  // Administradores controlam o estado por rotas proprias (iniciar/pausar/retomar/finalizar),
+  // que nao passam por este middleware.
+  const mensagensPorStatus: Record<string, string> = {
+    finalizada: 'Prova finalizada. Alterações operacionais não são permitidas.',
+    nao_iniciada: 'A prova ainda não foi iniciada pelo administrador. Aguarde para registrar operações.',
+    pausada: 'Prova pausada pelo administrador. As operações estão temporariamente bloqueadas.'
+  };
+
+  const mensagem = mensagensPorStatus[estadoProva.status];
+  if (mensagem) {
+    res.status(403).json({ error: mensagem, statusProva: estadoProva.status });
     return;
   }
 
@@ -238,7 +247,7 @@ const contextoAutorizacao = (papel: PapelUsuario = ROLES.OPERADOR) => ({
   estadoProva,
   pode: (acao: string) => {
     if (acao === 'exportar_dados') return podeExportarDados(papel);
-    if (acao === 'pausar_prova' || acao === 'retomar_prova' || acao === 'finalizar_prova') {
+    if (acao === 'iniciar_prova' || acao === 'pausar_prova' || acao === 'retomar_prova' || acao === 'finalizar_prova') {
       return podeControlarProva(papel);
     }
     return false;
@@ -643,7 +652,7 @@ const montarPainelCoordenador = async (
     alertas,
     totalAlertas: alertas.length,
     // Cronometro da prova (mesma base usada na TV).
-    inicioProvaTimestamp: estadoProva.inicioEm.getTime(),
+    inicioProvaTimestamp: estadoProva.inicioEm ? estadoProva.inicioEm.getTime() : null,
     duracaoProvaMs: DURACAO_PROVA_MS,
     ...contextoAutorizacao(papel),
     ...extra
@@ -968,10 +977,19 @@ app.post('/confirmar-finalizacao', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), a
   estadoProva.atualizadoPor = coordenador;
   estadoProva.atualizadoEm = new Date();
 
+  // Interrompe todos os turnos que ainda estavam em andamento ao fechar a prova.
+  let turnosEncerrados = 0;
+  try {
+    turnosEncerrados = await turnoRepo.encerrarTurnosEmAndamento();
+  } catch (err: any) {
+    console.error('[finalizar-prova] Falha ao encerrar turnos em andamento:', err.message);
+  }
+
   await registrarHistoricoAdministrativo(req, 'finalizar_prova', 'estado_prova', {
     status: estadoProva.status,
     atualizadoPor: coordenador,
-    atualizadoEm: estadoProva.atualizadoEm
+    atualizadoEm: estadoProva.atualizadoEm,
+    turnosEncerrados
   }, null, { status: 'em_andamento_ou_pausada' });
 
   res.render('index', {
@@ -1061,7 +1079,7 @@ app.get('/tv', async (req: Request, res: Response): Promise<void> => {
     equipesPainel: placar.equipes,
     diferencaTv: placar.diferenca,
     // Timestamp do inicio da prova e duracao total para o cronometro rodar na TV.
-    inicioProvaTimestamp: estadoProva.inicioEm.getTime(),
+    inicioProvaTimestamp: estadoProva.inicioEm ? estadoProva.inicioEm.getTime() : null,
     duracaoProvaMs: DURACAO_PROVA_MS,
     statusProvaTv: estadoProva.status
   });
@@ -1188,7 +1206,7 @@ app.post('/selecionar-operador', async (req: Request, res: Response): Promise<vo
   });
 });
 
-app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/continuar-operador', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { operador } = req.body;
   const equipes = await obterEquipesReal();
 
@@ -1214,7 +1232,7 @@ app.post('/voltar-operador', async (req: Request, res: Response): Promise<void> 
   });
 });
 
-app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
   const equipes = await obterEquipesReal();
 
@@ -1230,7 +1248,7 @@ app.post('/selecionar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
   });
 });
 
-app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/continuar-equipe', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe } = req.body;
   const atletas = await obterAtletasReal(equipe);
   const esteiras = await obterEsteirasReal();
@@ -1260,7 +1278,7 @@ app.post('/voltar-equipe', async (req: Request, res: Response): Promise<void> =>
   });
 });
 
-app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   // Recebe o atleta clicado e o ultimo atleta que correu.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
   const atletas = await obterAtletasReal(equipe);
@@ -1301,7 +1319,7 @@ app.post('/selecionar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR
   });
 });
 
-app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   // Recebe os dados necessarios para seguir da selecao de atleta para a esteira.
   const { operador, equipe, atleta, ultimoAtleta } = req.body;
   const atletas = await obterAtletasReal(equipe);
@@ -1333,7 +1351,7 @@ app.post('/continuar-atleta', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR,
   });
 });
 
-app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), bloquearOperacaoSeProvaFinalizada, async (req: Request, res: Response): Promise<void> => {
+app.post('/selecionar-esteira', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
   const { operador, equipe, atleta, esteira, bypassManutencao } = req.body;
   const esteiras = await obterEsteirasReal();
 
@@ -1844,7 +1862,38 @@ app.post('/confirmar-encerramento', autorizarPapeis(ROLES.OPERADOR, ROLES.COORDE
   });
 });
 
+// Inicia a prova: somente o administrador geral. Marca o horario de inicio (base do
+// cronometro de 24h) e libera as operacoes para operadores e coordenadores.
+app.post('/iniciar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  const statusAnterior = estadoProva.status;
+  estadoProva.status = 'em_andamento';
+  estadoProva.inicioEm = new Date();
+  estadoProva.atualizadoPor = req.body.coordenador;
+  estadoProva.atualizadoEm = new Date();
+  await registrarHistoricoAdministrativo(req, 'iniciar_prova', 'estado_prova', {
+    status: estadoProva.status,
+    inicioEm: estadoProva.inicioEm,
+    atualizadoPor: estadoProva.atualizadoPor
+  }, null, { status: statusAnterior });
+
+  res.render('index', await montarPainelCoordenador(
+    req.body.coordenador,
+    (req as RequestComUsuario).usuario!.papel,
+    { painelMensagem: 'Prova iniciada. Operações liberadas.' }
+  ));
+});
+
 app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
+  // Pausar exige confirmacao explicita do administrador (pausa todos os turnos).
+  if (req.body.confirmaPausa !== 'sim') {
+    res.render('index', await montarPainelCoordenador(
+      req.body.coordenador,
+      (req as RequestComUsuario).usuario!.papel,
+      { painelMensagem: 'Pausa cancelada: confirmação não recebida.' }
+    ));
+    return;
+  }
+
   const statusAnterior = estadoProva.status;
   estadoProva.status = 'pausada';
   estadoProva.atualizadoPor = req.body.coordenador;
@@ -1858,7 +1907,7 @@ app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req
   res.render('index', await montarPainelCoordenador(
     req.body.coordenador,
     (req as RequestComUsuario).usuario!.papel,
-    { painelMensagem: 'Prova pausada com sucesso.' }
+    { painelMensagem: 'Prova pausada. Operações de operadores e coordenadores bloqueadas.' }
   ));
 });
 
