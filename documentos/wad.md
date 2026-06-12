@@ -2159,7 +2159,7 @@ eventos(id_evento, nome, cidade, estado, data_inicio, data_fim, status)
 
 equipes(id_equipe, id_evento, nome, status, km_total)
 
-atletas(id_atleta, id_equipe, nome, status)
+atletas(id_atleta, id_equipe, nome, status, foto_url)
 
 esteiras(id_esteira, id_equipe, id_evento, marca, modelo, numero_serie, status)
 
@@ -2171,10 +2171,11 @@ turnos(id_turno, id_atleta, id_esteira, id_sessao_operacional, horario_inicio, h
 
 checkpoints(id_checkpoint, id_turno, id_sessao_operacional, km_acumulado, pace_medio, velocidade_media, registrado_em, is_ajuste)
 
-operador(id_operador, nome, id_sessao_operacional)
+operador(id_operador, nome, login, senha, foto_url, id_sessao_operacional)
 
-coordenador(id_coordenador, nome, id_sessao_operacional)
+coordenador(id_coordenador, nome, login, senha, id_sessao_operacional)
 
+admin_principal(id_admin, id_evento, nome, login, senha)
 
 #### 3.6.3.2 Modelo Físico
 
@@ -2184,7 +2185,7 @@ A implementação abaixo foi organizada em migrations para garantir a criação 
 
 ### Migrations
 
-A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos` ,`checkpoints`, `operador` e `coordenador`.
+A ordem das migrations respeita as dependências entre as tabelas. Tabelas independentes, como `eventos` e `funcoes`, são criadas primeiro. Em seguida, são criadas tabelas dependentes, como `equipes`, `atletas`, `esteiras`, `sessoes_operacionais`, `turnos`, `checkpoints`, `operador`, `coordenador` e `admin_principal`.
 
 - `0001_create_eventos.sql`: sem dependências externas;
 - `0002_create_funcoes.sql`: sem dependências externas;
@@ -2197,9 +2198,10 @@ A ordem das migrations respeita as dependências entre as tabelas. Tabelas indep
 - `0009_insert_dados_iniciais.sql`: depende de funcoes;
 - `0010_create_views.sql`: depende das tabelas anteriores;
 - `0011_create_operador.sql`: depende de sessoes_operacionais;
-- `0012_create_coordenador.sql`: depende de sessoes_operacionais.
+- `0012_create_coordenador.sql`: depende de sessoes_operacionais;
+- `0013_create_admin_principal.sql`: depende de eventos.
 
-Os scripts completos das migrations (0001 a 0012), incluindo as views, estão no anexo [Scripts das Migrations](#scripts-das-migrations).
+### Scripts das Migrations
 
 **0001_create_eventos.sql**
 
@@ -2275,6 +2277,7 @@ CREATE TABLE atletas (
     id_equipe      INT NOT NULL,
     nome           VARCHAR(150) NOT NULL,
     status         VARCHAR(50) NOT NULL DEFAULT 'ativo',
+    foto_url       TEXT,
 
     CONSTRAINT fk_atletas_equipes
         FOREIGN KEY (id_equipe)
@@ -2578,12 +2581,20 @@ ORDER BY
     t.horario_inicio,
     cp.registrado_em;
 ```
+
 **0011_create_operador.sql**
+
 ```sql
 CREATE TABLE operador (
     id_operador            SERIAL PRIMARY KEY,
-    id_sessao_operacional  INT NOT NULL,
     nome                   VARCHAR(150),
+    login                  VARCHAR(150) NOT NULL,
+    senha                  VARCHAR(255) NOT NULL,
+    foto_url               TEXT,
+    id_sessao_operacional  INT,
+
+    CONSTRAINT uq_operador_login
+        UNIQUE (login),
 
     CONSTRAINT fk_operador_sessoes_operacionais
         FOREIGN KEY (id_sessao_operacional)
@@ -2594,12 +2605,19 @@ CREATE TABLE operador (
 CREATE INDEX idx_operador_sessao_operacional
     ON operador(id_sessao_operacional);
 ```
-**0012_create_coordenador**
+
+**0012_create_coordenador.sql**
+
 ```sql
 CREATE TABLE coordenador (
     id_coordenador         SERIAL PRIMARY KEY,
-    id_sessao_operacional  INT NOT NULL,
     nome                   VARCHAR(150),
+    login                  VARCHAR(150) NOT NULL,
+    senha                  VARCHAR(255) NOT NULL,
+    id_sessao_operacional  INT,
+
+    CONSTRAINT uq_coordenador_login
+        UNIQUE (login),
 
     CONSTRAINT fk_coordenador_sessoes_operacionais
         FOREIGN KEY (id_sessao_operacional)
@@ -2610,6 +2628,24 @@ CREATE TABLE coordenador (
 CREATE INDEX idx_coordenador_sessao_operacional
     ON coordenador(id_sessao_operacional);
 ```
+
+**0013_create_admin_principal.sql**
+
+```sql
+CREATE TABLE admin_principal (
+    id_admin    SERIAL PRIMARY KEY,
+    id_evento   INT,
+    nome        VARCHAR(150),
+    login       VARCHAR(150),
+    senha       VARCHAR(255),
+
+    CONSTRAINT fk_admin_principal_eventos
+        FOREIGN KEY (id_evento)
+        REFERENCES eventos(id_evento)
+        ON DELETE RESTRICT
+);
+```
+
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
 A lógica proposicional, vertente matemática que estuda as proposições e seus conectivos, é peça fundamental neste projeto para estruturar a comunicação entre o back-end e a camada de persistência de dados. Esta seção apresenta as consultas SQL implementadas na aplicação, evidenciando como os operadores lógicos são aplicados para extrair e filtrar informações diretamente do banco de dados.
