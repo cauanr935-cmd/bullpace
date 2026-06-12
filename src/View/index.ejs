@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %></title>
-  <link rel="stylesheet" href="/static/style.css?v=15">
+  <link rel="stylesheet" href="/static/style.css?v=16">
 </head>
 <body>
   <% /* A classe do main muda quando a tela atual e uma TV publica ou uma tela operacional. */ %>
@@ -312,8 +312,10 @@
           Acompanhe a operação em tempo real.
         </p>
 
-        <section class="panel-progress">
-          <strong>08h 42min de 24h</strong>
+        <section class="panel-progress"
+          data-inicio-prova="<%= typeof inicioProvaTimestamp !== 'undefined' ? inicioProvaTimestamp : '' %>"
+          data-duracao-prova="<%= typeof duracaoProvaMs !== 'undefined' ? duracaoProvaMs : 86400000 %>">
+          <strong id="panelProvaTimer">00h 00min de 24h</strong>
           <span><%= estadoProva.status === 'finalizada' ? 'FINALIZADA' : estadoProva.status === 'pausada' ? 'PAUSADA' : 'EM ANDAMENTO' %></span>
         </section>
 
@@ -321,6 +323,7 @@
           <p class="checkpoint-message success"><%= painelMensagem %></p>
         <% } %>
 
+        <% const listaAlertas = typeof alertas !== 'undefined' ? alertas : []; %>
         <section class="panel-metrics" aria-label="Resumo da prova">
           <article>
             <strong>TURNOS ATIVOS</strong>
@@ -330,11 +333,40 @@
             <strong>CHECKPOINTS</strong>
             <span><%= typeof totalCheckpoints !== 'undefined' ? totalCheckpoints : 0 %></span>
           </article>
-          <article>
+          <button type="button" class="panel-alert-card" id="panelAlertButton" aria-haspopup="dialog">
             <strong>ALERTAS</strong>
-            <span>2</span>
-          </article>
+            <span><%= listaAlertas.length %></span>
+          </button>
         </section>
+
+        <div id="panelAlertModal" class="modal-overlay" hidden>
+          <section class="modal-box panel-alert-modal" role="dialog" aria-modal="true" aria-labelledby="panelAlertTitle">
+            <h2 id="panelAlertTitle">Turnos com alerta de pace</h2>
+            <% if (listaAlertas.length === 0) { %>
+              <p class="panel-alert-empty">Nenhum turno fora da faixa de pace no momento.</p>
+            <% } else { %>
+              <div class="panel-alert-list">
+                <div class="panel-alert-row panel-alert-row-header" aria-hidden="true">
+                  <span>EQUIPE</span>
+                  <span>ATLETA</span>
+                  <span>PACE</span>
+                  <span>QUANDO</span>
+                </div>
+                <% listaAlertas.forEach((alerta) => { %>
+                  <article class="panel-alert-row">
+                    <span><%= alerta.equipe %></span>
+                    <span><%= alerta.atleta %></span>
+                    <strong><%= alerta.pace %></strong>
+                    <span><%= alerta.horario %></span>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+            <div class="modal-actions">
+              <button type="button" class="continue-button" id="panelAlertClose">Fechar</button>
+            </div>
+          </section>
+        </div>
 
         <p class="operator-list-title">EQUIPES</p>
 
@@ -392,6 +424,45 @@
             </form>
           <% } %>
         </section>
+
+        <script>
+          (() => {
+            // ── Cronometro da prova no painel ──────────────────────────────
+            const progresso = document.querySelector('.panel-progress');
+            const timerEl = document.getElementById('panelProvaTimer');
+            if (progresso && timerEl) {
+              const inicio = Number(progresso.dataset.inicioProva) || Date.now();
+              const duracao = Number(progresso.dataset.duracaoProva) || 86400000;
+              const totalHoras = Math.round(duracao / 3600000);
+
+              const formatar = (ms) => {
+                const totalMin = Math.floor(Math.max(0, ms) / 60000);
+                const h = String(Math.floor(totalMin / 60)).padStart(2, '0');
+                const m = String(totalMin % 60).padStart(2, '0');
+                return `${h}h ${m}min`;
+              };
+
+              const tick = () => {
+                const decorrido = Math.min(duracao, Date.now() - inicio);
+                timerEl.textContent = `${formatar(decorrido)} de ${totalHoras}h`;
+              };
+              tick();
+              setInterval(tick, 1000);
+            }
+
+            // ── Pop-up de alertas ──────────────────────────────────────────
+            const alertButton = document.getElementById('panelAlertButton');
+            const alertModal = document.getElementById('panelAlertModal');
+            const alertClose = document.getElementById('panelAlertClose');
+            if (alertButton && alertModal) {
+              alertButton.addEventListener('click', () => { alertModal.hidden = false; });
+              alertClose?.addEventListener('click', () => { alertModal.hidden = true; });
+              alertModal.addEventListener('click', (event) => {
+                if (event.target === alertModal) alertModal.hidden = true;
+              });
+            }
+          })();
+        </script>
       <% } %>
 
       <% if (tela === 'modoTv') { %>

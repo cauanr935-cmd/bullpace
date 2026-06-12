@@ -425,6 +425,60 @@ const obterEsteirasReal = async () => {
   }));
 };
 
+// Soma o km real registrado por equipe a partir dos checkpoints (vw_historico_completo).
+// Retorna um mapa id_equipe -> km acumulado ate o momento.
+const obterKmPorEquipeReal = async (): Promise<Map<number, number>> => {
+  const { data, error } = await supabase
+    .from('vw_historico_completo')
+    .select('id_equipe, km_acumulado, id_checkpoint');
+
+  const mapa = new Map<number, number>();
+  if (error) {
+    console.error('[obterKmPorEquipeReal] Erro:', error.message);
+    return mapa;
+  }
+
+  for (const row of data || []) {
+    if (row.id_checkpoint === null || row.id_equipe === null) continue;
+    const atual = mapa.get(row.id_equipe) || 0;
+    mapa.set(row.id_equipe, atual + Number(row.km_acumulado || 0));
+  }
+  return mapa;
+};
+
+// Lista os checkpoints com pace fora da faixa saudavel (Regra 9: < 3 ou > 10 min/km).
+// Sao os "turnos dando errado" exibidos no pop-up de alertas do painel.
+const obterAlertasPaceReal = async () => {
+  const { data, error } = await supabase
+    .from('vw_historico_completo')
+    .select('id_checkpoint, equipe_nome, atleta_nome, pace_medio, registrado_em')
+    .not('id_checkpoint', 'is', null)
+    .or('pace_medio.lt.3,pace_medio.gt.10')
+    .order('registrado_em', { ascending: false });
+
+  if (error) {
+    console.error('[obterAlertasPaceReal] Erro:', error.message);
+    return [];
+  }
+
+  return (data || [])
+    .filter((r) => Number.isFinite(Number(r.pace_medio)))
+    .map((r) => {
+      const pace = Number(r.pace_medio);
+      const dataReg = r.registrado_em ? new Date(r.registrado_em) : null;
+      return {
+        idCheckpoint: r.id_checkpoint,
+        equipe: r.equipe_nome || '—',
+        atleta: r.atleta_nome || '—',
+        pace: `${pace.toFixed(2)} min/km`,
+        tipo: pace < 3 ? 'Pace muito rápido' : 'Pace muito lento',
+        horario: dataReg
+          ? dataReg.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+          : '—'
+      };
+    });
+};
+
 const obterEquipesPainelReal = async () => {
   const listaEquipes = await equipeRepo.listar();
   console.log(`[AUDIT obterEquipesPainelReal] Equipes carregadas: ${listaEquipes.length}`);
@@ -437,15 +491,19 @@ const obterEquipesPainelReal = async () => {
     .select('id_turno, id_atleta, atletas (nome, id_equipe)')
     .eq('status', 'em_andamento');
 
+  // KM real de cada equipe somado a partir dos checkpoints registrados ate agora.
+  const kmPorEquipe = await obterKmPorEquipeReal();
+
   const equipesPainel = [];
   for (const eq of listaEquipes) {
     const active = (turnosAtivos || []).find(t => t.atletas && (t.atletas as any).id_equipe === eq.id_equipe);
     const atletaStr = active ? `${(active.atletas as any).nome} em turno` : 'Nenhum atleta em turno';
     const numAtletas = (await atletaRepo.listarPorEquipe(eq.id_equipe)).length;
-    console.log(`[AUDIT obterEquipesPainelReal]   Equipe "${eq.nome}" (id=${eq.id_equipe}): ${numAtletas} atleta(s)`);
+    const kmEquipe = kmPorEquipe.get(eq.id_equipe) || 0;
+    console.log(`[AUDIT obterEquipesPainelReal]   Equipe "${eq.nome}" (id=${eq.id_equipe}): ${numAtletas} atleta(s), ${kmEquipe} km`);
     equipesPainel.push({
       nome: eq.nome,
-      km: `${eq.km_total.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
+      km: `${kmEquipe.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} km`,
       atleta: atletaStr,
       atletas: numAtletas
     });
@@ -562,6 +620,34 @@ const obterPainelMetricsReal = async () => {
     : await checkpointRepo.countTotalCheckpoints();
 
   return { idSessaoAtiva, turnosAtivos, totalCheckpoints };
+};
+
+// Monta o payload completo da tela painelCoordenador com dados reais:
+// equipes (km real), metricas, alertas de pace e dados do cronometro da prova.
+const montarPainelCoordenador = async (
+  coordenadorSelecionado: string,
+  papel: PapelUsuario,
+  extra: Record<string, unknown> = {}
+) => {
+  const equipesPainel = await obterEquipesPainelReal();
+  const painelMetrics = await obterPainelMetricsReal();
+  const alertas = await obterAlertasPaceReal();
+
+  return {
+    tela: 'painelCoordenador',
+    titulo: 'PAINEL DA PROVA',
+    coordenadorSelecionado,
+    equipesPainel,
+    turnosAtivos: painelMetrics.turnosAtivos,
+    totalCheckpoints: painelMetrics.totalCheckpoints,
+    alertas,
+    totalAlertas: alertas.length,
+    // Cronometro da prova (mesma base usada na TV).
+    inicioProvaTimestamp: estadoProva.inicioEm.getTime(),
+    duracaoProvaMs: DURACAO_PROVA_MS,
+    ...contextoAutorizacao(papel),
+    ...extra
+  };
 };
 
 const obterHistoricoOperacoesView = async (
@@ -775,17 +861,7 @@ app.post('/login-coordenador', async (req: Request, res: Response): Promise<void
     }
 
     // Credenciais válidas: abre o painel com dados reais do banco.
-    const equipesPainel = await obterEquipesPainelReal();
-    const painelMetrics = await obterPainelMetricsReal();
-    res.render('index', {
-      tela: 'painelCoordenador',
-      titulo: 'PAINEL DA PROVA',
-      coordenadorSelecionado: nomeAutenticado,
-      equipesPainel,
-      turnosAtivos: painelMetrics.turnosAtivos,
-      totalCheckpoints: painelMetrics.totalCheckpoints,
-      ...contextoAutorizacao(papel)
-    });
+    res.render('index', await montarPainelCoordenador(nomeAutenticado, papel));
 
   } catch (err: any) {
     console.error('[/login-coordenador] Erro na autenticação:', err.message);
@@ -816,20 +892,9 @@ app.post('/voltar-login-coordenador', (req: Request, res: Response): void => {
 app.post('/voltar-painel-coordenador', async (req: Request, res: Response): Promise<void> => {
   const { coordenador } = req.body;
   const papel = obterPapelRenderizacao(req);
-  const equipesPainel = await obterEquipesPainelReal();
 
-  const painelMetrics = await obterPainelMetricsReal();
-
-  res.render('index', {
-    // Retorna dos detalhes para a visao geral da coordenacao.
-    tela: 'painelCoordenador',
-    titulo: 'PAINEL DA PROVA',
-    coordenadorSelecionado: coordenador,
-    equipesPainel,
-    turnosAtivos: painelMetrics.turnosAtivos,
-    totalCheckpoints: painelMetrics.totalCheckpoints,
-    ...contextoAutorizacao(papel)
-  });
+  // Retorna dos detalhes para a visao geral da coordenacao.
+  res.render('index', await montarPainelCoordenador(coordenador, papel));
 });
 
 app.post('/modo-tv', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
@@ -1789,16 +1854,12 @@ app.post('/pausar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req
     atualizadoPor: estadoProva.atualizadoPor,
     atualizadoEm: estadoProva.atualizadoEm
   }, null, { status: statusAnterior });
-  const equipesPainel = await obterEquipesPainelReal();
 
-  res.render('index', {
-    tela: 'painelCoordenador',
-    titulo: 'PAINEL DA PROVA',
-    coordenadorSelecionado: req.body.coordenador,
-    equipesPainel,
-    painelMensagem: 'Prova pausada com sucesso.',
-    ...contextoAutorizacao((req as RequestComUsuario).usuario!.papel)
-  });
+  res.render('index', await montarPainelCoordenador(
+    req.body.coordenador,
+    (req as RequestComUsuario).usuario!.papel,
+    { painelMensagem: 'Prova pausada com sucesso.' }
+  ));
 });
 
 app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<void> => {
@@ -1811,16 +1872,12 @@ app.post('/retomar-prova', autorizarPapeis(ROLES.ADMINISTRADOR_GERAL), async (re
     atualizadoPor: estadoProva.atualizadoPor,
     atualizadoEm: estadoProva.atualizadoEm
   }, null, { status: statusAnterior });
-  const equipesPainel = await obterEquipesPainelReal();
 
-  res.render('index', {
-    tela: 'painelCoordenador',
-    titulo: 'PAINEL DA PROVA',
-    coordenadorSelecionado: req.body.coordenador,
-    equipesPainel,
-    painelMensagem: 'Prova retomada com sucesso.',
-    ...contextoAutorizacao((req as RequestComUsuario).usuario!.papel)
-  });
+  res.render('index', await montarPainelCoordenador(
+    req.body.coordenador,
+    (req as RequestComUsuario).usuario!.papel,
+    { painelMensagem: 'Prova retomada com sucesso.' }
+  ));
 });
 
 app.get('/exportar-dados', autorizarPapeis(ROLES.COORDENADOR, ROLES.ADMINISTRADOR_GERAL), async (req: Request, res: Response): Promise<Response> => {
