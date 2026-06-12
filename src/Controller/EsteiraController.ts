@@ -5,9 +5,13 @@ export class EsteiraController {
 
     private esteiraService = new EsteiraService();
 
-    listarEsteiras(req: Request, res: Response) {
-        const esteiras = this.esteiraService.listar();
-        return res.status(200).json(esteiras);
+    async listarEsteiras(req: Request, res: Response) {
+        try {
+            const esteiras = await this.esteiraService.listar();
+            return res.status(200).json(esteiras);
+        } catch (error) {
+            return res.status(500).json({ message: 'Erro ao listar esteiras.' });
+        }
     }
 
 }
